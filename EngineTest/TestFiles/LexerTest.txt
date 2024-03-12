@@ -1,0 +1,13 @@
+# String and FormatString
+$var = "String"
+$"Format {$var}" "Literal String" 
+
+# Integers and symbols
+(10 - 2) * (7 + 1)/3
+, || && ! ; : = < > == <= >= != => ->
+
+# Function example
+function($arg1:item, $arg2:item) : item
+{
+   $varname = $arg1.Prop; # comment
+}

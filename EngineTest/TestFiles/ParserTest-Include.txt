@@ -1,0 +1,373 @@
+enum Direction(North,South,East,West);
+enum DoorState(None,Open,Closed,Locked);
+
+delegate UseOnDelegate($item: Item, $target: Item);
+
+property DoorState : DoorState;
+property LinkN,LinkS,LinkE,LinkW : Item;
+property DoorN,DoorS,DoorE,DoorW : Item;
+property Location : Item; # item's location, e.g., a room
+property Description,Noun,Adj1,Adj2 : String;
+property Unlocks : Item;
+property IsPortable : Bool;
+property UseOnAction : UseOnDelegate;
+
+# location of items the player has picked up
+item inventory;
+
+# global variable specifying player's current location
+var $location : Item = null;
+
+function IsOpen($item:Item) => 
+    $item.DoorState == DoorState.Open || 
+    $item.DoorState == DoorState.None;
+
+map Opposite Direction -> Direction
+{
+    North -> South,
+    South -> North,
+    East -> West,
+    West -> East
+}
+
+function GetLink($item:Item, $dir:Direction) : Item
+{
+    switch ($dir)
+    {
+        case Direction.North {
+            $return = $item.LinkN;
+        }
+        case Direction.South {
+            $return = $item.LinkS;
+        }
+        case Direction.East {
+            $return = $item.LinkE;
+        }
+        default {
+            $return = $item.LinkW;
+        }
+    }
+}
+
+function SetLink($item:Item, $value:Item, $dir:Direction)
+{
+    switch ($dir)
+    {
+        case Direction.North {
+            $item.LinkN = $value;
+        }
+        case Direction.South {
+            $item.LinkS = $value;
+        }
+        case Direction.East {
+            $item.LinkE = $value;
+        }
+        default {
+            $item.LinkW = $value;
+        }
+    }
+}
+
+function GetDoor($item:Item, $dir:Direction) : Item
+{
+    switch ($dir)
+    {
+        case Direction.North {
+            $return = $item.DoorN;
+        }
+        case Direction.South {
+            $return = $item.DoorS;
+        }
+        case Direction.East {
+            $return = $item.DoorE;
+        }
+        default {
+            $return = $item.DoorW;
+        }
+    }
+}
+
+function SetDoor($item:Item, $value:Item, $dir:Direction)
+{
+    switch ($dir)
+    {
+        case Direction.North {
+            $item.DoorN = $value;
+        }
+        case Direction.South {
+            $item.DoorS = $value;
+        }
+        case Direction.East {
+            $item.DoorE = $value;
+        }
+        default {
+            $item.DoorW = $value;
+        }
+    }
+}
+
+# Links two rooms in the specified direction and Returns
+# a connecting "door" object.
+function LinkRoomsImpl($from:Item, $to:Item, $dir:Direction) : Item
+{
+    # Link the rooms.
+    var $backDir = Opposite($dir);
+    SetLink($from, $to, $dir);
+    SetLink($to, $from, $backDir);
+
+    # Create an item connecting the rooms.
+    $return = NewItem($"link_{$from}_{$to}");
+    SetDoor($from, $return, $dir);
+    SetDoor($to, $return, $backDir);
+}
+
+# Links rooms with an "opening".
+function LinkRooms($from:Item, $to:Item, $dir:Direction) : Item
+{
+    $return = LinkRoomsImpl($from, $to, $dir);
+    $return.Noun = "opening";
+}
+
+# Links rooms with a "door".
+function LinkRoomsWithDoor($from:Item, $to:Item, $dir:Direction) : Item
+{
+    $return = LinkRoomsImpl($from, $to, $dir);
+    $return.Noun = "door";
+    $return.DoorState = DoorState.Closed;
+}
+
+function UseKeyOn($key:Item, $target:Item)
+{
+    #TODO
+    Message("Using {$key.Noun} on {$target.Noun}.");
+}
+
+# Creates a key object for the specified door.
+# Automatically sets the door to the Locked state.
+# Returns the newly-created key object.
+function AddKey($door:Item, $keyLocation:Item, $adj1:String, $adj2:String) : Item
+{
+    $return = NewItem($"{$adj1}_{$adj2}_key");
+    $return.Unlocks = $door;
+    $door.DoorState = DoorState.Locked;
+    $return.Noun = "key";
+    $return.Adj1 = $adj1;
+    $return.Adj2 = $adj2;
+    $return.Location = $keyLocation;
+    $return.IsPortable = true;
+    $return.UseOnAction = UseKeyOn;
+}
+
+function UseOn($item:Item, $target:Item) : Bool
+{
+    var $fn = $item.UseOnAction;
+    if ($fn != null)
+    {
+        $fn($item, $target);
+        $return = true;
+    }
+    else
+    {
+        Message("You can't use that.");
+        $return = false;
+    }
+}
+
+function AddItemNouns($item:Item)
+{
+    if ($item.Noun != "")
+    {
+        AddNoun($item.Noun, $item);
+        AddAdjective($item.Adj1, $item);
+        AddAdjective($item.Adj2, $item);
+    }
+}
+
+function AddItemNounsForLocation($container:Item)
+{
+    foreach ($item:Item)
+    {
+        if ($item.Location == $container)
+        {
+            AddItemNouns($item);
+        }
+    }
+}
+
+function Look()
+{
+    Message($location.Description);
+
+    foreach ($dir : Direction)
+    {
+        var $door = GetDoor($location, $dir);
+        if ($door != null)
+        {
+            Message($"To the {$dir} is a {$door.Adj1} {$door.Adj2} {$door.Noun}.");
+        }
+    }
+
+    foreach ($item)
+    {
+        if ($item.Location == $location)
+        {
+            Message($"There is a {$item.Adj1} {$item.Adj2} {$item.Noun} here.");
+        }
+    }
+}
+
+function Go($dir : Direction)
+{
+    var $dest = GetLink($location, $dir);
+    var $door = GetDoor($location, $dir);
+
+    if ($dest == null)
+    {
+        Message($"You cannot go {$dir}.");
+    }
+    elseif ($door != null && !IsOpen($door))
+    {
+        Message("You can't walk through closed doors.");
+    }
+    else
+    {
+        $location = $dest;
+        Look();
+    }
+}
+
+function Open($door:Item)
+{
+    switch ($door.DoorState)
+    {
+        case DoorState.None
+        {
+            Message($"You cannot open the {$door.Noun}.");
+        }
+        case DoorState.Open
+        {
+            Message($"The {$door.Noun} is already open.");
+        }
+        case DoorState.Closed
+        {
+            $door.DoorState = DoorState.Open;
+            Message($"The {$door.Noun} is now open.");
+        }
+        case DoorState.Locked
+        {
+            Message($"The {$door.Noun} is locked.");
+        }
+    }
+}
+
+function Close($door:Item)
+{
+    switch ($door.DoorState)
+    {
+        case DoorState.None
+        {
+            Message($"You cannot close the {$door.Noun}.");
+        }
+        case DoorState.Open
+        {
+            $door.DoorState = DoorState.Closed;
+            Message($"The {$door.Noun} is now closed.");
+        }
+        default
+        {
+            Message($"The {$door.Noun} is already closed.");
+        }
+    }
+}
+
+function Inventory()
+{
+    foreach ($item)
+    {
+        if ($item.Location == inventory)
+        {
+            Message($"{$item.Adj1} {$item.Adj2} {$item.Noun}");
+        }
+    }
+}
+
+command "go {$dir:Direction}" { Go($dir); }
+command "n" { Go(Direction.North); }
+command "s" { Go(Direction.South); }
+command "e" { Go(Direction.East); }
+command "w" { Go(Direction.West); }
+
+command "look" { Look(); }
+
+command "open {$door:Item}" { Open($door); }
+command "close {$door:Item}" { Close($door); }
+
+command "unlock {$door:Item} with {$key:Item}"
+{
+    if ($door.DoorState != DoorState.Locked)
+    {
+        Message($"The {$door.Noun} is not locked.");
+    }
+    elseif ($key.Unlocks != $door)
+    {
+        Message($"The {$key.Noun} doesn't unlock the {$door.Noun}.");
+    }
+    else
+    {
+        $door.DoorState = DoorState.Closed;
+        Message($"The {$door.Noun} is now unlocked.");
+    }
+}
+
+command "unlock {$door:Item}"
+{
+    if ($door.DoorState != DoorState.Locked)
+    {
+        Message($"The {$door.Noun} is not locked.");
+    }
+    else
+    {
+        Message($"What do you want to unlock the {$door.Noun} with?");
+    }
+}
+
+command "take {$item:Item}"
+{
+    if ($item.Location == $location && $item.IsPortable)
+    {
+        $item.Location = inventory;
+        Message($"You've taken the {$item.Adj1} {$item.Adj2} {$item.Noun}");
+    }
+    else
+    {
+        Message("You cannot take that.");
+    }
+}
+
+command "inventory" { Inventory(); }
+command "i" { Inventory(); }
+
+turn
+{
+    # Add nouns for the door in each direction.
+    foreach ($dir : Direction)
+    {
+        var $door = GetDoor($location, $dir);
+        if ($door != null)
+        {
+            AddAdjective($"{$dir}", $door);            
+            AddItemNouns($door);
+        }
+    }
+
+    # Add nouns for items in the current room.
+    AddItemNounsForLocation($location);
+
+    # Add nouns for items in the player's inventory.
+    AddItemNounsForLocation(inventory);
+
+    # Uncomment the following for debug purposes to see What
+    # nouns and adjectives have been added.
+    #   MessageHeading("Words");
+    #   ListWords();
+}

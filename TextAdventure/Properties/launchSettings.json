@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CsAdventure": {
+      "commandName": "Project",
+      "commandLineArgs": "Gloom-Castle.txt",
+      "workingDirectory": "$(SolutionDir)\\Games"
+    }
+  }
+}

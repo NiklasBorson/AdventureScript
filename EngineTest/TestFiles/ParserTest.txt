@@ -1,0 +1,45 @@
+include "ParserTest-Include.txt";
+
+item frontPorch;
+item frontHall;
+item backHall;
+item laundryRoom;
+item kitchen;
+item diningRoom;
+item livingRoom;
+
+game
+{
+    $location = frontHall;
+
+    frontPorch.Description = "You are on a front porch.";
+    frontHall.Description = "You are in a small entryway.";
+    backHall.Description = "You are in a back hallway.";
+    laundryRoom.Description = "You are in a laundry room.";
+    kitchen.Description = "You are in a kitchen.";
+    diningRoom.Description = "You are in a dining room.";
+    livingRoom.Description = "You are in a living room.";
+
+    var $frontDoor = LinkRoomsWithDoor(frontPorch, frontHall, Direction.North);
+    $frontDoor.Adj1 = "red";
+    AddKey($frontDoor, laundryRoom, "small", "gold");
+
+    LinkRooms(frontHall, backHall, Direction.North);
+    LinkRoomsWithDoor(backHall, laundryRoom, Direction.North);
+    LinkRooms(backHall, kitchen, Direction.East);
+    LinkRooms(kitchen, diningRoom, Direction.East);
+    LinkRooms(diningRoom, livingRoom, Direction.South);
+    LinkRooms(livingRoom, frontHall, Direction.West);
+
+    MessageHeading("Global Variables");
+    ListVariables();
+
+    MessageHeading("Functions");
+    ListFunctions();
+
+    MessageHeading("Commands");
+    ListCommands();
+
+    MessageHeading("Starting Game");
+    Look();
+}
