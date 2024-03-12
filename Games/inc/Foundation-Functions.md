@@ -390,9 +390,9 @@ map IsClosedOrLocked DoorState -> Bool {
 
 ## OpenDoor and CloseDoor Functions
 
-The `OpenDoor` and `CloseDoor` functions provide a default implementation of the
-open and close actions for doors and containers. The `IsOpenable` function tests
-whether an item supports the open action.
+The `OpenDoor` and `CloseDoor` functions provide default implementations of the open
+and close actions. The `IsOpenable` function tests whether an item supports the open
+action.
 
 ```text
 function OpenDoor($item:Item)
@@ -453,6 +453,39 @@ The `PutInContainer` function puts an item in a container.
 The "put (item) in (item)" command invokes the `PutInContainer` function.
 
 ```text
+function ListContents($container:Item)
+{
+    Message($"Inside the {$container.Noun} are the following items:");
+    foreach ($item)
+    {
+        if ($item.Location == $container)
+        {
+            Message($" - A {Label($item)}.");
+        }
+    }
+}
+
+function OpenContainer($item:Item)
+{
+    switch ($item.DoorState)
+    {
+        case DoorState.None {
+            Message("You can't open that.");
+        }
+        case DoorState.Open {
+            Message($"The {Label($item)} is already open.");
+        }
+        case DoorState.Closed {
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now open.");
+            ListContents($item);
+        }
+        case DoorState.Locked {
+            Message($"The {Label($item)} is locked.");
+        }
+    }
+}
+
 function DescribeContainer($container:Item)
 {
     # Output basic description, including the door state.
@@ -460,14 +493,7 @@ function DescribeContainer($container:Item)
 
     if (!IsClosedOrLocked($container.DoorState))
     {
-        Message($"Inside the {$container.Noun} are the following items:");
-        foreach ($item)
-        {
-            if ($item.Location == $container)
-            {
-                Message($" - A {Label($item)}.");
-            }
-        }
+        ListContents($container);
     }
 }
 
@@ -482,7 +508,7 @@ function InitializeContainer(
 {
     SetLabelProperties($container, $adj1, $adj2, $noun);
     $container.DoorState = $state;
-    $container.OpenAction = OpenDoor;
+    $container.OpenAction = OpenContainer;
     $container.CloseAction = CloseDoor;
     $container.DescribeAction = DescribeContainer;
     $container.Location = $loc;
@@ -1044,7 +1070,7 @@ function Look()
         {
             if ($item.Location == $room && !$item.IsHidden && $item.Noun != null)
             {
-                Message($"There is a {Label($item)} here.");
+                Message($"There is a {DoorStateAdj($item.DoorState)} {Label($item)} here.");
             }
         }
     }
