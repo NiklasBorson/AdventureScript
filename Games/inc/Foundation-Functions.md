@@ -241,6 +241,9 @@ map DoorStateAdj DoorState -> String
     Locked -> "closed"
 }
 
+function StateAdj($item : Item) =>
+    $item.Health < 0 ? "broken" : DoorStateAdj($item.DoorState);
+
 function DescribeCommon($item:Item)
 {
     if ($item.Description != null)
@@ -1062,7 +1065,7 @@ function Look()
             var $door = GetLink(player.Location, $dir);
             if ($door != null)
             {
-                Message($"There is a {DoorStateAdj($door.DoorState)} {Label($door)} {DirectionPhrase($dir)}.");
+                Message($"There is a {StateAdj($door)} {Label($door)} {DirectionPhrase($dir)}.");
             }
         }
 
@@ -1070,7 +1073,7 @@ function Look()
         {
             if ($item.Location == $room && !$item.IsHidden && $item.Noun != null)
             {
-                Message($"There is a {DoorStateAdj($item.DoorState)} {Label($item)} here.");
+                Message($"There is a {StateAdj($item)} {Label($item)} here.");
             }
         }
     }
