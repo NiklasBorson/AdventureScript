@@ -2,17 +2,24 @@
 
 This module defines functions in AdventureScriptLib.
 
-## State Helpers
+## Label Function
+
+The `Label` function gets a short label that can be used to refer to an item.
 
 ```text
-map IsActiveLightState LightState -> Bool {
-    None -> false,
-    Off -> false,
-    On -> true,
-    Unlit -> false,
-    Lit -> true
-}
+function Label($item:Item) => $"{$item.Adj1} {$item.Adj2} {$item.Noun}";
+```
 
+## LabelWithState Function
+
+The `LabelWithState` function gets a short label that may include a state qualifier.
+Some possible examples:
+
+- _broken_ sword
+- _open_ chest
+- lantern, _which is lit_
+
+```text
 map LightStateAdj LightState -> String {
     None -> "",
     Off -> "off",
@@ -34,14 +41,6 @@ function AddStateQualifier($item:Item, $phrase:String) =>
     $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" :
     $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}." :
     $phrase;
-```
-
-## Label and LabelWithState Functions
-
-The `Label` function gets a short label that can be used to refer to an item.
-
-```text
-function Label($item:Item) => $"{$item.Adj1} {$item.Adj2} {$item.Noun}";
 
 function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
 ```
@@ -986,6 +985,14 @@ The `InitializeLighting` function is called during turn initialization to initia
 the `$isNowDark` and `$currentLightSource` global variables.
 
 ```text
+map IsActiveLightState LightState -> Bool {
+    None -> false,
+    Off -> false,
+    On -> true,
+    Unlit -> false,
+    Lit -> true
+}
+
 function InitializeLighting()
 {
     $currentLightSource = null;
