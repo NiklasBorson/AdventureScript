@@ -2,12 +2,48 @@
 
 This module defines functions in AdventureScriptLib.
 
-## Label Function
+## State Helpers
+
+```text
+map IsActiveLightState LightState -> Bool {
+    None -> false,
+    Off -> false,
+    On -> true,
+    Unlit -> false,
+    Lit -> true
+}
+
+map LightStateAdj LightState -> String {
+    None -> "",
+    Off -> "off",
+    On -> "on",
+    Unlit -> "unlit",
+    Lit -> "lit"
+}
+
+map DoorStateAdj DoorState -> String
+{
+    None -> "",
+    Open -> "open",
+    Closed -> "closed",
+    Locked -> "closed"
+}
+
+function AddStateQualifier($item:Item, $phrase:String) =>
+    $item.Health < 0 ? $"broken {$phrase}" :
+    $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" :
+    $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}." :
+    $phrase;
+```
+
+## Label and LabelWithState Functions
 
 The `Label` function gets a short label that can be used to refer to an item.
 
 ```text
 function Label($item:Item) => $"{$item.Adj1} {$item.Adj2} {$item.Noun}";
+
+function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
 ```
 
 ## SetLabelProperties Function
@@ -93,7 +129,7 @@ function DescribeHealthCommon($item:Item)
         var $percentage = $health * 100 / $item.MaxHealth;
         if ($health < 0)
         {
-            Message($"The {Label($item)} is destroyed.");
+            # The broken state is already reflected in the label.
         }
         elseif ($percentage < 20)
         {
@@ -216,7 +252,7 @@ property has not been set.
 function DescribeHealth($item:Item) => InvokeItemActionWithFallback($item.DescribeHealthAction, $item, DescribeHealthCommon);
 ```
 
-## Destroy Functions
+## Destroy Function
 
 The `Destroy` function invokes the destroy health action for the specified item,
 falling back to the `DestroyCommon` function if the `DestroyAction` property has not
@@ -233,17 +269,6 @@ function if the `DescribeAction` property has not been set. Item-specific descri
 actions can also call `DescribeCommon` to output basic information.
 
 ```text
-map DoorStateAdj DoorState -> String
-{
-    None -> "",
-    Open -> "open",
-    Closed -> "closed",
-    Locked -> "closed"
-}
-
-function StateAdj($item : Item) =>
-    $item.Health < 0 ? "broken" : DoorStateAdj($item.DoorState);
-
 function DescribeCommon($item:Item)
 {
     if ($item.Description != null)
@@ -257,7 +282,7 @@ function DescribeCommon($item:Item)
     }
     elseif ($item.Noun != null)
     {
-        Message($"You see a {DoorStateAdj($item.DoorState)} {Label($item)}.");
+        Message($"You see a {LabelWithState($item)}.");
     }
 
     DescribeHealth($item);
@@ -317,7 +342,7 @@ function Inventory()
     {
         if ($item.Location == player)
         {
-            Message(Label($item));
+            Message(LabelWithState($item));
             $haveItems = true;
         }
     }
@@ -425,14 +450,14 @@ function CloseDoor($item:Item)
             Message("You can't open that.");
         }
         case DoorState.Open {
-            Message($"The {Label($item)} is already open.");
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now closed.");
         }
         case DoorState.Closed {
-            $item.DoorState = DoorState.Open;
-            Message($"The {Label($item)} is now open.");
+            Message($"The {Label($item)} is already closed.");
         }
         case DoorState.Locked {
-            Message($"The {Label($item)} is locked.");
+            Message($"The {Label($item)} is already closed.");
         }
     }
 }
@@ -463,7 +488,7 @@ function ListContents($container:Item)
     {
         if ($item.Location == $container)
         {
-            Message($" - A {Label($item)}.");
+            Message($" - A {LabelWithState($item)}.");
         }
     }
 }
@@ -714,7 +739,11 @@ The `InitializeWeapon` function sets the properties of a weapon item. The
 ```text
 function InflictDamage($target:Item, $damage:Int)
 {
-    if ($target.MaxHealth != 0 && $damage != 0)
+    if ($target.Health < 0)
+    {
+        Message($"The {Label($target)} is already destroyed.");
+    }
+    elseif ($target.MaxHealth != 0 && $damage != 0)
     {
         $target.Health = $target.Health - $damage;
         if ($target.Health >= 0)
@@ -784,11 +813,11 @@ function TurnOffLight($item:Item)
     if ($item.LightState == LightState.On)
     {
         $item.LightState = LightState.Off;
-        Message($"The {Label($item)} is now out.");
+        Message($"The {Label($item)} is now off.");
     }
     else
     {
-        Message($"The {Label($item)} is already out.");
+        Message($"The {Label($item)} is already off.");
     }
 }
 function InitializeLight($item:Item, $adj1:String, $adj2:String, $noun:String, $loc:Item)
@@ -829,9 +858,9 @@ function TurnOnCandle($item:Item)
 }
 function IgniteCandle($item:Item)
 {
-    if ($item.LightState != LightState.On)
+    if ($item.LightState != LightState.Lit)
     {
-        $item.LightState = LightState.On;
+        $item.LightState = LightState.Lit;
         Message($"The {Label($item)} is now lit.");
     }
     else
@@ -839,15 +868,27 @@ function IgniteCandle($item:Item)
         Message($"The {Label($item)} is already lit.");
     }
 }
+function PutOutCandle($item:Item)
+{
+    if ($item.LightState == LightState.Lit)
+    {
+        $item.LightState = LightState.Unlit;
+        Message($"The {Label($item)} is now out.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already out.");
+    }
+}
 function InitializeCandle($item:Item, $adj1:String, $adj2:String, $noun:String, $loc:Item)
 {
     SetLabelProperties($item, $adj1, $adj2, $noun);
     SetPortable($item);
-    $item.LightState = LightState.Off;
-    $item.TurnOnAction = TurnOnCandle;
-    $item.TurnOffAction = TurnOffLight;
-    $item.IgniteAction = IgniteCandle;
-    $item.PutOutAction = TurnOffLight;
+    $item.LightState = LightState.Unlit;
+    $item.TurnOnAction = TurnOnCandle;  # displays error message
+    $item.IgniteAction = IgniteCandle;  # sets to LightState.Lit
+    $item.TurnOffAction = PutOutCandle; # sets to LightState.Unlit
+    $item.PutOutAction = PutOutCandle;  # sets to LightState.Unlit
     $item.Location = $loc;
 }
 function NewCandle($adj1:String, $adj2:String, $noun:String, $loc:Item) : Item
@@ -953,7 +994,7 @@ function InitializeLighting()
     {
         foreach ($item)
         {
-            if ($item.LightState == LightState.On && IsAccessible($item))
+            if (IsActiveLightState($item.LightState) && IsAccessible($item))
             {
                 $currentLightSource = $item;
             }
@@ -973,7 +1014,7 @@ The `InitializeWordMap` function is called at the beginning of each turn to add 
 and adjectives for accessible items.
 
 ```text
-function AddItemLabel($item:Item)
+function AddItemWords($item:Item)
 {
     AddAdjective($item.Adj1, $item);
     AddAdjective($item.Adj2, $item);
@@ -989,7 +1030,7 @@ function InitializeWordMap()
         {
             if ($item.Location == player)
             {
-                AddItemLabel($item);
+                AddItemWords($item);
             }
         }
     }
@@ -1000,7 +1041,7 @@ function InitializeWordMap()
         {
             if (IsAccessible($item))
             {
-                AddItemLabel($item);
+                AddItemWords($item);
             }
         }
 
@@ -1011,7 +1052,7 @@ function InitializeWordMap()
             if ($door.DoorState != DoorState.None)
             {
                 AddAdjective($"{$dir}", $door);
-                AddItemLabel($door);
+                AddItemWords($door);
             }
         }
     }
@@ -1065,7 +1106,7 @@ function Look()
             var $door = GetLink(player.Location, $dir);
             if ($door != null)
             {
-                Message($"There is a {StateAdj($door)} {Label($door)} {DirectionPhrase($dir)}.");
+                Message($"There is a {LabelWithState($door)} {DirectionPhrase($dir)}.");
             }
         }
 
@@ -1073,7 +1114,7 @@ function Look()
         {
             if ($item.Location == $room && !$item.IsHidden && $item.Noun != null)
             {
-                Message($"There is a {StateAdj($item)} {Label($item)} here.");
+                Message($"There is a {LabelWithState($item)} here.");
             }
         }
     }

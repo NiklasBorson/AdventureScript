@@ -204,17 +204,19 @@ var $isNowDark = false;
 
 ## LightState Type and Property
 
-The `LightState` property is used to implement light source objects. Possible values are:
+The `LightState` property is used to implement light source objects. Light source objects
+come in two categories: "lights" that can be on or off, and "candles" that can be lit or
+unlit. Possible values are:
 
 | Value     | Meaning                                   |
 |-----------|-------------------------------------------|
 | `None`    | The item is not a light source.           |
-| `Off`     | The light source is not emitting light.   |
-| `On`      | The light source is emitting light.       |
+| `Off`     | The light is off.                         |
+| `On`      | The light is on.                          |
+| `Unlit`   | The candle is unlit.                      |
+| `Lit`     | The candle is lit.                        |
 
-The following action properties apply to light sources but behave differently
-depending on whether the item works like a "light" that can be switch on and off or a
-"candle" that must be lit.
+The following action properties apply to "light" and "candle" light sources:
 
 | Action            | Light Behavior                    | Candle Behavior               |
 |-------------------|-----------------------------------|-------------------------------|
@@ -223,13 +225,10 @@ depending on whether the item works like a "light" that can be switch on and off
 | `TurnOffAction`   | Sets the light state to Off.      | Sets the light state to Off.  |
 | `PutOutAction`    | Sets the light state to Off.      | Sets the light state to Off.  |
 
-Note that candle-like light sources cannot be turned on but must be ignited. The
-ignite action is triggered by "using" a lighter object.
-
 The "turn off" and "put out" actions are interchangeable for light sources but may
 mean different things for other kinds of items.
 
 ```text
-enum LightState(None, Off, On, Extinguished, Lit);
+enum LightState(None, Off, On, Unlit, Lit);
 property LightState : LightState;
 ```
