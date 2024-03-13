@@ -10,26 +10,6 @@ namespace AdventureLib
         Loss
     }
 
-    public enum MessageType
-    {
-        Message,
-        Heading
-    }
-
-    public class MessageEventArgs : EventArgs
-    {
-        internal MessageEventArgs(MessageType messageType, string message)
-        {
-            this.MessageType = messageType;
-            this.Message = message;
-        }
-
-        public MessageType MessageType { get; }
-        public string Message { get; }
-    }
-
-    public delegate void MessageHandler(MessageType type, string message);
-
     public class GameState
     {
         #region Fields
@@ -43,6 +23,7 @@ namespace AdventureLib
         WordMap? m_wordMap = null;
         List<CodeBlock> m_gameBlocks = new List<CodeBlock>();
         List<CodeBlock> m_turnBlocks = new List<CodeBlock>();
+        List<string> m_messages = new List<string>();
         GameResult m_result = GameResult.None;
         #endregion
 
@@ -52,7 +33,7 @@ namespace AdventureLib
             m_varMap = new GlobalVarMap(m_stringMap);
         }
 
-        public void LoadGame(string filePath)
+        public IList<string> LoadGame(string filePath)
         {
             Parser.Parse(filePath, this);
 
@@ -67,23 +48,10 @@ namespace AdventureLib
 
             // Perform per-turn initialization before the first turn.
             InitializeTurn();
+
+            return m_messages;
         }
         #endregion
-
-        public event EventHandler<MessageEventArgs>? MessageEvent;
-
-        void RaiseMessageEvent(MessageType messageType, string message)
-        {
-            var raiseEvent = this.MessageEvent;
-            if (raiseEvent != null)
-            {
-                var args = new MessageEventArgs(
-                    messageType, 
-                    StringHelpers.NormalizeSpaces(message)
-                    );
-                raiseEvent(this, args);
-            }
-        }
 
         #region Properties
         //
@@ -129,17 +97,16 @@ namespace AdventureLib
             }
         }
 
-        public bool InvokeCommand(string commandLine)
+        public IList<string> InvokeCommand(string commandLine)
         {
+            m_messages.Clear();
+
             if (this.Commands.TryInvoke(this, commandLine))
             {
                 InitializeTurn();
-                return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return m_messages;
         }
 
         public void Save(string filePath)
@@ -278,12 +245,8 @@ namespace AdventureLib
 
         internal void Message(string message)
         {
-            RaiseMessageEvent(MessageType.Message, message);
-        }
-
-        internal void MessageHeading(string message)
-        {
-            RaiseMessageEvent(MessageType.Heading, message);
+            message = StringHelpers.NormalizeSpaces(message);
+            m_messages.Add(message);
         }
         #endregion
     }

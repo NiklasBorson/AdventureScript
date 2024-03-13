@@ -1023,8 +1023,8 @@ and adjectives for accessible items.
 ```text
 function AddItemWords($item:Item)
 {
-    AddAdjective($item.Adj1, $item);
-    AddAdjective($item.Adj2, $item);
+    AddAdjectives($item.Adj1, $item);
+    AddAdjectives($item.Adj2, $item);
     AddNoun($item.Noun, $item);
 }
 
@@ -1058,7 +1058,7 @@ function InitializeWordMap()
             var $door = GetLink(player.Location, $dir);
             if ($door.DoorState != DoorState.None)
             {
-                AddAdjective($"{$dir}", $door);
+                AddAdjectives($"{$dir}", $door);
                 AddItemWords($door);
             }
         }

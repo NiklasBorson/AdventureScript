@@ -9,22 +9,41 @@ namespace CsAdventure
         Program(string inputFile)
         {
             m_game = new GameState();
-            m_game.MessageEvent += MessageHandler;
-            m_game.LoadGame(inputFile);
+            var output = m_game.LoadGame(inputFile);
+            WriteOutput(output);
         }
 
-        static void MessageHandler(object? sender, MessageEventArgs args)
+        void WriteOutput(IList<string> output)
         {
-            if (args.MessageType == MessageType.Heading)
+            foreach (string para in output)
             {
-                Console.WriteLine("+---------------------");
-                Console.WriteLine($"| {args.Message}");
-                Console.WriteLine("+---------------------");
+                WriteMessage(para);
             }
-            else
+        }
+
+        void WriteMessage(string para)
+        {
+            const int colWidth = 80;
+
+            while (para.Length > colWidth)
             {
-                Console.WriteLine(args.Message);
+                int i = para.LastIndexOf(' ', 0, colWidth);
+                if (i <= 0)
+                {
+                    i = colWidth;
+                }
+                Console.WriteLine(para.Substring(0, i));
+
+                while (i < para.Length && para[i] == ' ')
+                    i++;
+
+                if (i == para.Length)
+                    return;
+
+                para = para.Substring(i);
             }
+
+            Console.WriteLine(para);
         }
 
         void Run()
@@ -33,10 +52,8 @@ namespace CsAdventure
             var input = Console.ReadLine();
             while (input != null && input != "q")
             {
-                if (!m_game.InvokeCommand(input))
-                {
-                    Console.WriteLine("I don't understand that.");
-                }
+                var output = m_game.InvokeCommand(input);
+                WriteOutput(output);
 
                 Console.Write("> ");
                 input = Console.ReadLine();

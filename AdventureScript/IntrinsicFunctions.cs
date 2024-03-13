@@ -82,15 +82,6 @@ namespace AdventureLib
             return 0;
         }
 
-        static int _MessageHeading(GameState game, int[] frame)
-        {
-            // MessageHeading($message:String)
-            //  - frame[1] -> $message
-            string message = game.Strings[frame[1]];
-            game.MessageHeading(message);
-            return 0;
-        }
-
         static int _ListVariables(GameState game, int[] frame)
         {
             foreach (var varExpr in game.GlobalVars)
@@ -158,15 +149,22 @@ namespace AdventureLib
             return 0;
         }
 
-        static int _AddAdjective(GameState game, int[] frame)
+        static int _AddAdjectives(GameState game, int[] frame)
         {
-            // AddAdjective($word:String, $item:Item)
+            // AddAdjectives($word:String, $item:Item)
             // - frame[1] -> $word
             // - frame[2] = $item
-            game.WordMap.AddAdjective(
-                /*word*/ game.Strings[frame[1]],
-                /*itemId*/ frame[2]
-                );
+            var words = game.Strings[frame[1]];
+            int itemId = frame[2];
+
+            // Remove leading and trailing spaces and combine multiple spaces.
+            words = StringHelpers.NormalizeSpaces(words);
+
+            // Add each word.
+            foreach (var word in words.Split())
+            {
+                game.WordMap.AddAdjective(word, itemId);
+            }
             return 0;
         }
 
@@ -205,14 +203,6 @@ namespace AdventureLib
                 _Message
                 ),
             new IntrinsicFunctionDef(
-                "MessageHeading",
-                new ParamDef[] {
-                    new ParamDef("$message", Types.String)
-                },
-                /*returnType*/ Types.Void,
-                _MessageHeading
-                ),
-            new IntrinsicFunctionDef(
                 "ListVariables",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
@@ -246,13 +236,13 @@ namespace AdventureLib
                 _AddNoun
                 ),
             new IntrinsicFunctionDef(
-                "AddAdjective",
+                "AddAdjectives",
                 new ParamDef[] {
-                    new ParamDef("$word", Types.String),
+                    new ParamDef("$words", Types.String),
                     new ParamDef("$item", Types.Item)
                 },
                 /*returnType*/ Types.Void,
-                _AddAdjective
+                _AddAdjectives
                 ),
         };
     }
