@@ -481,14 +481,33 @@ The `PutInContainer` function puts an item in a container.
 The "put (item) in (item)" command invokes the `PutInContainer` function.
 
 ```text
-function ListContents($container:Item)
+function IsContainerEmpty($container:Item) : Bool
 {
-    Message($"Inside the {$container.Noun} are the following items:");
+    $return = true;
     foreach ($item)
     {
         if ($item.Location == $container)
         {
-            Message($" - A {LabelWithState($item)}.");
+            $return = false;
+        }
+    }
+}
+
+function ListContents($container:Item)
+{
+    if (IsContainerEmpty($container))
+    {
+        Message($"The {$container.Noun} is empty.");
+    }
+    else
+    {
+        Message($"Inside the {$container.Noun} are the following:");
+        foreach ($item)
+        {
+            if ($item.Location == $container)
+            {
+                Message($" - A {LabelWithState($item)}.");
+            }
         }
     }
 }
