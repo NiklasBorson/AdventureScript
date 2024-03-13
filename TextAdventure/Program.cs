@@ -27,23 +27,36 @@ namespace CsAdventure
 
             while (para.Length > colWidth)
             {
-                int i = para.LastIndexOf(' ', 0, colWidth);
-                if (i <= 0)
+                int lastBreakStart = 0;
+                int lastBreakEnd = 0;
+
+                for (int i = 0; i < para.Length; i++)
                 {
-                    i = colWidth;
+                    if (para[i] == ' ')
+                    {
+                        int breakStart = i++;
+                        while (i < para.Length && para[i] == ' ')
+                            i++;
+
+                        if (lastBreakStart > 0 && i >= colWidth)
+                        {
+                            Console.WriteLine(para.Substring(0, lastBreakStart));
+                            para = para.Substring(lastBreakEnd);
+                            break;
+                        }
+
+                        lastBreakStart = breakStart;
+                        lastBreakEnd = i;
+                    }
                 }
-                Console.WriteLine(para.Substring(0, i));
-
-                while (i < para.Length && para[i] == ' ')
-                    i++;
-
-                if (i == para.Length)
-                    return;
-
-                para = para.Substring(i);
             }
 
-            Console.WriteLine(para);
+            if (para.Length != 0)
+            {
+                Console.WriteLine(para);
+            }
+
+            Console.WriteLine();
         }
 
         void Run()

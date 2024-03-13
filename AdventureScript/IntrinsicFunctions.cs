@@ -126,7 +126,7 @@ namespace AdventureLib
         {
             foreach (var def in game.Commands)
             {
-                game.Message(def.CommandSpec);
+                game.Message($"- {def.CommandSpec}");
             }
             return 0;
         }

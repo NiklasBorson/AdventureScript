@@ -1,5 +1,8 @@
 include "inc/Foundation.md";
 
+item outside_gate;
+item main_gate;
+
 item gate_room;
 
 item E_guard_room;
@@ -25,12 +28,66 @@ item N_square;
 
 item NE_square;
 
+# Special behavior when entering the gate room from outside.
+function OnEnterGateRoom($from:Item, $to:Item) : Bool
+{
+    if ($from == outside_gate)
+    {
+        Message(
+            "As soon as you enter the castle, the heavy portcullis crashes down behind "
+            "you, and you hear the click of bolts sliding into place."
+        );
+    }
+    main_gate.DoorState = DoorState.Locked;
+}
+
+# Special behavior when exiting the castle.
+function OnLeaveCastle($from:Item, $to:Item) : Bool
+{
+    if ($from == gate_room)
+    {
+        Message("You have escaped Gloom Castle!");
+        Message("Congratulations! You win the game!");
+        EndGame(true);
+    }
+}
+
+command "help" { ListCommands(); }
+
 game
 {
-    # Gate room (starting point)
-    player.Location = gate_room;
+    # Welcome message at the start of the game.
+    Message("# Welcome to Gloom Castle");
+    Message(
+        "You are a messenger sent by King Peregrin the Paranoid to find out what has "
+        "become of Gloom castle. Previous messengers have not returned, and the king "
+        "has begin to suspect the castle lord of plotting against him."
+    );
+    Message(
+        "That is one possibility, but you have also heard stranger rumors. In the "
+        "taverns, the name Gloom Castle elicits whispers of monsters or supernatural "
+        "forces. Of course, it may just be the ale talking. You are here to find out."
+    );
+    Message(
+        "It is now late morning and you have just arrived outside the south wall of the "
+        "castle. Before you is an arched gateway tall enough for a mounted knight to "
+        "ride through. Its massive iron portcullis is open at the moment, and no one "
+        "seems to be around."
+    );
+
+    # Outside gate (starting point)
+    player.Location = outside_gate;
+    outside_gate.Description = "You are standing outside the South wall of the castle.";
+    outside_gate.EnterAction = OnLeaveCastle;
+
+    # Main gate
+    InitializeDoor(main_gate, "massive", "iron", "portcullis", DoorState.Open);
+    LinkRooms(outside_gate, gate_room, main_gate, Direction.North);
+    gate_room.EnterAction = OnEnterGateRoom;
+
+    # Gate room
     gate_room.Description = "You are in a cobbled stone gate room.";
-    NewDoorItem(gate_room, E_guard_room, Direction.East, "door", DoorState.None).Adj1 = "broken";
+    NewDoorItem(gate_room, E_guard_room, Direction.East, "door", DoorState.None).Adj1 = "smashed";
 
     # East guard room
     E_guard_room.Description = "You are in what appears to be a guard room.";
@@ -53,9 +110,4 @@ game
     W_guard_room_chest.Description = "The heavy pine chest has a brass lock.";
     SetHealth(W_guard_room_chest, 50, 50);
     NewLighter("small", null, "tinderbox", W_guard_room_chest);
-}
-
-game
-{
-    Look();
 }
