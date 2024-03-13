@@ -4,7 +4,10 @@
     {
         StringMap m_stringMap;
         GlobalVariableExpr m_isNounFirst;
-        GlobalVariableExpr m_whichItemFormatString;
+        GlobalVariableExpr m_invalidCommandString;
+        GlobalVariableExpr m_invalidArgFormatString;
+        GlobalVariableExpr m_noItemFormatString;
+        GlobalVariableExpr m_ambiguousItemFormatString;
 
         public IntrinsicVars(GlobalVarMap varMap, StringMap stringMap)
         {
@@ -15,15 +18,36 @@
                 "$IsNounFirst"
                 );
 
-            m_whichItemFormatString = AddStringVar(
+            m_invalidCommandString = AddStringVar(
                 varMap,
-                "$WhichItemFormatString",
-                "Which {0}?"
+                "$InvalidCommandString",
+                "I don't understand that."
+                );
+
+            m_invalidArgFormatString = AddStringVar(
+                varMap,
+                "$InvalidArgFormatString",
+                "I don't understand {0}."
+                );
+
+            m_noItemFormatString = AddStringVar(
+                varMap,
+                "$NoItemFormatString",
+                "I couldn't find {0}."
+                );
+
+            m_ambiguousItemFormatString = AddStringVar(
+                varMap,
+                "$AmbiguousItemFormatString",
+                "I don't know which {0} you mean. It could be:"
                 );
         }
 
         public bool IsNounFirst => m_isNounFirst.Value != 0;
-        public string WhichItemFormatString => GetStringValue(m_whichItemFormatString);
+        public string InvalidCommandString => GetStringValue(m_invalidCommandString);
+        public string InvalidArgFormatString => GetStringValue(m_invalidArgFormatString);
+        public string NoItemFormatString => GetStringValue(m_noItemFormatString);
+        public string AmbiguousItemFormatString => GetStringValue(m_ambiguousItemFormatString);
 
         GlobalVariableExpr AddVar(GlobalVarMap varMap, string varName, TypeDef type)
         {

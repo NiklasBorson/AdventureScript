@@ -101,7 +101,7 @@ namespace AdventureLib
         {
             m_messages.Clear();
 
-            if (this.Commands.TryInvoke(this, commandLine))
+            if (this.Commands.InvokeCommandLine(this, commandLine))
             {
                 InitializeTurn();
             }
@@ -182,18 +182,82 @@ namespace AdventureLib
             var words = label.Split().AsSpan();
             string noun = GetNoun(words);
             if (noun == string.Empty)
+            {
+                OutputNoItem(label);
                 return false;
+            }
 
             var adjectives = GetAdjectives(words);
 
             var matches = this.WordMap.GetMatches(noun, adjectives);
 
-            if (matches.Count == 1)
+            switch (matches.Count)
             {
-                itemId = matches[0].ItemId;
-                return true;
+                case 0:
+                    OutputNoItem(label);
+                    return false;
+
+                case 1:
+                    itemId = matches[0].ItemId;
+                    return true;
+
+                default:
+                    OutputAmbiguousItem(label, matches);
+                    return false;
             }
-            return false;
+        }
+
+        public void OutputInvalidCommand()
+        {
+            string message = this.IntrinsicVars.InvalidCommandString;
+            Message(message);
+        }
+
+        public void OutputInvalidCommandArg(string arg)
+        {
+            string formatString = this.IntrinsicVars.InvalidArgFormatString;
+            Message(string.Format(formatString, arg));
+        }
+
+        void OutputNoItem(string label)
+        {
+            string formatString = this.IntrinsicVars.NoItemFormatString;
+            Message(string.Format(formatString, label));
+        }
+
+        void OutputAmbiguousItem(string label, IReadOnlyList<WordMapEntry> matches)
+        {
+            string formatString = this.IntrinsicVars.AmbiguousItemFormatString;
+            Message(string.Format(formatString, label));
+
+            bool isNounFirst = this.IntrinsicVars.IsNounFirst;
+            var b = new StringBuilder();
+
+            foreach (var match in matches)
+            {
+                b.Clear();
+                b.Append("- ");
+
+                if (isNounFirst)
+                {
+                    b.Append(match.Noun);
+                    foreach (var adj in match.Adjectives)
+                    {
+                        b.Append(' ');
+                        b.Append(adj);
+                    }
+                }
+                else
+                {
+                    foreach (var adj in match.Adjectives)
+                    {
+                        b.Append(adj);
+                        b.Append(' ');
+                    }
+                    b.Append(match.Noun);
+                }
+                Message(b.ToString());
+            }
         }
 
         internal void ListWords()

@@ -158,7 +158,8 @@ function if the `DestroyAction` property has not been set.
 ```text
 function DestroyCommon($item:Item)
 {
-    Message($"The {Label($item)} is destroyed!");
+    $item.Description = $"The {Label($item)} is destroyed!";
+    Message($item.Description);
 
     # Anything contained by the destroyed item is now outside of it.
     foreach ($inner:Item)
