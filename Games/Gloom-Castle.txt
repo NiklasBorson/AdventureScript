@@ -34,8 +34,9 @@ function OnEnterGateRoom($from:Item, $to:Item) : Bool
     if ($from == outside_gate)
     {
         Message(
-            "As soon as you enter the castle, the heavy portcullis crashes down behind "
-            "you, and you hear the click of bolts sliding into place."
+            "You pass under the iron portcullis. With a crash, it slides down from "
+            "above and slams shut behind you. You hear the click of bolts sliding into "
+            "place. You are locked in."
         );
     }
     main_gate.DoorState = DoorState.Locked;
@@ -52,7 +53,11 @@ function OnLeaveCastle($from:Item, $to:Item) : Bool
     }
 }
 
-command "help" { ListCommands(); }
+command "help"
+{
+    Message("Following are commands you can say:");
+    ListCommands();
+}
 
 game
 {
@@ -73,6 +78,9 @@ game
         "castle. Before you is an arched gateway tall enough for a mounted knight to "
         "ride through. Its massive iron portcullis is open at the moment, and no one "
         "seems to be around."
+    );
+    Message(
+        "At any time you can type 'help' to see a list of commands you can say."
     );
 
     # Outside gate (starting point)
