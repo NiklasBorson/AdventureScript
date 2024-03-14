@@ -85,7 +85,7 @@ namespace CsAdventure
             if (para.Length <= startPos)
                 return;
 
-            string currentLinePrefix = linePrefix;
+            string currentLinePrefix = firstLinePrefix;
             int lineStart = startPos;
 
             while (para.Length - lineStart > ColumnWidth)

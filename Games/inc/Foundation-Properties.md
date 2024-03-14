@@ -26,13 +26,15 @@ turn
 }
 ```
 
-## Noun, Adj1, and Adj2 Properties
+## Noun and Adjectives Properties
 
-Noun and adjective properties enable a user to refer to an item. They may also be used
-as a label or description for an item.
+The `Noun` and `Adjectives` properties are used to refer to an item both in game
+output (such as listing the items in a room) and in input (when a user command references
+an item). The `Noun` must be a single word. The `Adjectives` property can be zero or more
+words separated by spaces.
 
 ```text
-property Noun,Adj1,Adj2 : String;
+property Noun,Adjectives : String;
 ```
 
 ## Health and Damage Properties

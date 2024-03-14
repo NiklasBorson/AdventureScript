@@ -24,7 +24,7 @@ map DirectionPhrase Direction -> String
 The `Label` function gets a short label that can be used to refer to an item.
 
 ```text
-function Label($item:Item) => $"{$item.Adj1} {$item.Adj2} {$item.Noun}";
+function Label($item:Item) => $"{$item.Adjectives} {$item.Noun}";
 ```
 
 ## LabelWithState Function
@@ -68,10 +68,9 @@ The `SetLabelProperties` function sets the adjectives and noun for an item. Thes
 words are used by the player to refer to the item and also comprise the item's label.
 
 ```text
-function SetLabelProperties($item:Item, $adj1:String, $adj2:String, $noun:String)
+function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
 {
-    $item.Adj1 = $adj1;
-    $item.Adj2 = $adj2;
+    $item.Adjectives = $adjectives;
     $item.Noun = $noun;
 }
 ```
@@ -572,14 +571,13 @@ function DescribeContainer($container:Item)
 
 function InitializeContainer(
     $container:Item,
-    $adj1:String,
-    $adj2:String,
+    $adjectives:String,
     $noun:String,
     $state:DoorState,
     $loc:Item
     )
 {
-    SetLabelProperties($container, $adj1, $adj2, $noun);
+    SetLabelProperties($container, $adjectives, $noun);
     $container.DoorState = $state;
     $container.OpenAction = OpenContainer;
     $container.CloseAction = CloseDoor;
@@ -587,10 +585,10 @@ function InitializeContainer(
     $container.Location = $loc;
 }
 
-function NewContainer($adj1:String, $adj2:String, $noun:String, $state:DoorState, $loc:Item) : Item
+function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:Item) : Item
 {
-    var $container = NewItem($"_{$noun}_{$adj1}{$adj2}");
-    InitializeContainer($container, $adj1, $adj2, $noun, $state, $loc);
+    var $container = NewItem($"_{$noun}_{$loc}");
+    InitializeContainer($container, $adjectives, $noun, $state, $loc);
     $return = $container;    
 }
 
@@ -692,9 +690,9 @@ may be actual doors, which can be opened or closed, or mere openings.
 | `NewOpening`          | Links two rooms with a new opening.                           |
 
 ```text
-function InitializeDoor($door:Item, $adj1:String, $adj2:String, $noun:String, $state:DoorState)
+function InitializeDoor($door:Item, $adjectives:String, $noun:String, $state:DoorState)
 {
-    SetLabelProperties($door, $adj1, $adj2, $noun);
+    SetLabelProperties($door, $adjectives, $noun);
     $door.DoorState = $state;
 
     if ($state != DoorState.None)
@@ -713,20 +711,20 @@ function LinkRooms($from:Item, $to:Item, $via:Item, $dir:Direction)
     LinkRoomsOneWay($from, $to, $via, $dir);
     LinkRoomsOneWay($to, $from, $via, Opposite($dir));
 }
-function NewDoorItem($from:Item, $to:Item, $dir:Direction, $noun:String, $state:DoorState) : Item
+function NewDoorItem($from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState) : Item
 {
     var $door = NewItem($"_{$noun}_{$from}{$to}");
-    InitializeDoor($door, null, null, $noun, $state);
+    InitializeDoor($door, $adjectives, $noun, $state);
     LinkRooms($from, $to, $door, $dir);
     $return = $door;
 }
 function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "door", DoorState.Closed);
+    $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
 }
 function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "opening", DoorState.None);
+    $return = NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
 }
 ```
 
@@ -760,17 +758,17 @@ function UseKeyOn($key:Item, $target:Item)
         Message($"The {Label($key)} doesn't work on that.");
     }
 }
-function InitializeKey($key:Item, $adj1:String, $adj2:String, $noun:String, $loc:Item)
+function InitializeKey($key:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($key, $adj1, $adj2, $noun);
+    SetLabelProperties($key, $adjectives, $noun);
     SetPortable($key);
     $key.UseOnAction = UseKeyOn;
     $key.Location = $loc;
 }
-function NewKey($adj1:String, $adj2:String, $noun:String, $loc:Item) : Item
+function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
 {
-    var $key = NewItem($"_{$noun}_{$adj1}{$adj2}");
-    InitializeKey($key, $adj1, $adj2, $noun, $loc);
+    var $key = NewItem($"_{$noun}_{$loc}");
+    InitializeKey($key, $adjectives, $noun, $loc);
     $return = $key;
 }
 function IsKey($item:Item) => $item.UseOnAction == UseKeyOn;
@@ -812,19 +810,19 @@ function UseWeaponOn($item:Item, $target:Item)
     InflictDamage($target, $item.WeaponDamage);
 }
 
-function InitializeWeapon($item:Item, $adj1:String, $adj2:String, $noun:String, $damage:Int, $loc:Item)
+function InitializeWeapon($item:Item, $adjectives:String, $noun:String, $damage:Int, $loc:Item)
 {
-    SetLabelProperties($item, $adj1, $adj2, $noun);
+    SetLabelProperties($item, $adjectives, $noun);
     SetPortable($item);
     $item.UseOnAction = UseWeaponOn;
     $item.WeaponDamage = $damage;
     $item.Location = $loc;
 }
 
-function NewWeapon($adj1:String, $adj2:String, $noun:String, $damage:Int, $loc:Item) : Item
+function NewWeapon($adjectives:String, $noun:String, $damage:Int, $loc:Item) : Item
 {
-    var $item = NewItem($"_{$noun}_{$adj1}{$adj2}");
-    InitializeWeapon($item, $adj1, $adj2, $noun, $damage, $loc);
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeWeapon($item, $adjectives, $noun, $damage, $loc);
     $return = $item;
 }
 ```
@@ -865,9 +863,9 @@ function TurnOffLight($item:Item)
         Message($"The {Label($item)} is already off.");
     }
 }
-function InitializeLight($item:Item, $adj1:String, $adj2:String, $noun:String, $loc:Item)
+function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($item, $adj1, $adj2, $noun);
+    SetLabelProperties($item, $adjectives, $noun);
     SetPortable($item);
     $item.LightState = LightState.Off;
     $item.TurnOnAction = TurnOnLight;
@@ -875,10 +873,10 @@ function InitializeLight($item:Item, $adj1:String, $adj2:String, $noun:String, $
     $item.PutOutAction = TurnOffLight;
     $item.Location = $loc;
 }
-function NewLight($adj1:String, $adj2:String, $noun:String, $loc:Item) : Item
+function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
 {
-    var $item = NewItem($"_{$noun}_{$adj1}{$adj2}");
-    InitializeLight($item, $adj1, $adj2, $noun, $loc);
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLight($item, $adjectives, $noun, $loc);
     $return = $item;
 }
 function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
@@ -925,9 +923,9 @@ function PutOutCandle($item:Item)
         Message($"The {Label($item)} is already out.");
     }
 }
-function InitializeCandle($item:Item, $adj1:String, $adj2:String, $noun:String, $loc:Item)
+function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($item, $adj1, $adj2, $noun);
+    SetLabelProperties($item, $adjectives, $noun);
     SetPortable($item);
     $item.LightState = LightState.Unlit;
     $item.TurnOnAction = TurnOnCandle;  # displays error message
@@ -936,10 +934,10 @@ function InitializeCandle($item:Item, $adj1:String, $adj2:String, $noun:String, 
     $item.PutOutAction = PutOutCandle;  # sets to LightState.Unlit
     $item.Location = $loc;
 }
-function NewCandle($adj1:String, $adj2:String, $noun:String, $loc:Item) : Item
+function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
 {
-    var $item = NewItem($"_{$noun}_{$adj1}{$adj2}");
-    InitializeCandle($item, $adj1, $adj2, $noun, $loc);
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeCandle($item, $adjectives, $noun, $loc);
     $return = $item;
 }
 function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
@@ -980,17 +978,17 @@ function UseLighterOn($item:Item, $target:Item)
         Message($"You cannot light the {Label($target)}.");
     }
 }
-function InitializeLighter($item:Item, $adj1:String, $adj2:String, $noun:String, $loc:Item)
+function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($item, $adj1, $adj2, $noun);
+    SetLabelProperties($item, $adjectives, $noun);
     SetPortable($item);
     $item.UseOnAction = UseLighterOn;
     $item.Location = $loc;
 }
-function NewLighter($adj1:String, $adj2:String, $noun:String, $loc:Item) : Item
+function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
 {
-    var $item = NewItem($"_{$noun}_{$adj1}{$adj2}");
-    InitializeLighter($item, $adj1, $adj2, $noun, $loc);
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLighter($item, $adjectives, $noun, $loc);
     $return = $item;
 }
 function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
@@ -1081,8 +1079,7 @@ and adjectives for accessible items.
 ```text
 function AddItemWords($item:Item)
 {
-    AddAdjectives($item.Adj1, $item);
-    AddAdjectives($item.Adj2, $item);
+    AddAdjectives($item.Adjectives, $item);
     AddNoun($item.Noun, $item);
 }
 
