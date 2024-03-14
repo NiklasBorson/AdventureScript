@@ -15,37 +15,54 @@ namespace CsAdventure
 
         void WriteOutput(IList<string> output)
         {
-            const int colWidth = 80;
-
             bool inList = false;
 
             foreach (var para in output)
             {
                 if (para.StartsWith("- "))
                 {
+                    // Special handling for list items.
                     WriteWrapped(
                         para,
-                        /*colWidth*/ colWidth - 2,
                         /*startPos*/ 2,
                         /*firstLinePrefix*/ "- ",
-                        /*linePrefix*/ "  "
+                        /*linePrefix*/ "  ",
+                        /*lineSuffix*/ string.Empty
                         );
                     inList = true;
                 }
                 else
                 {
+                    // Not a list item, so end the list if we're on one.
                     if (inList)
                     {
                         Console.WriteLine();
                         inList = false;
                     }
-                    WriteWrapped(
-                        para,
-                        /*colWidth*/ colWidth,
-                        /*startPos*/ 0,
-                        /*firstLinePrefix*/ string.Empty,
-                        /*linePrefix*/ string.Empty
-                        );
+
+                    if (para.StartsWith("# "))
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("+------------------------------------------------------------------------------+");
+                        WriteWrapped(
+                            para,
+                            /*startPos*/ 2,
+                            /*firstLinePrefix*/ "| ",
+                            /*linePrefix*/ "| ",
+                            /*lineSuffix*/ " |"
+                            );
+                        Console.WriteLine("+------------------------------------------------------------------------------+");
+                    }
+                    else
+                    {
+                        WriteWrapped(
+                            para,
+                            /*startPos*/ 0,
+                            /*firstLinePrefix*/ string.Empty,
+                            /*linePrefix*/ string.Empty,
+                            /*lineSuffix*/ string.Empty
+                            );
+                    }
                     Console.WriteLine();
                 }
             }
@@ -55,21 +72,25 @@ namespace CsAdventure
             }
         }
 
+        const int ColumnWidth = 80;
+
         void WriteWrapped(
             string para,
-            int colWidth,
             int startPos,
             string firstLinePrefix,
-            string linePrefix
+            string linePrefix,
+            string lineSuffix
             )
         {
             if (para.Length <= startPos)
                 return;
 
+            string currentLinePrefix = linePrefix;
             int lineStart = startPos;
 
-            while (para.Length - lineStart > colWidth)
+            while (para.Length - lineStart > ColumnWidth)
             {
+                int maxLength = ColumnWidth - (currentLinePrefix.Length + lineSuffix.Length);
                 int lastBreakStart = lineStart;
                 int lastBreakEnd = lineStart;
 
@@ -81,11 +102,10 @@ namespace CsAdventure
                         while (i < para.Length && para[i] == ' ')
                             i++;
 
-                        if (lastBreakStart > lineStart && i - lineStart >= colWidth)
+                        if (lastBreakStart > lineStart && i - lineStart >= maxLength)
                         {
-                            var line = para.Substring(lineStart, lastBreakStart - lineStart);
-                            Console.Write(lineStart == startPos ? firstLinePrefix : linePrefix);
-                            Console.WriteLine(line);
+                            WriteLine(para, lineStart, lastBreakStart - lineStart, currentLinePrefix, lineSuffix);
+                            currentLinePrefix = linePrefix;
                             lineStart = lastBreakEnd;
                             break;
                         }
@@ -98,9 +118,24 @@ namespace CsAdventure
 
             if (lineStart < para.Length)
             {
-                Console.Write(lineStart == startPos ? firstLinePrefix : linePrefix);
-                Console.WriteLine(para.Substring(lineStart));
+                WriteLine(para, lineStart, para.Length - lineStart, currentLinePrefix, lineSuffix);
             }
+        }
+
+        void WriteLine(string input, int startPos, int length, string linePrefix, string lineSuffix)
+        {
+            Console.Write(linePrefix);
+            Console.Write(input.Substring(startPos, length));
+            if (lineSuffix.Length != 0)
+            {
+                int padding = ColumnWidth - (linePrefix.Length + length + lineSuffix.Length);
+                for (int i = 0; i < padding; i++)
+                {
+                    Console.Write(' ');
+                }
+                Console.Write(lineSuffix);
+            }
+            Console.WriteLine();
         }
 
         void Run()

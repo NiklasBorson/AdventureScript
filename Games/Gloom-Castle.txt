@@ -70,8 +70,8 @@ game
     );
     Message(
         "That is one possibility, but you have also heard stranger rumors. In the "
-        "taverns, the name Gloom Castle elicits whispers of monsters or supernatural "
-        "forces. Of course, it may just be the ale talking. You are here to find out."
+        "taverns, people whisper that something dark and sinister has befallen the "
+        "place. Of course, it may just be the ale talking. You are here to find out!"
     );
     Message(
         "It is now late morning and you have just arrived outside the south wall of the "
