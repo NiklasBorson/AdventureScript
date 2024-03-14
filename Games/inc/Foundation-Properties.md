@@ -61,9 +61,12 @@ used to implement _action properties_ (see below).
 
 `Item2Delegate` is a delegate type with two parameters of type `Item`.
 
+`ItemPredicate` is a delegate type that takes an `Item` parameter and returns a `Bool`.
+
 ```text
 delegate ItemDelegate($item:Item);
 delegate Item2Delegate($item1:Item, $item2:Item);
+delegate ItemPredicate($item:Item) : Bool;
 ```
 
 ## Action Properties
@@ -184,22 +187,35 @@ property IsHidden : Bool;
 
 ## IsDark Property
 
-The `IsDark` property applies to a room. If true, the player cannot see or interact
-with any items in the room unless there is available illumination. Illumination may be
-provided by _light source_ objects, which are defined by the `LightState` property
-(see below).
+The `IsDark` property is an `ItemPredicate` delegate that applies to a room. If this
+method returns `true` then a light source is required for the user to see in the room.
 
 The following global variables are initialized at the beginning of each turn:
 
-- `$isNowDark` is true if the current room's `IsDark` property is true _and_ there is
-  no light source providing illumination.
-- `$currentLightSource` refers to the light source illuminating an otherwise dark 
+- `$isNowDark` is true if the current room's `IsDark` predicate returns is true
+  _and_ there is no light source providing illumination.
+- `$currentLightSource` refers to the light source illuminating an otherwise dark
   room, if any.
 
 ```text
-property IsDark : Bool;
+property IsDark : ItemPredicate;
 var $currentLightSource : Item = null;
 var $isNowDark = false;
+```
+
+## Current Time
+
+The `$currentTime` global variable represents the current time in minutes from midnight.
+It is automatically incremented at the start of each turn. An `IsDark` predicate might
+use the current time to determine if there is daylight.
+
+```text
+var $currentTime = 11*60; # default initial time is 11am
+
+turn
+{
+    $currentTime = $currentTime < (23*60) + 59 ? $currentTime + 1 : 0;
+}
 ```
 
 ## LightState Type and Property

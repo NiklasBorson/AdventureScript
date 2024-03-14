@@ -2,6 +2,23 @@
 
 This module defines functions in AdventureScriptLib.
 
+## DirectionPhrase Function
+
+The `DirectionPhrase` returns a phrase representing the specified direction, e.g.,
+"to the North" or "leading upward".
+
+```text
+map DirectionPhrase Direction -> String
+{
+    North -> "to the North",
+    South -> "to the South",
+    East -> "to the East",
+    West -> "to the West",
+    Up -> "leading upward",
+    Down -> "leading downward"
+}
+```
+
 ## Label Function
 
 The `Label` function gets a short label that can be used to refer to an item.
@@ -39,7 +56,7 @@ map DoorStateAdj DoorState -> String
 function AddStateQualifier($item:Item, $phrase:String) =>
     $item.Health < 0 ? $"broken {$phrase}" :
     $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" :
-    $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}." :
+    $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}" :
     $phrase;
 
 function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
@@ -239,6 +256,15 @@ game
     SetHealth(player, 99, 99);
     player.DescribeHealthAction = DescribePlayerHealth;
     player.DestroyAction = DestroyPlayer;
+}
+
+turn
+{
+    # The player heals one health unit per turn.
+    if (player.Health < player.MaxHealth)
+    {
+        player.Health = player.Health + 1;
+    }
 }
 ```
 
@@ -919,6 +945,18 @@ function NewCandle($adj1:String, $adj2:String, $noun:String, $loc:Item) : Item
 function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
 ```
 
+## IsDark Predicates
+
+The functions in this section can be specified as the `IsDark` property of a room
+
+- `IsDarkAtNight` returns true if it is night.
+- `IsDarkAlways` returns true unconditionally.
+
+```text
+function IsDarkAtNight($item:Item) => $currentTime < 8*60 || $currentTime >= 20*60;
+function IsDarkAlways($item:Item) => true;
+```
+
 ## Lighter Functions
 
 The functions in this section create or initialize _lighter items_, which can be used
@@ -1017,7 +1055,7 @@ function InitializeLighting()
 {
     $currentLightSource = null;
 
-    if (player.Location.IsDark)
+    if (player.Location.IsDark(player.Location))
     {
         foreach ($item)
         {
@@ -1091,16 +1129,6 @@ function InitializeWordMap()
 The `Look` function describes the current room and its contents.
 
 ```text
-map DirectionPhrase Direction -> String
-{
-    North -> "to the north",
-    South -> "to the south",
-    East -> "to the east",
-    West -> "to the west",
-    Up -> "leading upward",
-    Down -> "leading downward"
-}
-
 function Look()
 {
     var $room = player.Location;
@@ -1113,9 +1141,13 @@ function Look()
         foreach ($dir : Direction)
         {
             var $door = GetLink($room, $dir);
-            if ($door != null && !IsClosedOrLocked($door.DoorState) && !GetLink($door, $dir).IsDark)
+            if ($door != null && !IsClosedOrLocked($door.DoorState))
             {
-                Message($"A faint light filters in from the {$dir} {$door.Noun}.");
+                var $linkedRoom = GetLink($door, $dir);
+                if (!$linkedRoom.IsDark($linkedRoom))
+                {
+                    Message($"A faint light filters in from the {$door.Noun} {DirectionPhrase($dir)}.");
+                }
             }
         }
     }

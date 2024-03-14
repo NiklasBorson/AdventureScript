@@ -34,9 +34,9 @@ function OnEnterGateRoom($from:Item, $to:Item) : Bool
     if ($from == outside_gate)
     {
         Message(
-            "You pass under the iron portcullis. With a crash, it slides down from "
-            "above and slams shut behind you. You hear the click of bolts sliding into "
-            "place. You are locked in."
+            "As soon as you pass under the iron portcullis, it slides down from above "
+            "and crashes shut behind you. You hear the click of bolts sliding into place. "
+            "You are locked in."
         );
     }
     main_gate.DoorState = DoorState.Locked;
@@ -86,6 +86,7 @@ game
     # Outside gate (starting point)
     player.Location = outside_gate;
     outside_gate.Description = "You are standing outside the South wall of the castle.";
+    outside_gate.IsDark = IsDarkAtNight;
     outside_gate.EnterAction = OnLeaveCastle;
 
     # Main gate
@@ -95,10 +96,12 @@ game
 
     # Gate room
     gate_room.Description = "You are in a cobbled stone gate room.";
+    gate_room.IsDark = IsDarkAtNight;
     NewDoorItem(gate_room, E_guard_room, Direction.East, "door", DoorState.None).Adj1 = "smashed";
 
     # East guard room
     E_guard_room.Description = "You are in what appears to be a guard room.";
+    E_guard_room.IsDark = IsDarkAtNight;
     InitializeContainer(E_guard_room_cabinet, "tall", "wooden", "cabinet", DoorState.Closed, E_guard_room);
     NewCandle("bronze", "oil", "lamp", E_guard_room_cabinet);
     NewWeapon("notched", null, "sword", 10, E_guard_room_cabinet);
@@ -108,10 +111,11 @@ game
 
     # Southeast tower level 0
     SE_tower_0.Description = "You are in a square stone room.";
-    SE_tower_0.IsDark = true;
+    SE_tower_0.IsDark = IsDarkAlways;
 
     # West Guard Room
     W_guard_room.Description = "You are in what appears to be a guard room.";
+    W_guard_room.IsDark = IsDarkAtNight;
     InitializeDoor(W_guard_room_door, "oak", null, "door", DoorState.Locked);
     LinkRooms(W_guard_room, gate_room, W_guard_room_door, Direction.East);
     InitializeContainer(W_guard_room_chest, "heavy", "pine", "chest", DoorState.Locked, W_guard_room);
