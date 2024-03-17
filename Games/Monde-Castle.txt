@@ -1,0 +1,29 @@
+include "inc/Foundation.md";
+
+#
+# Outside
+#
+item outside;
+
+#
+# Outer court rooms
+#
+item outer_court_S;
+item outer_court_SW;
+item outer_court_SE;
+item outer_court_center;
+item outer_court_N;
+item outer_court_NW;
+item outer_court_NE;
+item stable;
+
+#
+# Church rooms
+#
+item church_yard_W;
+item church_yard_S;
+item church_yard_N;
+item church;
+item side_chapel;
+item priest_house;
+

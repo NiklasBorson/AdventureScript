@@ -810,25 +810,26 @@ namespace AdventureLib
             Advance();
             ReadSymbol(SymbolId.LeftParen);
 
+            // Advance past the 'var' keyword.
+            ReadName("var");
+
             // Get the loop variable name.
-            var type = Types.Item;
-            var loopVar = frame.AddVar(this, ReadVariableName(), type);
+            string varName = ReadVariableName();
 
-            // Check for optional ":" <typeName>
-            if (MatchSymbol(SymbolId.Colon))
+            // Parse the optional type declaration.
+            var type = ParseOptionalTypeDeclaration();
+            if (type == Types.Void)
             {
-                Advance();
-
-                type = ParseTypeName();
-                if (type != Types.Item)
-                {
-                    if (!type.IsEnumType)
-                    {
-                        Fail("Only Item and enum types can be used with foreach.");
-                    }
-                    loopVar.SetType(type);
-                }
+                // Item type is the default.
+                type = Types.Item;
             }
+            else if (type != Types.Item && !type.IsEnumType)
+            {
+                Fail("Only Item and enum types can be used with foreach.");
+            }
+
+            // Add the loop variable.
+            var loopVar = frame.AddVar(this, varName, type);
 
             ReadSymbol(SymbolId.RightParen);
             var body = ParseStatementBlock(frame);
@@ -1297,6 +1298,15 @@ namespace AdventureLib
         {
             return this.IsNameToken && 
                 MemoryExtensions.Equals(name, m_lexer.NameValue, StringComparison.Ordinal);  
+        }
+
+        void ReadName(string name)
+        {
+            if (!MatchName(name))
+            {
+                Fail($"Expected '{name}'");
+            }
+            Advance();
         }
 
         string ReadName()

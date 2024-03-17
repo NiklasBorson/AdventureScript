@@ -178,7 +178,7 @@ function DestroyCommon($item:Item)
     Message($item.Description);
 
     # Anything contained by the destroyed item is now outside of it.
-    foreach ($inner:Item)
+    foreach (var $inner)
     {
         if ($inner.Location == $item)
         {
@@ -363,7 +363,7 @@ are `inventory` and `i`.
 function Inventory()
 {
     var $haveItems = false;
-    foreach ($item)
+    foreach (var $item)
     {
         if ($item.Location == player)
         {
@@ -509,7 +509,7 @@ The "put (item) in (item)" command invokes the `PutInContainer` function.
 function IsContainerEmpty($container:Item) : Bool
 {
     $return = true;
-    foreach ($item)
+    foreach (var $item)
     {
         if ($item.Location == $container)
         {
@@ -527,7 +527,7 @@ function ListContents($container:Item)
     else
     {
         Message($"Inside the {$container.Noun} are the following:");
-        foreach ($item)
+        foreach (var $item)
         {
             if ($item.Location == $container)
             {
@@ -1055,7 +1055,7 @@ function InitializeLighting()
 
     if (player.Location.IsDark(player.Location))
     {
-        foreach ($item)
+        foreach (var $item)
         {
             if (IsActiveLightState($item.LightState) && IsAccessible($item))
             {
@@ -1088,7 +1088,7 @@ function InitializeWordMap()
     if ($isNowDark)
     {
         # The room is dark, so only add labels for items in the inventory.
-        foreach ($item)
+        foreach (var $item)
         {
             if ($item.Location == player)
             {
@@ -1099,7 +1099,7 @@ function InitializeWordMap()
     else
     {
         # Add labels for all accessible items.
-        foreach ($item)
+        foreach (var $item)
         {
             if (IsAccessible($item))
             {
@@ -1108,7 +1108,7 @@ function InitializeWordMap()
         }
 
         # Add labels for doors linked from the current room.
-        foreach ($dir:Direction)
+        foreach (var $dir:Direction)
         {
             var $door = GetLink(player.Location, $dir);
             if ($door.DoorState != DoorState.None)
@@ -1135,7 +1135,7 @@ function Look()
         Message("You are in the dark.");
 
         # Check for an open door letting some light in.
-        foreach ($dir : Direction)
+        foreach (var $dir : Direction)
         {
             var $door = GetLink($room, $dir);
             if ($door != null && !IsClosedOrLocked($door.DoorState))
@@ -1157,7 +1157,7 @@ function Look()
 
         Describe($room);
 
-        foreach ($dir:Direction)
+        foreach (var $dir:Direction)
         {
             var $door = GetLink(player.Location, $dir);
             if ($door != null)
@@ -1166,7 +1166,7 @@ function Look()
             }
         }
 
-        foreach ($item)
+        foreach (var $item)
         {
             if ($item.Location == $room && !$item.IsHidden && $item.Noun != null)
             {
