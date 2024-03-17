@@ -46,8 +46,15 @@ namespace AdventureLib
                 var expr = m_vars[i];
                 writer.Write("var ");
                 writer.Write(expr.Name);
-                writer.Write(" = ");
-                expr.Type.WriteValue(game, expr.Value, writer);
+                if (expr.Value == 0)
+                {
+                    writer.Write($" : {expr.Type.Name}");
+                }
+                else
+                {
+                    writer.Write(" = ");
+                    expr.Type.WriteValue(game, expr.Value, writer);
+                }
                 writer.Write(";");
                 writer.EndLine();
             }

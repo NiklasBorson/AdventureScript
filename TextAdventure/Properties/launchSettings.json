@@ -2,8 +2,8 @@
   "profiles": {
     "CsAdventure": {
       "commandName": "Project",
-      "commandLineArgs": "Gloom-Castle.txt",
-      "workingDirectory": "$(SolutionDir)\\Games"
+      "commandLineArgs": "-parse .\\Games\\inc\\Foundation.md .\\EngineTest\\TestFiles\\ParserTest-Include.txt",
+      "workingDirectory": "$(SolutionDir)"
     }
   }
 }

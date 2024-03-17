@@ -69,7 +69,7 @@
             {
                 writer.BeginBlock();
 
-                writer.Write("$_ = ");
+                writer.Write("var $_ = ");
 
                 string name = m_list[id].Name;
                 if (Lexer.IsName(name))

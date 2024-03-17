@@ -68,7 +68,7 @@
 
         public override void WriteStatement(GameState game, CodeWriter writer)
         {
-            writer.Write("foreach (");
+            writer.Write("foreach (var ");
             writer.Write(m_loopVar.Name);
             if (m_type != Types.Item)
             {

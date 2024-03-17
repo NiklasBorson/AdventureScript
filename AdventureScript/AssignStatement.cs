@@ -37,9 +37,19 @@ namespace AdventureLib
         {
             if (m_isNewVar)
             {
-                writer.Write("var ");                
+                writer.Write("var ");
+                m_leftExpr.WriteExpr(game, writer);
+
+                if (m_rightExpr.Type == Types.Null)
+                {
+                    writer.Write($" : {m_leftExpr.Type.Name}");
+                }
             }
-            m_leftExpr.WriteExpr(game, writer);
+            else
+            {
+                m_leftExpr.WriteExpr(game, writer);
+            }
+
             writer.Write(" = ");
             m_rightExpr.WriteExpr(game, writer);
             writer.Write(";");

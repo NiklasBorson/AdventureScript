@@ -10,7 +10,7 @@ item livingRoom;
 
 game
 {
-    $location = frontHall;
+    player.Location = frontHall;
 
     frontPorch.Description = "You are on a front porch.";
     frontHall.Description = "You are in a small entryway.";
@@ -20,26 +20,23 @@ game
     diningRoom.Description = "You are in a dining room.";
     livingRoom.Description = "You are in a living room.";
 
-    var $frontDoor = LinkRoomsWithDoor(frontPorch, frontHall, Direction.North);
-    $frontDoor.Adj1 = "red";
-    AddKey($frontDoor, laundryRoom, "small", "gold");
+    var $frontDoor = NewDoorItem(
+        frontPorch,
+        frontHall,
+        Direction.North,
+        "red",
+        "door",
+        DoorState.Locked
+        );
 
-    LinkRooms(frontHall, backHall, Direction.North);
-    LinkRoomsWithDoor(backHall, laundryRoom, Direction.North);
-    LinkRooms(backHall, kitchen, Direction.East);
-    LinkRooms(kitchen, diningRoom, Direction.East);
-    LinkRooms(diningRoom, livingRoom, Direction.South);
-    LinkRooms(livingRoom, frontHall, Direction.West);
+    NewOpening(frontHall, backHall, Direction.North);
+    NewClosedDoor(backHall, laundryRoom, Direction.North);
+    NewOpening(backHall, kitchen, Direction.East);
+    NewOpening(kitchen, diningRoom, Direction.East);
+    NewOpening(diningRoom, livingRoom, Direction.South);
+    NewOpening(livingRoom, frontHall, Direction.West);
 
-    MessageHeading("Global Variables");
-    ListVariables();
+    $frontDoor.Key = NewKey("brass", "key", laundryRoom);
 
-    MessageHeading("Functions");
-    ListFunctions();
-
-    MessageHeading("Commands");
-    ListCommands();
-
-    MessageHeading("Starting Game");
     Look();
 }

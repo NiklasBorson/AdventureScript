@@ -234,18 +234,34 @@ namespace AdventureLib
             // Advance past "var" <varName> "="
             Advance();
             string varName = ReadVariableName();
-            var declaredType = ParseOptionalTypeDeclaration();
-            ReadSymbol(SymbolId.Assign);
+            var type = ParseOptionalTypeDeclaration();
+            int value = 0;
 
-            // Parse the right-hand expression.
-            var frame = new VariableFrame(this);
-            var rightExpr = ParseExpression(frame);
-
-            // Make sure we have a type.
-            var type = DeriveAssignedTypeAllowVoid(declaredType, rightExpr);
-            if (type == Types.Void)
+            // Is there an initializer expression?
+            if (MatchSymbol(SymbolId.Assign))
             {
-                Fail($"The initializer for {varName} does not return a value.");
+                Advance();
+
+                // Parse the right-hand expression.
+                var frame = new VariableFrame(this);
+                var rightExpr = ParseExpression(frame);
+
+                // Make sure we have a type.
+                type = DeriveAssignedTypeAllowVoid(type, rightExpr);
+                if (type == Types.Void)
+                {
+                    Fail($"The initializer for {varName} does not return a value.");
+                }
+
+                // Compute the value.
+                value = rightExpr.Evaluate(
+                    this.Game,
+                    new int[frame.FrameSize]
+                    );
+            }
+            else if (type == Types.Void)
+            {
+                Fail($"No type specified for variable {varName}.");
             }
 
             // Try adding the variable.
@@ -255,11 +271,7 @@ namespace AdventureLib
                 Fail($"The variable {varName} is already defined.");
             }
 
-            // Compute the value.
-            newVar.Value = rightExpr.Evaluate(
-                this.Game, 
-                new int[frame.FrameSize]
-                );
+            newVar.Value = value;
 
             // Read the final semicolon.
             ReadSymbol(SymbolId.Semicolon);
