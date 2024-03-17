@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using AdventureScript;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -661,7 +662,7 @@ namespace AdventureLib
                         Fail($"Cannot convert expression of type {right.Type.Name} to {expr.Type.Name}.");
                     }
 
-                    statement = new AssignStatement(expr, right, /*isNewVar*/ false);
+                    statement = new AssignStatement(expr, right);
                 }
                 else
                 {
@@ -681,28 +682,37 @@ namespace AdventureLib
             // Advance past the var keyword.
             Advance();
 
-            // Read $varName=
+            // Read the variable name and type.
             string varName = ReadVariableName();
-            var declaredType = ParseOptionalTypeDeclaration();
-            ReadSymbol(SymbolId.Assign);
+            var type = ParseOptionalTypeDeclaration();
 
-            // Parse the right-hand expression and get its type.
-            var rightExpr = ParseExpression(frame);
-            var type = DeriveAssignedTypeAllowVoid(declaredType, rightExpr);
-            if (type == Types.Void)
+            // Parse the right-hand express if specified.
+            Expr? rightExpr = null;
+            if (MatchSymbol(SymbolId.Assign))
             {
-                Fail("The expression does not return a value.");
+                Advance();
+                rightExpr = ParseExpression(frame);
+                type = DeriveAssignedTypeAllowVoid(type, rightExpr);
+                if (type == Types.Void)
+                {
+                    Fail("The expression does not return a value.");
+                }
+            }
+            else if (type == Types.Void)
+            {
+                Fail($"No type specified for variable {varName}.");
             }
 
-            // Add the variable and create an assignment statement.
-            var leftExpr = frame.AddVar(this, varName, type);
-            var statement = new AssignStatement(leftExpr, rightExpr, /*isNewVar*/ true);
+            // Add the variable and create the statement.
+            var newVar = frame.AddVar(this, varName, type);
+            var statement = new VarStatement(newVar, rightExpr);
 
             // Advance past the semicolon.
             ReadSymbol(SymbolId.Semicolon);
 
             return statement;
         }
+
         Statement ParseSwitchStatement(VariableFrame frame)
         {
             // Advance past the switch keyword.
