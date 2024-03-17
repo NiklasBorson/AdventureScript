@@ -803,9 +803,6 @@ namespace AdventureLib
 
         Statement ParseForeachStatement(VariableFrame frame)
         {
-            // The loop variable is scoped to the block.
-            frame.BeginBlock();
-
             // Advance past "foreach" "("
             Advance();
             ReadSymbol(SymbolId.LeftParen);
@@ -827,15 +824,68 @@ namespace AdventureLib
             {
                 Fail("Only Item and enum types can be used with foreach.");
             }
+            ReadSymbol(SymbolId.RightParen);
 
-            // Add the loop variable.
+            // Parse the where clause if specified.
+            WhereClause? whereClause = null;
+            if (type == Types.Item)
+            {
+                whereClause = ParseOptionalWhereClause(frame);
+            }
+
+            // Add the loop variable, which is scoped to the block.
+            frame.BeginBlock();
             var loopVar = frame.AddVar(this, varName, type);
 
-            ReadSymbol(SymbolId.RightParen);
             var body = ParseStatementBlock(frame);
             frame.EndBlock();
 
-            return new ForEachStatement(loopVar, type, body);
+            return new ForEachStatement(loopVar, type, whereClause, body);
+        }
+
+        WhereClause? ParseOptionalWhereClause(VariableFrame frame)
+        {
+            // Check for 'where' keyword and advance past it.
+            if (!MatchName("where"))
+            {
+                return null;
+            }
+            Advance();
+
+            // Read the property name, which the left argument.
+            string propName = ReadName();
+            var propDef = this.Game.Properties.TryGet(propName);
+            if (propDef == null)
+            {
+                Fail($"Undefined property: {propName}.");
+            }
+
+            // Read the binary operator.
+            var op = BinaryOperators.GetOp(m_lexer.SymbolValue);
+            if (op == null)
+            {
+                Fail("Expected binary operator.");
+            }
+            Advance();
+
+            // Parse the right-hand expression.
+            var rightArg = ParseUnaryExpression(frame);
+
+            // Determine the type of the binary expression.
+            var type = op.DeriveType(propDef.Type, rightArg.Type);
+            if (type != Types.Bool)
+            {
+                if (type == Types.Void)
+                {
+                    Fail($"Invalid argument types for '{op.SymbolText}' operator.");
+                }
+                else
+                {
+                    Fail("Expected Boolean operator in 'where' clause.");
+                }
+            }
+
+            return new WhereClause(propDef, op, rightArg);
         }
 
         Expr ParseExpression(VariableFrame frame)

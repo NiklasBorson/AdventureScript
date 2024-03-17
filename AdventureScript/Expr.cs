@@ -21,9 +21,14 @@ namespace AdventureLib
 
         public abstract void WriteExpr(GameState game, CodeWriter writer);
 
-        protected void WriteSubExpr(GameState game, Expr expr, CodeWriter writer)
+        public static void WriteSubExpr(
+            GameState game, 
+            Expr expr, 
+            Precedence outerPrecedence, 
+            CodeWriter writer
+            )
         {
-            if (expr.Precedence < this.Precedence)
+            if (expr.Precedence < outerPrecedence)
             {
                 writer.Write("(");
                 expr.WriteExpr(game, writer);
@@ -33,6 +38,11 @@ namespace AdventureLib
             {
                 expr.WriteExpr(game, writer);
             }
+        }
+
+        protected void WriteSubExpr(GameState game, Expr expr, CodeWriter writer)
+        {
+            WriteSubExpr(game, expr, this.Precedence, writer);
         }
 
         public int EvaluateConst(GameState game)

@@ -1166,9 +1166,9 @@ function Look()
             }
         }
 
-        foreach (var $item)
+        foreach (var $item) where Location == $room
         {
-            if ($item.Location == $room && !$item.IsHidden && $item.Noun != null)
+            if (!$item.IsHidden && $item.Noun != null)
             {
                 Message($"There is a {LabelWithState($item)} here.");
             }
