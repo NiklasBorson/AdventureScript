@@ -40,7 +40,7 @@ namespace AdventureLib
         {
             CheckNotFinalized();
             m_matchString.Append('$');
-            m_frame = new FunctionVariableFrame(parser, m_paramList);
+            m_frame = new FunctionVariableFrame(parser, m_paramList, Types.Void);
         }
 
         public VariableFrame GetVariableFrame()

@@ -177,9 +177,7 @@ namespace AdventureLib
             ReserveName(name, "type");
 
             // Parse the parameter list.
-            ReadSymbol(SymbolId.LeftParen);
             var paramList = ParseParamList();
-            ReadSymbol(SymbolId.RightParen);
 
             // Parse the return type.
             var returnType = ParseOptionalTypeDeclaration();
@@ -282,15 +280,12 @@ namespace AdventureLib
             var functionName = ReadName();
             ReserveName(functionName, "function");
 
-            // Parse the parameter list.
-            ReadSymbol(SymbolId.LeftParen);
+            // Parse the parameter list and return type.
             var paramList = ParseParamList();
-
-            ReadSymbol(SymbolId.RightParen);
             var returnType = ParseOptionalTypeDeclaration();
 
-            var frame = new FunctionVariableFrame(this, paramList);
-            frame.SetReturnType(this, returnType);
+            // Create a variable frame for this function.
+            var frame = new FunctionVariableFrame(this, paramList, returnType);
 
             if (MatchSymbol(SymbolId.Lambda))
             {
@@ -550,6 +545,9 @@ namespace AdventureLib
         List<ParamDef> ParseParamList()
         {
             var paramList = new List<ParamDef>();
+
+            ReadSymbol(SymbolId.LeftParen);
+
             if (this.IsVariableToken)
             {
                 paramList.Add(ParseParamDef());
@@ -560,6 +558,9 @@ namespace AdventureLib
                     paramList.Add(ParseParamDef());
                 }
             }
+
+            ReadSymbol(SymbolId.RightParen);
+
             return paramList;
         }
 
