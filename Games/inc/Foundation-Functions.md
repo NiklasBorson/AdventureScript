@@ -362,8 +362,12 @@ function Inventory()
     var $haveItems = false;
     foreach (var $item) where Location == player
     {
-        Message(LabelWithState($item));
-        $haveItems = true;
+        if (!$haveItems)
+        {
+            Message("You have the following items:");
+            $haveItems = true;
+        }
+        Message($"- A {LabelWithState($item)}.");
     }
     if (!$haveItems)
     {
@@ -500,28 +504,21 @@ The `PutInContainer` function puts an item in a container.
 The "put (item) in (item)" command invokes the `PutInContainer` function.
 
 ```text
-function IsContainerEmpty($container:Item) : Bool
-{
-    $return = true;
-    foreach (var $item) where Location == $container
-    {
-        $return = false;
-    }
-}
-
 function ListContents($container:Item)
 {
-    if (IsContainerEmpty($container))
+    var $haveItems = false;
+    foreach (var $item) where Location == $container
+    {
+        if (!$haveItems)
+        {
+            Message($"Inside the {$container.Noun} are the following:");
+            $haveItems = true;
+        }
+        Message($" - A {LabelWithState($item)}.");
+    }
+    if (!$haveItems)
     {
         Message($"The {$container.Noun} is empty.");
-    }
-    else
-    {
-        Message($"Inside the {$container.Noun} are the following:");
-        foreach (var $item) where Location == $container
-        {
-            Message($" - A {LabelWithState($item)}.");
-        }
     }
 }
 
