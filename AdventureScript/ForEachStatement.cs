@@ -25,16 +25,24 @@
         {
             if (m_whereClause != null)
             {
+                // Get the property definition and operator delegate.
                 var propDef = m_whereClause.Property;
-                int rightArg = m_whereClause.RightArg.Evaluate(game, frame);
                 var op = m_whereClause.Op.Compute;
 
+                // Evalute the right expression once outside the loop.
+                int rightArg = m_whereClause.RightArg.Evaluate(game, frame);
+
+                // Iterate over all the item IDs except the null item id.
                 int itemCount = game.Items.Count;
                 for (int itemId = 1; itemId < itemCount; itemId++)
                 {
+                    // Evaluate the Boolean operator.
                     int leftArg = propDef[itemId];
-
-                    // TODO
+                    if (op(leftArg, rightArg) != 0)
+                    {
+                        m_loopVar.SetValue(game, frame, itemId);
+                        m_body.Invoke(game, frame);
+                    }
                 }
             }
             else if (m_type == Types.Item)
@@ -51,9 +59,9 @@
 
         void Loop(GameState game, int[] frame, int iMin, int iLim)
         {
-            for (int id = iMin; id < iLim; id++)
+            for (int i = iMin; i < iLim; i++)
             {
-                m_loopVar.SetValue(game, frame, id);
+                m_loopVar.SetValue(game, frame, i);
                 m_body.Invoke(game, frame);
             }
         }

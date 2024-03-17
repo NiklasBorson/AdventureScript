@@ -178,12 +178,9 @@ function DestroyCommon($item:Item)
     Message($item.Description);
 
     # Anything contained by the destroyed item is now outside of it.
-    foreach (var $inner)
+    foreach (var $inner) where Location == $item
     {
-        if ($inner.Location == $item)
-        {
-            $inner.Location = $item.Location;
-        }
+        $inner.Location = $item.Location;
     }
 
     # The destroyed item can't do anything, so clear all its action properties.
@@ -363,13 +360,10 @@ are `inventory` and `i`.
 function Inventory()
 {
     var $haveItems = false;
-    foreach (var $item)
+    foreach (var $item) where Location == player
     {
-        if ($item.Location == player)
-        {
-            Message(LabelWithState($item));
-            $haveItems = true;
-        }
+        Message(LabelWithState($item));
+        $haveItems = true;
     }
     if (!$haveItems)
     {
@@ -509,12 +503,9 @@ The "put (item) in (item)" command invokes the `PutInContainer` function.
 function IsContainerEmpty($container:Item) : Bool
 {
     $return = true;
-    foreach (var $item)
+    foreach (var $item) where Location == $container
     {
-        if ($item.Location == $container)
-        {
-            $return = false;
-        }
+        $return = false;
     }
 }
 
@@ -527,12 +518,9 @@ function ListContents($container:Item)
     else
     {
         Message($"Inside the {$container.Noun} are the following:");
-        foreach (var $item)
+        foreach (var $item) where Location == $container
         {
-            if ($item.Location == $container)
-            {
-                Message($" - A {LabelWithState($item)}.");
-            }
+            Message($" - A {LabelWithState($item)}.");
         }
     }
 }
@@ -1088,12 +1076,9 @@ function InitializeWordMap()
     if ($isNowDark)
     {
         # The room is dark, so only add labels for items in the inventory.
-        foreach (var $item)
+        foreach (var $item) where Location == player
         {
-            if ($item.Location == player)
-            {
-                AddItemWords($item);
-            }
+            AddItemWords($item);
         }
     }
     else

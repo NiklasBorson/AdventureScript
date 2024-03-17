@@ -3,7 +3,7 @@
     class BinaryExpr : Expr
     {
         public delegate TypeDef DeriveType(TypeDef type1, TypeDef type2);
-        public delegate int Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2);
+        public delegate int Compute(int arg1, int arg2);
 
         BinaryOp m_op;
         TypeDef m_type1;
@@ -35,7 +35,7 @@
             {
                 int val1 = arg1.EvaluateConst(parser.Game);
                 int val2 = arg2.EvaluateConst(parser.Game);
-                int value = op.Compute(parser.Game, type1, type2, val1, val2);
+                int value = op.Compute(val1, val2);
                 return new LiteralExpr(resultType, value);
             }
             else
@@ -58,7 +58,7 @@
         {
             int arg1 = m_arg1.Evaluate(game, frame);
             int arg2 = m_arg2.Evaluate(game, frame);
-            return m_op.Compute(game, m_type1, m_type2, arg1, arg2);
+            return m_op.Compute(arg1, arg2);
         }
 
         public override TypeDef Type => m_resultType;
