@@ -1,0 +1,159 @@
+include "inc/Foundation.md";
+
+#
+# Outer court rooms
+#
+item outside;
+item outer_court_SW;
+item outer_court_S;
+item outer_court_SE;
+item stable;
+item outer_court_W;
+item outer_court_center;
+item outer_court_NW;
+item outer_court_N;
+item outer_court_NE;
+
+#
+# Church rooms
+#
+item church_yard_W;
+item church_yard_S;
+item church_yard_N;
+item church_W;
+item church_E;
+item side_chapel;
+item priest_house;
+item priest_key;
+item priest_house_bed;
+item priest_house_trunk;
+item priest_house_desk;
+item priest_house_paper;
+
+command "help"
+{
+    Message("Following are commands you can say:");
+    ListCommands();
+}
+
+game
+{
+    # Welcome message at the start of the game.
+    Message("# Welcome to Oxbow Castle");
+    Message(
+        "You are a messenger sent by King Peregrin the Paranoid to find out what has "
+        "become of Oxbow castle. Previous messengers have not returned, and the king "
+        "has begin to suspect the castle lord of plotting against him."
+    );
+    Message(
+        "That is one possibility, but you have also heard stranger rumors. In the "
+        "taverns, people whisper that something dark and sinister has befallen the "
+        "place. Of course, it may just be the ale talking. You are here to find out!"
+    );
+    Message(
+        "Oxbow Castle is situated in a sharp bend of the river Ox, such that it is "
+        "surrounded on three sides by water. It is late morning, and you have just "
+        "arrived at the only entrance to the castle, an open iron gate in the south "
+        "wall. It is strangely silent. No one seems to be around."
+    );
+    Message(
+        "At any time you can type 'help' to see a list of commands you can say."
+    );
+
+    player.Location = outside;
+
+    # Outer court descriptions
+    outside.Description = "You are outside the main gate of Oxbow Castle.";
+    outer_court_S.Description = 
+        "You are at the south end of a large courtyard, which extends to the North, East, and West. "
+        "At the north end of the courtyard you can see the high walls of the keep.";
+    outer_court_SW.Description =
+        "You are at the southwest corner of a large outer courtyard, which extends to the North and East. "
+        "The south and west walls meet in a small round tower, which is open to the inside. There is nothing "
+        "in the tower.";
+    outer_court_SE.Description = 
+        "You are in the southeast corner of a large outer courtyard, which extends to the West. The way north "
+        "is blocked by a stone wall behind which you can see a tall stone church. The south and east walls meet "
+        "in a small round tower, which is open to the inside. There is nothing in the tower.";
+    stable.Description =
+        "You are in a large wooden stable with room for many horses. Neither hay nor horses are to be found "
+        "here now, only their lingering smell.";
+    outer_court_W.Description = 
+        "You are at the west side of a large outer courtyard, which extends to the North, South, and East. "
+        "Against the wall to your west is a wooden stable.";
+    outer_court_center.Description =
+        "You are in the center of a large outer courtyard, which extends to the North, West, and South. East "
+        "of you is a stone wall with a wooden gate behind which you can see a tall stone church.";
+    outer_court_NW.Description =
+        "You are in the northwest corner of a large outer courtyard, which extends to the South and East. "
+        "The high wall of the keep looms above you to the North.";
+    outer_court_N.Description = 
+        "You are at the north end of a large outer courtyard, which extends to the West, East, and South. "
+        "Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on "
+        "either side of the gate.";
+    outer_court_NE.Description =
+        "You are in the northeast corner of a large outer courtyard, which extends to the West. The high wall "
+        "of the keep looms above you to the North. The way south is blocked by a stone wall behind which you "
+        "can see a tall stone church.";
+
+    # Outer court northward links
+    NewDoorItem(outside, outer_court_S, Direction.North, "iron", "gate", DoorState.Open);
+    NewLink(outer_court_SW, outer_court_W, Direction.North);
+    NewLink(outer_court_S, outer_court_center, Direction.North);
+    NewLink(outer_court_W, outer_court_NW, Direction.North);
+    NewLink(outer_court_center, outer_court_N, Direction.North);
+
+    # Outer court eastward links
+    NewLink(outer_court_SW, outer_court_S, Direction.East);
+    NewLink(outer_court_S, outer_court_SE, Direction.East);
+    NewClosedDoor(stable, outer_court_W, Direction.East);
+    NewLink(outer_court_W, outer_court_center, Direction.East);
+    NewLink(outer_court_NW, outer_court_N, Direction.East);
+    NewLink(outer_court_N, outer_court_NE, Direction.East);
+
+    # Church descriptions.
+    church_yard_W.Description =
+        "You are in a walled church yard. East of you is the arched doorway of a beautiful stone "
+        "church. The church yard wraps around the church to the North and South.";
+    church_yard_S.Description = 
+        "You are in a walled church yard south of the church. The church yard wraps around the church "
+        "to the North. East of you is a smaller stone building adjoining the church.";
+    church_yard_N.Description =
+        "You are in a walled churcn yard north of the church. The church yard wraps around the church "
+        "to the South. There are graves here.";
+    church_W.Description =
+        "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
+        "stone columns on either side. Windows set high in the walls let in light.";
+    church_E.Description =
+        "You are at the east end of the church. A long aisle runs from here to the West. Between "
+        "fluted columns to the North, you can see a side chapel.";
+    side_chapel.Description =
+        "You are in a side chapel with statues of saints. An opening to the South leads to the "
+        "main part of the church.";
+    priest_house.Description =
+        "You are in a one-room house, presumably the priest's residence.";
+
+    # Church eastward links.
+    NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
+    NewDoorItem(church_yard_W, church_W, Direction.East, "carved wooden", "door", DoorState.Closed);
+    NewLink(church_W, church_E, Direction.East);
+    NewDoorItem(church_yard_S, priest_house, Direction.East, "small wooden", "door", DoorState.Locked);
+
+    # Church north links.
+    NewLink(church_yard_S, church_yard_W, Direction.North);
+    NewLink(church_yard_W, church_yard_N, Direction.North);
+    NewLink(church_E, side_chapel, Direction.North);
+    NewDoorItem(priest_house, church_E, Direction.North, "small wooden", "door", DoorState.Closed).Key = priest_key;
+
+    # Priest house items.
+    priest_house_bed.Noun = "bed";
+    priest_house_bed.Location = priest_house;
+
+    InitializeContainer(priest_house_trunk, "wooden", "trunk", DoorState.Closed, priest_house);
+    NewPortableItem("black", "robe", priest_house_trunk);
+    InitializeKey(priest_key, "crude iron", "key", priest_house_trunk);
+
+    # priest_house_desk 
+    # priest_house_paper
+
+}

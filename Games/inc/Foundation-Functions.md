@@ -318,6 +318,8 @@ The `SetPortable` function makes an item portable by setting its `TakeAction` an
 
 The `IsPortable` function tests whether an item is portable.
 
+The `NewPortableItem` function creates a new portable item in the specified location.
+
 ```text
 function TakePortableItem($item:Item)
 {
@@ -349,6 +351,14 @@ function SetPortable($item:Item)
     $item.DropAction = DropPortableItem;
 }
 function IsPortable($item:Item) => $item.TakeAction == TakePortableItem;
+
+function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}");
+    SetLabelProperties($return, $adjectives, $noun);
+    SetPortable($return);
+    $return.Location = $loc;
+}
 ```
 
 ## Inventory Function
@@ -671,8 +681,9 @@ may be actual doors, which can be opened or closed, or mere openings.
 | `LinkRoomsOneWay`     | Creates a one-way link from one room to another via a door.   |
 | `LinkRooms`           | Links two rooms via a specified door item.                    |
 | `NewDoorItem`         | Links two rooms with a new door item.                         |
-| `NewClosedDoor`       | Links two rooms with a new door in the Closed state.          |
-| `NewOpening`          | Links two rooms with a new opening.                           |
+| `NewClosedDoor`       | Links two rooms with a new "door" in the Closed state.        |
+| `NewOpening`          | Links two rooms with a new "opening".                         |
+| `NewLink`             | Links two rooms with a new unnamed object.                    |
 
 ```text
 function InitializeDoor($door:Item, $adjectives:String, $noun:String, $state:DoorState)
@@ -710,6 +721,10 @@ function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
 function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
 {
     $return = NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
+}
+function NewLink($from:Item, $to:Item, $dir:Direction) : Item
+{
+    $return = NewDoorItem($from, $to, $dir, "", "", DoorState.None);
 }
 ```
 
@@ -1142,7 +1157,7 @@ function Look()
         foreach (var $dir:Direction)
         {
             var $door = GetLink(player.Location, $dir);
-            if ($door != null)
+            if ($door != null && $door.Noun != null)
             {
                 Message($"There is a {LabelWithState($door)} {DirectionPhrase($dir)}.");
             }
