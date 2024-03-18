@@ -499,6 +499,10 @@ function IsOpenable($item:Item) => $item.OpenAction != null;
 
 ## Container Functions
 
+The functions in this section apply to _container items_, which are items that contain
+other items. Some containers can be opened or closed. You can put items in a container
+and take items that are in an open container.
+
 The `InitializeContainer` function initialize the properties of a container item such
 as a box or chest.
 
@@ -514,7 +518,7 @@ The `PutInContainer` function puts an item in a container.
 The "put (item) in (item)" command invokes the `PutInContainer` function.
 
 ```text
-function ListContents($container:Item)
+function ListContainerContents($container:Item)
 {
     var $haveItems = false;
     foreach (var $item) where Location == $container
@@ -545,7 +549,7 @@ function OpenContainer($item:Item)
         case DoorState.Closed {
             $item.DoorState = DoorState.Open;
             Message($"The {Label($item)} is now open.");
-            ListContents($item);
+            ListContainerContents($item);
         }
         case DoorState.Locked {
             Message($"The {Label($item)} is locked.");
@@ -560,7 +564,7 @@ function DescribeContainer($container:Item)
 
     if (!IsClosedOrLocked($container.DoorState))
     {
-        ListContents($container);
+        ListContainerContents($container);
     }
 }
 
@@ -619,6 +623,84 @@ function PutInContainer($item:Item, $container:Item)
 }
 
 command "put {$item:Item} in {$container:Item}" { PutInContainer($item, $container); }
+```
+
+## Table Functions
+
+The functions in this section apply to tables and similar items like desks and shelves.
+These are similar to containers except that another item may be "on" a table, as opposed
+to "in" a container. Also, table items cannot be closed.
+
+The `InitializeTable` function initialize the properties of a table item.
+
+The `NewTable` function creates and initializes a new table item.
+
+The `IsTable` function tests whether the specified item is a table.
+
+The `PutOnTable` function puts an item on a table.
+
+The "put (item) on (item)" command invokes the `PutOnTable` function.
+
+```text
+function DescribeTable($table:Item)
+{
+    # Output basic description.
+    DescribeCommon($table);
+
+    var $haveItems = false;
+    foreach (var $item) where Location == $table
+    {
+        if (!$haveItems)
+        {
+            Message($"On the {$table.Noun} are the following:");
+            $haveItems = true;
+        }
+        Message($" - A {LabelWithState($item)}.");
+    }
+}
+
+function InitializeTable(
+    $table:Item,
+    $adjectives:String,
+    $noun:String,
+    $loc:Item
+    )
+{
+    SetLabelProperties($table, $adjectives, $noun);
+    $table.DescribeAction = DescribeTable;
+    $table.Location = $loc;
+}
+
+function NewTable($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeTable($return, $adjectives, $noun, $loc);
+}
+
+function IsTable($item:Item) => $item.DescribeAction == DescribeTable;
+
+function PutOnTable($item:Item, $table:Item)
+{
+    if (!IsPortable($item))
+    {
+        Message($"You can't move the {Label($item)}.");
+    }
+    elseif (!IsTable($table))
+    {
+        Message($"You can't put the {Label($item)} on the {Label($table)}.");
+    }
+    elseif ($item.Location == $table)
+    {
+        Message($"The {Label($item)} is already on the {Label($table)}.");
+    }
+    else
+    {
+        $item.Location = $table;
+        Message($"The {Label($item)} is now on the {Label($table)}.");
+    }
+}
+
+command "put {$item:Item} on {$table:Item}" { PutOnTable($item, $table); }
 ```
 
 ## Opposite Function
@@ -1008,8 +1090,8 @@ command "light {$target:Item} with {$lighter:Item}"
 
 ## IsAccessible Function
 
-The `IsAccessible` function tests whether an item is in the current room, in an
-open container in the current room, or in the player's inventory.
+The `IsAccessible` function tests whether an item is in the current room, in an open
+container in the current room, on a table in the current room, or in the inventory.
 
 ```text
 function IsCurrentRoomOrInventory($loc:Item) =>
@@ -1026,9 +1108,9 @@ function IsAccessible($item:Item) : Bool
             # Item is in the current room or player inventory.
             $return = true;
         }
-        elseif (IsOpenContainer($loc) && $loc.Location == player.Location)
+        elseif ($loc.Location == player.Location && !IsClosedOrLocked($loc.DoorState))
         {
-            # Item is in an open container in the current room.
+            # Item is in an open container or on a table in the current room.
             $return = true;
         }
     }

@@ -86,34 +86,31 @@ namespace CsAdventure
                 return;
 
             string currentLinePrefix = firstLinePrefix;
+            int maxLength = ColumnWidth - (currentLinePrefix.Length + lineSuffix.Length);
             int lineStart = startPos;
 
-            while (para.Length - lineStart > ColumnWidth)
+            while (para.Length - lineStart > maxLength)
             {
-                int maxLength = ColumnWidth - (currentLinePrefix.Length + lineSuffix.Length);
-                int lastBreakStart = lineStart;
-                int lastBreakEnd = lineStart;
+                int endIndex = Math.Min(para.Length, lineStart + maxLength);
 
-                for (int i = lineStart; i < para.Length; i++)
+                int breakStart = endIndex;
+                int breakEnd = endIndex;
+
+                for (int i = lineStart; i < endIndex; i++)
                 {
                     if (para[i] == ' ')
                     {
-                        int breakStart = i++;
+                        breakStart = i++;
                         while (i < para.Length && para[i] == ' ')
                             i++;
-
-                        if (lastBreakStart > lineStart && i - lineStart >= maxLength)
-                        {
-                            WriteLine(para, lineStart, lastBreakStart - lineStart, currentLinePrefix, lineSuffix);
-                            currentLinePrefix = linePrefix;
-                            lineStart = lastBreakEnd;
-                            break;
-                        }
-
-                        lastBreakStart = breakStart;
-                        lastBreakEnd = i;
+                        breakEnd = i;
                     }
                 }
+
+                WriteLine(para, lineStart, breakStart - lineStart, currentLinePrefix, lineSuffix);
+                lineStart = breakEnd;
+                currentLinePrefix = linePrefix;
+                maxLength = ColumnWidth - (currentLinePrefix.Length + lineSuffix.Length);
             }
 
             if (lineStart < para.Length)

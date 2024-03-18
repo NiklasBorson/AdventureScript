@@ -25,7 +25,6 @@ item church_E;
 item side_chapel;
 item priest_house;
 item priest_key;
-item priest_house_bed;
 item priest_house_trunk;
 item priest_house_desk;
 item priest_house_paper;
@@ -137,23 +136,22 @@ game
     NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
     NewDoorItem(church_yard_W, church_W, Direction.East, "carved wooden", "door", DoorState.Closed);
     NewLink(church_W, church_E, Direction.East);
-    NewDoorItem(church_yard_S, priest_house, Direction.East, "small wooden", "door", DoorState.Locked);
+    NewDoorItem(church_yard_S, priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = priest_key;
 
     # Church north links.
     NewLink(church_yard_S, church_yard_W, Direction.North);
     NewLink(church_yard_W, church_yard_N, Direction.North);
     NewLink(church_E, side_chapel, Direction.North);
-    NewDoorItem(priest_house, church_E, Direction.North, "small wooden", "door", DoorState.Closed).Key = priest_key;
+    NewDoorItem(priest_house, church_E, Direction.North, "small wooden", "door", DoorState.Closed);
 
     # Priest house items.
-    priest_house_bed.Noun = "bed";
-    priest_house_bed.Location = priest_house;
-
-    InitializeContainer(priest_house_trunk, "wooden", "trunk", DoorState.Closed, priest_house);
+    NewTable("lumpy", "bed", priest_house);
+    InitializeContainer(priest_house_trunk, "pine", "trunk", DoorState.Closed, priest_house);
     NewPortableItem("black", "robe", priest_house_trunk);
     InitializeKey(priest_key, "crude iron", "key", priest_house_trunk);
-
-    # priest_house_desk 
-    # priest_house_paper
-
+    InitializeTable(priest_house_desk, "large oak", "desk", priest_house);
+    NewPortableItem("white", "paper", priest_house_desk).Description =
+        "The paper appears to be a draft of a sermon. Between the scratched-out words and ink blots, "
+        "you read a passionate diatribe criticizing the congregation for continuing to believe in the "
+        "old gods, as well as supernatural creatures like fairies.";
 }
