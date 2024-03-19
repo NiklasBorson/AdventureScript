@@ -30,6 +30,17 @@ item priest_house_trunk;
 item priest_house_desk;
 item priest_house_paper;
 
+#
+# Inner court rooms
+#
+item inner_gate;
+item inner_court_S;
+item inner_court_SW;
+item inner_court_SE;
+item inner_court_N;
+item inner_court_NW;
+item inner_court_NE;
+
 command "help"
 {
     Message("Following are commands you can say:");
@@ -61,7 +72,25 @@ game
     );
 
     player.Location = outside;
+}
 
+# Use action for a well.
+function UseWell($item:Item)
+{
+    Message("You draw water from the well and take a refreshing drink.");
+}
+
+# Helper function create a well in a specified location.
+function NewWell($loc:Item)
+{
+    var $well = NewItem($"{$loc}_well");
+    $well.Location = $loc;
+    $well.Noun = "well";
+    $well.UseAction = UseWell;
+}
+
+game
+{
     # Outer court descriptions
     outside.Description = "You are outside the main gate of Oxbow Castle.";
     outer_court_S.Description = 
@@ -90,7 +119,7 @@ game
     outer_court_N.Description = 
         "You are at the north end of a large outer courtyard, which extends to the West, East, and South. "
         "Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on "
-        "either side of the gate.";
+        "either side of an open portcullis.";
     outer_court_NE.Description =
         "You are in the northeast corner of a large outer courtyard, which extends to the West. The high wall "
         "of the keep looms above you to the North. The way south is blocked by a stone wall behind which you "
@@ -111,6 +140,11 @@ game
     NewLink(outer_court_NW, outer_court_N, Direction.East);
     NewLink(outer_court_N, outer_court_NE, Direction.East);
 
+    NewWell(outer_court_NW);
+}
+
+game
+{
     # Church descriptions.
     church_yard_W.Description =
         "You are in a walled church yard. East of you is the arched doorway of a beautiful stone "
@@ -156,4 +190,64 @@ game
         "The paper appears to be a draft of a sermon. Between the scratched-out words and ink blots, "
         "you read a passionate diatribe criticizing the congregation for continuing to believe in the "
         "old gods, as well as supernatural creatures like fairies.";
+}
+
+function OnEnterKeep($from:Item, $to:Item) : Bool
+{
+    if ($from == outer_court_N && $to == inner_court_S)
+    {
+        Message(
+            "You pass through the open portcullis into a dim tunnel. High in the walls on "
+            "either side are arrow loops through which defenders could rain down fire on "
+            "an attacker, and in the ceiling above you are murder holes through which "
+            "boulders could be dropped. However, no one challenges you or raises an alarm."
+            );
+        Message(
+            "At the north end of the tunnel, you pass through another open gate into an "
+            "inner courtyard. For a moment, the air around you seems to shimmer, but "
+            "perhaps you are only dazzled by the sun after leaving the dim tunnel."
+        );
+    }
+}
+
+game
+{
+    # One-way link from outer court to inner court via. inner_gate.
+    LinkRoomsOneWay(outer_court_N, inner_court_S, inner_gate, Direction.North);
+    outer_court_N.LeaveAction = OnEnterKeep;
+
+    # Inner court descriptions
+    inner_court_S.Description =
+        "You are at the south end of the inner courtyard, which extends to the "
+        "North, East, and West. South of you is the main gatehouse of the keep "
+        "with its inner gate open. Across the courtyard to the North is the "
+        "great hall. Other buildings surround the courtyard on all sides.";
+    inner_court_SW.Description =
+        "You are in the southwest corner of the inner courtyard, which extends to "
+        "the North and East.";
+    inner_court_SE.Description =
+        "You are in the southeast corner of the inner courtyard, which extends to "
+        "the North and West.";
+    inner_court_N.Description =
+        "You are at the north end of the inner courtyard, which extends to the "
+        "South, East, and West.";
+    inner_court_NW.Description =
+        "You are in the northwest corner of the inner courtyard, which extends "
+        "to the South and East.";
+    inner_court_NE.Description =
+        "You are in the northeast corner of the inner courtyard, which extends "
+        "to the South and West.";
+    
+    # Inner court northward links
+    NewLink(inner_court_S, inner_court_N, Direction.North);
+    NewLink(inner_court_SW, inner_court_NW, Direction.North);
+    NewLink(inner_court_SE, inner_court_NE, Direction.North);
+
+    # Inner court eastward links
+    NewLink(inner_court_SW, inner_court_S, Direction.East);
+    NewLink(inner_court_S, inner_court_SE, Direction.East);
+    NewLink(inner_court_NW, inner_court_N, Direction.East);
+    NewLink(inner_court_N, inner_court_NE, Direction.East);
+
+    NewWell(inner_court_NE);
 }
