@@ -465,19 +465,14 @@ Expressions are the building blocks of statements.
 
 ### Literal Values
 
-String literal
-    A sequence of characters enclosed in quotation marks represents a
-    literal value of type String.
+A _string literal_ is a sequence of characters enclosed in quotation marks.
 
-Integer literal
-    A sequence of decimal digits represents a literal value of type Int.
+An _integer literal_ is a sequence of decimal digits.
 
-Boolean literal
-    The keywords `true` and `false` represent literal values of type Bool.
+A _Boolean literal_ is the `true` or `false` keyword.
 
-Null literal
-    The `null` keyword has no specific type but can be converted to the
-    default "null" value of any type.
+A _null literal_ is the `null` keyword. It has no specific type but can be
+implicitly converted to the default "null" value of any type.
 
 ### Format Strings
 
