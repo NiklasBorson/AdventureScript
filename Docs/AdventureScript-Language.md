@@ -345,7 +345,7 @@ player.Health = player.Health - 1;
 
 ### If Statement
 
-The `if` statement executs a code block if a specified condition is true. The condition is an
+The `if` statement executes a code block if a specified condition is true. The condition is an
 expression enclosed in parentheses after the `if` keyword and must return a Boolean value
 (i.e., true or false).
 
@@ -416,19 +416,25 @@ while ($count > 0)
 
 ### Foreach Statement
 
-The `foreach` statement executes a statement block once for each item or once for each possible
-value of an enum type.
+The `foreach` statement may be used in three ways:
+
+- To loop over all the named values of a specified enum type.
+- To loop over all items.
+- To loop over all items where a specified condition is true.
+
+Following is a foreach statement that loops over all the values of the `Direction` type:
 
 ```text
-# Example of foreach with an enum type.
-# Output is "North", "South", "East", "West", "Up", "Down".
 foreach (var $dir : Direction)
 {
     Message($"{$dir}");
 }
+```
 
-# Example of foreach item.
-# Note that Item is the default type and can be omitted.
+Following is a foreach statement that loops over all items. Note that the loop variable's
+type need not be specified in this case because Item is the default.
+
+```text
 foreach (var $item)
 {
     if ($item.Location == player.Location)
@@ -436,14 +442,22 @@ foreach (var $item)
         Message($"You see a {Label($item)}.");
     }
 }
+```
 
-# Example of foreach item with where clause.
-# Effect is the same as the previous example.
+Following is a foreach statement that loops over all the items for which the
+Location properties equals a specified value. The where clause in the following
+loop has the same effect as the if test inside the above loop, but the where
+clause is more concise and more efficient.
+
+```text
 foreach (var $item) where Location == player.Location
 {
     Message($"You see a {Label($item)}.");
 }
 ```
+
+The where clause must be a binary expression in which the left-hand argument
+is simply a property name.
 
 ## Expressions
 
