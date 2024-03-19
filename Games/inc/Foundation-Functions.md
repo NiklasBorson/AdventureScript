@@ -1271,12 +1271,18 @@ function Go($dir:Direction)
     {
         Message($"You cannot go {$dir}.");
     }
-    elseif (IsClosedOrLocked($door.DoorState))
+    elseif ($door.DoorState == DoorState.Locked)
     {
-        Message($"The {Label($door)} is closed.");
+        Message($"The {Label($door)} is locked.");
     }
     else
     {
+        if ($door.DoorState == DoorState.Closed)
+        {
+            Message($"You open the {Label($door)} and go {$dir}.");
+            $door.DoorState = DoorState.Open;
+        }
+
         var $dest = GetLink($door, $dir);
         if (!$source.LeaveAction($source, $dest) &&
             !$dest.EnterAction($source, $dest))
