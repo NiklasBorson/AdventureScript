@@ -41,6 +41,30 @@ item inner_court_N;
 item inner_court_NW;
 item inner_court_NE;
 
+#
+# South wall and towers
+#
+item guard_room_W_0;
+item guard_room_E_0;
+item guard_room_W_1;
+item guard_room_E_1;
+item tower_SW_0;
+item tower_SW_1;
+item tower_SW_2;    # aligns with wall
+item tower_SW_roof;
+item tower_SE_0;
+item tower_SE_1;
+item tower_SE_2;    # aligns with wall
+item tower_SE_roof;
+item gate_house_W_0;
+item gate_house_W_1;
+item gate_house_E_0;
+item gate_house_E_1;
+item gate_house_2;  # aligns with wall
+item gate_house_roof;
+item wall_SW;
+item wall_SE;
+
 command "help"
 {
     Message("Following are commands you can say:");
@@ -264,4 +288,96 @@ game
         "The statue is of bright, untarnished silver and exquisite workmanship. "
         "It depicts a young man, or perhaps a fairy for it has delicate wings. "
         "Its empty hands are outstretched as if reaching for something.";
+}
+
+game
+{
+    # South wall and tower descriptions.
+    guard_room_W_0.Description =
+        "You are in a rectangular stone chamber.";
+    guard_room_E_0.Description =
+        "You are in a rectangular stone chamber.";
+    guard_room_W_1.Description =
+        "You are in a rectangular stone chamber.";
+    guard_room_E_1.Description =
+        "You are in a rectangular stone chamber.";
+    tower_SW_0.Description =
+        "You are on the ground floor of a round tower.";
+    tower_SW_1.Description =
+        "You are in a round tower.";
+    tower_SW_2.Description =    # aligns with wall
+        "You are in a round tower.";
+    tower_SW_roof.Description =
+        "You are on the roof of the soutwest corner tower. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners, with the northeast tower being the largest and tallest. The great hall is "
+        "a long east-west building across the inner courtyard from you. Adjoining it to the west "
+        "is a lower building. Other lower buildings line the east and west walls of the keep.";
+    tower_SE_0.Description =
+        "You are on the ground floor of a round tower.";
+    tower_SE_1.Description =
+        "You are in a round tower.";
+    tower_SE_2.Description =    # aligns with wall
+        "You are in a round tower.";
+    tower_SE_roof.Description =
+        "You are on the roof of the southeast corner tower. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners, with the northeast tower being the largest and tallest. The great hall is "
+        "a long east-west building across the inner courtyard from you. Adjoining it to the west "
+        "is a lower building. Other lower buildings line the east and west walls of the keep.";
+    gate_house_W_0.Description =
+        "You are in a U-shaped stone chamber.";
+    gate_house_W_1.Description =
+        "You are in a U-shaped stone chamber. In the east wall are arrow loops looking down "
+        "on the entrance tunnel between the gatehouse towers.";
+    gate_house_E_0.Description =
+        "You are in a U-shaped stone chamber.";
+    gate_house_E_1.Description =
+        "You are in a U-shaped stone chamber. In the west wall are arrow loops looking down "
+        "on the entrance tunnel between the gatehouse towers.";
+    gate_house_2.Description =  # aligns with wall
+        "You are in a large, rectangular stone chamber. In the floor are murder holes looking down "
+        "on the entrance tunnel to the keep.";
+    gate_house_roof.Description =
+        "You are on the roof of the gatehouse. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners, with the northeast tower being the largest and tallest. The great hall is "
+        "a long east-west building across the inner courtyard from you. Adjoining it to the west "
+        "is a lower building. Other lower buildings line the east and west walls of the keep.";
+    wall_SW.Description =
+        "You are on top of the south wall of the keep between the southwest tower and the "
+        "gatehouse. Looking north across a courtyard, you see the great hall flanked by lower "
+        "buildings.";
+    wall_SE.Description =
+        "You are on top of the south wall of the keep between the southeast tower and the "
+        "gatehouse. Looking north across a courtyard, you see the great hall flanked by lower "
+        "buildings.";
+
+    # South wall and tower northward links.
+    NewClosedDoor(guard_room_W_0, inner_court_SW, Direction.North);
+    NewClosedDoor(guard_room_E_0, inner_court_SE, Direction.North);
+
+    # South wall and tower eastward links.
+    NewClosedDoor(tower_SW_0, guard_room_W_0, Direction.East);
+    NewOpening(guard_room_W_0, gate_house_W_0, Direction.East);
+    NewClosedDoor(tower_SW_1, guard_room_W_1, Direction.East);
+    NewOpening(guard_room_W_1, gate_house_W_1, Direction.East);
+    NewClosedDoor(tower_SW_2, wall_SW, Direction.East);
+    NewClosedDoor(wall_SW, gate_house_2, Direction.East);
+
+    # South wall and tower westward links.
+    NewClosedDoor(tower_SE_0, guard_room_E_0, Direction.West);
+    NewOpening(guard_room_E_0, gate_house_E_0, Direction.West);
+    NewClosedDoor(tower_SE_1, guard_room_E_1, Direction.West);
+    NewOpening(guard_room_E_1, gate_house_E_1, Direction.West);
+    NewClosedDoor(tower_SE_2, wall_SE, Direction.West);
+    NewClosedDoor(wall_SE, gate_house_2, Direction.West);
+
+    # South wall and tower upward links.
+    NewDoorItem(tower_SW_0, tower_SW_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SW_1, tower_SW_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SW_2, tower_SW_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SE_0, tower_SE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SE_1, tower_SE_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SE_2, tower_SE_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
 }
