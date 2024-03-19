@@ -42,7 +42,7 @@ item inner_court_NW;
 item inner_court_NE;
 
 #
-# South wall and towers
+# Walls and towers
 #
 item guard_room_W_0;
 item guard_room_E_0;
@@ -56,6 +56,10 @@ item tower_SE_0;
 item tower_SE_1;
 item tower_SE_2;    # aligns with wall
 item tower_SE_roof;
+item tower_NW_0;
+item tower_NW_1;
+item tower_NW_2;    # aligns with wall
+item tower_NW_roof;
 item gate_house_W_0;
 item gate_house_W_1;
 item gate_house_E_0;
@@ -64,6 +68,9 @@ item gate_house_2;  # aligns with wall
 item gate_house_roof;
 item wall_SW;
 item wall_SE;
+item wall_W;
+item wall_E;
+item wall_N;
 
 command "help"
 {
@@ -310,7 +317,7 @@ game
     tower_SW_roof.Description =
         "You are on the roof of the soutwest corner tower. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
-        "four corners, with the northeast tower being the largest and tallest. The great hall is "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
         "a long east-west building across the inner courtyard from you. Adjoining it to the west "
         "is a lower building. Other lower buildings line the east and west walls of the keep.";
     tower_SE_0.Description =
@@ -322,9 +329,21 @@ game
     tower_SE_roof.Description =
         "You are on the roof of the southeast corner tower. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
-        "four corners, with the northeast tower being the largest and tallest. The great hall is "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
         "a long east-west building across the inner courtyard from you. Adjoining it to the west "
         "is a lower building. Other lower buildings line the east and west walls of the keep.";
+    tower_NW_0.Description =
+        "You are on the ground floor of a round tower.";
+    tower_NW_1.Description =
+        "You are in a round tower.";
+    tower_NW_2.Description =    # aligns with wall
+        "You are in a round tower.";
+    tower_NW_roof.Description =
+        "You are on the roof of the northwest corner tower. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
+        "southeast of you beyond some lower buildings. There is a small courtyard between the great "
+        "hall and the north wall and a larger courtyard between the great hall and the south wall.";
     gate_house_W_0.Description =
         "You are in a U-shaped stone chamber.";
     gate_house_W_1.Description =
@@ -341,7 +360,7 @@ game
     gate_house_roof.Description =
         "You are on the roof of the gatehouse. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
-        "four corners, with the northeast tower being the largest and tallest. The great hall is "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
         "a long east-west building across the inner courtyard from you. Adjoining it to the west "
         "is a lower building. Other lower buildings line the east and west walls of the keep.";
     wall_SW.Description =
@@ -352,20 +371,35 @@ game
         "You are on top of the south wall of the keep between the southeast tower and the "
         "gatehouse. Looking north across a courtyard, you see the great hall flanked by lower "
         "buildings.";
+    wall_W.Description =
+        "You are on the west wall of the keep. The great hall is east of you beyond some "
+        "lower buildings. There is a courtyard between the great hall and the south wall and "
+        "another smaller courtyard between the great hall and the north wall.";
+    wall_E.Description =
+        "You are on the east wall of the keep between the southeast tower and the taller "
+        "northeast tower. There is no entrance to the northeast tower from here.";
+    wall_N.Description =
+        "You are on the north wall of the keep between the northwest tower and the taller "
+        "northeast tower. There is no entrance to the northeast tower from here. Across a "
+        "small courtyard to your south is the great hall.";
 
-    # South wall and tower northward links.
+    # Wall and tower northward links.
     NewClosedDoor(guard_room_W_0, inner_court_SW, Direction.North);
     NewClosedDoor(guard_room_E_0, inner_court_SE, Direction.North);
+    NewClosedDoor(tower_SW_2, wall_W, Direction.North);
+    NewClosedDoor(wall_W, tower_NW_2, Direction.North);
+    NewClosedDoor(tower_SE_2, wall_E, Direction.North);
 
-    # South wall and tower eastward links.
+    # Wall and tower eastward links.
     NewClosedDoor(tower_SW_0, guard_room_W_0, Direction.East);
     NewOpening(guard_room_W_0, gate_house_W_0, Direction.East);
     NewClosedDoor(tower_SW_1, guard_room_W_1, Direction.East);
     NewOpening(guard_room_W_1, gate_house_W_1, Direction.East);
     NewClosedDoor(tower_SW_2, wall_SW, Direction.East);
     NewClosedDoor(wall_SW, gate_house_2, Direction.East);
+    NewClosedDoor(tower_NW_2, wall_N, Direction.East);
 
-    # South wall and tower westward links.
+    # Wall and tower westward links.
     NewClosedDoor(tower_SE_0, guard_room_E_0, Direction.West);
     NewOpening(guard_room_E_0, gate_house_E_0, Direction.West);
     NewClosedDoor(tower_SE_1, guard_room_E_1, Direction.West);
@@ -373,11 +407,14 @@ game
     NewClosedDoor(tower_SE_2, wall_SE, Direction.West);
     NewClosedDoor(wall_SE, gate_house_2, Direction.West);
 
-    # South wall and tower upward links.
+    # Wall and tower upward links.
     NewDoorItem(tower_SW_0, tower_SW_1, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_SW_1, tower_SW_2, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_SW_2, tower_SW_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_SE_0, tower_SE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_SE_1, tower_SE_2, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_SE_2, tower_SE_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NW_0, tower_NW_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NW_1, tower_NW_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NW_2, tower_NW_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
 }
