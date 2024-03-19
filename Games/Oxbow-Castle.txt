@@ -251,3 +251,17 @@ game
 
     NewWell(inner_court_NE);
 }
+
+# Silver fairy statue, which is the key to lifting the enchantment.
+item fairy_statue;
+
+game
+{
+    fairy_statue.Location = inner_court_S;
+    fairy_statue.Adjectives = "silver";
+    fairy_statue.Noun = "statue";
+    fairy_statue.Description =
+        "The statue is of bright, untarnished silver and exquisite workmanship. "
+        "It depicts a young man, or perhaps a fairy for it has delicate wings. "
+        "Its empty hands are outstretched as if reaching for something.";
+}
