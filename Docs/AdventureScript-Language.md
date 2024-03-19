@@ -1,7 +1,24 @@
 # AdventureScript Language
 
-The AdventureScript language is a scripting language designed for implementing text
-adventure games. Core concepts of the language include:
+The AdventureScript language is a scripting language designed for implementing
+text adventure games.
+
+This document describes the syntax and core concepts of the AdventureScript
+language.
+
+Many building blocks of text adventure games are not part of the language itself
+but instead are implemented by the AdventureScript Foundation library. This
+library is itself implemented in AdventureScript and implements functionality
+such as rooms, doors, movement, and so on. For a guide to creating text
+adventure games using the AdventureScript Foundation Library, see
+[Foundation Library Guide](Foundation-Library-Guide.md).
+
+For a reference to the AdventureScript language grammer, see
+[AdventureScript Grammar](AdventureScript-Grammar.md).
+
+## Core Concepts
+
+Core concepts of the language include:
 
 - Items, which are objects with properties.
 - Properties, which are named values associated with items.
@@ -11,15 +28,6 @@ adventure games. Core concepts of the language include:
 - Commands, which map user input to code.
 - Game blocks, which execute once per game.
 - Turn blocks, which execute once per turn.
-
-This document describes the core language, including its syntax and the core concepts
-listed above. On top of the core language, the Adventure Script Foundation Library
-implements game mechanics such as rooms, doors, movement, and so on. For a guide to
-creating text adventure games using the AdventureScript Foundation Library, see
-[Foundation Library Guide](Foundation-Library-Guide.md).
-
-For a reference to the AdventureScript language grammer, see
-[AdventureScript Grammar](AdventureScript-Grammer.md).
 
 ## AdventureScript Source Files
 
@@ -441,4 +449,120 @@ foreach (var $item) where Location == player.Location
 
 Expressions are the building blocks of statements.
 
-TODO
+### Literal Values
+
+String literal
+    A sequence of characters enclosed in quotation marks represents a
+    literal value of type String.
+
+Integer literal
+    A sequence of decimal digits represents a literal value of type Int.
+
+Boolean literal
+    The keywords `true` and `false` represent literal values of type Bool.
+
+Null literal
+    The `null` keyword has no specific type but can be converted to the
+    default "null" value of any type.
+
+### Format Strings
+
+A format string is string literal with a '$' prefix, and may contain embedded
+expressions enclosed in curly braces. For example:
+
+```text
+$"You see a {$item.Noun}."
+```
+
+At run time, the expression inside the curly braces is evaluted, and the
+resulting value is inserted in place of the embedded expression.
+
+### Variable References
+
+A variable name is an expression of the same type as the variable.
+
+### Item Names
+
+The name of an item is an expression of type Item.
+
+### Property Expressions
+
+Any expression of type Item can be followed by the `.` operator and a
+property name to refer to the specified property of that item.
+
+```text
+# Example property expressions
+player.Location             # where 'player' is an item
+$item.Location              # where $item is a variable of type Item
+$item.Location.Location     # where the Location property has type Item
+GetItem("player").Location  # where the GetItem function returns an Item
+```
+
+### Function Call Expressions
+
+A function name followed by a list of arguments in parentheses is an
+expression. The type of the expression is the return type of the function.
+Each comma-separated argument is itself an expression.
+
+The argument types must match the parameter types of the function. The
+function can be an intrisic function (built in to the game engine), or
+a function defined using the `function` or `map` keyword.
+
+```text
+# Example function call expressions
+Message("Hello World")
+IsClosedOrLocked($item.DoorState)
+```
+
+### Delegate Expressions
+
+Delegate expressions resemble function call expressions except that an
+expression returning a delegate takes the place of the function name.
+
+```text
+# Example delegate expression
+$item.UseAction($item)    # where UseAction is a delegate property
+```
+
+### Unary Operators
+
+A Boolean expression may be preceded by the `!` operator to return
+the Boolean complement (logical "not") of the expression.
+
+An integer expression may be preceded by the `-` operator to return
+the additive inverse (negative) of the expression.
+
+### Grouping
+
+Any expression enclosed in parentheses is itself an expression.
+
+### Binary Expressions
+
+A binary expression comprises a left argument, a binary operator, and a
+right argument. The left and right arguments are themselves expressions.
+
+For example, in the binary expression `$item.Noun != null`, the left
+argument is the expression `$item.Noun`, the right argument is the
+literal value `null`, and the binary expression returns true if the
+left argument is not equal to null and false otherwise.
+
+The arguments to a binary expression may themselves be binary expressions.
+In this case, the order (or grouping) of subexpressions depends on
+operator precedence. For example, multiplication and division have
+higher precedence than addition and subtraction. Therefore, `1 + 2 * 3`
+is evaluated as `1 + (2 * 3)`, not `(1 + 2) * 3`.
+
+Following are the binary operators in decreasing order of precedence.
+
+| Operators             | Meaning                           |
+|=======================|===================================|
+| `*` and `/`           | Multiplication and division       |
+| `+` and `-`           | Addition and subtraction          |
+| `== != > < >= <=`     | Comparison                        |
+| `&&` and `||`         | Logical AND and OR                |
+
+### Ternary Expressions
+
+A ternary expression has the form _condition_ ? _expr1_ : _expr2_. If the
+Boolean expression _condition_ evalutes to true then _expr1_ is evaluated.
+If _condition_ is values than _expr2_ is evaluated.
