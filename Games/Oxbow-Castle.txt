@@ -72,6 +72,23 @@ item wall_W;
 item wall_E;
 item wall_N;
 
+#
+# West keep rooms
+#
+item store_room;
+item stewards_room;
+item knight_room_1;
+item knight_room_2;
+item knight_room_3;
+item knight_room_4;
+item knight_room_entry;
+item armory;
+item bakehouse;
+item hallway_NS;
+item hallway_corner;
+item hallway_EW;
+item courtyard_N;
+
 command "help"
 {
     Message("Following are commands you can say:");
@@ -417,4 +434,55 @@ game
     NewDoorItem(tower_NW_0, tower_NW_1, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_NW_1, tower_NW_2, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_NW_2, tower_NW_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
+}
+
+game
+{
+    # West keep room descriptions
+    store_room.Description =
+        "You are in a store room full of barrels.";
+    stewards_room.Description =
+        "You are in a bedchamber.";
+    knight_room_1.Description =
+        "You are in a small bedchamber.";
+    knight_room_2.Description =
+        "You are in a small bedchamber.";
+    knight_room_3.Description =
+        "You are in a small bedchamber.";
+    knight_room_4.Description =
+        "You are in a small bedchamber.";
+    knight_room_entry.Description =
+        "You are in a small entryway.";
+    armory.Description =
+        "You are in a large rectangular room.";
+    bakehouse.Description =
+        "You are in a rectangular room with a large oven.";
+    hallway_NS.Description =
+        "You are at one end of a hallway leading north.";
+    hallway_corner.Description =
+        "You are at the junction of two hallways leading south and east.";
+    hallway_EW.Description =
+        "You are at one end of a hallway leading west.";
+    courtyard_N.Description =
+        "You are in a courtyard bordered on the north by the keep's wall and on the "
+        "south by the great hall. Rising above other buildings to your east is the "
+        "keep's tall northeast tower with its conical roof.";
+
+    # West keep room northward links.
+    NewClosedDoor(store_room, stewards_room, Direction.North);
+    NewClosedDoor(knight_room_1, knight_room_entry, Direction.North);
+    NewClosedDoor(knight_room_entry, knight_room_3, Direction.North);
+    NewClosedDoor(knight_room_4, armory, Direction.North);
+    NewClosedDoor(armory, tower_NW_0, Direction.North);
+    NewClosedDoor(inner_court_NW, hallway_NS, Direction.North);
+    NewLink(hallway_NS, hallway_corner, Direction.North);
+    NewClosedDoor(hallway_EW, bakehouse, Direction.North);
+
+    # West keep eastward links.
+    NewClosedDoor(store_room, inner_court_SW, Direction.East);
+    NewClosedDoor(knight_room_2, knight_room_entry, Direction.East);
+    NewClosedDoor(knight_room_entry, hallway_NS, Direction.East);
+    NewClosedDoor(armory, hallway_corner, Direction.East);
+    NewLink(hallway_corner, hallway_EW, Direction.East);
+    NewClosedDoor(hallway_EW, courtyard_N, Direction.East);
 }
