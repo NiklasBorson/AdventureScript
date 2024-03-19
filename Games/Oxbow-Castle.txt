@@ -89,6 +89,20 @@ item hallway_corner;
 item hallway_EW;
 item courtyard_N;
 
+#
+# East keep rooms
+#
+item kitchen;
+item pantry;
+item buttery;
+item great_hall_W;
+item great_hall_E;
+item court;
+item parlor;
+item lords_chamber;
+item library;
+
+
 command "help"
 {
     Message("Following are commands you can say:");
@@ -485,4 +499,42 @@ game
     NewClosedDoor(armory, hallway_corner, Direction.East);
     NewLink(hallway_corner, hallway_EW, Direction.East);
     NewClosedDoor(hallway_EW, courtyard_N, Direction.East);
+}
+
+game
+{
+    # East keep room descriptions
+    kitchen.Description =
+        "You are in a large kitchen.";
+    pantry.Description =
+        "You are in a pantry.";
+    buttery.Description =
+        "You are in the buttery.";
+    great_hall_W.Description =
+        "You are at the west end of the great hall.";
+    great_hall_E.Description =
+        "You are at the east end of the great hall.";
+    court.Description =
+        "You are in a large room with benches lining the east and west walls and a raised "
+        "throne at the north end. This is presumably where the lord of the castle holds court.";
+    parlor.Description =
+        "You are in a comfortable parlor with tapestries and expensive furnishings.";
+    lords_chamber.Description =
+        "You are in the lord's bedchamber.";
+    library.Description =
+        "You are in a library.";
+
+    # East keep northward links.
+    NewClosedDoor(inner_court_N, great_hall_W, Direction.North);
+    NewClosedDoor(kitchen, pantry, Direction.North);
+    NewClosedDoor(lords_chamber, parlor, Direction.North);
+    NewClosedDoor(parlor, court, Direction.North);
+    NewClosedDoor(court, library, Direction.North);
+
+    # East keep eastward links.
+    NewClosedDoor(hallway_NS, kitchen, Direction.East);
+    NewClosedDoor(kitchen, great_hall_W, Direction.East);
+    NewClosedDoor(pantry, buttery, Direction.East);
+    NewLink(great_hall_W, great_hall_E, Direction.East);
+    NewClosedDoor(great_hall_E, court, Direction.East);
 }
