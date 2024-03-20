@@ -572,6 +572,12 @@ Following are the binary operators in decreasing order of precedence.
 
 ### Ternary Expressions
 
-A ternary expression has the form _condition_ ? _expr1_ : _expr2_. If the
-Boolean expression _condition_ evalutes to true then _expr1_ is evaluated.
-If _condition_ is values than _expr2_ is evaluated.
+A ternary expression has the form _condition_ ? _expr1_ : _expr2_. The value of
+the ternary expression is _expr1_ if _condition_ is true or _expr2_ otherwise.
+
+For example, the following lambda function uses the ternary operator to
+compute the absolute value of an integer:
+
+```text
+function AbsoluteValue($n:Int) => $n >= 0 ? $n : -$n;
+```
