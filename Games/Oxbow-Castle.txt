@@ -618,3 +618,40 @@ game
     NewLink(fairyland_SW, fairyland_S, Direction.East);
     NewLink(fairyland_S, fairyland_SE, Direction.East);
 }
+
+game
+{
+    # Fairyland church room descriptions
+    fairyland_church_yard_W.Description =
+        "You are in a walled church yard. East of you is the arched doorway of a beautiful stone "
+        "church. The church yard wraps around the church to the North and South.";
+    fairyland_church_yard_S.Description =
+        "You are in a walled church yard south of the church. The church yard wraps around the church "
+        "to the North. East of you is a smaller stone building adjoining the church.";
+    fairyland_church_yard_N.Description =
+        "You are in a walled churcn yard north of the church. The church yard wraps around the church "
+        "to the South. There are graves here.";
+    fairyland_church_W.Description =
+        "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
+        "stone columns on either side. Windows set high in the walls let in light.";
+    fairyland_church_E.Description =
+        "You are at the east end of the church. A long aisle runs from here to the West. Between "
+        "fluted columns to the North, you can see a side chapel.";
+    fairyland_side_chapel.Description =
+        "You are in a side chapel with statues of saints. An opening to the South leads to the "
+        "main part of the church.";
+    fairyland_priest_house.Description =
+        "You are in a one-room house, presumably the priest's residence.";
+
+    # Fairyland church eastward links.
+    NewDoorItem(fairyland_center, fairyland_church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
+    NewDoorItem(fairyland_church_yard_W, fairyland_church_W, Direction.East, "carved wooden", "door", DoorState.Closed).Key = church_key;
+    NewLink(fairyland_church_W, fairyland_church_E, Direction.East);
+    NewDoorItem(fairyland_church_yard_S, fairyland_priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = priest_key;
+
+    # Fairyland church north links.
+    NewLink(fairyland_church_yard_S, fairyland_church_yard_W, Direction.North);
+    NewLink(fairyland_church_yard_W, fairyland_church_yard_N, Direction.North);
+    NewLink(fairyland_church_E, fairyland_side_chapel, Direction.North);
+    NewDoorItem(fairyland_priest_house, fairyland_church_E, Direction.North, "small wooden", "door", DoorState.Closed);
+}
