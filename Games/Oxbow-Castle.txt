@@ -1,4 +1,5 @@
 include "inc/Foundation.md";
+include "inc/Foundation-Combat.md";
 
 #
 # Outer court rooms
@@ -164,8 +165,8 @@ game
     Message("# Welcome to Oxbow Castle");
     Message(
         "You are a messenger sent by King Peregrin the Paranoid to find out what has "
-        "become of Oxbow castle. Previous messengers have not returned, and the king "
-        "has begin to suspect the castle lord of plotting against him."
+        "become of Oxbow castle and its ruler, Lord Kevin. Previous messengers have not "
+        "returned, and the king has begin to suspect Lord Kevin of plotting against him."
     );
     Message(
         "That is one possibility, but you have also heard stranger rumors. In the "
@@ -173,7 +174,7 @@ game
         "place. Of course, it may just be the ale talking. You are here to find out!"
     );
     Message(
-        "Oxbow Castle is situated in a sharp bend of the river Ox, such that it is "
+        "Oxbow Castle is situated in a sharp bend of the river Oxyl, such that it is "
         "surrounded on three sides by water. It is late morning, and you have just "
         "arrived at the only entrance to the castle, an open iron gate in the south "
         "wall. It is strangely silent. No one seems to be around."
