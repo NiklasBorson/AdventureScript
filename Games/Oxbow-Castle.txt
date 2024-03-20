@@ -24,11 +24,6 @@ item church_W;
 item church_E;
 item side_chapel;
 item priest_house;
-item priest_key;
-item church_key;
-item priest_house_trunk;
-item priest_house_desk;
-item priest_house_paper;
 
 #
 # Inner court rooms
@@ -102,6 +97,38 @@ item parlor;
 item lords_chamber;
 item library;
 
+#
+# Fairlyland rooms
+#
+item fairyland_NW;
+item fairyland_N;
+item fairyland_NE;
+item fairyland_stable;
+item fairyland_W;
+item fairyland_center;
+item fairyland_SW;
+item fairyland_S;
+item fairyland_SE;
+
+#
+# Fairyland church rooms
+#
+item fairyland_church_yard_W;
+item fairyland_church_yard_S;
+item fairyland_church_yard_N;
+item fairyland_church_W;
+item fairyland_church_E;
+item fairyland_side_chapel;
+item fairyland_priest_house;
+
+#
+# Church items
+#
+item priest_key;
+item church_key;
+item priest_house_trunk;
+item priest_house_desk;
+item priest_house_paper;
 
 command "help"
 {
@@ -240,8 +267,11 @@ game
     NewLink(church_yard_W, church_yard_N, Direction.North);
     NewLink(church_E, side_chapel, Direction.North);
     NewDoorItem(priest_house, church_E, Direction.North, "small wooden", "door", DoorState.Closed);
+}
 
-    # Priest house items.
+game
+{
+    # Initialize priest house items
     NewTable("lumpy", "bed", priest_house);
     InitializeContainer(priest_house_trunk, "pine", "trunk", DoorState.Closed, priest_house);
     NewPortableItem("black", "robe", priest_house_trunk);
@@ -537,4 +567,54 @@ game
     NewClosedDoor(pantry, buttery, Direction.East);
     NewLink(great_hall_W, great_hall_E, Direction.East);
     NewClosedDoor(great_hall_E, court, Direction.East);
+}
+
+game
+{
+    # Fairlyland room descriptions
+    fairyland_N.Description =
+        "You are at the north end of the outer courtyard, but somehow transformed into an alien place. "
+        "There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you "
+        "is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through "
+        "the trees.";
+    fairyland_NW.Description =
+        "You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. "
+        "The high wall of the keep looms above you to the north, and the outer wall is to the west. Trils "
+        "lead east and south through the trees.";
+    fairyland_NE.Description =
+        "You are in the northeast corner of the strangely-transformed outer courtyard. The high wall of "
+        "the keep looms above you to the north. To the east is the outer wall and to the south is the "
+        "wall of the church yard. There is a trail leading west.";
+    fairyland_W.Description =
+        "You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. "
+        "Trails lead north, east, and south through the trees.";
+    fairyland_stable.Description =
+        "You are in a large wooden stable.";
+    fairyland_center.Description =
+        "You are in a small clearing in the strangely-transformed outer courtyard. Trails lead north, south, "
+        "and west through the trees. East of you is the church yard wall.";
+    fairyland_SW.Description =
+        "You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you "
+        "are the castle walls, Trails lead north and east through the trees.";
+    fairyland_S.Description =
+        "You are at the south end of the strangely-transformed outer courtyard. South of you is the town gate, "
+        "which is shut tight. Trails lead north, east, and west.";
+    fairyland_SE.Description =
+        "You are in the southeast corner of the strangely-transformed outer courtyard. East and south of you "
+        "are the castle walls, and north of you is the church yard wall. A trail leads west through the trees.";
+
+    # Fairyland southward links.
+    NewLink(inner_court_S, fairyland_N, Direction.South);
+    NewLink(fairyland_N, fairyland_center, Direction.South);
+    NewLink(fairyland_center, fairyland_S, Direction.South);
+    NewLink(fairyland_NW, fairyland_W, Direction.South);
+    NewLink(fairyland_W, fairyland_SW, Direction.South);
+
+    # Fairyland eastward links.
+    NewLink(fairyland_NW, fairyland_N, Direction.East);
+    NewLink(fairyland_N, fairyland_NE, Direction.East);
+    NewClosedDoor(fairyland_stable, fairyland_W, Direction.East);
+    NewLink(fairyland_W, fairyland_center, Direction.East);
+    NewLink(fairyland_SW, fairyland_S, Direction.East);
+    NewLink(fairyland_S, fairyland_SE, Direction.East);
 }
