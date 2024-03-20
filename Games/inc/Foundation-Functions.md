@@ -1271,6 +1271,10 @@ function Go($dir:Direction)
     {
         Message($"You cannot go {$dir}.");
     }
+    elseif (IsClosedOrLocked($door.DoorState) && $isNowDark)
+    {
+        Message($"You cannot go {$dir}.");
+    }
     elseif ($door.DoorState == DoorState.Locked)
     {
         Message($"The {Label($door)} is locked.");

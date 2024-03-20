@@ -130,6 +130,28 @@ item priest_house_trunk;
 item priest_house_desk;
 item priest_house_paper;
 
+game
+{
+    # Set the IsDark predicate for all rooms to IsDarkAtNight.
+    # Setting this for non-room items has no effect.
+    foreach (var $item)
+    {
+        $item.IsDark = IsDarkAtNight;
+    }
+
+    # Make specific rooms dark always.
+    tower_NW_0.IsDark = IsDarkAlways;
+    tower_SW_0.IsDark = IsDarkAlways;
+    tower_SE_0.IsDark = IsDarkAlways;
+    gate_house_W_0.IsDark = IsDarkAlways;
+    gate_house_E_0.IsDark = IsDarkAlways;
+    hallway_NS.IsDark = IsDarkAlways;
+    hallway_corner.IsDark = IsDarkAlways;
+    hallway_EW.IsDark = IsDarkAlways;
+    pantry.IsDark = IsDarkAlways;
+    buttery.IsDark = IsDarkAlways;
+}
+
 command "help"
 {
     Message("Following are commands you can say:");
