@@ -84,6 +84,13 @@ namespace AdventureLib
                 Divide_Compute
                 ),
             new BinaryOp(
+                SymbolId.Modulo,
+                "%",
+                Precedence.MulDiv,
+                Arithmetic_DeriveType,
+                Modulo_Compute
+                ),
+            new BinaryOp(
                 SymbolId.Plus,
                 "+",
                 Precedence.AddSub,
@@ -188,6 +195,10 @@ namespace AdventureLib
         static int Divide_Compute(int arg1, int arg2)
         {
             return arg2 != 0 ? arg1 / arg2 : 0;
+        }
+        static int Modulo_Compute(int arg1, int arg2)
+        {
+            return arg2 != 0 ? arg1 % arg2 : 0;
         }
         static int Plus_Compute(int arg1, int arg2)
         {

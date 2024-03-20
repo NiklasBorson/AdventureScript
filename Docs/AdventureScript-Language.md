@@ -563,12 +563,12 @@ is evaluated as `1 + (2 * 3)`, not `(1 + 2) * 3`.
 
 Following are the binary operators in decreasing order of precedence.
 
-| Operators             | Meaning                           |
-|=======================|===================================|
-| `*` and `/`           | Multiplication and division       |
-| `+` and `-`           | Addition and subtraction          |
-| `== != > < >= <=`     | Comparison                        |
-| `&&` and `||`         | Logical AND and OR                |
+| Operators             | Meaning                               |
+|-----------------------|---------------------------------------|
+| `* / %`               | Multiplication, division, and modulo  |
+| `+ -`                 | Addition and subtraction              |
+| `== != > < >= <=`     | Comparison                            |
+| `&& \|\|`             | Logical AND and OR                    |
 
 ### Ternary Expressions
 
