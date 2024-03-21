@@ -2,7 +2,7 @@
 
 namespace AdventureLib
 {
-    class FunctionMap : IEnumerable<FunctionDef>
+    class FunctionMap
     {
         Dictionary<string, FunctionDef> m_map = new Dictionary<string, FunctionDef>();
         List<FunctionDef> m_list = new List<FunctionDef>();
@@ -42,15 +42,5 @@ namespace AdventureLib
         public int Count => m_list.Count;
 
         public FunctionDef this[int index] => m_list[index];
-
-        IEnumerator<FunctionDef> IEnumerable<FunctionDef>.GetEnumerator()
-        {
-            return m_list.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return m_list.GetEnumerator();
-        }
     }
 }

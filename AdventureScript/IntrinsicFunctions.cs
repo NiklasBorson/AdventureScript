@@ -107,8 +107,16 @@ namespace AdventureLib
 
         static int _ListFunctions(GameState game, int[] frame)
         {
-            foreach (var funcDef in game.Functions)
+            // Iterate over all the functions except the "null"
+            // function.
+            var functionMap = game.Functions;
+            var functionCount = functionMap.Count;
+            for (int functionIndex = 1;
+                functionIndex < functionCount;
+                functionIndex++)
             {
+                var funcDef = functionMap[functionIndex];
+
                 var b = new StringBuilder();
                 b.Append($"- function {funcDef.Name}(");
                 for (int i = 0; i < funcDef.ParamList.Count; i++)
