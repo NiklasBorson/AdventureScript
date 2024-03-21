@@ -24,7 +24,10 @@ namespace AdventureLib
 
         public bool InvokeCommandLine(GameState game, string commandLine)
         {
-            string input = NormalizeInputString(commandLine);
+            string input = StringHelpers.NormalizeInputString(
+                commandLine,
+                game.IntrinsicVars.IgnoreWords
+                );
 
             foreach (var def in m_commandList)
             {
@@ -37,12 +40,6 @@ namespace AdventureLib
 
             game.OutputInvalidCommand();
             return false;
-        }
-
-        string NormalizeInputString(string commandLine)
-        {
-            // TODO
-            return commandLine.ToLowerInvariant();
         }
 
         bool InvokeCommand(GameState game, CommandDef def, IReadOnlyList<Group> groups)

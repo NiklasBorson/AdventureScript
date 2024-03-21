@@ -148,5 +148,70 @@
             return result;
         }
 
+        public static string NormalizeInputString(string input, string[] ignoreWords)
+        {
+            var chars = input.ToLowerInvariant().ToCharArray();
+
+            // Replace punctuation with spaces.
+            for (int i = 0; i < chars.Length; i++)
+            {
+                if (char.IsPunctuation(chars[i]))
+                {
+                    chars[i] = ' ';
+                }
+            }
+
+            int resultLength = 0;
+
+            void AddWord(int index, int length)
+            {
+                var span = chars.AsSpan(index, length);
+                for (int i = 0; i < ignoreWords.Length; i++)
+                {
+                    if (span.SequenceEqual(ignoreWords[i]))
+                        return;
+                }
+
+                if (resultLength != 0)
+                {
+                    chars[resultLength++] = ' ';
+                }
+
+                if (index > resultLength)
+                {
+                    for (int i = 0; i < length; i++)
+                    {
+                        chars[resultLength + i] = chars[index + i];
+                    }
+                }
+
+                resultLength += length;
+            }
+
+            int wordPos = 0;
+            while (wordPos < chars.Length && chars[wordPos] == ' ')
+            {
+                wordPos++;
+            }
+
+            for (int i = wordPos; i < chars.Length; i++)
+            {
+                if (chars[i] == ' ')
+                {
+                    if (i > wordPos)
+                    {
+                        AddWord(wordPos, i - wordPos);
+                    }
+                    wordPos = i + 1;
+                }
+            }
+
+            if (chars.Length > wordPos)
+            {
+                AddWord(wordPos, chars.Length - wordPos);
+            }
+
+            return new string(chars, 0, resultLength);
+        }
     }
 }

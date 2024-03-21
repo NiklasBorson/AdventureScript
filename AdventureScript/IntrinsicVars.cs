@@ -8,6 +8,10 @@
         GlobalVariableExpr m_invalidArgFormatString;
         GlobalVariableExpr m_noItemFormatString;
         GlobalVariableExpr m_ambiguousItemFormatString;
+        GlobalVariableExpr m_ignoreWords;
+
+        string m_ignoreWordsValue = string.Empty;
+        string[] m_ignoreWordsArray = new string[0];
 
         public IntrinsicVars(GlobalVarMap varMap, StringMap stringMap)
         {
@@ -41,6 +45,12 @@
                 "$AmbiguousItemFormatString",
                 "I don't know which {0} you mean. It could be:"
                 );
+
+            m_ignoreWords = AddStringVar(
+                varMap,
+                "$IgnoreWords",
+                "a an the"
+                );
         }
 
         public bool IsNounFirst => m_isNounFirst.Value != 0;
@@ -48,6 +58,20 @@
         public string InvalidArgFormatString => GetStringValue(m_invalidArgFormatString);
         public string NoItemFormatString => GetStringValue(m_noItemFormatString);
         public string AmbiguousItemFormatString => GetStringValue(m_ambiguousItemFormatString);
+
+        public string[] IgnoreWords
+        {
+            get
+            {
+                string value = GetStringValue(m_ignoreWords);
+                if (!object.ReferenceEquals(value, m_ignoreWordsValue))
+                {
+                    m_ignoreWordsValue = value;
+                    m_ignoreWordsArray = value.Split();
+                }
+                return m_ignoreWordsArray;
+            }
+        }
 
         GlobalVariableExpr AddVar(GlobalVarMap varMap, string varName, TypeDef type)
         {
