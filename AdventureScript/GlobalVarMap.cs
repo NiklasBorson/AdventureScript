@@ -53,7 +53,7 @@ namespace AdventureLib
                 else
                 {
                     writer.Write(" = ");
-                    expr.Type.WriteValue(game, expr.Value, writer);
+                    expr.Type.WriteValue(game, expr.Value, writer.TextWriter);
                 }
                 writer.Write(";");
                 writer.EndLine();

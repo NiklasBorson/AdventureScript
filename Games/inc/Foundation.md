@@ -342,9 +342,14 @@ use the current time to determine if there is daylight.
 ```text
 var $currentTime = 11*60; # default initial time is 11am
 
-turn
+function IncrementTime()
 {
     $currentTime = $currentTime < (23*60) + 59 ? $currentTime + 1 : 0;
+}
+
+turn
+{
+    IncrementTime();
 }
 ```
 

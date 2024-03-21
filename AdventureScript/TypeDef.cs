@@ -27,7 +27,7 @@
             // Default implementation for built-in types does nothing
         }
 
-        public abstract void WriteValue(GameState game, int value, CodeWriter writer);
+        public abstract void WriteValue(GameState game, int value, TextWriter writer);
 
         public abstract string ValueToString(GameState game, int value);
     }

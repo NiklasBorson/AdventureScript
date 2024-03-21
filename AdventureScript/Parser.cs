@@ -817,7 +817,7 @@ namespace AdventureLib
             // Advance past the while keyword.
             Advance();
 
-            return new IfStatement(
+            return new WhileStatement(
                 this,
                 ParseIfCondition(frame),
                 ParseStatementBlock(frame)

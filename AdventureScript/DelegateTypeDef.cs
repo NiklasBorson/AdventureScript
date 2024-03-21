@@ -32,7 +32,7 @@
             FunctionDef.WriteReturnType(this.ReturnType, writer);
             writer.WriteLine(';');
         }
-        public override void WriteValue(GameState game, int value, CodeWriter writer)
+        public override void WriteValue(GameState game, int value, TextWriter writer)
         {
             writer.Write(game.Functions[value].Name);
         }

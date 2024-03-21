@@ -12,13 +12,27 @@ behavior for "active" items like monsters and non-player characters.
 ```text
 property UpdateAction : ItemDelegate;
 
-turn
+function UpdateItems()
 {
     foreach (var $item)
     {
         $item.UpdateAction($item);
     }
 }
+
+turn
+{
+    UpdateItems();
+}
+```
+
+## OnAttackedAction Property
+
+The `OnAttackedAction` is invoked on the target of an attack, giving the target
+a chance to respond, e.g., by changing its behavior.
+
+```text
+property OnAttackedAction : ItemDelegate;
 ```
 
 ## Health and MaxHealth Properties
@@ -227,15 +241,6 @@ character.
 
 ```text
 property CurrentWeapon : Item;
-```
-
-## OnAttackedAction Property
-
-The `OnAttackedAction` is invoked on the target of an attack, giving the target
-a chance to respond, e.g., by changing its behavior.
-
-```text
-property OnAttackedAction : ItemDelegate;
 ```
 
 ## ArmorKind Property
@@ -699,6 +704,76 @@ function NewMonster(
 {
     $return = NewItem($"_{$loc}_{$noun}");
     InitializeMonster($return, $adjectives, $noun, $health, $damageResistance, $attackDamage, $loc);
+}
+```
+
+## Sleep Function
+
+The `Sleep` function sleeps for the specified number of minutes unless interrupted
+by being attacked. The return value is true if the player slept for the specified
+duration or false if the player was attacked.
+
+```text
+var $isSleeping = false;
+
+function Sleep($minutes:Int) : Bool
+{
+    $isSleeping = true;
+    while ($isSleeping && $minutes > 0)
+    {
+        IncrementTime();
+        UpdateItems();
+        $minutes = $minutes - 1;
+    }
+
+    $return = $isSleeping;
+
+    $isSleeping = false;
+}
+
+function OnPlayerAttacked($item:Item)
+{
+    $isSleeping = false;
+}
+
+game
+{
+    player.OnAttackedAction = OnPlayerAttacked;
+}
+```
+
+## InitializeBed and NewBed Functions
+
+The `InitializeBed` function sets the properties of a bed item. The `NewBed`
+function creates and initializes a bed item. A bed has the properties of a
+table (i.e., you can put things on it) plus the additional "use" of sleeping.
+
+```text
+function UseBed($item:Item)
+{
+    Message($"You go to sleep in the {Label($item)}.");
+    if (Sleep(8 * 60))
+    {
+        Message("You wake up after eight hours.");
+    }
+    else
+    {
+        Message("You wake up after being attacked.");
+    }
+}
+
+function InitializeBed($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    # A bed has the properties of a table (you can put things on it), plus
+    # the additional "use" action of sleeping.
+    InitializeTable($item, $adjectives, $noun, $loc);
+    $item.UseAction = UseBed;
+}
+
+function NewBed($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"{$noun}_{$loc}");
+    InitializeBed($return, $adjectives, $noun, $loc);
 }
 ```
 

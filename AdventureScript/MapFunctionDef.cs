@@ -57,7 +57,7 @@ namespace AdventureLib
                 }
                 else
                 {
-                    m_toType.WriteValue(game, value, writer);
+                    m_toType.WriteValue(game, value, writer.TextWriter);
                 }
 
                 // Write a comma after all but the last entry.

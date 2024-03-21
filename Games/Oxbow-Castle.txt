@@ -1,5 +1,6 @@
 include "inc/Foundation.md";
 include "inc/Foundation-Combat.md";
+include "inc/Foundation-Debug.md";
 
 #
 # Outer court rooms
@@ -308,7 +309,7 @@ game
 game
 {
     # Initialize priest house items
-    NewTable("lumpy", "bed", priest_house);
+    NewBed("lumpy", "bed", priest_house);
     InitializeContainer(priest_house_trunk, "pine", "trunk", DoorState.Closed, priest_house);
     NewPortableItem("black", "robe", priest_house_trunk);
     InitializeKey(priest_key, "crude iron", "key", priest_house_trunk);

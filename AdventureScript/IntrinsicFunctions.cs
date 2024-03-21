@@ -86,7 +86,21 @@ namespace AdventureLib
         {
             foreach (var varExpr in game.GlobalVars)
             {
-                game.Message($"var {varExpr.Name} : {varExpr.Type.Name};");
+                var writer = new StringWriter();
+
+                writer.Write(
+                    "- var {0} : {1} = ",
+                    varExpr.Name,
+                    varExpr.Type.Name
+                    );
+                varExpr.Type.WriteValue(
+                    game,
+                    varExpr.Value,
+                    writer
+                    );
+                writer.Write(';');
+
+                game.Message(writer.ToString());
             }
             return 0;
         }
@@ -96,7 +110,7 @@ namespace AdventureLib
             foreach (var funcDef in game.Functions)
             {
                 var b = new StringBuilder();
-                b.Append($"function {funcDef.Name}(");
+                b.Append($"- function {funcDef.Name}(");
                 for (int i = 0; i < funcDef.ParamList.Count; i++)
                 {
                     var paramDef = funcDef.ParamList[i];
