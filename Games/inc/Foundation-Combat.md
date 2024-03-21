@@ -56,6 +56,15 @@ function ComputeDamage($attackDamage:Int, $DamageResistance:Int) : Int
 }
 ```
 
+## OnAttackedAction Property
+
+The `OnAttackedAction` is invoked on the target of an attack, giving the target
+a chance to respond, e.g., by changing its behavior.
+
+```text
+property OnAttackedAction : ItemDelegate;
+```
+
 ## ArmorKind Property
 
 The `ArmorKind` property specifies where a piece of armor is worn (i.e., head,
@@ -227,6 +236,7 @@ function DestroyPlayer($item:Item)
 
 game
 {
+    player.AttackDamage = 5;  # damage using bare hands
     player.DestroyAction = DestroyPlayer;
 }
 
@@ -276,6 +286,12 @@ function AttackItemWith($target:Item, $weapon:Item)
             {
                 DescribeHealth($target);
             }
+        }
+
+        # Invoke the target's OnAttackedAction delegate.
+        if ($target.Health >= 0)
+        {
+            $target.OnAttackedAction($target);
         }
     }
 }

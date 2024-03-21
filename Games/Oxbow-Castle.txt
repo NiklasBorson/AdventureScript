@@ -1,5 +1,6 @@
 include "inc/Foundation.md";
 include "inc/Foundation-Combat.md";
+include "inc/Foundation-Monster.md";
 
 #
 # Outer court rooms
@@ -706,4 +707,17 @@ game
     NewLink(fairyland_church_yard_W, fairyland_church_yard_N, Direction.North);
     NewLink(fairyland_church_E, fairyland_side_chapel, Direction.North);
     NewDoorItem(fairyland_priest_house, fairyland_church_E, Direction.North, "small wooden", "door", DoorState.Closed);
+}
+
+game
+{
+    # Monsters
+    NewMonster(
+        "small",        # adjectives
+        "goblin",       # noun
+        50,             # health
+        10,             # damage resistance
+        10,             # attack damage
+        hallway_NS      # location
+    );
 }
