@@ -410,3 +410,37 @@ function NewWeapon($adjectives:String, $noun:String, $damage:Int, $loc:Item) : I
     InitializeWeapon($return, $adjectives, $noun, $damage, $loc);
 }
 ```
+
+## Describe Helper Functions
+
+This code in this section overrides the player's DescribeAction to include armor and
+weapons information.
+
+```text
+function DescribePlayerWithArms($item:Item)
+{
+    DescribePlayer($item);
+
+    if ($headArmor != null)
+    {
+        Message($"On your head is a {Label($headArmor)}.");
+    }
+    if ($torsoArmor != null)
+    {
+        Message($"You're wearing a {Label($torsoArmor)}.");
+    }
+    if ($legArmor != null)
+    {
+        Message($"On your legs are {Label($legArmor)}.");
+    }
+    if (player.CurrentWeapon != null)
+    {
+        Message($"You wield a {Label(player.CurrentWeapon)}.");
+    }
+}
+game
+{
+    player.DescribeAction = DescribePlayerWithArms;
+}
+
+```

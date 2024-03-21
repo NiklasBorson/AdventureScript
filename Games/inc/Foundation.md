@@ -696,11 +696,11 @@ function DescribeHealthCommon($item:Item)
         {
             Message($"The {Label($item)} is severely damanged.");
         }
-        elseif ($percentage < 60)
+        elseif ($percentage < 70)
         {
             Message($"The {Label($item)} is significantly damanged.");
         }
-        elseif ($percentage < 80)
+        elseif ($percentage < 100)
         {
             Message($"The {Label($item)} is slightly damaged.");
         }
@@ -725,13 +725,17 @@ function DescribePlayerHealth($item:Item)
         {
             Message("You are severaly injured.");
         }
-        elseif ($percentage < 60)
+        elseif ($percentage < 70)
         {
             Message("You are significantly injured.");
         }
-        elseif ($percentage < 80)
+        elseif ($percentage < 100)
         {
             Message("You are slightly injured.");
+        }
+        else
+        {
+            Message("You are uninjured.");
         }
     }
 }
@@ -775,6 +779,16 @@ function DescribeCommon($item:Item)
     }
 
     DescribeHealth($item);
+}
+
+function DescribePlayer($item:Item)
+{
+    DescribeHealth($item);
+}
+
+game
+{
+    player.DescribeAction = DescribePlayer;
 }
 ```
 
@@ -1441,6 +1455,8 @@ command "turn on {$item:Item}" { TurnOn($item); }
 command "turn off {$item:Item}" { TurnOff($item); }
 command "light {$target:Item} with {$lighter:Item}" { LightWith($target, $lighter); }
 command "put out {$item:Item}" { PutOut($item); }
+command "look at me" { Describe(player); }
+command "look at self" { Describe(player); }
 command "look at {$item:Item}" { Describe($item); }
 command "look" { Look(); }
 ```
