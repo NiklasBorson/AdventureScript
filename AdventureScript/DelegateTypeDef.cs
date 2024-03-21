@@ -25,6 +25,8 @@
             return returnType == this.ReturnType;
         }
 
+        public override bool IsUserType => true;
+
         public override void SaveDefinition(TextWriter writer)
         {
             writer.Write($"delegate {Name}");

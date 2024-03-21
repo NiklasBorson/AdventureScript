@@ -152,10 +152,10 @@
         {
             var chars = input.ToLowerInvariant().ToCharArray();
 
-            // Replace punctuation with spaces.
+            // Replace certain punctuation with spaces.
             for (int i = 0; i < chars.Length; i++)
             {
-                if (char.IsPunctuation(chars[i]))
+                if ("\"'.,?;:".Contains(chars[i]))
                 {
                     chars[i] = ' ';
                 }

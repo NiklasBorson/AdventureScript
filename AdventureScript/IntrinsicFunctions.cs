@@ -82,6 +82,111 @@ namespace AdventureLib
             return 0;
         }
 
+        static int _ListItem(GameState game, int[] frame)
+        {
+            // ListItem($name:String)
+            //  - frame[1] -> $name
+            string name = game.Strings[frame[1]];
+            var itemMap = game.Items;
+            var item = itemMap.TryGetItem(name);
+
+            // If we didn't find the item, it may be a case mismatch.
+            // TryGetItem is case-sensitive and user-input is converted
+            // to lowercase.
+            if (item == null)
+            {
+                // Search for the item by doing a case-insensitive string
+                // comparison with each item's name.
+                int itemCount = itemMap.Count;
+                for (int i = 1; i < itemCount; i++)
+                {
+                    if (string.Compare(
+                        name,
+                        itemMap[i].Name,
+                        true
+                        ) == 0)
+                    {
+                        item = itemMap[i];
+                        break;
+                    }
+                }
+
+                // Output an error if we still didn't find the item.
+                if (item == null)
+                {
+                    game.Message($"Undefined item: {name}.");
+                    return 0;
+                }
+            }
+
+            // Output the item name.
+            game.Message($"Item {item.Name}");
+            int id = item.ID;
+
+            // Output each non-null property.
+            foreach (var prop in game.Properties)
+            {
+                int value = prop[id];
+                if (value != 0)
+                {
+                    var type = prop.Type;
+
+                    var writer = new StringWriter();
+                    writer.Write(
+                        "- {0} : {1} = ",
+                        prop.Name,
+                        type.Name
+                        );
+
+                    type.WriteValue(game, value, writer);
+                    writer.Write(';');
+
+                    game.Message(writer.ToString());
+                }
+            }
+            return 0;
+        }
+
+        static int _ListItems(GameState game, int[] frame)
+        {
+            // Iterate over all the items except the "null" item.
+            var itemMap = game.Items;
+            var itemCount = itemMap.Count;
+            for (int id = 1; id < itemCount; id++)
+            {
+                game.Message($"- item {itemMap[id].Name};");
+            }
+            return 0;
+        }
+
+        static int _ListProperties(GameState game, int[] frame)
+        {
+            foreach (var prop in game.Properties)
+            {
+                game.Message($"- {prop.Name} : {prop.Type.Name};");
+            }
+            return 0;
+        }
+
+        static int _ListTypes(GameState game, int[] frame)
+        {
+            foreach (var type in game.Types)
+            {
+                if (type.IsUserType)
+                {
+                    var writer = new StringWriter();
+                    writer.Write("- ");
+                    type.SaveDefinition(writer);
+                    game.Message(writer.ToString().Trim());
+                }
+                else
+                {
+                    game.Message($"- {type.Name};");
+                }
+            }
+            return 0;
+        }
+
         static int _ListVariables(GameState game, int[] frame)
         {
             foreach (var varExpr in game.GlobalVars)
@@ -111,11 +216,9 @@ namespace AdventureLib
             // function.
             var functionMap = game.Functions;
             var functionCount = functionMap.Count;
-            for (int functionIndex = 1;
-                functionIndex < functionCount;
-                functionIndex++)
+            for (int id = 1; id < functionCount; id++)
             {
-                var funcDef = functionMap[functionIndex];
+                var funcDef = functionMap[id];
 
                 var b = new StringBuilder();
                 b.Append($"- function {funcDef.Name}(");
@@ -223,6 +326,32 @@ namespace AdventureLib
                 },
                 /*returnType*/ Types.Void,
                 _Message
+                ),
+            new IntrinsicFunctionDef(
+                "ListItems",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _ListItems
+                ),
+            new IntrinsicFunctionDef(
+                "ListItem",
+                new ParamDef[] {
+                    new ParamDef("$name", Types.String)
+                },
+                /*returnType*/ Types.Void,
+                _ListItem
+                ),
+            new IntrinsicFunctionDef(
+                "ListProperties",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _ListProperties
+                ),
+            new IntrinsicFunctionDef(
+                "ListTypes",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _ListTypes
                 ),
             new IntrinsicFunctionDef(
                 "ListVariables",

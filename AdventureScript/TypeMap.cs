@@ -1,8 +1,9 @@
-﻿using System.Xml.Linq;
+﻿using System.Collections;
+using System.Xml.Linq;
 
 namespace AdventureLib
 {
-    class TypeMap
+    class TypeMap : IEnumerable<TypeDef>
     {
         Dictionary<string, TypeDef> m_map = new Dictionary<string, TypeDef>();
         List<DelegateTypeDef> m_delegateTypes = new List<DelegateTypeDef>();
@@ -88,6 +89,16 @@ namespace AdventureLib
             {
                 type.SaveDefinition(writer);
             }
+        }
+
+        public IEnumerator<TypeDef> GetEnumerator()
+        {
+            return m_map.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return m_map.Values.GetEnumerator();
         }
     }
 }

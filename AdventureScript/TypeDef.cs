@@ -22,6 +22,8 @@
 
         public bool IsEnumType => ValueNames.Count != 0;
 
+        public abstract bool IsUserType { get; }
+
         public virtual void SaveDefinition(TextWriter writer)
         {
             // Default implementation for built-in types does nothing
