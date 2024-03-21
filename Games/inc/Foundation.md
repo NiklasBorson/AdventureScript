@@ -1336,6 +1336,8 @@ function Look()
 The `Go` function navigates in the specified direction.
 
 ```text
+var $lastRoom : Item;
+
 function Go($dir:Direction)
 {
     var $source = player.Location;
@@ -1364,6 +1366,7 @@ function Go($dir:Direction)
         if (!$source.LeaveAction($source, $dest) &&
             !$dest.EnterAction($source, $dest))
         {
+            $lastRoom = player.Location;
             player.Location = $dest;
             InitializeLighting();
             Look();
@@ -1432,6 +1435,8 @@ turn
 ```
 
 ## Commands
+
+This library implements the following commands.
 
 ```text
 command "go {$dir:Direction}" { Go($dir); }

@@ -1,7 +1,8 @@
 # AdventureScript Foundation Library - Combat Module
 
-This module implements functionality related to weapons and damage. It depends
-on the `Foundation.md` module, which must be included first.
+This optional module implements a basic combat system, including armor, weapons,
+and the "attack" command. It depends on `Foundation.md`, which must be included
+first.
 
 ## CurrentWeapon Property
 
@@ -278,17 +279,6 @@ function AttackItemWith($target:Item, $weapon:Item)
         }
     }
 }
-
-# Attack commands.
-command "attack {$target:Item} with {$weapon:Item}"
-{
-    AttackItemWith($target, $weapon);
-}
-command "attack {$target:Item}"
-{
-    AttackItemWith($target, player.CurrentWeapon);
-}
-
 ```
 
 ## AttackPlayer Function
@@ -443,4 +433,19 @@ game
     player.DescribeAction = DescribePlayerWithArms;
 }
 
+```
+
+## Commands
+
+This library implements the following commands:
+
+```text
+command "attack {$target:Item} with {$weapon:Item}"
+{
+    AttackItemWith($target, $weapon);
+}
+command "attack {$target:Item}"
+{
+    AttackItemWith($target, player.CurrentWeapon);
+}
 ```
