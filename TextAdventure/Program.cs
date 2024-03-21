@@ -144,6 +144,11 @@ namespace CsAdventure
                 var output = m_game.InvokeCommand(input);
                 WriteOutput(output);
 
+                if (m_game.IsGameOver)
+                {
+                    break;
+                }
+
                 Console.Write("> ");
                 input = Console.ReadLine();
             }

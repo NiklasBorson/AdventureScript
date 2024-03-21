@@ -59,6 +59,8 @@ namespace AdventureLib
         //
         public GameResult Result => m_result;
 
+        public bool IsGameOver => m_result != GameResult.None;
+
         internal TypeMap Types => m_typeMap;
         internal PropertyMap Properties => m_propMap;
         internal FunctionMap Functions => m_funcMap;
