@@ -1,6 +1,6 @@
+include "inc/Foundation-Debug.md";
 include "inc/Foundation.md";
 include "inc/Foundation-Combat.md";
-include "inc/Foundation-Debug.md";
 
 #
 # Outer court rooms
@@ -114,6 +114,20 @@ item lords_chamber;
 item library;
 
 #
+# Northeast tower rooms
+#
+item tower_NE_0;
+item tower_NE_1;
+item tower_NE_2;
+item tower_NE_3;
+
+#
+# Northeast tower items
+#
+item tower_NE_door;
+item tower_NE_table;
+
+#
 # Fairlyland rooms
 #
 item fairyland_NW;
@@ -150,6 +164,7 @@ game
     tower_NW_0.IsDark = IsDarkAlways;
     tower_SW_0.IsDark = IsDarkAlways;
     tower_SE_0.IsDark = IsDarkAlways;
+    tower_NE_0.IsDark = IsDarkAlways;
     gate_house_W_0.IsDark = IsDarkAlways;
     gate_house_E_0.IsDark = IsDarkAlways;
     hallway_NS.IsDark = IsDarkAlways;
@@ -435,7 +450,7 @@ game
     tower_NW_0.Description =
         "You are on the ground floor of a round tower.";
     tower_NW_1.Description =
-        "You are in a round tower.";
+        "You are in a round tower with arrow loops opening to the outside.";
     tower_NW_2.Description =    # aligns with wall
         "You are in a round tower with arrow loops opening to the outside.";
     tower_NW_roof.Description =
@@ -620,6 +635,35 @@ game
     NewClosedDoor(pantry, buttery, Direction.East);
     NewLink(great_hall_W, great_hall_E, Direction.East);
     NewClosedDoor(great_hall_E, court, Direction.East);
+}
+
+game
+{
+    # Northeast tower room descriptions
+    tower_NE_0.Description =
+        "You are in a large, round stone chamber with a high ceiling.";
+    tower_NE_1.Description =
+        "You are in a large, round stone chamber with a high ceiling. There are arrow loops "
+        "in the walls but also rich tapestries.";
+    tower_NE_2.Description =
+        "You are in a large, round stone chamber with a high ceiling. The walls are hung with "
+        "tapestries and also have small windows.";
+    tower_NE_3.Description =
+        "You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. "
+        "The wood-paneled walls have large windows. Around an empty table sit several fairies. One "
+        "is the fairy depected by the statue in the library. The others are have similarly noble "
+        "dress and bearing. They take no notice of you.";
+
+    # Northeast tower room upward links.
+    NewDoorItem(tower_NE_0, tower_NE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NE_1, tower_NE_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NE_2, tower_NE_3, Direction.Up, "spiral stone", "stair", DoorState.None);
+
+    # Initialize northeast tower door.
+    InitializeDoor(tower_NE_door, library, tower_NE_0, Direction.North, "arched oak", "door", DoorState.Closed);
+
+    # Initialize northeast tower table.
+    InitializeTable(tower_NE_table, "long wooden", "table", tower_NE_3);
 }
 
 game

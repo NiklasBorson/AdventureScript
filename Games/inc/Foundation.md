@@ -856,17 +856,6 @@ may be actual doors, which can be opened or closed, or mere openings.
 | `NewLink`             | Links two rooms with a new unnamed object.                    |
 
 ```text
-function InitializeDoor($door:Item, $adjectives:String, $noun:String, $state:DoorState)
-{
-    SetLabelProperties($door, $adjectives, $noun);
-    $door.DoorState = $state;
-
-    if ($state != DoorState.None)
-    {
-        $door.OpenAction = OpenDoor;
-        $door.CloseAction = CloseDoor;
-    }
-}
 function LinkRoomsOneWay($from:Item, $to:Item, $via:Item, $dir:Direction)
 {
     SetLink($from, $via, $dir);
@@ -877,12 +866,23 @@ function LinkRooms($from:Item, $to:Item, $via:Item, $dir:Direction)
     LinkRoomsOneWay($from, $to, $via, $dir);
     LinkRoomsOneWay($to, $from, $via, Opposite($dir));
 }
+function InitializeDoor($door:Item, $from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState)
+{
+    SetLabelProperties($door, $adjectives, $noun);
+    $door.DoorState = $state;
+
+    if ($state != DoorState.None)
+    {
+        $door.OpenAction = OpenDoor;
+        $door.CloseAction = CloseDoor;
+    }
+    
+    LinkRooms($from, $to, $door, $dir);
+}
 function NewDoorItem($from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState) : Item
 {
-    var $door = NewItem($"_{$noun}_{$from}{$to}");
-    InitializeDoor($door, $adjectives, $noun, $state);
-    LinkRooms($from, $to, $door, $dir);
-    $return = $door;
+    $return = NewItem($"_{$noun}_{$from}{$to}");
+    InitializeDoor($return, $from, $to, $dir, $adjectives, $noun, $state);
 }
 function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
 {
