@@ -151,6 +151,14 @@ game
     hallway_EW.IsDark = IsDarkAlways;
     pantry.IsDark = IsDarkAlways;
     buttery.IsDark = IsDarkAlways;
+    store_room.IsDark = IsDarkAlways;
+    stewards_room.IsDark = IsDarkAlways;
+    knight_room_1.IsDark = IsDarkAlways;
+    knight_room_2.IsDark = IsDarkAlways;
+    knight_room_3.IsDark = IsDarkAlways;
+    knight_room_4.IsDark = IsDarkAlways;
+    knight_room_entry.IsDark = IsDarkAlways;
+    armory.IsDark = IsDarkAlways;
 }
 
 command "help"
@@ -385,13 +393,15 @@ game
 {
     # South wall and tower descriptions.
     guard_room_W_0.Description =
-        "You are in a rectangular stone chamber.";
+        "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
     guard_room_E_0.Description =
-        "You are in a rectangular stone chamber.";
+        "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
     guard_room_W_1.Description =
-        "You are in a rectangular stone chamber.";
+        "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the "
+        "inner courtyard and in the south wall facing the outer courtyard.";
     guard_room_E_1.Description =
-        "You are in a rectangular stone chamber.";
+        "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the "
+        "inner courtyard and in the south wall facing the outer courtyard.";
     tower_SW_0.Description =
         "You are on the ground floor of a round tower.";
     tower_SW_1.Description =
@@ -407,9 +417,9 @@ game
     tower_SE_0.Description =
         "You are on the ground floor of a round tower.";
     tower_SE_1.Description =
-        "You are in a round tower.";
+        "You are in a round tower. There are arrow loops in the walls.";
     tower_SE_2.Description =    # aligns with wall
-        "You are in a round tower.";
+        "You are in a round tower. There are arrow loops in the walls.";
     tower_SE_roof.Description =
         "You are on the roof of the southeast corner tower. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
@@ -421,7 +431,7 @@ game
     tower_NW_1.Description =
         "You are in a round tower.";
     tower_NW_2.Description =    # aligns with wall
-        "You are in a round tower.";
+        "You are in a round tower. There are arrow loops in the walls.";
     tower_NW_roof.Description =
         "You are on the roof of the northwest corner tower. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
@@ -440,7 +450,8 @@ game
         "on the entrance tunnel between the gatehouse towers.";
     gate_house_2.Description =  # aligns with wall
         "You are in a large, rectangular stone chamber. In the floor are murder holes looking down "
-        "on the entrance tunnel to the keep.";
+        "on the entrance tunnel to the keep. In the south wall are arrow loops facing the outer "
+        "courtyard.";
     gate_house_roof.Description =
         "You are on the roof of the gatehouse. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
@@ -523,7 +534,8 @@ game
     armory.Description =
         "You are in a large rectangular room.";
     bakehouse.Description =
-        "You are in a rectangular room with a large oven.";
+        "You are in a rectangular room with a large oven. A window in the east wall "
+        "looks out upon a small courtyard.";
     hallway_NS.Description =
         "You are at one end of a hallway leading north.";
     hallway_corner.Description =
