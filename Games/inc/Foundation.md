@@ -226,6 +226,21 @@ map IsClosedOrLocked DoorState -> Bool {
 }
 ```
 
+## Key Property
+
+The `Key` property specfies the key to a door or container. More than one door or
+container can specify the same item as a key.
+
+The door or container item's `DoorState` property must be something other than
+`DoorState.None`.
+
+The value must be a key item created using the `NewKey` function or initialized using
+the `InitializeKey` function.
+
+```text
+property Key : Item;
+```
+
 ## SetPortable and NewPortableItem Functions
 
 The `SetPortable` function makes an item portable by setting its `TakeAction` and
@@ -939,6 +954,7 @@ may be actual doors, which can be opened or closed, or mere openings.
 | `LinkRooms`           | Links two rooms via a specified door item.                    |
 | `NewDoorItem`         | Links two rooms with a new door item.                         |
 | `NewClosedDoor`       | Links two rooms with a new "door" in the Closed state.        |
+| `NewLockedDoor`       | Links two rooms with a new "door" in the Locked state.        |
 | `NewOpening`          | Links two rooms with a new "opening".                         |
 | `NewLink`             | Links two rooms with a new unnamed object.                    |
 
@@ -975,6 +991,11 @@ function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
 {
     $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
 }
+function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
+{
+    $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Locked);
+    $return.Key = $key;
+}
 function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
 {
     $return = NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
@@ -983,21 +1004,6 @@ function NewLink($from:Item, $to:Item, $dir:Direction) : Item
 {
     $return = NewDoorItem($from, $to, $dir, "", "", DoorState.None);
 }
-```
-
-## Key Property
-
-The `Key` property specfies the key to a door or container. More than one door or
-container can specify the same item as a key.
-
-The door or container item's `DoorState` property must be something other than
-`DoorState.None`.
-
-The value must be a key item created using the `NewKey` function or initialized using
-the `InitializeKey` function.
-
-```text
-property Key : Item;
 ```
 
 ## Key Helper Functions

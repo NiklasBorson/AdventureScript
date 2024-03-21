@@ -27,6 +27,15 @@ item side_chapel;
 item priest_house;
 
 #
+# Church items
+#
+item priest_key;
+item church_key;
+item priest_house_trunk;
+item priest_house_desk;
+item priest_house_paper;
+
+#
 # Inner court rooms
 #
 item inner_gate;
@@ -67,6 +76,11 @@ item wall_SE;
 item wall_W;
 item wall_E;
 item wall_N;
+
+#
+# Wall and tower items
+#
+item tower_key;
 
 #
 # West keep rooms
@@ -121,15 +135,6 @@ item fairyland_church_W;
 item fairyland_church_E;
 item fairyland_side_chapel;
 item fairyland_priest_house;
-
-#
-# Church items
-#
-item priest_key;
-item church_key;
-item priest_house_trunk;
-item priest_house_desk;
-item priest_house_paper;
 
 game
 {
@@ -405,9 +410,9 @@ game
     tower_SW_0.Description =
         "You are on the ground floor of a round tower.";
     tower_SW_1.Description =
-        "You are in a round tower.";
+        "You are in a round tower with arrow loops opening to the outside.";
     tower_SW_2.Description =    # aligns with wall
-        "You are in a round tower.";
+        "You are in a round tower with arrow loops opening to the outside.";
     tower_SW_roof.Description =
         "You are on the roof of the soutwest corner tower. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
@@ -417,9 +422,9 @@ game
     tower_SE_0.Description =
         "You are on the ground floor of a round tower.";
     tower_SE_1.Description =
-        "You are in a round tower. There are arrow loops in the walls.";
+        "You are in a round tower with arrow loops opening to the outside.";
     tower_SE_2.Description =    # aligns with wall
-        "You are in a round tower. There are arrow loops in the walls.";
+        "You are in a round tower with arrow loops opening to the outside.";
     tower_SE_roof.Description =
         "You are on the roof of the southeast corner tower. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
@@ -431,7 +436,7 @@ game
     tower_NW_1.Description =
         "You are in a round tower.";
     tower_NW_2.Description =    # aligns with wall
-        "You are in a round tower. There are arrow loops in the walls.";
+        "You are in a round tower with arrow loops opening to the outside.";
     tower_NW_roof.Description =
         "You are on the roof of the northwest corner tower. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
@@ -486,7 +491,7 @@ game
     NewClosedDoor(tower_SE_2, wall_E, Direction.North);
 
     # Wall and tower eastward links.
-    NewClosedDoor(tower_SW_0, guard_room_W_0, Direction.East);
+    NewLockedDoor(tower_SW_0, guard_room_W_0, Direction.East, tower_key);
     NewOpening(guard_room_W_0, gate_house_W_0, Direction.East);
     NewClosedDoor(tower_SW_1, guard_room_W_1, Direction.East);
     NewOpening(guard_room_W_1, gate_house_W_1, Direction.East);
@@ -495,7 +500,7 @@ game
     NewClosedDoor(tower_NW_2, wall_N, Direction.East);
 
     # Wall and tower westward links.
-    NewClosedDoor(tower_SE_0, guard_room_E_0, Direction.West);
+    NewLockedDoor(tower_SE_0, guard_room_E_0, Direction.West, tower_key);
     NewOpening(guard_room_E_0, gate_house_E_0, Direction.West);
     NewClosedDoor(tower_SE_1, guard_room_E_1, Direction.West);
     NewOpening(guard_room_E_1, gate_house_E_1, Direction.West);
@@ -512,6 +517,18 @@ game
     NewDoorItem(tower_NW_0, tower_NW_1, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_NW_1, tower_NW_2, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_NW_2, tower_NW_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
+}
+
+game
+{
+    # West guard room items
+    var $chest = NewContainer("large wooden", "chest", DoorState.Closed, guard_room_W_0);
+    NewCandle("oil", "lamp", $chest);
+    NewLighter("small", "tinderbox", $chest);
+    NewWeapon("short iron", "dagger", 20, $chest);
+    NewArmor("leather", "cap", ArmorKind.Head, 10, $chest);
+    NewArmor("leather", "vest", ArmorKind.Torso, 10, $chest);
+    InitializeKey(tower_key, "large", "key", $chest);
 }
 
 game
