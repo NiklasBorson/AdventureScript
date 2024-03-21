@@ -111,18 +111,6 @@ function InvokeItemActionWithFallback($func:ItemDelegate, $item:Item, $fallback:
         $fallback($item);
     }
 }
-
-function InvokeItem2Action($func:Item2Delegate, $item1:Item, $item2:Item, $verb:String)
-{
-    if ($func != null)
-    {
-        $func($item1, $item2);
-    }
-    else
-    {
-        Message($"You cannot {$verb} the {Label($item1)}.");
-    }
-}
 ```
 
 ## Action Properties
@@ -132,26 +120,28 @@ item-specific behavior for a function or command. The following table lists acti
 properties along with the associated functions and commands that may invoke the
 action.
 
-| Action Property           | Function          | Related Commands          |
-|---------------------------|-------------------|---------------------------|
-| `TakeAction`              | `Take`            | "take (item)"             |
-| `DropAction`              | `Drop`            | "drop (item)"             |
-| `UseAction`               | `Use`             | "use (item)"              |
-| `UseOnAction`             | `UseOn`           | "use (item) on (item)"    |
-| `OpenAction`              | `Open`            | "open (item)"             |
-| `CloseAction`             | `Close`           | "close (item)"            |
-| `DescribeAction`          | `Describe`        | "look", "look at (item)"  |
-| `DescribeHealthAction`    | N/A               | N/A                       |
-| `TurnOnAction`            | `TurnOn`          | "turn on (item)"          |
-| `TurnOffAction`           | `TurnOff`         | "turn off (item)"         |
-| `IgniteAction`            | `Ignite`          | N/A                       |
-| `PutOutAction`            | `PutOut`          | "put out (item)"          |
+| Action Property           | Function          | Related Commands              |
+|---------------------------|-------------------|-------------------------------|
+| `TakeAction`              | `Take`            | "take (item)"                 |
+| `DropAction`              | `Drop`            | "drop (item)"                 |
+| `UseAction`               | `Use`             | "use (item)"                  |
+| `UseOnAction`             | `UseOn`           | "use (item) on (item)"        |
+| `OpenAction`              | `Open`            | "open (item)"                 |
+| `CloseAction`             | `Close`           | "close (item)"                |
+| `DescribeAction`          | `Describe`        | "look", "look at (item)"      |
+| `DescribeHealthAction`    | N/A               | N/A                           |
+| `TurnOnAction`            | `TurnOn`          | "turn on (item)"              |
+| `TurnOffAction`           | `TurnOff`         | "turn off (item)"             |
+| `IgniteAction`            | `Ignite`          | N/A                           |
+| `PutOutAction`            | `PutOut`          | "put out (item)"              |
+| `PutInAction`             | `PutIn`           | "put (item) in (container)"   |
+| `PutOnAction`             | `PutOn`           | "put (item) on (table)"       |
 
 ```text
 property TakeAction : ItemDelegate;
 property DropAction : ItemDelegate;
 property UseAction : ItemDelegate;
-property UseOnAction : Item2Delegate;
+property UseOnAction : Item2Delegate;   # applies to item being used
 property OpenAction : ItemDelegate;
 property CloseAction : ItemDelegate;
 property DescribeAction : ItemDelegate;
@@ -160,6 +150,8 @@ property TurnOnAction : ItemDelegate;
 property TurnOffAction : ItemDelegate;
 property IgniteAction : ItemDelegate;
 property PutOutAction : ItemDelegate;
+property PutInAction : Item2Delegate;   # applies to container
+property PutOnAction : Item2Delegate;   # applies to table
 ```
 
 ## LeaveAction and EnterAction Properties
@@ -214,10 +206,7 @@ the `InitializeKey` function.
 property Key : Item;
 ```
 
-## SetPortable and NewPortableItem Functions
-
-The `SetPortable` function makes an item portable by setting its `TakeAction` and
-`DropAction` properties.
+## InitializePortableItem and NewPortableItem Functions
 
 The `IsPortable` function tests whether an item is portable.
 
@@ -226,6 +215,7 @@ The `InitializePortableItem` sets the properties of a portable item.
 The `NewPortableItem` function creates and initializes a portable item.
 
 ```text
+# TakeAction implementation for portable items
 function TakePortableItem($item:Item)
 {
     if ($item.Location != player)
@@ -238,6 +228,7 @@ function TakePortableItem($item:Item)
         Message($"The {Label($item)} is already in your inventory.");
     }
 }
+# DropAction implementation for portable items
 function DropPortableItem($item:Item)
 {
     if ($item.Location == player)
@@ -250,17 +241,12 @@ function DropPortableItem($item:Item)
         Message($"The {Label($item)} is not in your inventory.");
     }
 }
-function SetPortable($item:Item)
-{
-    $item.TakeAction = TakePortableItem;
-    $item.DropAction = DropPortableItem;
-}
-function IsPortable($item:Item) => $item.TakeAction == TakePortableItem;
 
 function InitializePortableItem($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
     SetLabelProperties($item, $adjectives, $noun);
-    SetPortable($item);
+    $item.TakeAction = TakePortableItem;
+    $item.DropAction = DropPortableItem;
     $item.Location = $loc;
 }
 
@@ -269,6 +255,8 @@ function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
     $return = NewItem($"_{$noun}{$loc}");
     InitializePortableItem($return, $adjectives, $noun, $loc);
 }
+
+function IsPortable($item:Item) => $item.TakeAction != null;
 ```
 
 ## IsHidden Property
@@ -496,13 +484,11 @@ The `IsLight` function tests whether an item is a light.
 ```text
 function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($item, $adjectives, $noun);
-    SetPortable($item);
+    InitializePortableItem($item, $adjectives, $noun, $loc);
     $item.LightState = LightState.Off;
     $item.TurnOnAction = TurnOnLight;
     $item.TurnOffAction = TurnOffLight;
     $item.PutOutAction = TurnOffLight;
-    $item.Location = $loc;
 }
 function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
 {
@@ -528,14 +514,12 @@ The `IsCandle` function tests whether an item is a candle.
 ```text
 function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($item, $adjectives, $noun);
-    SetPortable($item);
+    InitializePortableItem($item, $adjectives, $noun, $loc);
     $item.LightState = LightState.Unlit;
     $item.TurnOnAction = TurnOnCandle;  # displays error message
     $item.IgniteAction = IgniteCandle;  # sets to LightState.Lit
     $item.TurnOffAction = PutOutCandle; # sets to LightState.Unlit
     $item.PutOutAction = PutOutCandle;  # sets to LightState.Unlit
-    $item.Location = $loc;
 }
 function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
 {
@@ -560,10 +544,8 @@ The `IsLighter` function tests whether an item is a lighter.
 ```text
 function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($item, $adjectives, $noun);
-    SetPortable($item);
+    InitializePortableItem($item, $adjectives, $noun, $loc);
     $item.UseOnAction = UseLighterOn;
-    $item.Location = $loc;
 }
 function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
 {
@@ -704,13 +686,51 @@ error message if the action property is null.
 function Take($item:Item) => InvokeItemAction($item.TakeAction, $item, "take");
 function Drop($item:Item) => InvokeItemAction($item.DropAction, $item, "drop");
 function Use($item:Item) => InvokeItemAction($item.UseAction, $item, "use");
-function UseOn($item:Item, $target:Item) => InvokeItem2Action($item.UseOnAction, $item, $target, "use");
 function Open($item:Item) => InvokeItemAction($item.OpenAction, $item, "open");
 function Close($item:Item) => InvokeItemAction($item.CloseAction, $item, "close");
 function TurnOn($item:Item) => InvokeItemAction($item.TurnOnAction, $item, "turn on");
 function TurnOff($item:Item) => InvokeItemAction($item.TurnOffAction, $item, "turn off");
 function PutOut($item:Item) => InvokeItemAction($item.PutOutAction, $item, "put out");
 function Describe($item:Item) => InvokeItemActionWithFallback($item.DescribeAction, $item, DescribeCommon);
+
+function UseOn($item:Item, $target:Item)
+{
+    # The UseOnAction property applies to the item being used
+    if ($item.UseOnAction != null)
+    {
+        $item.UseOnAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't use the {Label($item)}.");
+    }
+}
+
+function PutIn($item:Item, $target:Item)
+{
+    # The PutInAction property applies to the target (container)
+    if ($target.PutInAction != null)
+    {
+        $target.PutInAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+
+function PutOn($item:Item, $target:Item)
+{
+    # The PutOnAction property applies to the target (container)
+    if ($target.PutOnAction != null)
+    {
+        $target.PutOnAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} on the {Label($target)}.");
+    }
+}
 ```
 
 ## Direction Type
@@ -949,10 +969,8 @@ The `IsKey` function tests whether a specified item is a key.
 ```text
 function InitializeKey($key:Item, $adjectives:String, $noun:String, $loc:Item)
 {
-    SetLabelProperties($key, $adjectives, $noun);
-    SetPortable($key);
+    InitializePortableItem($key, $adjectives, $noun, $loc);
     $key.UseOnAction = UseKeyOn;
-    $key.Location = $loc;
 }
 function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
 {
@@ -978,10 +996,6 @@ The `IsContainer` function tests whether the specified item is a container.
 
 The `IsOpenContainer` function tests whether the specified item is a container that is
 not closed or locked.
-
-The `PutInContainer` function puts an item in a container.
-
-The "put (item) in (item)" command invokes the `PutInContainer` function.
 
 ```text
 function ListContainerContents($container:Item)
@@ -1034,44 +1048,12 @@ function DescribeContainer($container:Item)
     }
 }
 
-function InitializeContainer(
-    $container:Item,
-    $adjectives:String,
-    $noun:String,
-    $state:DoorState,
-    $loc:Item
-    )
-{
-    SetLabelProperties($container, $adjectives, $noun);
-    $container.DoorState = $state;
-    $container.OpenAction = OpenContainer;
-    $container.CloseAction = CloseDoor;
-    $container.DescribeAction = DescribeContainer;
-    $container.Location = $loc;
-}
-
-function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:Item) : Item
-{
-    var $container = NewItem($"_{$noun}_{$loc}");
-    InitializeContainer($container, $adjectives, $noun, $state, $loc);
-    $return = $container;    
-}
-
-function IsContainer($item:Item) => $item.DescribeAction == DescribeContainer;
-
-function IsOpenContainer($item:Item) =>
-    IsContainer($item) &&
-    !IsClosedOrLocked($item.DoorState);
-
+# PutInAction implementation for containers
 function PutInContainer($item:Item, $container:Item)
 {
     if (!IsPortable($item))
     {
         Message($"You can't move the {Label($item)}.");
-    }
-    elseif (!IsContainer($container))
-    {
-        Message($"The {Label($container)} is not a container.");
     }
     elseif (IsClosedOrLocked($container.DoorState))
     {
@@ -1087,6 +1069,36 @@ function PutInContainer($item:Item, $container:Item)
         Message($"The {Label($item)} is now in the {Label($container)}.");
     }
 }
+
+function InitializeContainer(
+    $container:Item,
+    $adjectives:String,
+    $noun:String,
+    $state:DoorState,
+    $loc:Item
+    )
+{
+    SetLabelProperties($container, $adjectives, $noun);
+    $container.DoorState = $state;
+    $container.PutInAction = PutInContainer;
+    $container.OpenAction = OpenContainer;
+    $container.CloseAction = CloseDoor;
+    $container.DescribeAction = DescribeContainer;
+    $container.Location = $loc;
+}
+
+function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:Item) : Item
+{
+    var $container = NewItem($"_{$noun}_{$loc}");
+    InitializeContainer($container, $adjectives, $noun, $state, $loc);
+    $return = $container;    
+}
+
+function IsContainer($item:Item) => $item.PutInAction != null;
+
+function IsOpenContainer($item:Item) =>
+    IsContainer($item) &&
+    !IsClosedOrLocked($item.DoorState);
 ```
 
 ## Table Functions
@@ -1100,10 +1112,6 @@ The `InitializeTable` function initialize the properties of a table item.
 The `NewTable` function creates and initializes a new table item.
 
 The `IsTable` function tests whether the specified item is a table.
-
-The `PutOnTable` function puts an item on a table.
-
-The "put (item) on (item)" command invokes the `PutOnTable` function.
 
 ```text
 function DescribeTable($table:Item)
@@ -1123,35 +1131,12 @@ function DescribeTable($table:Item)
     }
 }
 
-function InitializeTable(
-    $table:Item,
-    $adjectives:String,
-    $noun:String,
-    $loc:Item
-    )
-{
-    SetLabelProperties($table, $adjectives, $noun);
-    $table.DescribeAction = DescribeTable;
-    $table.Location = $loc;
-}
-
-function NewTable($adjectives:String, $noun:String, $loc:Item) : Item
-{
-    $return = NewItem($"_{$noun}_{$loc}");
-    InitializeTable($return, $adjectives, $noun, $loc);
-}
-
-function IsTable($item:Item) => $item.DescribeAction == DescribeTable;
-
+# PutOnAction implementation for table items
 function PutOnTable($item:Item, $table:Item)
 {
     if (!IsPortable($item))
     {
         Message($"You can't move the {Label($item)}.");
-    }
-    elseif (!IsTable($table))
-    {
-        Message($"You can't put the {Label($item)} on the {Label($table)}.");
     }
     elseif ($item.Location == $table)
     {
@@ -1163,6 +1148,27 @@ function PutOnTable($item:Item, $table:Item)
         Message($"The {Label($item)} is now on the {Label($table)}.");
     }
 }
+
+function InitializeTable(
+    $table:Item,
+    $adjectives:String,
+    $noun:String,
+    $loc:Item
+    )
+{
+    SetLabelProperties($table, $adjectives, $noun);
+    $table.PutOnAction = PutOnTable;
+    $table.DescribeAction = DescribeTable;
+    $table.Location = $loc;
+}
+
+function NewTable($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeTable($return, $adjectives, $noun, $loc);
+}
+
+function IsTable($item:Item) => $item.PutOnAction != null;
 ```
 
 ## Look Function
@@ -1340,8 +1346,8 @@ command "inventory" { Inventory(); }
 command "i" { Inventory(); }
 command "take {$item:Item}" { Take($item); }
 command "drop {$item:Item}" { Take($item); }
-command "put {$item:Item} in {$container:Item}" { PutInContainer($item, $container); }
-command "put {$item:Item} on {$table:Item}" { PutOnTable($item, $table); }
+command "put {$item:Item} in {$container:Item}" { PutIn($item, $container); }
+command "put {$item:Item} on {$table:Item}" { PutOn($item, $table); }
 command "use {$item:Item} on {$target:Item}" { UseOn($item, $target); }
 command "use {$item:Item}" { Use($item); }
 command "open {$item:Item}" { Open($item); }
