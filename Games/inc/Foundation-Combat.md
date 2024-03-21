@@ -4,13 +4,17 @@ This optional module implements a basic combat system, including armor, weapons,
 and the "attack" command. It depends on `Foundation.md`, which must be included
 first.
 
-## CurrentWeapon Property
+## Health and MaxHealth Properties
 
-This property specifies the current weapon (if any) of the player or non-player
-character.
+The `Health` and `MaxHealth` properties are used to keep track of the amount of
+injury or damage to a character or object. Damage reduces the `Health` property
+by specified amount. The _relative health_ of a character or object is the ratio
+of `Health` to `MaxHealth`. If both properties are zero, the item is not subject
+to damage.
 
 ```text
-property CurrentWeapon : Item;
+property Health : Int;
+property MaxHealth : Int;
 ```
 
 ## AttackDamage Property
@@ -54,6 +58,155 @@ function ComputeDamage($attackDamage:Int, $DamageResistance:Int) : Int
 
     $return = $damage > 0 ? $damage : 0;
 }
+```
+
+## Health Helpers
+
+This section contains internal helper functions used to implement the
+DescribeHealthAction delegate.
+
+```text
+# DescribeHealthAction implementation suitable for inaninate objects
+function DescribeItemHealth($item:Item)
+{
+    if ($item.MaxHealth > 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        var $label = Label($item);
+        if ($health < 0)
+        {
+            Message($"The {$label} is destroyed!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message($"The {$label} is critically damanged.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message($"The {$label} is severely damanged.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message($"The {$label} is significantly damanged.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message($"The {$label} is slightly damaged.");
+        }
+        else
+        {
+            Message($"The {$label} is undamaged.");
+        }
+    }
+}
+# DescribeHealthAction implementation suitable for monsters, NPCs, etc.
+function DescribeCreatureHealth($item:Item)
+{
+    if ($item.MaxHealth > 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        var $label = Label($item);
+        if ($health < 0)
+        {
+            Message($"The {$label} is dead!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message($"The {$label} is critically injured.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message($"The {$label} is severely injured.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message($"The {$label} is significantly injured.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message($"The {$label} is slightly injured.");
+        }
+        else
+        {
+            Message($"The {$label} is uninjured.");
+        }
+    }
+}
+# DescribeHealthAction implementation for the player.
+function DescribePlayerHealth($item:Item)
+{
+    if ($item.MaxHealth != 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        if ($health < 0)
+        {
+            Message("You are dead!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message("You are critically injured.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message("You are severaly injured.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message("You are significantly injured.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message("You are slightly injured.");
+        }
+        else
+        {
+            Message("You are uninjured.");
+        }
+    }
+}
+game
+{
+    # Initialize the player's health and related properties.
+    player.MaxHealth = 250;
+    player.Health = 250;
+    player.AttackDamage = 5;  # damage using bare hands
+    player.DescribeHealthAction = DescribePlayerHealth;
+    player.DescribeAction = DescribePlayerHealth;
+}
+turn
+{
+    # The player heals one health unit per turn.
+    if (player.Health < player.MaxHealth)
+    {
+        player.Health = player.Health + 1;
+    }
+}
+```
+
+## SetItemHealth Function
+
+The `SetItemHealth` function sets an inanimate item's `Health`, `MaxHealth`, and
+`DescribeHealthAction` properties.
+
+```text
+function SetItemHealth($item:Item, $health:Int)
+{
+    $item.Health = $health;
+    $item.MaxHealth = $health;
+    $item.DescribeHealthAction = DescribeItemHealth;
+}
+```
+
+## CurrentWeapon Property
+
+This property specifies the current weapon (if any) of the player or non-player
+character.
+
+```text
+property CurrentWeapon : Item;
 ```
 
 ## OnAttackedAction Property
@@ -211,12 +364,8 @@ This section contains internal helper methods for inflicting damage on and/or
 destroying items.
 
 ```text
-# Default implementation of the Destroy function if DestroyAction is not set.
-function DestroyCommon($item:Item)
+function DestroyItem($item:Item)
 {
-    $item.Description = $"The {Label($item)} is destroyed!";
-    Message($item.Description);
-
     # Anything contained by the destroyed item is now outside of it.
     foreach (var $inner) where Location == $item
     {
@@ -226,31 +375,6 @@ function DestroyCommon($item:Item)
     # Set the item's location to null, so in effect it doesn't exist.
     $item.Location = null;
 }
-
-# Destroy action for the player item (ends the game).
-function DestroyPlayer($item:Item)
-{
-    Message("You have sustained fatal injuries. The game is over. Better luck next time!");
-    EndGame(false);
-}
-
-game
-{
-    player.AttackDamage = 5;  # damage using bare hands
-    player.DestroyAction = DestroyPlayer;
-}
-
-# The player heals one health unit per turn.
-turn
-{
-    if (player.Health < player.MaxHealth)
-    {
-        player.Health = player.Health + 1;
-    }
-}
-
-# The Destroy function invokes the DestroyAction or calls DestroyCommon.
-function Destroy($item:Item) => InvokeItemActionWithFallback($item.DestroyAction, $item, DestroyCommon);
 
 # Function invoked when the player attacks something.
 function AttackItemWith($target:Item, $weapon:Item)
@@ -278,13 +402,10 @@ function AttackItemWith($target:Item, $weapon:Item)
             Message($"You attack the {Label($target)} with {$weaponName}.");
 
             $target.Health = $target.Health - $damage;
+            $target.DescribeHealthAction($target);
             if ($target.Health < 0)
             {
-                Destroy($target);
-            }
-            else
-            {
-                DescribeHealth($target);
+                DestroyItem($target);
             }
         }
 
@@ -319,13 +440,11 @@ function AttackPlayer($foe:Item)
         Message($"The {Label($foe)} attacks you{$withPhrase}.");
 
         player.Health = player.Health - $damage;
+        player.DescribeHealthAction(player);
         if (player.Health < 0)
         {
-            Destroy(player);
-        }
-        else
-        {
-            DescribeHealth(player);
+            Message("Better luck next time!");
+            EndGame(false);
         }
     }
 }
@@ -425,7 +544,7 @@ weapons information.
 ```text
 function DescribePlayerWithArms($item:Item)
 {
-    DescribePlayer($item);
+    DescribeCommon($item);
 
     if ($headArmor != null)
     {

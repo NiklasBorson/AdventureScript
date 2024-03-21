@@ -717,7 +717,7 @@ game
         "goblin",       # noun
         50,             # health
         10,             # damage resistance
-        10,             # attack damage
+        20,             # attack damage
         hallway_NS      # location
     );
 }

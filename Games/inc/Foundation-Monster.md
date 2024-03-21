@@ -38,8 +38,26 @@ function UpdateHostileMonster($monster:Item)
         elseif ($monster.Location == $lastRoom)
         {
             $monster.Location = player.Location;
+            AddItemWords($monster);
             Message($"The {Label($monster)} follows you.");
         }
+    }
+}
+```
+
+## UpdateSurprisedMonster Function
+
+The `UpdateSurprisedMonster` is the default initial update action for a
+potentially hostile monster. A "surprised" monster becomes hostile after
+noticing the player.
+
+```text
+function UpdateSurprisedMonster($monster:Item)
+{
+    if ($monster.Location == player.Location && !$isNowDark)
+    {
+        Message($"The {Label($monster)} notices you.");
+        $monster.UpdateAction = UpdateHostileMonster;
     }
 }
 ```
@@ -55,6 +73,7 @@ function UpdateFriendlyMonster($monster:Item)
     if (!$isNowDark && $monster.Location == $lastRoom)
     {
         $monster.Location = player.Location;
+        AddItemWords($monster);
         Message($"The {Label($monster)} follows you.");
     }
 }
@@ -75,9 +94,9 @@ function OnMonsterAttacked($monster:Item)
 ## InitializeMonster and NewMonster Functions
 
 The `InitializeMonster` function sets the properties of a monster item. The
-`NewMonster` function creates and initializes a monster item. Both functions
-set the monster's UpdateAction to UpdateHostileMonster. Custom behavior can
-be implemented by setting the UpdateAction to something else.
+`NewMonster` function creates and initializes a monster item. The default
+behavior of monsters is hostile, but this can be changed by setting the
+UpdateAction property.
 
 ```text
 function InitializeMonster(
@@ -93,11 +112,12 @@ function InitializeMonster(
     SetLabelProperties($monster, $adjectives, $noun);
     $monster.Health = $health;
     $monster.MaxHealth = $health;
+    $monster.DescribeHealthAction = DescribeCreatureHealth;
     $monster.DamageResistance = $damageResistance;
     $monster.AttackDamage = $attackDamage;
     $monster.Location = $loc;
     $monster.OnAttackedAction = OnMonsterAttacked;
-    $monster.UpdateAction = UpdateHostileMonster;
+    $monster.UpdateAction = UpdateSurprisedMonster;
 }
 function NewMonster(
     $adjectives : String,

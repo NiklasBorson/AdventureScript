@@ -34,31 +34,6 @@ turn
 }
 ```
 
-## Health and MaxHealth Properties
-
-The `Health` and `MaxHealth` properties are used to keep track of the amount of
-injury or damage to a character or object. Damage reduces the `Health` property
-by specified amount. The _relative health_ of a character or object is the ratio
-of `Health` to `MaxHealth`. If both properties are zero, the item is not subject
-to damage.
-
-```text
-property Health : Int;
-property MaxHealth : Int;
-```
-
-## SetHealth Function
-
-The `SetHealth` function sets an item's `Health` and `MaxHealth` properties.
-
-```text
-function SetHealth($item:Item, $health:Int, $maxHealth:Int)
-{
-    $item.Health = $health;
-    $item.MaxHealth = $maxHealth;
-}
-```
-
 ## Noun and Adjectives Properties
 
 The `Noun` and `Adjectives` properties are used to refer to an item both in game
@@ -166,8 +141,7 @@ action.
 | `OpenAction`              | `Open`            | "open (item)"             |
 | `CloseAction`             | `Close`           | "close (item)"            |
 | `DescribeAction`          | `Describe`        | "look", "look at (item)"  |
-| `DescribeHealthAction`    | `DescribeHealth`  | N/A                       |
-| `DestroyAction`           | `Destroy`         |                           |
+| `DescribeHealthAction`    | N/A               | N/A                       |
 | `TurnOnAction`            | `TurnOn`          | "turn on (item)"          |
 | `TurnOffAction`           | `TurnOff`         | "turn off (item)"         |
 | `IgniteAction`            | `Ignite`          | N/A                       |
@@ -182,7 +156,6 @@ property OpenAction : ItemDelegate;
 property CloseAction : ItemDelegate;
 property DescribeAction : ItemDelegate;
 property DescribeHealthAction : ItemDelegate;
-property DestroyAction : ItemDelegate;
 property TurnOnAction : ItemDelegate;
 property TurnOffAction : ItemDelegate;
 property IgniteAction : ItemDelegate;
@@ -628,7 +601,6 @@ map DoorStateAdj DoorState -> String
 }
 
 function AddStateQualifier($item:Item, $phrase:String) =>
-    $item.Health < 0 ? $"broken {$phrase}" :
     $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" :
     $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}" :
     $phrase;
@@ -672,90 +644,6 @@ typically begins with "You are in...".
 property Description : String;
 ```
 
-## DescribeHealth Helpers
-
-This section contains internal helper functions used by DescribeHealth.
-
-```text
-# Default behavor of DescribeHealth if DescribeHealthAction is not set.
-function DescribeHealthCommon($item:Item)
-{
-    if ($item.MaxHealth != 0)
-    {
-        var $health = $item.Health;
-        var $percentage = $health * 100 / $item.MaxHealth;
-        if ($health < 0)
-        {
-            # The broken state is already reflected in the label.
-        }
-        elseif ($percentage < 20)
-        {
-            Message($"The {Label($item)} is critically damanged.");
-        }
-        elseif ($percentage < 40)
-        {
-            Message($"The {Label($item)} is severely damanged.");
-        }
-        elseif ($percentage < 70)
-        {
-            Message($"The {Label($item)} is significantly damanged.");
-        }
-        elseif ($percentage < 100)
-        {
-            Message($"The {Label($item)} is slightly damaged.");
-        }
-    }
-}
-# DescribeHealthAction for the player
-function DescribePlayerHealth($item:Item)
-{
-    if ($item.MaxHealth != 0)
-    {
-        var $health = $item.Health;
-        var $percentage = $health * 100 / $item.MaxHealth;
-        if ($health < 0)
-        {
-            Message("You are dead.");
-        }
-        elseif ($percentage < 20)
-        {
-            Message("You are critically injured.");
-        }
-        elseif ($percentage < 40)
-        {
-            Message("You are severaly injured.");
-        }
-        elseif ($percentage < 70)
-        {
-            Message("You are significantly injured.");
-        }
-        elseif ($percentage < 100)
-        {
-            Message("You are slightly injured.");
-        }
-        else
-        {
-            Message("You are uninjured.");
-        }
-    }
-}
-game
-{
-    SetHealth(player, 99, 99);
-    player.DescribeHealthAction = DescribePlayerHealth;
-}
-```
-
-## DescribeHealth Function
-
-The `DescribeHealth` function invokes the describe health action for the specified
-item, falling back to the `DescribeHealthCommon` function if the `DescribeHealthAction`
-property has not been set.
-
-```text
-function DescribeHealth($item:Item) => InvokeItemActionWithFallback($item.DescribeHealthAction, $item, DescribeHealthCommon);
-```
-
 ## Describe Helpers
 
 This section contains internal helpers used to implement the Describe function.
@@ -778,17 +666,7 @@ function DescribeCommon($item:Item)
         Message($"You see a {LabelWithState($item)}.");
     }
 
-    DescribeHealth($item);
-}
-
-function DescribePlayer($item:Item)
-{
-    DescribeHealth($item);
-}
-
-game
-{
-    player.DescribeAction = DescribePlayer;
+    $item.DescribeHealthAction($item);
 }
 ```
 
