@@ -221,7 +221,9 @@ The `SetPortable` function makes an item portable by setting its `TakeAction` an
 
 The `IsPortable` function tests whether an item is portable.
 
-The `NewPortableItem` function creates a new portable item in the specified location.
+The `InitializePortableItem` sets the properties of a portable item.
+
+The `NewPortableItem` function creates and initializes a portable item.
 
 ```text
 function TakePortableItem($item:Item)
@@ -255,12 +257,17 @@ function SetPortable($item:Item)
 }
 function IsPortable($item:Item) => $item.TakeAction == TakePortableItem;
 
+function InitializePortableItem($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    SetLabelProperties($item, $adjectives, $noun);
+    SetPortable($item);
+    $item.Location = $loc;
+}
+
 function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
 {
-    $return = NewItem($"_{$noun}");
-    SetLabelProperties($return, $adjectives, $noun);
-    SetPortable($return);
-    $return.Location = $loc;
+    $return = NewItem($"_{$noun}{$loc}");
+    InitializePortableItem($return, $adjectives, $noun, $loc);
 }
 ```
 

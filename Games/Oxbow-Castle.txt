@@ -774,6 +774,18 @@ game
 
 #############################################
 #
+# Fairyland table
+#
+
+game
+{
+    InitializeTable(fairyland_table, "long", "table", fairyland_NW);
+    InitializePortableItem(fairyland_food, "platter of", "food", fairyland_table);
+    InitializePortableItem(fairyland_wine, "cup of", "wine", fairyland_table);
+}
+
+#############################################
+#
 # Fairyland church
 #
 game
