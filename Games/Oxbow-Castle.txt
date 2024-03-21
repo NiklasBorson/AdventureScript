@@ -2,6 +2,11 @@ include "inc/Foundation-Debug.md";
 include "inc/Foundation.md";
 include "inc/Foundation-Combat.md";
 
+#############################################
+#
+# Item declarations
+#
+
 #
 # Outer court rooms
 #
@@ -46,6 +51,11 @@ item inner_court_SE;
 item inner_court_N;
 item inner_court_NW;
 item inner_court_NE;
+
+#
+# Inner court items
+#
+item inner_court_statue;
 
 #
 # Walls and towers
@@ -126,6 +136,9 @@ item tower_NE_3;
 #
 item tower_NE_door;
 item tower_NE_table;
+item fairy_king;
+item fairy_prince1;
+item fairy_prince2;
 
 #
 # Fairlyland rooms
@@ -141,6 +154,18 @@ item fairyland_S;
 item fairyland_SE;
 
 #
+# Fairyland items.
+#
+item fairyland_table;
+item fairyland_food;
+item fairyland_wine;
+item fairy1;
+item fairy2;
+item fairy3;
+item fairy4;
+item fairy5;
+
+#
 # Fairyland church rooms
 #
 item fairyland_church_yard_W;
@@ -151,6 +176,46 @@ item fairyland_church_E;
 item fairyland_side_chapel;
 item fairyland_priest_house;
 
+#############################################
+#
+# Welcome message
+#
+game
+{
+    Message("# Welcome to Oxbow Castle");
+    Message(
+        "You are a messenger sent by King Peregrin the Paranoid to find out what has "
+        "become of Oxbow castle and its ruler, Lord Kevin. Previous messengers have not "
+        "returned, and the king has begin to suspect Lord Kevin of plotting against him."
+    );
+    Message(
+        "That is one possibility, but you have also heard stranger rumors. In the "
+        "taverns, people whisper that something dark and sinister has befallen the "
+        "place. Of course, it may just be the ale talking. You are here to find out!"
+    );
+    Message(
+        "Oxbow Castle is situated in a sharp bend of the river Oxyl, such that it is "
+        "surrounded on three sides by water. It is late morning, and you have just "
+        "arrived at the only entrance to the castle, an open iron gate in the south "
+        "wall. It is strangely silent. No one seems to be around."
+    );
+    Message(
+        "At any time you can type 'help' to see a list of commands you can say."
+    );
+
+    player.Location = outside;
+}
+
+command "help"
+{
+    Message("Following are commands you can say:");
+    ListCommands();
+}
+
+#############################################
+#
+# IsDark Initialization
+#
 game
 {
     # Set the IsDark predicate for all rooms to IsDarkAtNight.
@@ -182,54 +247,10 @@ game
     armory.IsDark = IsDarkAlways;
 }
 
-command "help"
-{
-    Message("Following are commands you can say:");
-    ListCommands();
-}
-
-game
-{
-    # Welcome message at the start of the game.
-    Message("# Welcome to Oxbow Castle");
-    Message(
-        "You are a messenger sent by King Peregrin the Paranoid to find out what has "
-        "become of Oxbow castle and its ruler, Lord Kevin. Previous messengers have not "
-        "returned, and the king has begin to suspect Lord Kevin of plotting against him."
-    );
-    Message(
-        "That is one possibility, but you have also heard stranger rumors. In the "
-        "taverns, people whisper that something dark and sinister has befallen the "
-        "place. Of course, it may just be the ale talking. You are here to find out!"
-    );
-    Message(
-        "Oxbow Castle is situated in a sharp bend of the river Oxyl, such that it is "
-        "surrounded on three sides by water. It is late morning, and you have just "
-        "arrived at the only entrance to the castle, an open iron gate in the south "
-        "wall. It is strangely silent. No one seems to be around."
-    );
-    Message(
-        "At any time you can type 'help' to see a list of commands you can say."
-    );
-
-    player.Location = outside;
-}
-
-# Use action for a well.
-function UseWell($item:Item)
-{
-    Message("You draw water from the well and take a refreshing drink.");
-}
-
-# Helper function create a well in a specified location.
-function NewWell($loc:Item)
-{
-    var $well = NewItem($"{$loc}_well");
-    $well.Location = $loc;
-    $well.Noun = "well";
-    $well.UseAction = UseWell;
-}
-
+#############################################
+#
+# Outer court
+#
 game
 {
     # Outer court descriptions
@@ -280,10 +301,12 @@ game
     NewLink(outer_court_W, outer_court_center, Direction.East);
     NewLink(outer_court_NW, outer_court_N, Direction.East);
     NewLink(outer_court_N, outer_court_NE, Direction.East);
-
-    NewWell(outer_court_NW);
 }
 
+#############################################
+#
+# Church
+#
 game
 {
     # Church descriptions.
@@ -321,6 +344,10 @@ game
     NewDoorItem(priest_house, church_E, Direction.North, "small wooden", "door", DoorState.Closed);
 }
 
+#############################################
+#
+# Priest house
+#
 game
 {
     # Initialize priest house items
@@ -336,6 +363,10 @@ game
         "old gods, as well as supernatural creatures like fairies.";
 }
 
+#############################################
+#
+# Special behavior when entering keep from outer court
+#
 function OnEnterKeep($from:Item, $to:Item) : Bool
 {
     if ($from == outer_court_N && $to == inner_court_S)
@@ -354,6 +385,10 @@ function OnEnterKeep($from:Item, $to:Item) : Bool
     }
 }
 
+#############################################
+#
+# Inner court
+#
 game
 {
     # One-way link from outer court to inner court via. inner_gate.
@@ -392,24 +427,29 @@ game
     NewLink(inner_court_S, inner_court_SE, Direction.East);
     NewLink(inner_court_NW, inner_court_N, Direction.East);
     NewLink(inner_court_N, inner_court_NE, Direction.East);
-
-    NewWell(inner_court_NE);
 }
 
-# Silver fairy statue, which is the key to lifting the enchantment.
-item fairy_statue;
-
+#############################################
+#
+# Inner court statue
+#
+# This is the key to getting out the keep and winning the game.
+#
 game
 {
-    fairy_statue.Location = inner_court_S;
-    fairy_statue.Adjectives = "silver";
-    fairy_statue.Noun = "statue";
-    fairy_statue.Description =
+    inner_court_statue.Location = inner_court_S;
+    inner_court_statue.Adjectives = "silver";
+    inner_court_statue.Noun = "statue";
+    inner_court_statue.Description =
         "The statue is of bright, untarnished silver and exquisite workmanship. "
         "It depicts a young man, or perhaps a fairy for it has delicate wings. "
         "Its empty hands are outstretched as if reaching for something.";
 }
 
+#############################################
+#
+# South wall and towers
+#
 game
 {
     # South wall and tower descriptions.
@@ -547,6 +587,10 @@ game
     InitializeKey(tower_key, "large", "key", $chest);
 }
 
+#############################################
+#
+# West keep rooms
+#
 game
 {
     # West keep room descriptions
@@ -599,6 +643,10 @@ game
     NewClosedDoor(hallway_EW, courtyard_N, Direction.East);
 }
 
+#############################################
+#
+# East keep rooms
+#
 game
 {
     # East keep room descriptions
@@ -637,6 +685,10 @@ game
     NewClosedDoor(great_hall_E, court, Direction.East);
 }
 
+#############################################
+#
+# Northeast tower
+#
 game
 {
     # Northeast tower room descriptions
@@ -650,9 +702,9 @@ game
         "tapestries and also have small windows.";
     tower_NE_3.Description =
         "You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. "
-        "The wood-paneled walls have large windows. Around an empty table sit several fairies. One "
-        "is the fairy depected by the statue in the library. The others are have similarly noble "
-        "dress and bearing. They take no notice of you.";
+        "The wood-paneled walls have large windows. Sitting at a long, empty table is the fairy king "
+        "depicted by the statue downstairs along with two other noble-looking fairies. They take "
+        "no notice of you.";
 
     # Northeast tower room upward links.
     NewDoorItem(tower_NE_0, tower_NE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
@@ -666,6 +718,10 @@ game
     InitializeTable(tower_NE_table, "long wooden", "table", tower_NE_3);
 }
 
+#############################################
+#
+# Fairyland
+#
 game
 {
     # Fairlyland room descriptions
@@ -716,6 +772,10 @@ game
     NewLink(fairyland_S, fairyland_SE, Direction.East);
 }
 
+#############################################
+#
+# Fairyland church
+#
 game
 {
     # Fairyland church room descriptions
@@ -753,9 +813,126 @@ game
     NewDoorItem(fairyland_priest_house, fairyland_church_E, Direction.North, "small wooden", "door", DoorState.Closed);
 }
 
+#############################################
+#
+# Wells
+#
+
+# Use action for a well.
+function UseWell($item:Item)
+{
+    Message("You draw water from the well and take a refreshing drink.");
+}
+
+# Helper function create a well in a specified location.
+function NewWell($loc:Item)
+{
+    var $well = NewItem($"{$loc}_well");
+    $well.Location = $loc;
+    $well.Noun = "well";
+    $well.UseAction = UseWell;
+}
+
 game
 {
-    # Monsters
+    NewWell(inner_court_NE);
+    NewWell(outer_court_NW);
+    NewWell(fairyland_NW);
+}
+
+#############################################
+#
+# Fairies
+#
+
+# Each fairy has a message.
+property Message : String;
+
+# A fairy's initial update action is to say a message.
+function UpdateFairy($fairy:Item)
+{
+    if ($fairy.Location == player.Location &&
+        $fairy.Message != null)
+    {
+        Message($"The fairy says, '{$fairy.Message}'");
+    }
+}
+
+# Make all fairies hostile.
+function EnrageFairies()
+{
+    foreach (var $item) where UpdateAction == UpdateFairy
+    {
+        $item.UpdateAction = UpdateHostileMonster;
+    }
+}
+
+# An attack on one fairy enrages all of them.
+function OnFairyAttacked($monster:Item)
+{
+    EnrageFairies();
+}
+
+function InitializeFairy(
+    $fairy:Item,
+    $adjectives:String,
+    $message:String,
+    $loc:Item
+    )
+{
+    InitializeMonster(
+        $fairy,
+        $adjectives,
+        "fairy",
+        100,    # health
+        100,    # invincible
+        100,    # attack damage
+        $loc
+    );
+    $fairy.Message = $message;
+    $fairy.UpdateAction = UpdateFairy;
+    $fairy.OnAttackedAction = OnFairyAttacked;
+}
+
+function InitializeFairyLord(
+    $fairy:Item,
+    $adjectives:String,
+    $noun:String,
+    $loc:Item
+    )
+{
+    InitializeMonster(
+        $fairy,
+        $adjectives,
+        $noun,
+        100,    # health
+        100,    # invincible
+        200,    # attack damage
+        $loc
+    );
+    $fairy.UpdateAction = UpdateFairy;
+    $fairy.OnAttackedAction = OnFairyAttacked;
+}
+
+game
+{
+    InitializeFairy(fairy1, "small blue", "The guests have arrived!", fairyland_W);
+    InitializeFairy(fairy2, "green", "The guests can't leave until the last cup is poured!", fairyland_SW);
+    InitializeFairy(fairy3, "pale", "The guests can't leave until the feast is over!", fairyland_S);
+    InitializeFairy(fairy4, "slim brown", "The host can't eat until the guests have arrived!", fairyland_SE);
+    InitializeFairy(fairy5, "bright yellow", "The host sits in the highest seat!", fairyland_NE);
+
+    InitializeFairyLord(fairy_king, "fairy", "king", tower_NE_3);
+    InitializeFairyLord(fairy_prince1, "blue fairy", "prince", tower_NE_3);
+    InitializeFairyLord(fairy_prince2, "dark fairy", "prince", tower_NE_3);
+}
+
+#############################################
+#
+# Monsters
+#
+game
+{
     NewMonster(
         "small",        # adjectives
         "goblin",       # noun
