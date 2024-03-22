@@ -120,6 +120,13 @@ item lords_chamber;
 item library;
 
 #
+# East keep items
+#
+item court_throne;
+item library_door;
+item library_key;
+
+#
 # Northeast tower rooms
 #
 item tower_NE_0;
@@ -756,18 +763,19 @@ game
         "You are in a large room with benches lining the east and west walls and a raised "
         "throne at the north end. This is presumably where the lord of the castle holds court.";
     parlor.Description =
-        "You are in a comfortable parlor with tapestries and expensive furnishings.";
+        "You are in a comfortable parlor with tapestries and expensive furnishings. Windows "
+        "in the west wall open onto the inner courtyard.";
     lords_chamber.Description =
-        "You are in the lord's bedchamber.";
+        "You are in the lord's bedchamber. Windows in the west wall open onto the inner courtyard.";
     library.Description =
-        "You are in a library.";
+        "You are in a library. Windows in the west wall open onto the rear courtyard.";
 
     # East keep northward links.
     NewClosedDoor(inner_court_N, great_hall_W, Direction.North);
     NewClosedDoor(kitchen, pantry, Direction.North);
     NewClosedDoor(lords_chamber, parlor, Direction.North);
     NewClosedDoor(parlor, court, Direction.North);
-    NewClosedDoor(court, library, Direction.North);
+    InitializeDoor(library_door, court, library, Direction.North, "discrete wooden", "door", DoorState.Locked);
 
     # East keep eastward links.
     NewClosedDoor(hallway_NS, kitchen, Direction.East);
@@ -775,6 +783,55 @@ game
     NewClosedDoor(pantry, buttery, Direction.East);
     NewLink(great_hall_W, great_hall_E, Direction.East);
     NewClosedDoor(great_hall_E, court, Direction.East);
+}
+
+#############################################
+#
+# Lord's bedchamber items
+#
+game
+{
+    NewBed("large four-poster", "bed", lords_chamber);
+    var $chest = NewContainer("carved wooden", "chest", DoorState.Closed, lords_chamber);
+    InitializeKey(library_key, "fine silver", "key", $chest);
+}
+
+#############################################
+#
+# Court items
+#
+
+# Looking at the throne reveals the hidden library door.
+function DescribeThrone($item:Item)
+{
+    Message(
+        "The carved wooden throne sits on a raised platform in front of the paneled "
+        "north wall. On closer inspection, you notice a wooden door behind the throne, "
+        "which is made to discretely blend in with the paneling." 
+    );
+    library_door.IsHidden = false;    
+}
+
+game
+{
+    # The library door is initially hidden.
+    library_door.Key = library_key;
+    library_door.IsHidden = true;
+
+    # Looking at the throne reveals the hidden library door.
+    court_throne.Adjectives = "carved wooden";
+    court_throne.Noun = "throne";
+    court_throne.DescribeAction = DescribeThrone;
+    court_throne.Location = court;
+}
+
+#############################################
+#
+# Library items
+#
+game
+{
+    # TODO
 }
 
 #############################################

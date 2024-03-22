@@ -1202,7 +1202,7 @@ function Look()
     {
         if ($currentLightSource != null)
         {
-            Message($"The {Label($currentLightSource)} illuminates the dark room.");
+            Message($"The {Label($currentLightSource)} illuminates the darkness.");
         }
 
         Describe($room);
@@ -1210,7 +1210,7 @@ function Look()
         foreach (var $dir:Direction)
         {
             var $door = GetLink(player.Location, $dir);
-            if ($door != null && $door.Noun != null)
+            if ($door != null && $door.Noun != null && !$door.IsHidden)
             {
                 Message($"There is a {LabelWithState($door)} {DirectionPhrase($dir)}.");
             }
@@ -1238,7 +1238,7 @@ function Go($dir:Direction)
 {
     var $source = player.Location;
     var $door = GetLink($source, $dir);
-    if ($door == null)
+    if ($door == null || $door.IsHidden)
     {
         Message($"You cannot go {$dir}.");
     }
