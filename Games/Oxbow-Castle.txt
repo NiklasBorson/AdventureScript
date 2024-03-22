@@ -125,6 +125,7 @@ item library;
 item court_throne;
 item library_door;
 item library_key;
+item library_statue;
 
 #
 # Northeast tower rooms
@@ -179,6 +180,12 @@ item fairyland_church_W;
 item fairyland_church_E;
 item fairyland_side_chapel;
 item fairyland_priest_house;
+
+#
+# Fairyland church items
+#
+item priest;
+item maid;
 
 #############################################
 #
@@ -402,9 +409,17 @@ function OnEnterCouterCourt($from:Item, $to:Item) : Bool
             "sky! You have broken the enchantment and reconnected the keep with the "
             "real world."
         );
-        Message(
-            "Congratulations! You have won the game!"
-        );
+
+        if (priest.Location == inner_court_S && maid.Location == inner_court_S)
+        {
+            Message("The priest and maid follow you to safety.");
+        }
+        else
+        {
+            Message("It's a pity you didn't rescue the survivors...");
+        }
+
+        Message("Congratulations! You have won the game!");
         EndGame(true);
     }
 }
@@ -831,7 +846,34 @@ game
 #
 game
 {
-    # TODO
+    library_statue.Location = library;
+    library_statue.Adjectives = "silver";
+    library_statue.Noun = "statue";
+    library_statue.Description =
+        "The statue shows a tall, noble looking fairy with a crown on his head. "
+        "A fairy king, perhaps. A caption reads, 'The host of the feast.'";
+
+    # Initialize the door from the library to the NE tower.
+    InitializeDoor(tower_NE_door, library, tower_NE_0, Direction.North, "arched oak", "door", DoorState.Closed);
+    tower_NE_door.IsHidden = true;
+}
+
+command "say {$message:String}"
+{
+    if (player.Location == library_statue.Location &&
+        $message == "guests have arrived")
+    {
+        # The statue disappears and the door appears.
+        library_statue.Location = null;
+        tower_NE_door.IsHidden = false;
+
+        # Describe that in a more dramatic way.
+        Message(
+            "The statue of the fairy king comes to life and says, 'The host can't eat "
+            "until the guests have arrived!' Then it makes an elegant bow and vanishes. "
+            "In place of the statue, you now see an arched oak door leading north." 
+        );
+    }
 }
 
 #############################################
@@ -902,9 +944,6 @@ game
     NewDoorItem(tower_NE_0, tower_NE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_NE_1, tower_NE_2, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_NE_2, tower_NE_3, Direction.Up, "spiral stone", "stair", DoorState.None);
-
-    # Initialize northeast tower door.
-    InitializeDoor(tower_NE_door, library, tower_NE_0, Direction.North, "arched oak", "door", DoorState.Closed);
 
     # Initialize northeast tower table.
     InitializeTable(kings_table, "long wooden", "table", tower_NE_3);
@@ -1074,13 +1113,24 @@ game
 # Each fairy has a message.
 property Message : String;
 
+# Fairy message spoken this turn, if any. This global variable exists so
+# non-player characters can react to fairy actions.
+var $currentFairyMessage : String;
+
+# Reset the current fairy message to null each turn after all of the
+# update actions are executed.
+turn
+{
+    $currentFairyMessage = null;
+}
+
 # A fairy's initial update action is to say a message.
 function UpdateFairy($fairy:Item)
 {
-    if ($fairy.Location == player.Location &&
-        $fairy.Message != null)
+    if ($fairy.Location == player.Location && $fairy.Message != null)
     {
         Message($"The fairy says, '{$fairy.Message}'");
+        $currentFairyMessage = $fairy.Message;
     }
 }
 
@@ -1191,4 +1241,133 @@ game
         50,             # attack damage
         tower_NE_1      # location
     );
+}
+
+#############################################
+#
+# Priest and maid
+#
+var $hasPriestReactedToFairy = false;
+function UpdateFollowingPriest($npc:Item)
+{
+    if (TryFollowPlayer($npc))
+    {
+        # Room-specific actions
+    }
+
+    if ($currentFairyMessage != null && $npc.Location == player.Location)
+    {
+        if (!$hasPriestReactedToFairy)
+        {
+            Message(
+                "The priest says, `Do not trust these fiends! They speak only in riddles '"
+                "and they do not mean is well, I am sure!'"
+                );
+            $hasPriestReactedToFairy = true;
+        }
+        else
+        {
+            Message("The priest scowls and says, 'More riddles!'");
+        }
+    }
+}
+
+var $hasMaidReactedToFairy = false;
+var $hasMaidReactedToInnerCourtStatue = false;
+var $hasMaidReactedToLibraryStatue = false;
+function UpdateFollowingMaid($npc:Item)
+{
+    if (TryFollowPlayer($npc))
+    {
+        # Room-specific actions
+        if ($npc.Location == inner_court_statue.Location && !$hasMaidReactedToInnerCourtStatue)
+        {
+            Message(
+                "The maid says, 'Ooh! That statue wasn't here before! It's beautiful!'"
+            );
+            $hasMaidReactedToInnerCourtStatue = true;
+        }
+
+        if ($npc.Location == library_statue.Location && !$hasMaidReactedToLibraryStatue)
+        {
+            Message(
+                "The maid says, 'Ooh! Another of these silver statues! It's strange, though. "
+                "I've cleaned this room before, and there should be a door right where that "
+                "statue is. Maybe it will appear if we say the magic words!'"
+            );
+            Message(
+                "'Hocus pocus!' she says to the statue, but nothing happens."
+            );
+            $hasMaidReactedToLibraryStatue = true;
+        }
+    }
+
+    if ($currentFairyMessage != null && $npc.Location == player.Location)
+    {
+        if (!$hasMaidReactedToFairy)
+        {
+            Message(
+                "The maid says, 'Maybe there's some clue these words, but I don't "
+                "understand it.'"
+                );
+            $hasMaidReactedToFairy = true;
+        }
+    }
+}
+
+function UpdateIdlePriest($npc:Item)
+{
+    if (player.Location == $npc.Location)
+    {
+        Message(
+            "The priest says, 'At last, help has arrived! I see you wear the king's "
+            "livery. This chamber maid and I are the only survivors in the castle, as "
+            "far as we know. We will gladly follow you if you can show us the way out.'"
+        );
+        Message(
+            "Recognizing your duty, you promise to help if you can."
+        );
+        $npc.UpdateAction = UpdateFollowingPriest;
+    }
+}
+
+function UpdateIdleMaid($npc:Item)
+{
+    if (player.Location == $npc.Location)
+    {
+        Message(
+            "The maid exclaims, 'Oh, thank you sir! It was awful what happened here! "
+            "I was in Lord Kevin's chambers doing a bit of cleaning when those winged "
+            "creatures came. Lord Kevin and his men tried to fight them, but they were "
+            "all killed. I think the townspeople mostly fled. I fled too. I thought to "
+            "seek sanctuary in the church, and I found the church right enough, but it's "
+            "here in the middle of this strange forest and we don't know the way out!'"
+        );
+        $npc.UpdateAction = UpdateFollowingMaid;
+    }
+}
+
+game
+{
+    InitializeMonster(
+        priest,
+        "",
+        "priest",
+        1,              # health
+        0,              # damage resistance
+        1,              # attack damage
+        fairyland_church_W
+    );
+    priest.UpdateAction = UpdateIdlePriest;
+
+    InitializeMonster(
+        maid,
+        "chamber",
+        "maid",
+        1,              # health
+        0,              # damage resistance
+        1,              # attack damage
+        fairyland_church_W
+    );
+    maid.UpdateAction = UpdateIdleMaid;
 }

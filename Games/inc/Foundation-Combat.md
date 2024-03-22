@@ -595,6 +595,24 @@ game
 
 ```
 
+## TryFollowPayer Function
+
+The `TryFollowPlayer` function is a helper function used to implement behavior
+for monsters or NPCs that follow the player.
+
+```text
+function TryFollowPlayer($monster:Item) : Bool
+{
+    if (!$isNowDark && $monster.Location == $lastRoom)
+    {
+        $monster.Location = player.Location;
+        AddItemWords($monster);
+        Message($"The {Label($monster)} follows you.");
+        $return = true;
+    }
+}
+```
+
 ## UpdateHostileMonster Function
 
 The `UpdateHostileMonster` function implements the update action for a
@@ -609,11 +627,9 @@ function UpdateHostileMonster($monster:Item)
         {
             AttackPlayer($monster);
         }
-        elseif ($monster.Location == $lastRoom)
+        else
         {
-            $monster.Location = player.Location;
-            AddItemWords($monster);
-            Message($"The {Label($monster)} follows you.");
+            TryFollowPlayer($monster);
         }
     }
 }
@@ -644,12 +660,7 @@ friendly monster.
 ```text
 function UpdateFriendlyMonster($monster:Item)
 {
-    if (!$isNowDark && $monster.Location == $lastRoom)
-    {
-        $monster.Location = player.Location;
-        AddItemWords($monster);
-        Message($"The {Label($monster)} follows you.");
-    }
+    TryFollowPlayer($monster);
 }
 ```
 
