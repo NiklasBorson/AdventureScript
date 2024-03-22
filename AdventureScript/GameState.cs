@@ -311,8 +311,11 @@ namespace AdventureLib
 
         internal void Message(string message)
         {
-            message = StringHelpers.NormalizeSpaces(message);
-            m_messages.Add(message);
+            if (!IsGameOver)
+            {
+                message = StringHelpers.NormalizeSpaces(message);
+                m_messages.Add(message);
+            }
         }
         #endregion
     }

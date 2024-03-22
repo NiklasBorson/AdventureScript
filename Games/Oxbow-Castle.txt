@@ -359,16 +359,16 @@ game
     InitializeKey(church_key, "ornate brass", "key", priest_house_trunk);
     InitializeTable(priest_house_desk, "large oak", "desk", priest_house);
     NewPortableItem("white", "paper", priest_house_desk).Description =
-        "The paper appears to be a draft of a sermon. Between the scratched-out words and ink blots, "
-        "you read a passionate diatribe criticizing the congregation for continuing to believe in the "
-        "old gods, as well as supernatural creatures like fairies.";
+        "The paper appears to be a draft of a sermon. Between scratched-out words and ink blots, you "
+        "read a passionate diatribe criticizing the people for holding superstitious beliefs about "
+        "goblins and fairies.";
 }
 
 #############################################
 #
 # Special behavior when entering keep from outer court
 #
-function OnEnterKeep($from:Item, $to:Item) : Bool
+function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
 {
     if ($from == outer_court_N && $to == inner_court_S)
     {
@@ -386,6 +386,23 @@ function OnEnterKeep($from:Item, $to:Item) : Bool
     }
 }
 
+function OnEnterCouterCourt($from:Item, $to:Item) : Bool
+{
+    if ($from == inner_court_S && $to == outer_court_N)
+    {
+        Message(
+            "You pass through the gate house tunnel and back into the outer courtyard. "
+            "It's the real outer couryard, not the forested fairyland with the purple "
+            "sky! You have broken the enchantment and reconnected the keep with the "
+            "real world."
+        );
+        Message(
+            "Congratulations! You have won the game!"
+        );
+        EndGame(true);
+    }
+}
+
 #############################################
 #
 # Inner court
@@ -394,7 +411,8 @@ game
 {
     # One-way link from outer court to inner court via. inner_gate.
     LinkRoomsOneWay(outer_court_N, inner_court_S, inner_gate, Direction.North);
-    outer_court_N.LeaveAction = OnEnterKeep;
+    outer_court_N.LeaveAction = OnLeaveOuterCourt;
+    outer_court_N.EnterAction = OnEnterCouterCourt;
 
     # Inner court descriptions
     inner_court_S.Description =
@@ -436,6 +454,61 @@ game
 #
 # This is the key to getting out the keep and winning the game.
 #
+function PutInSilverCup($item:Item, $target:Item)
+{
+    if ($item == fairyland_wine)
+    {
+        Message(
+            "You pour the wine into the silver cup. Suddenly, the statue comes to "
+            "life. It says, 'The guests can't leave until the last cup is poured!' "
+            "and drains the cup in one long draft."
+        );
+
+        Message(
+            "The statue then vanishes with a flash of light. There is a sudden "
+            "breeze, and a not-unpleasant smell of grass and manure wafts in from "
+            "the open gate south of you."
+        );
+
+        # The statue is now gone.
+        inner_court_statue.Location = null;
+
+        # Link the inner court back to the real world.
+        LinkRoomsOneWay(inner_court_S, outer_court_N, inner_gate, Direction.South);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+
+function PutInSilverStatue($item:Item, $target:Item)
+{
+    if ($item == silver_cup)
+    {
+        Message(
+            "As you put the silver cup in the outstretched hands of the statue, the "
+            "fingers close around the cup, melding with it. The cup is now part of "
+            "the statue."
+        );
+
+        inner_court_statue.Description =
+            "You see a silver statue of a fairy with its hands wrapped around a "
+            "silver cup.";
+
+        # The cup is now in the statue and can no longer be taken.
+        $item.Location = $target;
+        $item.TakeAction = null;
+
+        # The cup is now primed for the final unlocking action.
+        $item.PutInAction = PutInSilverCup;
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+
 game
 {
     inner_court_statue.Location = inner_court_S;
@@ -445,6 +518,7 @@ game
         "The statue is of bright, untarnished silver and exquisite workmanship. "
         "It depicts a young man, or perhaps a fairy for it has delicate wings. "
         "Its empty hands are outstretched as if reaching for something.";
+    inner_court_statue.PutInAction = PutInSilverStatue;
 }
 
 #############################################
