@@ -355,9 +355,9 @@ game
     NewPortableItem("black", "robe", $trunk);
     InitializeKey(church_key, "ornate brass", "key", $trunk);
 
-    # Add desk to priest house.
-    var $desk = NewTable("large oak", "desk", priest_house);
-    NewPortableItem("white", "paper", $desk).Description =
+    # Add table to priest house.
+    var $table = NewTable("wooden writing", "table", priest_house);
+    NewPortableItem("white", "paper", $table).Description =
         "The paper appears to be a draft of a sermon. Between scratched-out words and ink blots, you "
         "read a passionate diatribe criticizing the people for holding superstitious beliefs about "
         "goblins and fairies.";
@@ -703,7 +703,7 @@ game
     NewClosedDoor(knight_room_1, knight_room_entry, Direction.North);
     NewClosedDoor(knight_room_entry, knight_room_3, Direction.North);
     NewClosedDoor(knight_room_4, armory, Direction.North);
-    NewClosedDoor(armory, tower_NW_0, Direction.North);
+    NewClosedDoor(armory, tower_NW_0, Direction.North).Key = tower_key;
     NewClosedDoor(inner_court_NW, hallway_NS, Direction.North);
     NewLink(hallway_NS, hallway_corner, Direction.North);
     NewClosedDoor(hallway_EW, bakehouse, Direction.North);
@@ -715,6 +715,24 @@ game
     NewClosedDoor(armory, hallway_corner, Direction.East);
     NewLink(hallway_corner, hallway_EW, Direction.East);
     NewClosedDoor(hallway_EW, courtyard_N, Direction.East);
+}
+
+#############################################
+#
+# Armory items
+#
+game
+{
+    var $rack = NewTable("weapon", "rack", armory);
+    NewWeapon("rusty short", "sword", 30, $rack);
+    NewWeapon("long", "sword", 50, $rack);
+
+    var $chest = NewContainer("large wooden", "chest", DoorState.Locked, armory);
+    $chest.Key = tower_key;
+
+    NewArmor("steel", "helmet", ArmorKind.Head, 25, $chest);
+    NewArmor("chain mail", "shirt", ArmorKind.Torso, 20, $chest);
+    NewArmor("chain", "leggings", ArmorKind.Leg, 20, $chest);
 }
 
 #############################################
@@ -956,9 +974,9 @@ game
     var $trunk = NewContainer("pine", "trunk", DoorState.Closed, fairyland_priest_house);
     NewPortableItem("black", "robe", $trunk);
 
-    # Add desk to priest house.
-    var $desk = NewTable("large oak", "desk", fairyland_priest_house);
-    NewPortableItem("white", "paper", $desk).Description =
+    # Add table to priest house.
+    var $table = NewTable("wooden writing", "table", fairyland_priest_house);
+    NewPortableItem("white", "paper", $table).Description =
         "The paper reads, 'My warnings have gone unheeded. The people have continued to offer sacrifice "
         "to infernal beings, and now we have been drawn into their world. Fiends are all around us! "
         "If we cannot escape this place, may God have mercy on our souls!'";
@@ -1091,5 +1109,29 @@ game
         10,             # damage resistance
         20,             # attack damage
         hallway_NS      # location
+    );
+    NewMonster(
+        "hairy",        # adjectives
+        "imp",          # noun
+        40,             # health
+        10,             # damage resistance
+        20,             # attack damage
+        kitchen         # location
+    );
+    NewMonster(
+        "large",        # adjectives
+        "orc",          # noun
+        100,            # health
+        10,             # damage resistance
+        30,             # attack damage
+        parlor          # location
+    );
+    NewMonster(
+        "cave",         # adjectives
+        "troll",        # noun
+        300,            # health
+        30,             # damage resistance
+        50,             # attack damage
+        tower_NE_1      # location
     );
 }
