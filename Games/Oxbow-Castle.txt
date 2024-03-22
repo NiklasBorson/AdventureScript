@@ -35,11 +35,7 @@ item priest_house;
 #
 # Church items
 #
-item priest_key;
 item church_key;
-item priest_house_trunk;
-item priest_house_desk;
-item priest_house_paper;
 
 #
 # Inner court rooms
@@ -336,7 +332,7 @@ game
     NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
     NewDoorItem(church_yard_W, church_W, Direction.East, "carved wooden", "door", DoorState.Closed).Key = church_key;
     NewLink(church_W, church_E, Direction.East);
-    NewDoorItem(church_yard_S, priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = priest_key;
+    NewDoorItem(church_yard_S, priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = church_key;
 
     # Church north links.
     NewLink(church_yard_S, church_yard_W, Direction.North);
@@ -353,12 +349,15 @@ game
 {
     # Initialize priest house items
     NewBed("lumpy", "bed", priest_house);
-    InitializeContainer(priest_house_trunk, "pine", "trunk", DoorState.Closed, priest_house);
-    NewPortableItem("black", "robe", priest_house_trunk);
-    InitializeKey(priest_key, "crude iron", "key", priest_house_trunk);
-    InitializeKey(church_key, "ornate brass", "key", priest_house_trunk);
-    InitializeTable(priest_house_desk, "large oak", "desk", priest_house);
-    NewPortableItem("white", "paper", priest_house_desk).Description =
+
+    # Add trunk to priest house.
+    var $trunk = NewContainer("pine", "trunk", DoorState.Closed, priest_house);
+    NewPortableItem("black", "robe", $trunk);
+    InitializeKey(church_key, "ornate brass", "key", $trunk);
+
+    # Add desk to priest house.
+    var $desk = NewTable("large oak", "desk", priest_house);
+    NewPortableItem("white", "paper", $desk).Description =
         "The paper appears to be a draft of a sermon. Between scratched-out words and ink blots, you "
         "read a passionate diatribe criticizing the people for holding superstitious beliefs about "
         "goblins and fairies.";
@@ -935,13 +934,34 @@ game
     NewDoorItem(fairyland_center, fairyland_church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
     NewDoorItem(fairyland_church_yard_W, fairyland_church_W, Direction.East, "carved wooden", "door", DoorState.Closed).Key = church_key;
     NewLink(fairyland_church_W, fairyland_church_E, Direction.East);
-    NewDoorItem(fairyland_church_yard_S, fairyland_priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = priest_key;
+    NewDoorItem(fairyland_church_yard_S, fairyland_priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = church_key;
 
     # Fairyland church north links.
     NewLink(fairyland_church_yard_S, fairyland_church_yard_W, Direction.North);
     NewLink(fairyland_church_yard_W, fairyland_church_yard_N, Direction.North);
     NewLink(fairyland_church_E, fairyland_side_chapel, Direction.North);
     NewDoorItem(fairyland_priest_house, fairyland_church_E, Direction.North, "small wooden", "door", DoorState.Closed);
+}
+
+#############################################
+#
+# Fairyland priest house
+#
+game
+{
+    # Initialize priest house items
+    NewBed("lumpy", "bed", fairyland_priest_house);
+
+    # Add trunk to priest house.
+    var $trunk = NewContainer("pine", "trunk", DoorState.Closed, fairyland_priest_house);
+    NewPortableItem("black", "robe", $trunk);
+
+    # Add desk to priest house.
+    var $desk = NewTable("large oak", "desk", fairyland_priest_house);
+    NewPortableItem("white", "paper", $desk).Description =
+        "The paper reads, 'My warnings have gone unheeded. The people have continued to offer sacrifice "
+        "to infernal beings, and now we have been drawn into their world. Fiends are all around us! "
+        "If we cannot escape this place, may God have mercy on our souls!'";
 }
 
 #############################################
