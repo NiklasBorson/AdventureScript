@@ -11,22 +11,22 @@
     <Grid Background="{StaticResource AccentAAFillColorSecondaryBrush}">
         <Grid.Resources>
             <Style x:Key="HeadingStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontSize" Value="24"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
             <Style x:Key="BodyStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontSize" Value="16"/>
             </Style>
             <Style x:Key="HeadingParaStyle" x:Name="m_headingParaStyle" TargetType="TextBlock" BasedOn="{StaticResource HeadingStyle}">
                 <Setter Property="TextWrapping" Value="Wrap"/>
-                <Setter Property="Margin" Value="0,10,0,0"/>
+                <Setter Property="Margin" Value="10,10,0,0"/>
             </Style>
             <Style x:Key="BodyParaStyle" x:Name="m_bodyParaStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStyle}">
                 <Setter Property="TextWrapping" Value="Wrap"/>
-                <Setter Property="Margin" Value="0,5,0,5"/>
+                <Setter Property="Margin" Value="10,5,0,5"/>
             </Style>
             <Style x:Key="CommandStyle" x:Name="m_commandStyle" TargetType="TextBlock">
-                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontSize" Value="16"/>
                 <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
                 <Setter Property="Margin" Value="0,20,0,0"/>
@@ -61,7 +61,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <ScrollViewer x:Name="m_outputScrollViewer" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}">
-                <StackPanel x:Name="m_outputStackPanel" Margin="40,10,20,10"/>
+                <StackPanel x:Name="m_outputStackPanel" Margin="20,10,20,10"/>
             </ScrollViewer>
             <TextBox Grid.Row="1" x:Name="m_commandTextBox" KeyDown="TextBox_KeyDown"/>
         </Grid>

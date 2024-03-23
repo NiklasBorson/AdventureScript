@@ -133,7 +133,8 @@ namespace OxbowCastle
                 AddOutput(m_game.InvokeCommand(input));
 
                 m_outputScrollViewer.Measure(m_outputScrollViewer.RenderSize);
-                m_outputScrollViewer.ScrollToVerticalOffset(m_outputScrollViewer.ScrollableHeight);
+
+                m_outputScrollViewer.ChangeView(null, m_outputScrollViewer.ScrollableHeight, null);
             }
         }
 
