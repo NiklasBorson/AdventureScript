@@ -1,0 +1,3892 @@
+game {
+    Message("# Welcome to Oxbow Castle");
+    Message("You are a messenger sent by King Peregrin the Paranoid to find out what has become of Oxbow castle and its ruler, Lord Kevin. Previous messengers have not returned, and the king has begin to suspect Lord Kevin of plotting against him.");
+    Message("That is one possibility, but you have also heard stranger rumors. In the taverns, people whisper that something dark and sinister has befallen the place. Of course, it may just be the ale talking. You are here to find out!");
+    Message("Oxbow Castle is situated in a sharp bend of the river Oxyl, such that it is surrounded on three sides by water. It is late morning, and you have just arrived at the only entrance to the castle, an open iron gate in the south wall. It is strangely silent. No one seems to be around.");
+    Message("At any time you can type 'help' to see a list of commands you can say.");
+}
+delegate ItemDelegate($item:Item);
+delegate Item2Delegate($item1:Item, $item2:Item);
+delegate ItemPredicate($item:Item) : Bool;
+delegate NavigationAction($from:Item, $to:Item) : Bool;
+enum DoorState(None,Open,Closed,Locked);
+enum LightState(None,Off,On,Unlit,Lit);
+enum Direction(North,South,East,West,Up,Down);
+enum ArmorKind(None,Head,Torso,Leg);
+property Location: Item;
+property Noun: String;
+property Adjectives: String;
+property TakeAction: ItemDelegate;
+property DropAction: ItemDelegate;
+property UseAction: ItemDelegate;
+property UseOnAction: Item2Delegate;
+property OpenAction: ItemDelegate;
+property CloseAction: ItemDelegate;
+property DescribeAction: ItemDelegate;
+property DescribeHealthAction: ItemDelegate;
+property TurnOnAction: ItemDelegate;
+property TurnOffAction: ItemDelegate;
+property IgniteAction: ItemDelegate;
+property PutOutAction: ItemDelegate;
+property PutInAction: Item2Delegate;
+property PutOnAction: Item2Delegate;
+property LeaveAction: NavigationAction;
+property EnterAction: NavigationAction;
+property DoorState: DoorState;
+property Key: Item;
+property IsHidden: Bool;
+property LightState: LightState;
+property IsDark: ItemPredicate;
+property Description: String;
+property LinkN: Item;
+property LinkS: Item;
+property LinkE: Item;
+property LinkW: Item;
+property LinkU: Item;
+property LinkD: Item;
+property UpdateAction: ItemDelegate;
+property OnAttackedAction: ItemDelegate;
+property Health: Int;
+property MaxHealth: Int;
+property AttackDamage: Int;
+property DamageResistance: Int;
+property CurrentWeapon: Item;
+property ArmorKind: ArmorKind;
+property Message: String;
+item player;
+item outside;
+item outer_court_SW;
+item outer_court_S;
+item outer_court_SE;
+item stable;
+item outer_court_W;
+item outer_court_center;
+item outer_court_NW;
+item outer_court_N;
+item outer_court_NE;
+item church_yard_W;
+item church_yard_S;
+item church_yard_N;
+item church_W;
+item church_E;
+item side_chapel;
+item priest_house;
+item church_key;
+item inner_gate;
+item inner_court_S;
+item inner_court_SW;
+item inner_court_SE;
+item inner_court_N;
+item inner_court_NW;
+item inner_court_NE;
+item inner_court_statue;
+item guard_room_W_0;
+item guard_room_E_0;
+item guard_room_W_1;
+item guard_room_E_1;
+item tower_SW_0;
+item tower_SW_1;
+item tower_SW_2;
+item tower_SW_roof;
+item tower_SE_0;
+item tower_SE_1;
+item tower_SE_2;
+item tower_SE_roof;
+item tower_NW_0;
+item tower_NW_1;
+item tower_NW_2;
+item tower_NW_roof;
+item gate_house_W_0;
+item gate_house_W_1;
+item gate_house_E_0;
+item gate_house_E_1;
+item gate_house_2;
+item gate_house_roof;
+item wall_SW;
+item wall_SE;
+item wall_W;
+item wall_E;
+item wall_N;
+item tower_key;
+item store_room;
+item stewards_room;
+item knight_room_1;
+item knight_room_2;
+item knight_room_3;
+item knight_room_4;
+item knight_room_entry;
+item armory;
+item bakehouse;
+item hallway_NS;
+item hallway_corner;
+item hallway_EW;
+item courtyard_N;
+item kitchen;
+item pantry;
+item buttery;
+item great_hall_W;
+item great_hall_E;
+item court;
+item parlor;
+item lords_chamber;
+item library;
+item court_throne;
+item library_door;
+item library_key;
+item library_statue;
+item tower_NE_0;
+item tower_NE_1;
+item tower_NE_2;
+item tower_NE_3;
+item tower_NE_door;
+item kings_table;
+item silver_cup;
+item fairy_king;
+item fairy_prince1;
+item fairy_prince2;
+item fairyland_NW;
+item fairyland_N;
+item fairyland_NE;
+item fairyland_stable;
+item fairyland_W;
+item fairyland_center;
+item fairyland_SW;
+item fairyland_S;
+item fairyland_SE;
+item fairyland_table;
+item fairyland_food;
+item fairyland_wine;
+item fairy1;
+item fairy2;
+item fairy3;
+item fairy4;
+item fairy5;
+item fairyland_church_yard_W;
+item fairyland_church_yard_S;
+item fairyland_church_yard_N;
+item fairyland_church_W;
+item fairyland_church_E;
+item fairyland_side_chapel;
+item fairyland_priest_house;
+item priest;
+item maid;
+item _gate_outsideouter_court_S;
+item __outer_court_SWouter_court_W;
+item __outer_court_Souter_court_center;
+item __outer_court_Wouter_court_NW;
+item __outer_court_centerouter_court_N;
+item __outer_court_SWouter_court_S;
+item __outer_court_Souter_court_SE;
+item _door_stableouter_court_W;
+item __outer_court_Wouter_court_center;
+item __outer_court_NWouter_court_N;
+item __outer_court_Nouter_court_NE;
+item _gate_outer_court_centerchurch_yard_W;
+item _door_church_yard_Wchurch_W;
+item __church_Wchurch_E;
+item _door_church_yard_Spriest_house;
+item __church_yard_Schurch_yard_W;
+item __church_yard_Wchurch_yard_N;
+item __church_Eside_chapel;
+item _door_priest_housechurch_E;
+item bed_priest_house;
+item _trunk_priest_house;
+item _robe_trunk_priest_house;
+item _table_priest_house;
+item _paper_table_priest_house;
+item __inner_court_Sinner_court_N;
+item __inner_court_SWinner_court_NW;
+item __inner_court_SEinner_court_NE;
+item __inner_court_SWinner_court_S;
+item __inner_court_Sinner_court_SE;
+item __inner_court_NWinner_court_N;
+item __inner_court_Ninner_court_NE;
+item _door_guard_room_W_0inner_court_SW;
+item _door_guard_room_E_0inner_court_SE;
+item _door_tower_SW_2wall_W;
+item _door_wall_Wtower_NW_2;
+item _door_tower_SE_2wall_E;
+item _door_tower_SW_0guard_room_W_0;
+item _opening_guard_room_W_0gate_house_W_0;
+item _door_tower_SW_1guard_room_W_1;
+item _opening_guard_room_W_1gate_house_W_1;
+item _door_tower_SW_2wall_SW;
+item _door_wall_SWgate_house_2;
+item _door_tower_NW_2wall_N;
+item _door_tower_SE_0guard_room_E_0;
+item _opening_guard_room_E_0gate_house_E_0;
+item _door_tower_SE_1guard_room_E_1;
+item _opening_guard_room_E_1gate_house_E_1;
+item _door_tower_SE_2wall_SE;
+item _door_wall_SEgate_house_2;
+item _stair_tower_SW_0tower_SW_1;
+item _stair_tower_SW_1tower_SW_2;
+item _stair_tower_SW_2tower_SW_roof;
+item _stair_tower_SE_0tower_SE_1;
+item _stair_tower_SE_1tower_SE_2;
+item _stair_tower_SE_2tower_SE_roof;
+item _stair_tower_NW_0tower_NW_1;
+item _stair_tower_NW_1tower_NW_2;
+item _stair_tower_NW_2tower_NW_roof;
+item _chest_guard_room_W_0;
+item _lamp__chest_guard_room_W_0;
+item _tinderbox__chest_guard_room_W_0;
+item _dagger__chest_guard_room_W_0;
+item __chest_guard_room_W_0_cap;
+item __chest_guard_room_W_0_vest;
+item _door_store_roomstewards_room;
+item _door_knight_room_1knight_room_entry;
+item _door_knight_room_entryknight_room_3;
+item _door_knight_room_4armory;
+item _door_armorytower_NW_0;
+item _door_inner_court_NWhallway_NS;
+item __hallway_NShallway_corner;
+item _door_hallway_EWbakehouse;
+item _door_store_roominner_court_SW;
+item _door_knight_room_2knight_room_entry;
+item _door_knight_room_entryhallway_NS;
+item _door_armoryhallway_corner;
+item __hallway_cornerhallway_EW;
+item _door_hallway_EWcourtyard_N;
+item _rack_armory;
+item _sword__rack_armory;
+item _sword__rack_armory_1;
+item _chest_armory;
+item __chest_armory_helmet;
+item __chest_armory_shirt;
+item __chest_armory_leggings;
+item _door_inner_court_Ngreat_hall_W;
+item _door_kitchenpantry;
+item _door_lords_chamberparlor;
+item _door_parlorcourt;
+item _door_hallway_NSkitchen;
+item _door_kitchengreat_hall_W;
+item _door_pantrybuttery;
+item __great_hall_Wgreat_hall_E;
+item _door_great_hall_Ecourt;
+item bed_lords_chamber;
+item _chest_lords_chamber;
+item _stair_tower_NE_0tower_NE_1;
+item _stair_tower_NE_1tower_NE_2;
+item _stair_tower_NE_2tower_NE_3;
+item __inner_court_Sfairyland_N;
+item __fairyland_Nfairyland_center;
+item __fairyland_centerfairyland_S;
+item __fairyland_NWfairyland_W;
+item __fairyland_Wfairyland_SW;
+item __fairyland_NWfairyland_N;
+item __fairyland_Nfairyland_NE;
+item _door_fairyland_stablefairyland_W;
+item __fairyland_Wfairyland_center;
+item __fairyland_SWfairyland_S;
+item __fairyland_Sfairyland_SE;
+item _gate_fairyland_centerfairyland_church_yard_W;
+item _door_fairyland_church_yard_Wfairyland_church_W;
+item __fairyland_church_Wfairyland_church_E;
+item _door_fairyland_church_yard_Sfairyland_priest_house;
+item __fairyland_church_yard_Sfairyland_church_yard_W;
+item __fairyland_church_yard_Wfairyland_church_yard_N;
+item __fairyland_church_Efairyland_side_chapel;
+item _door_fairyland_priest_housefairyland_church_E;
+item bed_fairyland_priest_house;
+item _trunk_fairyland_priest_house;
+item _robe_trunk_fairyland_priest_house;
+item _table_fairyland_priest_house;
+item _paper_table_fairyland_priest_house;
+item inner_court_NE_well;
+item outer_court_NW_well;
+item fairyland_NW_well;
+item _hallway_NS_goblin;
+item _kitchen_imp;
+item _parlor_orc;
+item _tower_NE_1_troll;
+var $currentTime = 661;
+var $currentLightSource : Item;
+var $isNowDark : Bool;
+var $lastRoom : Item;
+var $headArmor : Item;
+var $torsoArmor : Item;
+var $legArmor : Item;
+var $isSleeping : Bool;
+var $currentFairyMessage : String;
+var $hasPriestReactedToFairy : Bool;
+var $hasMaidReactedToFairy : Bool;
+var $hasMaidReactedToInnerCourtStatue : Bool;
+var $hasMaidReactedToLibraryStatue : Bool;
+function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
+{
+    $item.Adjectives = $adjectives;
+    $item.Noun = $noun;
+}
+function Label($item:Item) => $"{$item.Adjectives} {$item.Noun}";
+function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
+{
+    if ($func != null)
+    {
+        $func($item);
+    }
+    else
+    {
+        Message($"You cannot {$verb} the {Label($item)}.");
+    }
+}
+function InvokeItemActionWithFallback($func:ItemDelegate, $item:Item, $fallback:ItemDelegate)
+{
+    if ($func != null)
+    {
+        $func($item);
+    }
+    else
+    {
+        $fallback($item);
+    }
+}
+map IsClosedOrLocked DoorState -> Bool
+{
+    None -> false,
+    Open -> false,
+    Closed -> true,
+    Locked -> true
+}
+function TakePortableItem($item:Item)
+{
+    if ($item.Location != player)
+    {
+        $item.Location = player;
+        Message($"The {Label($item)} is now in your inventory.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already in your inventory.");
+    }
+}
+function DropPortableItem($item:Item)
+{
+    if ($item.Location == player)
+    {
+        $item.Location = player.Location;
+        Message($"You've dropped the {Label($item)}.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is not in your inventory.");
+    }
+}
+function InitializePortableItem($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    SetLabelProperties($item, $adjectives, $noun);
+    $item.TakeAction = TakePortableItem;
+    $item.DropAction = DropPortableItem;
+    $item.Location = $loc;
+}
+function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}{$loc}");
+    InitializePortableItem($return, $adjectives, $noun, $loc);
+}
+function IsPortable($item:Item) => $item.TakeAction != null;
+function IsCurrentRoomOrInventory($loc:Item) => $loc == player.Location || $loc == player;
+function IsAccessible($item:Item) : Bool
+{
+    if (!$item.IsHidden && $item.Noun != null)
+    {
+        var $loc = $item.Location;
+        if (IsCurrentRoomOrInventory($loc))
+        {
+            $return = true;
+        }
+        elseif ($loc.Location == player.Location && !IsClosedOrLocked($loc.DoorState))
+        {
+            $return = true;
+        }
+    }
+}
+function IsNight() => $currentTime < 480 || $currentTime >= 1200;
+function IncrementTime()
+{
+    $currentTime = $currentTime < 1439 ? $currentTime + 1 : 0;
+}
+function IsDarkAtNight($item:Item) => IsNight();
+function IsDarkAlways($item:Item) => true;
+map IsActiveLightState LightState -> Bool
+{
+    None -> false,
+    Off -> false,
+    On -> true,
+    Unlit -> false,
+    Lit -> true
+}
+function InitializeLighting()
+{
+    $currentLightSource = null;
+    if (player.Location.IsDark(player.Location))
+    {
+        foreach (var $item) where LightState != LightState.None
+        {
+            if (IsActiveLightState($item.LightState) && IsAccessible($item))
+            {
+                $currentLightSource = $item;
+            }
+        }
+        $isNowDark = $currentLightSource == null;
+    }
+    else
+    {
+        $isNowDark = false;
+    }
+}
+map LightStateAdj LightState -> String
+{
+    None -> "",
+    Off -> "off",
+    On -> "on",
+    Unlit -> "unlit",
+    Lit -> "lit"
+}
+map DoorStateAdj DoorState -> String
+{
+    None -> "",
+    Open -> "open",
+    Closed -> "closed",
+    Locked -> "closed"
+}
+function AddStateQualifier($item:Item, $phrase:String) => $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" : $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}" : $phrase;
+function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
+function Inventory()
+{
+    var $haveItems = false;
+    foreach (var $item) where Location == player
+    {
+        if (!$haveItems)
+        {
+            Message("You have the following items:");
+            $haveItems = true;
+        }
+        Message($"- A {LabelWithState($item)}.");
+    }
+    if (!$haveItems)
+    {
+        Message("There is nothing in your inventory.");
+    }
+}
+function DescribeCommon($item:Item)
+{
+    if ($item.Description != null)
+    {
+        Message($item.Description);
+        if ($item.DoorState != null && $item.Noun != null)
+        {
+            Message($"The {Label($item)} is {DoorStateAdj($item.DoorState)}.");
+        }
+    }
+    elseif ($item.Noun != null)
+    {
+        Message($"You see a {LabelWithState($item)}.");
+    }
+    $item.DescribeHealthAction($item);
+}
+function Take($item:Item) => InvokeItemAction($item.TakeAction, $item, "take");
+function Drop($item:Item) => InvokeItemAction($item.DropAction, $item, "drop");
+function Use($item:Item) => InvokeItemAction($item.UseAction, $item, "use");
+function Open($item:Item) => InvokeItemAction($item.OpenAction, $item, "open");
+function Close($item:Item) => InvokeItemAction($item.CloseAction, $item, "close");
+function TurnOn($item:Item) => InvokeItemAction($item.TurnOnAction, $item, "turn on");
+function TurnOff($item:Item) => InvokeItemAction($item.TurnOffAction, $item, "turn off");
+function PutOut($item:Item) => InvokeItemAction($item.PutOutAction, $item, "put out");
+function Describe($item:Item) => InvokeItemActionWithFallback($item.DescribeAction, $item, DescribeCommon);
+function UseOn($item:Item, $target:Item)
+{
+    if ($item.UseOnAction != null)
+    {
+        $item.UseOnAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't use the {Label($item)}.");
+    }
+}
+function PutIn($item:Item, $target:Item)
+{
+    if ($target.PutInAction != null)
+    {
+        $target.PutInAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+function PutOn($item:Item, $target:Item)
+{
+    if ($target.PutOnAction != null)
+    {
+        $target.PutOnAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} on the {Label($target)}.");
+    }
+}
+map Opposite Direction -> Direction
+{
+    North -> South,
+    South -> North,
+    East -> West,
+    West -> East,
+    Up -> Down,
+    Down -> Up
+}
+map DirectionPhrase Direction -> String
+{
+    North -> "to the North",
+    South -> "to the South",
+    East -> "to the East",
+    West -> "to the West",
+    Up -> "leading upward",
+    Down -> "leading downward"
+}
+function GetLink($item:Item, $dir:Direction) : Item
+{
+    switch ($dir)
+    {
+        case Direction.North
+        {
+            $return = $item.LinkN;
+        }
+        case Direction.South
+        {
+            $return = $item.LinkS;
+        }
+        case Direction.East
+        {
+            $return = $item.LinkE;
+        }
+        case Direction.West
+        {
+            $return = $item.LinkW;
+        }
+        case Direction.Up
+        {
+            $return = $item.LinkU;
+        }
+        case Direction.Down
+        {
+            $return = $item.LinkD;
+        }
+    }
+}
+function SetLink($from:Item, $to:Item, $dir:Direction)
+{
+    switch ($dir)
+    {
+        case Direction.North
+        {
+            $from.LinkN = $to;
+        }
+        case Direction.South
+        {
+            $from.LinkS = $to;
+        }
+        case Direction.East
+        {
+            $from.LinkE = $to;
+        }
+        case Direction.West
+        {
+            $from.LinkW = $to;
+        }
+        case Direction.Up
+        {
+            $from.LinkU = $to;
+        }
+        case Direction.Down
+        {
+            $from.LinkD = $to;
+        }
+    }
+}
+function OpenDoor($item:Item)
+{
+    switch ($item.DoorState)
+    {
+        case DoorState.None
+        {
+            Message("You can't open that.");
+        }
+        case DoorState.Open
+        {
+            Message($"The {Label($item)} is already open.");
+        }
+        case DoorState.Closed
+        {
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now open.");
+        }
+        case DoorState.Locked
+        {
+            Message($"The {Label($item)} is locked.");
+        }
+    }
+}
+function CloseDoor($item:Item)
+{
+    switch ($item.DoorState)
+    {
+        case DoorState.None
+        {
+            Message("You can't open that.");
+        }
+        case DoorState.Open
+        {
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now closed.");
+        }
+        case DoorState.Closed
+        {
+            Message($"The {Label($item)} is already closed.");
+        }
+        case DoorState.Locked
+        {
+            Message($"The {Label($item)} is already closed.");
+        }
+    }
+}
+function IsOpenable($item:Item) => $item.OpenAction != null;
+function LinkRoomsOneWay($from:Item, $to:Item, $via:Item, $dir:Direction)
+{
+    SetLink($from, $via, $dir);
+    SetLink($via, $to, $dir);
+}
+function LinkRooms($from:Item, $to:Item, $via:Item, $dir:Direction)
+{
+    LinkRoomsOneWay($from, $to, $via, $dir);
+    LinkRoomsOneWay($to, $from, $via, Opposite($dir));
+}
+function InitializeDoor($door:Item, $from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState)
+{
+    SetLabelProperties($door, $adjectives, $noun);
+    $door.DoorState = $state;
+    if ($state != DoorState.None)
+    {
+        $door.OpenAction = OpenDoor;
+        $door.CloseAction = CloseDoor;
+    }
+    LinkRooms($from, $to, $door, $dir);
+}
+function NewDoorItem($from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState) : Item
+{
+    $return = NewItem($"_{$noun}_{$from}{$to}");
+    InitializeDoor($return, $from, $to, $dir, $adjectives, $noun, $state);
+}
+function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
+{
+    $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
+}
+function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
+{
+    $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Locked);
+    $return.Key = $key;
+}
+function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
+{
+    $return = NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
+}
+function NewLink($from:Item, $to:Item, $dir:Direction) : Item
+{
+    $return = NewDoorItem($from, $to, $dir, "", "", DoorState.None);
+}
+function UseKeyOn($key:Item, $target:Item)
+{
+    if ($target.Key == $key && $target.DoorState != DoorState.None)
+    {
+        if ($target.DoorState == DoorState.Locked)
+        {
+            $target.DoorState = DoorState.Closed;
+            Message($"The {Label($target)} is now unlocked.");
+        }
+        else
+        {
+            $target.DoorState = DoorState.Locked;
+            Message($"The {Label($target)} is now locked.");
+        }
+    }
+    else
+    {
+        Message($"The {Label($key)} doesn't work on that.");
+    }
+}
+function InitializeKey($key:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($key, $adjectives, $noun, $loc);
+    $key.UseOnAction = UseKeyOn;
+}
+function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $key = NewItem($"_{$noun}_{$loc}");
+    InitializeKey($key, $adjectives, $noun, $loc);
+    $return = $key;
+}
+function IsKey($item:Item) => $item.UseOnAction == UseKeyOn;
+function ListContainerContents($container:Item)
+{
+    var $haveItems = false;
+    foreach (var $item) where Location == $container
+    {
+        if (!$haveItems)
+        {
+            Message($"Inside the {$container.Noun} are the following:");
+            $haveItems = true;
+        }
+        Message($" - A {LabelWithState($item)}.");
+    }
+    if (!$haveItems)
+    {
+        Message($"The {$container.Noun} is empty.");
+    }
+}
+function OpenContainer($item:Item)
+{
+    switch ($item.DoorState)
+    {
+        case DoorState.None
+        {
+            Message("You can't open that.");
+        }
+        case DoorState.Open
+        {
+            Message($"The {Label($item)} is already open.");
+        }
+        case DoorState.Closed
+        {
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now open.");
+            ListContainerContents($item);
+        }
+        case DoorState.Locked
+        {
+            Message($"The {Label($item)} is locked.");
+        }
+    }
+}
+function DescribeContainer($container:Item)
+{
+    DescribeCommon($container);
+    if (!IsClosedOrLocked($container.DoorState))
+    {
+        ListContainerContents($container);
+    }
+}
+function PutInContainer($item:Item, $container:Item)
+{
+    if (!IsPortable($item))
+    {
+        Message($"You can't move the {Label($item)}.");
+    }
+    elseif (IsClosedOrLocked($container.DoorState))
+    {
+        Message($"The {Label($container)} is closed.");
+    }
+    elseif ($item.Location == $container)
+    {
+        Message($"The {Label($item)} is already in the {Label($container)}.");
+    }
+    else
+    {
+        $item.Location = $container;
+        Message($"The {Label($item)} is now in the {Label($container)}.");
+    }
+}
+function InitializeContainer($container:Item, $adjectives:String, $noun:String, $state:DoorState, $loc:Item)
+{
+    SetLabelProperties($container, $adjectives, $noun);
+    $container.DoorState = $state;
+    $container.PutInAction = PutInContainer;
+    $container.OpenAction = OpenContainer;
+    $container.CloseAction = CloseDoor;
+    $container.DescribeAction = DescribeContainer;
+    $container.Location = $loc;
+}
+function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:Item) : Item
+{
+    var $container = NewItem($"_{$noun}_{$loc}");
+    InitializeContainer($container, $adjectives, $noun, $state, $loc);
+    $return = $container;
+}
+function IsContainer($item:Item) => $item.PutInAction != null;
+function IsOpenContainer($item:Item) => IsContainer($item) && !IsClosedOrLocked($item.DoorState);
+function DescribeTable($table:Item)
+{
+    DescribeCommon($table);
+    var $haveItems = false;
+    foreach (var $item) where Location == $table
+    {
+        if (!$haveItems)
+        {
+            Message($"On the {$table.Noun} are the following:");
+            $haveItems = true;
+        }
+        Message($" - A {LabelWithState($item)}.");
+    }
+}
+function PutOnTable($item:Item, $table:Item)
+{
+    if (!IsPortable($item))
+    {
+        Message($"You can't move the {Label($item)}.");
+    }
+    elseif ($item.Location == $table)
+    {
+        Message($"The {Label($item)} is already on the {Label($table)}.");
+    }
+    else
+    {
+        $item.Location = $table;
+        Message($"The {Label($item)} is now on the {Label($table)}.");
+    }
+}
+function InitializeTable($table:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    SetLabelProperties($table, $adjectives, $noun);
+    $table.PutOnAction = PutOnTable;
+    $table.DescribeAction = DescribeTable;
+    $table.Location = $loc;
+}
+function NewTable($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeTable($return, $adjectives, $noun, $loc);
+}
+function IsTable($item:Item) => $item.PutOnAction != null;
+function Look()
+{
+    var $room = player.Location;
+    if ($isNowDark)
+    {
+        Message("You are in the dark.");
+        foreach (var $dir:Direction)
+        {
+            var $door = GetLink($room, $dir);
+            if ($door != null && !IsClosedOrLocked($door.DoorState))
+            {
+                var $linkedRoom = GetLink($door, $dir);
+                if (!$linkedRoom.IsDark($linkedRoom))
+                {
+                    Message($"A faint light filters in from the {$door.Noun} {DirectionPhrase($dir)}.");
+                }
+            }
+        }
+    }
+    else
+    {
+        if ($currentLightSource != null)
+        {
+            if (player.Location.IsDark == IsDarkAtNight)
+            {
+                Message($"It is night, but the {Label($currentLightSource)} illuminates the darkness.");
+            }
+            else
+            {
+                Message($"The {Label($currentLightSource)} illuminates the darkness.");
+            }
+        }
+        Describe($room);
+        foreach (var $dir:Direction)
+        {
+            var $door = GetLink(player.Location, $dir);
+            if ($door != null && $door.Noun != null && !$door.IsHidden)
+            {
+                Message($"There is a {LabelWithState($door)} {DirectionPhrase($dir)}.");
+            }
+        }
+        foreach (var $item) where Location == $room
+        {
+            if (!$item.IsHidden && $item.Noun != null)
+            {
+                Message($"There is a {LabelWithState($item)} here.");
+            }
+        }
+    }
+}
+function OnLightActivated($lightSource:Item)
+{
+    if ($isNowDark)
+    {
+        $isNowDark = false;
+        $currentLightSource = $lightSource;
+        Look();
+    }
+}
+function TurnOnLight($item:Item)
+{
+    if ($item.LightState != LightState.On)
+    {
+        $item.LightState = LightState.On;
+        Message($"The {Label($item)} is now on.");
+        OnLightActivated($item);
+    }
+    else
+    {
+        Message($"The {Label($item)} is already on.");
+    }
+}
+function TurnOffLight($item:Item)
+{
+    if ($item.LightState == LightState.On)
+    {
+        $item.LightState = LightState.Off;
+        Message($"The {Label($item)} is now off.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already off.");
+    }
+}
+function TurnOnCandle($item:Item)
+{
+    Message($"You can't turn on the {Label($item)}. You need to light it with something.");
+}
+function IgniteCandle($item:Item)
+{
+    if ($item.LightState != LightState.Lit)
+    {
+        $item.LightState = LightState.Lit;
+        Message($"The {Label($item)} is now lit.");
+        OnLightActivated($item);
+    }
+    else
+    {
+        Message($"The {Label($item)} is already lit.");
+    }
+}
+function PutOutCandle($item:Item)
+{
+    if ($item.LightState == LightState.Lit)
+    {
+        $item.LightState = LightState.Unlit;
+        Message($"The {Label($item)} is now out.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already out.");
+    }
+}
+function UseLighterOn($item:Item, $target:Item)
+{
+    if ($target.IgniteAction != null)
+    {
+        $target.IgniteAction($target);
+    }
+    else
+    {
+        Message($"You cannot light the {Label($target)}.");
+    }
+}
+function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.LightState = LightState.Off;
+    $item.TurnOnAction = TurnOnLight;
+    $item.TurnOffAction = TurnOffLight;
+    $item.PutOutAction = TurnOffLight;
+}
+function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLight($item, $adjectives, $noun, $loc);
+    $return = $item;
+}
+function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
+function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.LightState = LightState.Unlit;
+    $item.TurnOnAction = TurnOnCandle;
+    $item.IgniteAction = IgniteCandle;
+    $item.TurnOffAction = PutOutCandle;
+    $item.PutOutAction = PutOutCandle;
+}
+function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeCandle($item, $adjectives, $noun, $loc);
+    $return = $item;
+}
+function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
+function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.UseOnAction = UseLighterOn;
+}
+function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLighter($item, $adjectives, $noun, $loc);
+    $return = $item;
+}
+function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
+function LightWith($target:Item, $lighter:Item)
+{
+    if (IsLighter($lighter))
+    {
+        UseLighterOn($lighter, $target);
+    }
+    else
+    {
+        Message($"The {Label($lighter)} has no effect.");
+    }
+}
+function Go($dir:Direction)
+{
+    var $source = player.Location;
+    var $door = GetLink($source, $dir);
+    if ($door == null || $door.IsHidden)
+    {
+        Message($"You cannot go {$dir}.");
+    }
+    elseif (IsClosedOrLocked($door.DoorState) && $isNowDark)
+    {
+        Message($"You cannot go {$dir}.");
+    }
+    elseif ($door.DoorState == DoorState.Locked)
+    {
+        Message($"The {Label($door)} is locked.");
+    }
+    else
+    {
+        if ($door.DoorState == DoorState.Closed)
+        {
+            Message($"You open the {Label($door)} and go {$dir}.");
+            $door.DoorState = DoorState.Open;
+        }
+        var $dest = GetLink($door, $dir);
+        if (!$source.LeaveAction($source, $dest) && !$dest.EnterAction($source, $dest))
+        {
+            $lastRoom = player.Location;
+player            .Location = $dest;
+            InitializeLighting();
+            Look();
+        }
+    }
+}
+function AddItemWords($item:Item)
+{
+    AddAdjectives($item.Adjectives, $item);
+    AddNoun($item.Noun, $item);
+}
+function InitializeWordMap()
+{
+    if ($isNowDark)
+    {
+        foreach (var $item) where Location == player
+        {
+            AddItemWords($item);
+        }
+    }
+    else
+    {
+        foreach (var $item)
+        {
+            if (IsAccessible($item))
+            {
+                AddItemWords($item);
+            }
+        }
+        foreach (var $dir:Direction)
+        {
+            var $door = GetLink(player.Location, $dir);
+            if ($door.DoorState != DoorState.None)
+            {
+                AddAdjectives($"{$dir}", $door);
+                AddItemWords($door);
+            }
+        }
+    }
+}
+function UpdateItems()
+{
+    foreach (var $item)
+    {
+        $item.UpdateAction($item);
+    }
+}
+function ComputeDamage($attackDamage:Int, $DamageResistance:Int) : Int
+{
+    var $damage = $attackDamage - $DamageResistance;
+    $damage = $damage - $damage * $DamageResistance / 100;
+    $return = $damage > 0 ? $damage : 0;
+}
+function DescribeItemHealth($item:Item)
+{
+    if ($item.MaxHealth > 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        var $label = Label($item);
+        if ($health < 0)
+        {
+            Message($"The {$label} is destroyed!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message($"The {$label} is critically damanged.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message($"The {$label} is severely damanged.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message($"The {$label} is significantly damanged.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message($"The {$label} is slightly damaged.");
+        }
+        else
+        {
+            Message($"The {$label} is undamaged.");
+        }
+    }
+}
+function DescribeCreatureHealth($item:Item)
+{
+    if ($item.MaxHealth > 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        var $label = Label($item);
+        if ($health < 0)
+        {
+            Message($"The {$label} is dead!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message($"The {$label} is critically injured.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message($"The {$label} is severely injured.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message($"The {$label} is significantly injured.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message($"The {$label} is slightly injured.");
+        }
+        else
+        {
+            Message($"The {$label} is uninjured.");
+        }
+    }
+}
+function DescribePlayerHealth($item:Item)
+{
+    if ($item.MaxHealth != 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        if ($health < 0)
+        {
+            Message("You are dead!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message("You are critically injured.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message("You are severaly injured.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message("You are significantly injured.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message("You are slightly injured.");
+        }
+        else
+        {
+            Message("You are uninjured.");
+        }
+    }
+}
+function UpdatePlayer($item:Item)
+{
+    if ($item.Health < $item.MaxHealth)
+    {
+        $item.Health = $item.Health + 1;
+    }
+}
+function SetItemHealth($item:Item, $health:Int)
+{
+    $item.Health = $health;
+    $item.MaxHealth = $health;
+    $item.DescribeHealthAction = DescribeItemHealth;
+}
+function GetArmor($kind:ArmorKind) : Item
+{
+    switch ($kind)
+    {
+        case ArmorKind.Head
+        {
+            $return = $headArmor;
+        }
+        case ArmorKind.Torso
+        {
+            $return = $torsoArmor;
+        }
+        case ArmorKind.Leg
+        {
+            $return = $legArmor;
+        }
+    }
+}
+function SetArmor($kind:ArmorKind, $item:Item)
+{
+    switch ($kind)
+    {
+        case ArmorKind.Head
+        {
+            $headArmor = $item;
+        }
+        case ArmorKind.Torso
+        {
+            $torsoArmor = $item;
+        }
+        case ArmorKind.Leg
+        {
+            $legArmor = $item;
+        }
+    }
+}
+function SetPlayerDamageResistance()
+{
+player    .DamageResistance = ($headArmor.DamageResistance * 30 + $torsoArmor.DamageResistance * 50 + $legArmor.DamageResistance * 20) / 100;
+}
+function TakeArmor($item:Item)
+{
+    var $kind = $item.ArmorKind;
+    if ($kind != ArmorKind.None)
+    {
+        var $current = GetArmor($kind);
+        if ($current == $item)
+        {
+            Message($"You're already wearing the {Label($item)}.");
+        }
+        else
+        {
+            if ($current != null)
+            {
+                Message($"You drop the {Label($current)} and put on the {Label($item)}.");
+                $current.Location = player.Location;
+            }
+            else
+            {
+                Message($"You put on the {Label($item)}.");
+            }
+            $item.Location = player;
+            SetArmor($kind, $item);
+            SetPlayerDamageResistance();
+        }
+    }
+    else
+    {
+        Message($"You can't take the {Label($item)}.");
+    }
+}
+function DropArmor($item:Item)
+{
+    if ($item.Location == player)
+    {
+        Message($"You remove the {Label($item)}.");
+        $item.Location = player.Location;
+        SetArmor($item.ArmorKind, null);
+        SetPlayerDamageResistance();
+    }
+    else
+    {
+        Message($"You're not wearing the {Label($item)}.");
+    }
+}
+function InitializeArmor($item:Item, $adjectives:String, $noun:String, $kind:ArmorKind, $DamageResistance:Int, $loc:Item)
+{
+    SetLabelProperties($item, $adjectives, $noun);
+    $item.ArmorKind = $kind;
+    $item.Location = $loc;
+    $item.TakeAction = TakeArmor;
+    $item.UseAction = TakeArmor;
+    $item.DropAction = DropArmor;
+}
+function NewArmor($adjectives:String, $noun:String, $kind:ArmorKind, $DamageResistance:Int, $loc:Item) : Item
+{
+    $return = NewItem($"_{$loc}_{$noun}");
+    InitializeArmor($return, $adjectives, $noun, $kind, $DamageResistance, $loc);
+}
+function DestroyItem($item:Item)
+{
+    foreach (var $inner) where Location == $item
+    {
+        $inner.Location = $item.Location;
+    }
+    $item.Location = null;
+}
+function AttackItemWith($target:Item, $weapon:Item)
+{
+    if ($target.MaxHealth == 0)
+    {
+        Message($"You can't attack the {Label($target)}.");
+    }
+    elseif ($weapon != null && $weapon.AttackDamage == 0)
+    {
+        Message($"The {Label($weapon)} is not a weapon.");
+    }
+    else
+    {
+        var $weaponName = $weapon != null ? $"the {Label($weapon)}" : "your bare hands";
+        var $weaponDamage = $weapon != null ? $weapon.AttackDamage : player.AttackDamage;
+        var $damage = ComputeDamage($weaponDamage, $target.DamageResistance);
+        if ($damage <= 0)
+        {
+            Message($"You attack the {Label($target)} with {$weaponName} but do no damage.");
+        }
+        else
+        {
+            Message($"You attack the {Label($target)} with {$weaponName}.");
+            $target.Health = $target.Health - $damage;
+            $target.DescribeHealthAction($target);
+            if ($target.Health < 0)
+            {
+                DestroyItem($target);
+            }
+        }
+        if ($target.Health >= 0)
+        {
+            $target.OnAttackedAction($target);
+        }
+    }
+}
+function AttackPlayer($foe:Item)
+{
+    var $weapon = $foe.CurrentWeapon;
+    var $withPhrase = $weapon != null ? $" with {Label($weapon)}" : "";
+    var $weaponDamage = $weapon != null ? $weapon.AttackDamage : $foe.AttackDamage;
+    var $damage = ComputeDamage($weaponDamage, player.DamageResistance);
+    if ($damage <= 0)
+    {
+        Message($"The {Label($foe)} attacks you{$withPhrase} but does no damage.");
+    }
+    else
+    {
+        Message($"The {Label($foe)} attacks you{$withPhrase}.");
+player        .Health = player.Health - $damage;
+player        .DescribeHealthAction(player);
+        if (player.Health < 0)
+        {
+            Message("Better luck next time!");
+            EndGame(false);
+        }
+    }
+}
+function UseWeapon($item:Item)
+{
+    if (player.CurrentWeapon == $item)
+    {
+        Message($"The {Label($item)} is already your current weapon.");
+    }
+    else
+    {
+        if ($item.Location != player)
+        {
+            $item.Location = player;
+            Message($"The {Label($item)} is now in your inventory.");
+        }
+player        .CurrentWeapon = $item;
+        Message($"The {Label($item)} is now your current weapon.");
+    }
+}
+function TakeWeapon($item:Item)
+{
+    TakePortableItem($item);
+    if (player.CurrentWeapon == null)
+    {
+player        .CurrentWeapon = $item;
+        Message($"The {Label($item)} is now your current weapon.");
+    }
+    else
+    {
+        Message($"The {Label(player.CurrentWeapon)} is still your current weapon.");
+        Message($"You can 'use {Label($item)}' to change that.");
+    }
+}
+function DropWeapon($item:Item)
+{
+    if ($item.Location == player)
+    {
+        $item.Location = player.Location;
+        Message($"You've dropped the {Label($item)}.");
+        if (player.CurrentWeapon == $item)
+        {
+player            .CurrentWeapon = null;
+            Message("You no longer have a current weapon.");
+        }
+    }
+    else
+    {
+        Message($"The {Label($item)} is not in your inventory.");
+    }
+}
+function InitializeWeapon($item:Item, $adjectives:String, $noun:String, $damage:Int, $loc:Item)
+{
+    SetLabelProperties($item, $adjectives, $noun);
+    $item.UseAction = UseWeapon;
+    $item.TakeAction = TakeWeapon;
+    $item.DropAction = DropWeapon;
+    $item.AttackDamage = $damage;
+    $item.Location = $loc;
+}
+function NewWeapon($adjectives:String, $noun:String, $damage:Int, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeWeapon($return, $adjectives, $noun, $damage, $loc);
+}
+function DescribePlayerWithArms($item:Item)
+{
+    DescribeCommon($item);
+    if ($headArmor != null)
+    {
+        Message($"On your head is a {Label($headArmor)}.");
+    }
+    if ($torsoArmor != null)
+    {
+        Message($"You're wearing a {Label($torsoArmor)}.");
+    }
+    if ($legArmor != null)
+    {
+        Message($"On your legs are {Label($legArmor)}.");
+    }
+    if (player.CurrentWeapon != null)
+    {
+        Message($"You wield a {Label(player.CurrentWeapon)}.");
+    }
+}
+function TryFollowPlayer($monster:Item) : Bool
+{
+    if (!$isNowDark && $monster.Location == $lastRoom)
+    {
+        $monster.Location = player.Location;
+        AddItemWords($monster);
+        Message($"The {Label($monster)} follows you.");
+        $return = true;
+    }
+}
+function UpdateHostileMonster($monster:Item)
+{
+    if (!$isNowDark)
+    {
+        if ($monster.Location == player.Location)
+        {
+            AttackPlayer($monster);
+        }
+        else
+        {
+            TryFollowPlayer($monster);
+        }
+    }
+}
+function UpdateSurprisedMonster($monster:Item)
+{
+    if ($monster.Location == player.Location && !$isNowDark)
+    {
+        Message($"The {Label($monster)} notices you.");
+        $monster.UpdateAction = UpdateHostileMonster;
+    }
+}
+function UpdateFriendlyMonster($monster:Item)
+{
+    TryFollowPlayer($monster);
+}
+function OnMonsterAttacked($monster:Item)
+{
+    $monster.UpdateAction = UpdateHostileMonster;
+}
+function InitializeMonster($monster:Item, $adjectives:String, $noun:String, $health:Int, $damageResistance:Int, $attackDamage:Int, $loc:Item)
+{
+    SetLabelProperties($monster, $adjectives, $noun);
+    $monster.Health = $health;
+    $monster.MaxHealth = $health;
+    $monster.DescribeHealthAction = DescribeCreatureHealth;
+    $monster.DamageResistance = $damageResistance;
+    $monster.AttackDamage = $attackDamage;
+    $monster.Location = $loc;
+    $monster.OnAttackedAction = OnMonsterAttacked;
+    $monster.UpdateAction = UpdateSurprisedMonster;
+}
+function NewMonster($adjectives:String, $noun:String, $health:Int, $damageResistance:Int, $attackDamage:Int, $loc:Item) : Item
+{
+    $return = NewItem($"_{$loc}_{$noun}");
+    InitializeMonster($return, $adjectives, $noun, $health, $damageResistance, $attackDamage, $loc);
+}
+function Sleep($minutes:Int) : Bool
+{
+    $isSleeping = true;
+    while ($isSleeping && $minutes > 0)
+    {
+        IncrementTime();
+        UpdateItems();
+        $minutes = $minutes - 1;
+    }
+    $return = $isSleeping;
+    $isSleeping = false;
+}
+function OnPlayerAttacked($item:Item)
+{
+    $isSleeping = false;
+}
+function UseBed($item:Item)
+{
+    Message($"You go to sleep in the {Label($item)}.");
+    if (Sleep(480))
+    {
+        Message("You wake up after eight hours.");
+    }
+    else
+    {
+        Message("You wake up after being attacked.");
+    }
+}
+function InitializeBed($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializeTable($item, $adjectives, $noun, $loc);
+    $item.UseAction = UseBed;
+}
+function NewBed($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"{$noun}_{$loc}");
+    InitializeBed($return, $adjectives, $noun, $loc);
+}
+function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
+{
+    if ($from == outer_court_N && $to == inner_court_S)
+    {
+        Message("You pass through the open portcullis into a dim tunnel. High in the walls on either side are arrow loops through which defenders could rain down fire on an attacker, and in the ceiling above you are murder holes through which boulders could be dropped. However, no one challenges you or raises an alarm.");
+        Message("At the north end of the tunnel, you pass through another open gate into an inner courtyard. For a moment, the air around you seems to shimmer, but perhaps you are only dazzled by the sun after leaving the dim tunnel.");
+    }
+}
+function OnEnterCouterCourt($from:Item, $to:Item) : Bool
+{
+    if ($from == inner_court_S && $to == outer_court_N)
+    {
+        Message("You pass through the gate house tunnel and back into the outer courtyard. It's the real outer couryard, not the forested fairyland with the purple sky! You have broken the enchantment and reconnected the keep with the real world.");
+        if (priest.Location == inner_court_S && maid.Location == inner_court_S)
+        {
+            Message("The priest and maid follow you to safety.");
+        }
+        else
+        {
+            Message("It's a pity you didn't rescue the survivors...");
+        }
+        Message("Congratulations! You have won the game!");
+        EndGame(true);
+    }
+}
+function PutInSilverCup($item:Item, $target:Item)
+{
+    if ($item == fairyland_wine)
+    {
+        Message("You pour the wine into the silver cup. Suddenly, the statue comes to life. It says, 'The guests can't leave until the last cup is poured!' and drains the cup in one long draft.");
+        Message("The statue then vanishes with a flash of light. There is a sudden breeze, and a not-unpleasant smell of grass and manure wafts in from the open gate south of you.");
+inner_court_statue        .Location = null;
+        LinkRoomsOneWay(inner_court_S, outer_court_N, inner_gate, Direction.South);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+function PutInSilverStatue($item:Item, $target:Item)
+{
+    if ($item == silver_cup)
+    {
+        Message("As you put the silver cup in the outstretched hands of the statue, the fingers close around the cup, melding with it. The cup is now part of the statue.");
+inner_court_statue        .Description = "You see a silver statue of a fairy with its hands wrapped around a silver cup.";
+        $item.Location = $target;
+        $item.TakeAction = null;
+        $item.PutInAction = PutInSilverCup;
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+function DescribeThrone($item:Item)
+{
+    Message("The carved wooden throne sits on a raised platform in front of the paneled north wall. On closer inspection, you notice a wooden door behind the throne, which is made to discretely blend in with the paneling.");
+library_door    .IsHidden = false;
+}
+function PutOnKingsTable($item:Item, $table:Item)
+{
+    if ($item == fairyland_food)
+    {
+fairy_king        .Location = null;
+fairy_prince1        .Location = null;
+fairy_prince2        .Location = null;
+fairyland_food        .Location = null;
+        InitializePortableItem(silver_cup, "silver", "cup", kings_table);
+tower_NE_3        .Description = "You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. The wood-paneled walls have large windows.";
+        Message("When you put the food on the table, it seems to grow and multiply into a great feast. Plates and cups appear before the fairy king and his guests, and they begin to laugh and eat with abandon. Although you are in the same room, the fairies continue to ignore your presence, and it almost feels as though you are watching from a distance.");
+        Message("Soon, the meal is finished. With a final clink of their glasses, the three fairies vanish into thin air. The plates and food disappear as well, leaving behind only a single silver cup.");
+    }
+    else
+    {
+        PutOnTable($item, $table);
+    }
+}
+function UseWell($item:Item)
+{
+    Message("You draw water from the well and take a refreshing drink.");
+}
+function NewWell($loc:Item)
+{
+    var $well = NewItem($"{$loc}_well");
+    $well.Location = $loc;
+    $well.Noun = "well";
+    $well.UseAction = UseWell;
+}
+function UpdateFairy($fairy:Item)
+{
+    if ($fairy.Location == player.Location && $fairy.Message != null)
+    {
+        Message($"The fairy says, '{$fairy.Message}'");
+        $currentFairyMessage = $fairy.Message;
+    }
+}
+function EnrageFairies()
+{
+    foreach (var $item) where UpdateAction == UpdateFairy
+    {
+        $item.UpdateAction = UpdateHostileMonster;
+    }
+}
+function OnFairyAttacked($monster:Item)
+{
+    EnrageFairies();
+}
+function InitializeFairy($fairy:Item, $adjectives:String, $message:String, $loc:Item)
+{
+    InitializeMonster($fairy, $adjectives, "fairy", 100, 100, 100, $loc);
+    $fairy.Message = $message;
+    $fairy.UpdateAction = UpdateFairy;
+    $fairy.OnAttackedAction = OnFairyAttacked;
+}
+function InitializeFairyLord($fairy:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializeMonster($fairy, $adjectives, $noun, 100, 100, 200, $loc);
+    $fairy.UpdateAction = UpdateFairy;
+    $fairy.OnAttackedAction = OnFairyAttacked;
+}
+function UpdateFollowingPriest($npc:Item)
+{
+    if (TryFollowPlayer($npc))
+    {
+    }
+    if ($currentFairyMessage != null && $npc.Location == player.Location)
+    {
+        if (!$hasPriestReactedToFairy)
+        {
+            Message("The priest says, 'Do not trust these fiends! They speak only in riddles and they do not mean is well, I am sure!'");
+            $hasPriestReactedToFairy = true;
+        }
+        else
+        {
+            Message("The priest scowls and says, 'More riddles!'");
+        }
+    }
+}
+function UpdateFollowingMaid($npc:Item)
+{
+    if (TryFollowPlayer($npc))
+    {
+        if ($npc.Location == inner_court_statue.Location && !$hasMaidReactedToInnerCourtStatue)
+        {
+            Message("The maid says, 'Ooh! That statue wasn't here before! It's beautiful!'");
+            $hasMaidReactedToInnerCourtStatue = true;
+        }
+        if ($npc.Location == library_statue.Location && !$hasMaidReactedToLibraryStatue)
+        {
+            Message("The maid says, 'Ooh! Another of these silver statues! It's strange, though. I've cleaned this room before, and there should be a door right where that statue is. Maybe it will appear if we say the magic words!'");
+            Message("'Hocus pocus!' she says to the statue, but nothing happens.");
+            $hasMaidReactedToLibraryStatue = true;
+        }
+    }
+    if ($currentFairyMessage != null && $npc.Location == player.Location)
+    {
+        if (!$hasMaidReactedToFairy)
+        {
+            Message("The maid says, 'Maybe these words are giving us some important clue, but I don't understand it.'");
+            $hasMaidReactedToFairy = true;
+        }
+    }
+}
+function UpdateIdlePriest($npc:Item)
+{
+    if (player.Location == $npc.Location)
+    {
+        Message("The priest says, 'At last, help has arrived! I see you wear the king's livery. This chamber maid and I are the only survivors in the castle, as far as we know. We will gladly follow you if you can show us the way out.'");
+        Message("Recognizing your duty, you promise to help if you can.");
+        $npc.UpdateAction = UpdateFollowingPriest;
+    }
+}
+function UpdateIdleMaid($npc:Item)
+{
+    if (player.Location == $npc.Location)
+    {
+        Message("The maid exclaims, 'Oh, thank you sir! It was awful what happened here! I was in Lord Kevin's chambers doing a bit of cleaning when those winged creatures came. Lord Kevin and his men tried to fight them, but they were all killed. I think the townspeople mostly fled. I fled too. I thought to seek sanctuary in the church, and I found the church right enough, but it's here in the middle of this strange forest and we don't know the way out!'");
+        $npc.UpdateAction = UpdateFollowingMaid;
+    }
+}
+command "list items"
+{
+    ListItems();
+}
+command "list item {$name:String}"
+{
+    ListItem($name);
+}
+command "list properties"
+{
+    ListProperties();
+}
+command "list types"
+{
+    ListTypes();
+}
+command "list variables"
+{
+    ListVariables();
+}
+command "list functions"
+{
+    ListFunctions();
+}
+command "list commands"
+{
+    ListCommands();
+}
+command "list words"
+{
+    ListWords();
+}
+command "go {$dir:Direction}"
+{
+    Go($dir);
+}
+command "n"
+{
+    Go(Direction.North);
+}
+command "s"
+{
+    Go(Direction.South);
+}
+command "e"
+{
+    Go(Direction.East);
+}
+command "w"
+{
+    Go(Direction.West);
+}
+command "up"
+{
+    Go(Direction.Up);
+}
+command "down"
+{
+    Go(Direction.Down);
+}
+command "inventory"
+{
+    Inventory();
+}
+command "i"
+{
+    Inventory();
+}
+command "take {$item:Item}"
+{
+    Take($item);
+}
+command "drop {$item:Item}"
+{
+    Take($item);
+}
+command "put {$item:Item} in {$container:Item}"
+{
+    PutIn($item, $container);
+}
+command "put {$item:Item} on {$table:Item}"
+{
+    PutOn($item, $table);
+}
+command "use {$item:Item} on {$target:Item}"
+{
+    UseOn($item, $target);
+}
+command "use {$item:Item}"
+{
+    Use($item);
+}
+command "open {$item:Item}"
+{
+    Open($item);
+}
+command "close {$item:Item}"
+{
+    Close($item);
+}
+command "turn on {$item:Item}"
+{
+    TurnOn($item);
+}
+command "turn off {$item:Item}"
+{
+    TurnOff($item);
+}
+command "light {$target:Item} with {$lighter:Item}"
+{
+    LightWith($target, $lighter);
+}
+command "put out {$item:Item}"
+{
+    PutOut($item);
+}
+command "look at me"
+{
+    Describe(player);
+}
+command "look at self"
+{
+    Describe(player);
+}
+command "look at {$item:Item}"
+{
+    Describe($item);
+}
+command "look"
+{
+    Look();
+}
+command "attack {$target:Item} with {$weapon:Item}"
+{
+    AttackItemWith($target, $weapon);
+}
+command "attack {$target:Item}"
+{
+    AttackItemWith($target, player.CurrentWeapon);
+}
+command "help"
+{
+    Message("Following are commands you can say:");
+    ListCommands();
+}
+command "say {$message:String}"
+{
+    if (player.Location == library_statue.Location && $message == "guests have arrived")
+    {
+library_statue        .Location = null;
+tower_NE_door        .IsHidden = false;
+        Message("The statue of the fairy king comes to life and says, 'The host can't eat until the guests have arrived!' Then it makes an elegant bow and vanishes. In place of the statue, you now see an arched oak door leading north.");
+    }
+}
+game
+{
+    {
+        var $_ = player;
+        $_.Location = outside;
+        $_.DescribeAction = DescribePlayerWithArms;
+        $_.DescribeHealthAction = DescribePlayerHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdatePlayer;
+        $_.OnAttackedAction = OnPlayerAttacked;
+        $_.Health = 250;
+        $_.MaxHealth = 250;
+        $_.AttackDamage = 5;
+    }
+    {
+        var $_ = outside;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are outside the main gate of Oxbow Castle.";
+        $_.LinkN = _gate_outsideouter_court_S;
+    }
+    {
+        var $_ = outer_court_SW;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the southwest corner of a large outer courtyard, which extends to the North and East. The south and west walls meet in a small round tower, which is open to the inside. There is nothing in the tower.";
+        $_.LinkN = __outer_court_SWouter_court_W;
+        $_.LinkE = __outer_court_SWouter_court_S;
+    }
+    {
+        var $_ = outer_court_S;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the south end of a large courtyard, which extends to the North, East, and West. At the north end of the courtyard you can see the high walls of the keep.";
+        $_.LinkN = __outer_court_Souter_court_center;
+        $_.LinkS = _gate_outsideouter_court_S;
+        $_.LinkE = __outer_court_Souter_court_SE;
+        $_.LinkW = __outer_court_SWouter_court_S;
+    }
+    {
+        var $_ = outer_court_SE;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the southeast corner of a large outer courtyard, which extends to the West. The way north is blocked by a stone wall behind which you can see a tall stone church. The south and east walls meet in a small round tower, which is open to the inside. There is nothing in the tower.";
+        $_.LinkW = __outer_court_Souter_court_SE;
+    }
+    {
+        var $_ = stable;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a large wooden stable with room for many horses. Neither hay nor horses are to be found here now, only their lingering smell.";
+        $_.LinkE = _door_stableouter_court_W;
+    }
+    {
+        var $_ = outer_court_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the west side of a large outer courtyard, which extends to the North, South, and East. Against the wall to your west is a wooden stable.";
+        $_.LinkN = __outer_court_Wouter_court_NW;
+        $_.LinkS = __outer_court_SWouter_court_W;
+        $_.LinkE = __outer_court_Wouter_court_center;
+        $_.LinkW = _door_stableouter_court_W;
+    }
+    {
+        var $_ = outer_court_center;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the center of a large outer courtyard, which extends to the North, West, and South. East of you is a stone wall with a wooden gate behind which you can see a tall stone church.";
+        $_.LinkN = __outer_court_centerouter_court_N;
+        $_.LinkS = __outer_court_Souter_court_center;
+        $_.LinkE = _gate_outer_court_centerchurch_yard_W;
+        $_.LinkW = __outer_court_Wouter_court_center;
+    }
+    {
+        var $_ = outer_court_NW;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the northwest corner of a large outer courtyard, which extends to the South and East. The high wall of the keep looms above you to the North.";
+        $_.LinkS = __outer_court_Wouter_court_NW;
+        $_.LinkE = __outer_court_NWouter_court_N;
+    }
+    {
+        var $_ = outer_court_N;
+        $_.LeaveAction = OnLeaveOuterCourt;
+        $_.EnterAction = OnEnterCouterCourt;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the north end of a large outer courtyard, which extends to the West, East, and South. Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on either side of an open portcullis.";
+        $_.LinkN = inner_gate;
+        $_.LinkS = __outer_court_centerouter_court_N;
+        $_.LinkE = __outer_court_Nouter_court_NE;
+        $_.LinkW = __outer_court_NWouter_court_N;
+    }
+    {
+        var $_ = outer_court_NE;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the northeast corner of a large outer courtyard, which extends to the West. The high wall of the keep looms above you to the North. The way south is blocked by a stone wall behind which you can see a tall stone church.";
+        $_.LinkW = __outer_court_Nouter_court_NE;
+    }
+    {
+        var $_ = church_yard_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a walled church yard. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.";
+        $_.LinkN = __church_yard_Wchurch_yard_N;
+        $_.LinkS = __church_yard_Schurch_yard_W;
+        $_.LinkE = _door_church_yard_Wchurch_W;
+        $_.LinkW = _gate_outer_court_centerchurch_yard_W;
+    }
+    {
+        var $_ = church_yard_S;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a walled church yard south of the church. The church yard wraps around the church to the North. East of you is a smaller stone building adjoining the church.";
+        $_.LinkN = __church_yard_Schurch_yard_W;
+        $_.LinkE = _door_church_yard_Spriest_house;
+    }
+    {
+        var $_ = church_yard_N;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a walled churcn yard north of the church. The church yard wraps around the church to the South. There are graves here.";
+        $_.LinkS = __church_yard_Wchurch_yard_N;
+    }
+    {
+        var $_ = church_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the west end of the church. A long aisle runs from here to the East, with fluted stone columns on either side. Windows set high in the walls let in light.";
+        $_.LinkE = __church_Wchurch_E;
+        $_.LinkW = _door_church_yard_Wchurch_W;
+    }
+    {
+        var $_ = church_E;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the east end of the church. A long aisle runs from here to the West. Between fluted columns to the North, you can see a side chapel.";
+        $_.LinkN = __church_Eside_chapel;
+        $_.LinkS = _door_priest_housechurch_E;
+        $_.LinkW = __church_Wchurch_E;
+    }
+    {
+        var $_ = side_chapel;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a side chapel with statues of saints. An opening to the South leads to the main part of the church.";
+        $_.LinkS = __church_Eside_chapel;
+    }
+    {
+        var $_ = priest_house;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a one-room house, presumably the priest's residence.";
+        $_.LinkN = _door_priest_housechurch_E;
+        $_.LinkW = _door_church_yard_Spriest_house;
+    }
+    {
+        var $_ = church_key;
+        $_.Location = _trunk_priest_house;
+        $_.Noun = "key";
+        $_.Adjectives = "ornate brass";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.UseOnAction = UseKeyOn;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = inner_gate;
+        $_.IsDark = IsDarkAtNight;
+        $_.LinkN = inner_court_S;
+    }
+    {
+        var $_ = inner_court_S;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the south end of the inner courtyard, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.";
+        $_.LinkN = __inner_court_Sinner_court_N;
+        $_.LinkS = __inner_court_Sfairyland_N;
+        $_.LinkE = __inner_court_Sinner_court_SE;
+        $_.LinkW = __inner_court_SWinner_court_S;
+    }
+    {
+        var $_ = inner_court_SW;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the southwest corner of the inner courtyard, which extends to the North and East.";
+        $_.LinkN = __inner_court_SWinner_court_NW;
+        $_.LinkS = _door_guard_room_W_0inner_court_SW;
+        $_.LinkE = __inner_court_SWinner_court_S;
+        $_.LinkW = _door_store_roominner_court_SW;
+    }
+    {
+        var $_ = inner_court_SE;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the southeast corner of the inner courtyard, which extends to the North and West.";
+        $_.LinkN = __inner_court_SEinner_court_NE;
+        $_.LinkS = _door_guard_room_E_0inner_court_SE;
+        $_.LinkW = __inner_court_Sinner_court_SE;
+    }
+    {
+        var $_ = inner_court_N;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the north end of the inner courtyard, which extends to the South, East, and West.";
+        $_.LinkN = _door_inner_court_Ngreat_hall_W;
+        $_.LinkS = __inner_court_Sinner_court_N;
+        $_.LinkE = __inner_court_Ninner_court_NE;
+        $_.LinkW = __inner_court_NWinner_court_N;
+    }
+    {
+        var $_ = inner_court_NW;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the northwest corner of the inner courtyard, which extends to the South and East.";
+        $_.LinkN = _door_inner_court_NWhallway_NS;
+        $_.LinkS = __inner_court_SWinner_court_NW;
+        $_.LinkE = __inner_court_NWinner_court_N;
+    }
+    {
+        var $_ = inner_court_NE;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the northeast corner of the inner courtyard, which extends to the South and West.";
+        $_.LinkS = __inner_court_SEinner_court_NE;
+        $_.LinkW = __inner_court_Ninner_court_NE;
+    }
+    {
+        var $_ = inner_court_statue;
+        $_.Location = inner_court_S;
+        $_.Noun = "statue";
+        $_.Adjectives = "silver";
+        $_.PutInAction = PutInSilverStatue;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "The statue is of bright, untarnished silver and exquisite workmanship. It depicts a young man, or perhaps a fairy for it has delicate wings. Its empty hands are outstretched as if reaching for something.";
+    }
+    {
+        var $_ = guard_room_W_0;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
+        $_.LinkN = _door_guard_room_W_0inner_court_SW;
+        $_.LinkE = _opening_guard_room_W_0gate_house_W_0;
+        $_.LinkW = _door_tower_SW_0guard_room_W_0;
+    }
+    {
+        var $_ = guard_room_E_0;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
+        $_.LinkN = _door_guard_room_E_0inner_court_SE;
+        $_.LinkE = _door_tower_SE_0guard_room_E_0;
+        $_.LinkW = _opening_guard_room_E_0gate_house_E_0;
+    }
+    {
+        var $_ = guard_room_W_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the inner courtyard and in the south wall facing the outer courtyard.";
+        $_.LinkE = _opening_guard_room_W_1gate_house_W_1;
+        $_.LinkW = _door_tower_SW_1guard_room_W_1;
+    }
+    {
+        var $_ = guard_room_E_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the inner courtyard and in the south wall facing the outer courtyard.";
+        $_.LinkE = _door_tower_SE_1guard_room_E_1;
+        $_.LinkW = _opening_guard_room_E_1gate_house_E_1;
+    }
+    {
+        var $_ = tower_SW_0;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are on the ground floor of a round tower.";
+        $_.LinkE = _door_tower_SW_0guard_room_W_0;
+        $_.LinkU = _stair_tower_SW_0tower_SW_1;
+    }
+    {
+        var $_ = tower_SW_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a round tower with arrow loops opening to the outside.";
+        $_.LinkE = _door_tower_SW_1guard_room_W_1;
+        $_.LinkU = _stair_tower_SW_1tower_SW_2;
+        $_.LinkD = _stair_tower_SW_0tower_SW_1;
+    }
+    {
+        var $_ = tower_SW_2;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a round tower with arrow loops opening to the outside.";
+        $_.LinkN = _door_tower_SW_2wall_W;
+        $_.LinkE = _door_tower_SW_2wall_SW;
+        $_.LinkU = _stair_tower_SW_2tower_SW_roof;
+        $_.LinkD = _stair_tower_SW_1tower_SW_2;
+    }
+    {
+        var $_ = tower_SW_roof;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the roof of the soutwest corner tower. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is a long east-west building across the inner courtyard from you. Adjoining it to the west is a lower building. Other lower buildings line the east and west walls of the keep.";
+        $_.LinkD = _stair_tower_SW_2tower_SW_roof;
+    }
+    {
+        var $_ = tower_SE_0;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are on the ground floor of a round tower.";
+        $_.LinkW = _door_tower_SE_0guard_room_E_0;
+        $_.LinkU = _stair_tower_SE_0tower_SE_1;
+    }
+    {
+        var $_ = tower_SE_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a round tower with arrow loops opening to the outside.";
+        $_.LinkW = _door_tower_SE_1guard_room_E_1;
+        $_.LinkU = _stair_tower_SE_1tower_SE_2;
+        $_.LinkD = _stair_tower_SE_0tower_SE_1;
+    }
+    {
+        var $_ = tower_SE_2;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a round tower with arrow loops opening to the outside.";
+        $_.LinkN = _door_tower_SE_2wall_E;
+        $_.LinkW = _door_tower_SE_2wall_SE;
+        $_.LinkU = _stair_tower_SE_2tower_SE_roof;
+        $_.LinkD = _stair_tower_SE_1tower_SE_2;
+    }
+    {
+        var $_ = tower_SE_roof;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the roof of the southeast corner tower. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is a long east-west building across the inner courtyard from you. Adjoining it to the west is a lower building. Other lower buildings line the east and west walls of the keep.";
+        $_.LinkD = _stair_tower_SE_2tower_SE_roof;
+    }
+    {
+        var $_ = tower_NW_0;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are on the ground floor of a round tower.";
+        $_.LinkS = _door_armorytower_NW_0;
+        $_.LinkU = _stair_tower_NW_0tower_NW_1;
+    }
+    {
+        var $_ = tower_NW_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a round tower with arrow loops opening to the outside.";
+        $_.LinkU = _stair_tower_NW_1tower_NW_2;
+        $_.LinkD = _stair_tower_NW_0tower_NW_1;
+    }
+    {
+        var $_ = tower_NW_2;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a round tower with arrow loops opening to the outside.";
+        $_.LinkS = _door_wall_Wtower_NW_2;
+        $_.LinkE = _door_tower_NW_2wall_N;
+        $_.LinkU = _stair_tower_NW_2tower_NW_roof;
+        $_.LinkD = _stair_tower_NW_1tower_NW_2;
+    }
+    {
+        var $_ = tower_NW_roof;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the roof of the northwest corner tower. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is southeast of you beyond some lower buildings. There is a small courtyard between the great hall and the north wall and a larger courtyard between the great hall and the south wall.";
+        $_.LinkD = _stair_tower_NW_2tower_NW_roof;
+    }
+    {
+        var $_ = gate_house_W_0;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a U-shaped stone chamber.";
+        $_.LinkW = _opening_guard_room_W_0gate_house_W_0;
+    }
+    {
+        var $_ = gate_house_W_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a U-shaped stone chamber. In the east wall are arrow loops looking down on the entrance tunnel between the gatehouse towers.";
+        $_.LinkW = _opening_guard_room_W_1gate_house_W_1;
+    }
+    {
+        var $_ = gate_house_E_0;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a U-shaped stone chamber.";
+        $_.LinkE = _opening_guard_room_E_0gate_house_E_0;
+    }
+    {
+        var $_ = gate_house_E_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a U-shaped stone chamber. In the west wall are arrow loops looking down on the entrance tunnel between the gatehouse towers.";
+        $_.LinkE = _opening_guard_room_E_1gate_house_E_1;
+    }
+    {
+        var $_ = gate_house_2;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a large, rectangular stone chamber. In the floor are murder holes looking down on the entrance tunnel to the keep. In the south wall are arrow loops facing the outer courtyard.";
+        $_.LinkE = _door_wall_SEgate_house_2;
+        $_.LinkW = _door_wall_SWgate_house_2;
+    }
+    {
+        var $_ = gate_house_roof;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the roof of the gatehouse. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is a long east-west building across the inner courtyard from you. Adjoining it to the west is a lower building. Other lower buildings line the east and west walls of the keep.";
+    }
+    {
+        var $_ = wall_SW;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on top of the south wall of the keep between the southwest tower and the gatehouse. Looking north across a courtyard, you see the great hall flanked by lower buildings.";
+        $_.LinkE = _door_wall_SWgate_house_2;
+        $_.LinkW = _door_tower_SW_2wall_SW;
+    }
+    {
+        var $_ = wall_SE;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on top of the south wall of the keep between the southeast tower and the gatehouse. Looking north across a courtyard, you see the great hall flanked by lower buildings.";
+        $_.LinkE = _door_tower_SE_2wall_SE;
+        $_.LinkW = _door_wall_SEgate_house_2;
+    }
+    {
+        var $_ = wall_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the west wall of the keep. The great hall is east of you beyond some lower buildings. There is a courtyard between the great hall and the south wall and another smaller courtyard between the great hall and the north wall.";
+        $_.LinkN = _door_wall_Wtower_NW_2;
+        $_.LinkS = _door_tower_SW_2wall_W;
+    }
+    {
+        var $_ = wall_E;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the east wall of the keep between the southeast tower and the taller northeast tower. There is no entrance to the northeast tower from here.";
+        $_.LinkS = _door_tower_SE_2wall_E;
+    }
+    {
+        var $_ = wall_N;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the north wall of the keep between the northwest tower and the taller northeast tower. There is no entrance to the northeast tower from here. Across a small courtyard to your south is the great hall.";
+        $_.LinkW = _door_tower_NW_2wall_N;
+    }
+    {
+        var $_ = tower_key;
+        $_.Location = _chest_guard_room_W_0;
+        $_.Noun = "key";
+        $_.Adjectives = "large";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.UseOnAction = UseKeyOn;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = store_room;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a store room full of barrels.";
+        $_.LinkN = _door_store_roomstewards_room;
+        $_.LinkE = _door_store_roominner_court_SW;
+    }
+    {
+        var $_ = stewards_room;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a bedchamber.";
+        $_.LinkS = _door_store_roomstewards_room;
+    }
+    {
+        var $_ = knight_room_1;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a small bedchamber.";
+        $_.LinkN = _door_knight_room_1knight_room_entry;
+    }
+    {
+        var $_ = knight_room_2;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a small bedchamber.";
+        $_.LinkE = _door_knight_room_2knight_room_entry;
+    }
+    {
+        var $_ = knight_room_3;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a small bedchamber.";
+        $_.LinkS = _door_knight_room_entryknight_room_3;
+    }
+    {
+        var $_ = knight_room_4;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a small bedchamber.";
+        $_.LinkN = _door_knight_room_4armory;
+    }
+    {
+        var $_ = knight_room_entry;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a small entryway.";
+        $_.LinkN = _door_knight_room_entryknight_room_3;
+        $_.LinkS = _door_knight_room_1knight_room_entry;
+        $_.LinkE = _door_knight_room_entryhallway_NS;
+        $_.LinkW = _door_knight_room_2knight_room_entry;
+    }
+    {
+        var $_ = armory;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a large rectangular room.";
+        $_.LinkN = _door_armorytower_NW_0;
+        $_.LinkS = _door_knight_room_4armory;
+        $_.LinkE = _door_armoryhallway_corner;
+    }
+    {
+        var $_ = bakehouse;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a rectangular room with a large oven. A window in the east wall looks out upon a small courtyard.";
+        $_.LinkS = _door_hallway_EWbakehouse;
+    }
+    {
+        var $_ = hallway_NS;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are at one end of a hallway leading north.";
+        $_.LinkN = __hallway_NShallway_corner;
+        $_.LinkS = _door_inner_court_NWhallway_NS;
+        $_.LinkE = _door_hallway_NSkitchen;
+        $_.LinkW = _door_knight_room_entryhallway_NS;
+    }
+    {
+        var $_ = hallway_corner;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are at the junction of two hallways leading south and east.";
+        $_.LinkS = __hallway_NShallway_corner;
+        $_.LinkE = __hallway_cornerhallway_EW;
+        $_.LinkW = _door_armoryhallway_corner;
+    }
+    {
+        var $_ = hallway_EW;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are at one end of a hallway leading west.";
+        $_.LinkN = _door_hallway_EWbakehouse;
+        $_.LinkE = _door_hallway_EWcourtyard_N;
+        $_.LinkW = __hallway_cornerhallway_EW;
+    }
+    {
+        var $_ = courtyard_N;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a courtyard bordered on the north by the keep's wall and on the south by the great hall. Rising above other buildings to your east is the keep's tall northeast tower with its conical roof.";
+        $_.LinkW = _door_hallway_EWcourtyard_N;
+    }
+    {
+        var $_ = kitchen;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a large kitchen.";
+        $_.LinkN = _door_kitchenpantry;
+        $_.LinkE = _door_kitchengreat_hall_W;
+        $_.LinkW = _door_hallway_NSkitchen;
+    }
+    {
+        var $_ = pantry;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a pantry.";
+        $_.LinkS = _door_kitchenpantry;
+        $_.LinkE = _door_pantrybuttery;
+    }
+    {
+        var $_ = buttery;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in the buttery.";
+        $_.LinkW = _door_pantrybuttery;
+    }
+    {
+        var $_ = great_hall_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the west end of the great hall.";
+        $_.LinkS = _door_inner_court_Ngreat_hall_W;
+        $_.LinkE = __great_hall_Wgreat_hall_E;
+        $_.LinkW = _door_kitchengreat_hall_W;
+    }
+    {
+        var $_ = great_hall_E;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the east end of the great hall.";
+        $_.LinkE = _door_great_hall_Ecourt;
+        $_.LinkW = __great_hall_Wgreat_hall_E;
+    }
+    {
+        var $_ = court;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds court.";
+        $_.LinkN = library_door;
+        $_.LinkS = _door_parlorcourt;
+        $_.LinkW = _door_great_hall_Ecourt;
+    }
+    {
+        var $_ = parlor;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a comfortable parlor with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.";
+        $_.LinkN = _door_parlorcourt;
+        $_.LinkS = _door_lords_chamberparlor;
+    }
+    {
+        var $_ = lords_chamber;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the lord's bedchamber. Windows in the west wall open onto the inner courtyard.";
+        $_.LinkN = _door_lords_chamberparlor;
+    }
+    {
+        var $_ = library;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a library. Windows in the west wall open onto the rear courtyard.";
+        $_.LinkN = tower_NE_door;
+        $_.LinkS = library_door;
+    }
+    {
+        var $_ = court_throne;
+        $_.Location = court;
+        $_.Noun = "throne";
+        $_.Adjectives = "carved wooden";
+        $_.DescribeAction = DescribeThrone;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = library_door;
+        $_.Noun = "door";
+        $_.Adjectives = "discrete wooden";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Locked;
+        $_.Key = library_key;
+        $_.IsHidden = true;
+        $_.IsDark = IsDarkAtNight;
+        $_.LinkN = library;
+        $_.LinkS = court;
+    }
+    {
+        var $_ = library_key;
+        $_.Location = _chest_lords_chamber;
+        $_.Noun = "key";
+        $_.Adjectives = "fine silver";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.UseOnAction = UseKeyOn;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = library_statue;
+        $_.Location = library;
+        $_.Noun = "statue";
+        $_.Adjectives = "silver";
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "The statue shows a tall, noble looking fairy with a crown on his head. A fairy king, perhaps. A caption reads, 'The host of the feast.'";
+    }
+    {
+        var $_ = tower_NE_0;
+        $_.IsDark = IsDarkAlways;
+        $_.Description = "You are in a large, round stone chamber with a high ceiling.";
+        $_.LinkS = tower_NE_door;
+        $_.LinkU = _stair_tower_NE_0tower_NE_1;
+    }
+    {
+        var $_ = tower_NE_1;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a large, round stone chamber with a high ceiling. There are arrow loops in the walls but also rich tapestries.";
+        $_.LinkU = _stair_tower_NE_1tower_NE_2;
+        $_.LinkD = _stair_tower_NE_0tower_NE_1;
+    }
+    {
+        var $_ = tower_NE_2;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a large, round stone chamber with a high ceiling. The walls are hung with tapestries and also have small windows.";
+        $_.LinkU = _stair_tower_NE_2tower_NE_3;
+        $_.LinkD = _stair_tower_NE_1tower_NE_2;
+    }
+    {
+        var $_ = tower_NE_3;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. The wood-paneled walls have large windows. Sitting at a long table is the fairy king depicted by the statue downstairs along with two other noble-looking fairies. They take no notice of you.";
+        $_.LinkD = _stair_tower_NE_2tower_NE_3;
+    }
+    {
+        var $_ = tower_NE_door;
+        $_.Noun = "door";
+        $_.Adjectives = "arched oak";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.IsHidden = true;
+        $_.IsDark = IsDarkAtNight;
+        $_.LinkN = tower_NE_0;
+        $_.LinkS = library;
+    }
+    {
+        var $_ = kings_table;
+        $_.Location = tower_NE_3;
+        $_.Noun = "table";
+        $_.Adjectives = "long wooden";
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnKingsTable;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = silver_cup;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = fairy_king;
+        $_.Location = tower_NE_3;
+        $_.Noun = "king";
+        $_.Adjectives = "fairy";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 200;
+        $_.DamageResistance = 100;
+    }
+    {
+        var $_ = fairy_prince1;
+        $_.Location = tower_NE_3;
+        $_.Noun = "prince";
+        $_.Adjectives = "blue fairy";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 200;
+        $_.DamageResistance = 100;
+    }
+    {
+        var $_ = fairy_prince2;
+        $_.Location = tower_NE_3;
+        $_.Noun = "prince";
+        $_.Adjectives = "dark fairy";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 200;
+        $_.DamageResistance = 100;
+    }
+    {
+        var $_ = fairyland_NW;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north, and the outer wall is to the west. Trils lead east and south through the trees.";
+        $_.LinkS = __fairyland_NWfairyland_W;
+        $_.LinkE = __fairyland_NWfairyland_N;
+    }
+    {
+        var $_ = fairyland_N;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the north end of the outer courtyard, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.";
+        $_.LinkN = __inner_court_Sfairyland_N;
+        $_.LinkS = __fairyland_Nfairyland_center;
+        $_.LinkE = __fairyland_Nfairyland_NE;
+        $_.LinkW = __fairyland_NWfairyland_N;
+    }
+    {
+        var $_ = fairyland_NE;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the northeast corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north. To the east is the outer wall and to the south is the wall of the church yard. There is a trail leading west.";
+        $_.LinkW = __fairyland_Nfairyland_NE;
+    }
+    {
+        var $_ = fairyland_stable;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a large wooden stable.";
+        $_.LinkE = _door_fairyland_stablefairyland_W;
+    }
+    {
+        var $_ = fairyland_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Trails lead north, east, and south through the trees.";
+        $_.LinkN = __fairyland_NWfairyland_W;
+        $_.LinkS = __fairyland_Wfairyland_SW;
+        $_.LinkE = __fairyland_Wfairyland_center;
+        $_.LinkW = _door_fairyland_stablefairyland_W;
+    }
+    {
+        var $_ = fairyland_center;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a small clearing in the strangely-transformed outer courtyard. Trails lead north, south, and west through the trees. East of you is the church yard wall.";
+        $_.LinkN = __fairyland_Nfairyland_center;
+        $_.LinkS = __fairyland_centerfairyland_S;
+        $_.LinkE = _gate_fairyland_centerfairyland_church_yard_W;
+        $_.LinkW = __fairyland_Wfairyland_center;
+    }
+    {
+        var $_ = fairyland_SW;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you are the castle walls, Trails lead north and east through the trees.";
+        $_.LinkN = __fairyland_Wfairyland_SW;
+        $_.LinkE = __fairyland_SWfairyland_S;
+    }
+    {
+        var $_ = fairyland_S;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the south end of the strangely-transformed outer courtyard. South of you is the town gate, which is shut tight. Trails lead north, east, and west.";
+        $_.LinkN = __fairyland_centerfairyland_S;
+        $_.LinkE = __fairyland_Sfairyland_SE;
+        $_.LinkW = __fairyland_SWfairyland_S;
+    }
+    {
+        var $_ = fairyland_SE;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in the southeast corner of the strangely-transformed outer courtyard. East and south of you are the castle walls, and north of you is the church yard wall. A trail leads west through the trees.";
+        $_.LinkW = __fairyland_Sfairyland_SE;
+    }
+    {
+        var $_ = fairyland_table;
+        $_.Location = fairyland_NW;
+        $_.Noun = "table";
+        $_.Adjectives = "long";
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = fairyland_food;
+        $_.Location = fairyland_table;
+        $_.Noun = "food";
+        $_.Adjectives = "platter of";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = fairyland_wine;
+        $_.Location = fairyland_table;
+        $_.Noun = "wine";
+        $_.Adjectives = "flask of";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.IsDark = IsDarkAtNight;
+    }
+    {
+        var $_ = fairy1;
+        $_.Location = fairyland_W;
+        $_.Noun = "fairy";
+        $_.Adjectives = "small blue";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 100;
+        $_.DamageResistance = 100;
+        $_.Message = "The guests have arrived!";
+    }
+    {
+        var $_ = fairy2;
+        $_.Location = fairyland_SW;
+        $_.Noun = "fairy";
+        $_.Adjectives = "green";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 100;
+        $_.DamageResistance = 100;
+        $_.Message = "The guests can't leave until the last cup is poured!";
+    }
+    {
+        var $_ = fairy3;
+        $_.Location = fairyland_S;
+        $_.Noun = "fairy";
+        $_.Adjectives = "pale";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 100;
+        $_.DamageResistance = 100;
+        $_.Message = "The guests can't leave until the feast is over!";
+    }
+    {
+        var $_ = fairy4;
+        $_.Location = fairyland_SE;
+        $_.Noun = "fairy";
+        $_.Adjectives = "slim brown";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 100;
+        $_.DamageResistance = 100;
+        $_.Message = "The host can't eat until the guests have arrived!";
+    }
+    {
+        var $_ = fairy5;
+        $_.Location = fairyland_NE;
+        $_.Noun = "fairy";
+        $_.Adjectives = "bright yellow";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateFairy;
+        $_.OnAttackedAction = OnFairyAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 100;
+        $_.DamageResistance = 100;
+        $_.Message = "The host sits in the highest seat!";
+    }
+    {
+        var $_ = fairyland_church_yard_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a walled church yard. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.";
+        $_.LinkN = __fairyland_church_yard_Wfairyland_church_yard_N;
+        $_.LinkS = __fairyland_church_yard_Sfairyland_church_yard_W;
+        $_.LinkE = _door_fairyland_church_yard_Wfairyland_church_W;
+        $_.LinkW = _gate_fairyland_centerfairyland_church_yard_W;
+    }
+    {
+        var $_ = fairyland_church_yard_S;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a walled church yard south of the church. The church yard wraps around the church to the North. East of you is a smaller stone building adjoining the church.";
+        $_.LinkN = __fairyland_church_yard_Sfairyland_church_yard_W;
+        $_.LinkE = _door_fairyland_church_yard_Sfairyland_priest_house;
+    }
+    {
+        var $_ = fairyland_church_yard_N;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a walled churcn yard north of the church. The church yard wraps around the church to the South. There are graves here.";
+        $_.LinkS = __fairyland_church_yard_Wfairyland_church_yard_N;
+    }
+    {
+        var $_ = fairyland_church_W;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the west end of the church. A long aisle runs from here to the East, with fluted stone columns on either side. Windows set high in the walls let in light.";
+        $_.LinkE = __fairyland_church_Wfairyland_church_E;
+        $_.LinkW = _door_fairyland_church_yard_Wfairyland_church_W;
+    }
+    {
+        var $_ = fairyland_church_E;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are at the east end of the church. A long aisle runs from here to the West. Between fluted columns to the North, you can see a side chapel.";
+        $_.LinkN = __fairyland_church_Efairyland_side_chapel;
+        $_.LinkS = _door_fairyland_priest_housefairyland_church_E;
+        $_.LinkW = __fairyland_church_Wfairyland_church_E;
+    }
+    {
+        var $_ = fairyland_side_chapel;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a side chapel with statues of saints. An opening to the South leads to the main part of the church.";
+        $_.LinkS = __fairyland_church_Efairyland_side_chapel;
+    }
+    {
+        var $_ = fairyland_priest_house;
+        $_.IsDark = IsDarkAtNight;
+        $_.Description = "You are in a one-room house, presumably the priest's residence.";
+        $_.LinkN = _door_fairyland_priest_housefairyland_church_E;
+        $_.LinkW = _door_fairyland_church_yard_Sfairyland_priest_house;
+    }
+    {
+        var $_ = priest;
+        $_.Location = fairyland_church_W;
+        $_.Noun = "priest";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateIdlePriest;
+        $_.OnAttackedAction = OnMonsterAttacked;
+        $_.Health = 1;
+        $_.MaxHealth = 1;
+        $_.AttackDamage = 1;
+    }
+    {
+        var $_ = maid;
+        $_.Location = fairyland_church_W;
+        $_.Noun = "maid";
+        $_.Adjectives = "chamber";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.IsDark = IsDarkAtNight;
+        $_.UpdateAction = UpdateIdleMaid;
+        $_.OnAttackedAction = OnMonsterAttacked;
+        $_.Health = 1;
+        $_.MaxHealth = 1;
+        $_.AttackDamage = 1;
+    }
+    {
+        var $_ = _gate_outsideouter_court_S;
+        $_.Noun = "gate";
+        $_.Adjectives = "iron";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Open;
+        $_.LinkN = outer_court_S;
+        $_.LinkS = outside;
+    }
+    {
+        var $_ = __outer_court_SWouter_court_W;
+        $_.LinkN = outer_court_W;
+        $_.LinkS = outer_court_SW;
+    }
+    {
+        var $_ = __outer_court_Souter_court_center;
+        $_.LinkN = outer_court_center;
+        $_.LinkS = outer_court_S;
+    }
+    {
+        var $_ = __outer_court_Wouter_court_NW;
+        $_.LinkN = outer_court_NW;
+        $_.LinkS = outer_court_W;
+    }
+    {
+        var $_ = __outer_court_centerouter_court_N;
+        $_.LinkN = outer_court_N;
+        $_.LinkS = outer_court_center;
+    }
+    {
+        var $_ = __outer_court_SWouter_court_S;
+        $_.LinkE = outer_court_S;
+        $_.LinkW = outer_court_SW;
+    }
+    {
+        var $_ = __outer_court_Souter_court_SE;
+        $_.LinkE = outer_court_SE;
+        $_.LinkW = outer_court_S;
+    }
+    {
+        var $_ = _door_stableouter_court_W;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = outer_court_W;
+        $_.LinkW = stable;
+    }
+    {
+        var $_ = __outer_court_Wouter_court_center;
+        $_.LinkE = outer_court_center;
+        $_.LinkW = outer_court_W;
+    }
+    {
+        var $_ = __outer_court_NWouter_court_N;
+        $_.LinkE = outer_court_N;
+        $_.LinkW = outer_court_NW;
+    }
+    {
+        var $_ = __outer_court_Nouter_court_NE;
+        $_.LinkE = outer_court_NE;
+        $_.LinkW = outer_court_N;
+    }
+    {
+        var $_ = _gate_outer_court_centerchurch_yard_W;
+        $_.Noun = "gate";
+        $_.Adjectives = "wooden";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = church_yard_W;
+        $_.LinkW = outer_court_center;
+    }
+    {
+        var $_ = _door_church_yard_Wchurch_W;
+        $_.Noun = "door";
+        $_.Adjectives = "carved wooden";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.Key = church_key;
+        $_.LinkE = church_W;
+        $_.LinkW = church_yard_W;
+    }
+    {
+        var $_ = __church_Wchurch_E;
+        $_.LinkE = church_E;
+        $_.LinkW = church_W;
+    }
+    {
+        var $_ = _door_church_yard_Spriest_house;
+        $_.Noun = "door";
+        $_.Adjectives = "oak";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Locked;
+        $_.Key = church_key;
+        $_.LinkE = priest_house;
+        $_.LinkW = church_yard_S;
+    }
+    {
+        var $_ = __church_yard_Schurch_yard_W;
+        $_.LinkN = church_yard_W;
+        $_.LinkS = church_yard_S;
+    }
+    {
+        var $_ = __church_yard_Wchurch_yard_N;
+        $_.LinkN = church_yard_N;
+        $_.LinkS = church_yard_W;
+    }
+    {
+        var $_ = __church_Eside_chapel;
+        $_.LinkN = side_chapel;
+        $_.LinkS = church_E;
+    }
+    {
+        var $_ = _door_priest_housechurch_E;
+        $_.Noun = "door";
+        $_.Adjectives = "small wooden";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = church_E;
+        $_.LinkS = priest_house;
+    }
+    {
+        var $_ = bed_priest_house;
+        $_.Location = priest_house;
+        $_.Noun = "bed";
+        $_.Adjectives = "lumpy";
+        $_.UseAction = UseBed;
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+    }
+    {
+        var $_ = _trunk_priest_house;
+        $_.Location = priest_house;
+        $_.Noun = "trunk";
+        $_.Adjectives = "pine";
+        $_.OpenAction = OpenContainer;
+        $_.CloseAction = CloseDoor;
+        $_.DescribeAction = DescribeContainer;
+        $_.PutInAction = PutInContainer;
+        $_.DoorState = DoorState.Closed;
+    }
+    {
+        var $_ = _robe_trunk_priest_house;
+        $_.Location = _trunk_priest_house;
+        $_.Noun = "robe";
+        $_.Adjectives = "black";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+    }
+    {
+        var $_ = _table_priest_house;
+        $_.Location = priest_house;
+        $_.Noun = "table";
+        $_.Adjectives = "wooden writing";
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+    }
+    {
+        var $_ = _paper_table_priest_house;
+        $_.Location = _table_priest_house;
+        $_.Noun = "paper";
+        $_.Adjectives = "white";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.Description = "The paper appears to be a draft of a sermon. Between scratched-out words and ink blots, you read a passionate diatribe criticizing the people for holding superstitious beliefs about goblins and fairies.";
+    }
+    {
+        var $_ = __inner_court_Sinner_court_N;
+        $_.LinkN = inner_court_N;
+        $_.LinkS = inner_court_S;
+    }
+    {
+        var $_ = __inner_court_SWinner_court_NW;
+        $_.LinkN = inner_court_NW;
+        $_.LinkS = inner_court_SW;
+    }
+    {
+        var $_ = __inner_court_SEinner_court_NE;
+        $_.LinkN = inner_court_NE;
+        $_.LinkS = inner_court_SE;
+    }
+    {
+        var $_ = __inner_court_SWinner_court_S;
+        $_.LinkE = inner_court_S;
+        $_.LinkW = inner_court_SW;
+    }
+    {
+        var $_ = __inner_court_Sinner_court_SE;
+        $_.LinkE = inner_court_SE;
+        $_.LinkW = inner_court_S;
+    }
+    {
+        var $_ = __inner_court_NWinner_court_N;
+        $_.LinkE = inner_court_N;
+        $_.LinkW = inner_court_NW;
+    }
+    {
+        var $_ = __inner_court_Ninner_court_NE;
+        $_.LinkE = inner_court_NE;
+        $_.LinkW = inner_court_N;
+    }
+    {
+        var $_ = _door_guard_room_W_0inner_court_SW;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = inner_court_SW;
+        $_.LinkS = guard_room_W_0;
+    }
+    {
+        var $_ = _door_guard_room_E_0inner_court_SE;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = inner_court_SE;
+        $_.LinkS = guard_room_E_0;
+    }
+    {
+        var $_ = _door_tower_SW_2wall_W;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = wall_W;
+        $_.LinkS = tower_SW_2;
+    }
+    {
+        var $_ = _door_wall_Wtower_NW_2;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = tower_NW_2;
+        $_.LinkS = wall_W;
+    }
+    {
+        var $_ = _door_tower_SE_2wall_E;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = wall_E;
+        $_.LinkS = tower_SE_2;
+    }
+    {
+        var $_ = _door_tower_SW_0guard_room_W_0;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Locked;
+        $_.Key = tower_key;
+        $_.LinkE = guard_room_W_0;
+        $_.LinkW = tower_SW_0;
+    }
+    {
+        var $_ = _opening_guard_room_W_0gate_house_W_0;
+        $_.Noun = "opening";
+        $_.LinkE = gate_house_W_0;
+        $_.LinkW = guard_room_W_0;
+    }
+    {
+        var $_ = _door_tower_SW_1guard_room_W_1;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = guard_room_W_1;
+        $_.LinkW = tower_SW_1;
+    }
+    {
+        var $_ = _opening_guard_room_W_1gate_house_W_1;
+        $_.Noun = "opening";
+        $_.LinkE = gate_house_W_1;
+        $_.LinkW = guard_room_W_1;
+    }
+    {
+        var $_ = _door_tower_SW_2wall_SW;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = wall_SW;
+        $_.LinkW = tower_SW_2;
+    }
+    {
+        var $_ = _door_wall_SWgate_house_2;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = gate_house_2;
+        $_.LinkW = wall_SW;
+    }
+    {
+        var $_ = _door_tower_NW_2wall_N;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = wall_N;
+        $_.LinkW = tower_NW_2;
+    }
+    {
+        var $_ = _door_tower_SE_0guard_room_E_0;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Locked;
+        $_.Key = tower_key;
+        $_.LinkE = tower_SE_0;
+        $_.LinkW = guard_room_E_0;
+    }
+    {
+        var $_ = _opening_guard_room_E_0gate_house_E_0;
+        $_.Noun = "opening";
+        $_.LinkE = guard_room_E_0;
+        $_.LinkW = gate_house_E_0;
+    }
+    {
+        var $_ = _door_tower_SE_1guard_room_E_1;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = tower_SE_1;
+        $_.LinkW = guard_room_E_1;
+    }
+    {
+        var $_ = _opening_guard_room_E_1gate_house_E_1;
+        $_.Noun = "opening";
+        $_.LinkE = guard_room_E_1;
+        $_.LinkW = gate_house_E_1;
+    }
+    {
+        var $_ = _door_tower_SE_2wall_SE;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = tower_SE_2;
+        $_.LinkW = wall_SE;
+    }
+    {
+        var $_ = _door_wall_SEgate_house_2;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = wall_SE;
+        $_.LinkW = gate_house_2;
+    }
+    {
+        var $_ = _stair_tower_SW_0tower_SW_1;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_SW_1;
+        $_.LinkD = tower_SW_0;
+    }
+    {
+        var $_ = _stair_tower_SW_1tower_SW_2;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_SW_2;
+        $_.LinkD = tower_SW_1;
+    }
+    {
+        var $_ = _stair_tower_SW_2tower_SW_roof;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_SW_roof;
+        $_.LinkD = tower_SW_2;
+    }
+    {
+        var $_ = _stair_tower_SE_0tower_SE_1;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_SE_1;
+        $_.LinkD = tower_SE_0;
+    }
+    {
+        var $_ = _stair_tower_SE_1tower_SE_2;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_SE_2;
+        $_.LinkD = tower_SE_1;
+    }
+    {
+        var $_ = _stair_tower_SE_2tower_SE_roof;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_SE_roof;
+        $_.LinkD = tower_SE_2;
+    }
+    {
+        var $_ = _stair_tower_NW_0tower_NW_1;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_NW_1;
+        $_.LinkD = tower_NW_0;
+    }
+    {
+        var $_ = _stair_tower_NW_1tower_NW_2;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_NW_2;
+        $_.LinkD = tower_NW_1;
+    }
+    {
+        var $_ = _stair_tower_NW_2tower_NW_roof;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_NW_roof;
+        $_.LinkD = tower_NW_2;
+    }
+    {
+        var $_ = _chest_guard_room_W_0;
+        $_.Location = guard_room_W_0;
+        $_.Noun = "chest";
+        $_.Adjectives = "large wooden";
+        $_.OpenAction = OpenContainer;
+        $_.CloseAction = CloseDoor;
+        $_.DescribeAction = DescribeContainer;
+        $_.PutInAction = PutInContainer;
+        $_.DoorState = DoorState.Closed;
+    }
+    {
+        var $_ = _lamp__chest_guard_room_W_0;
+        $_.Location = _chest_guard_room_W_0;
+        $_.Noun = "lamp";
+        $_.Adjectives = "oil";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.TurnOnAction = TurnOnCandle;
+        $_.TurnOffAction = PutOutCandle;
+        $_.IgniteAction = IgniteCandle;
+        $_.PutOutAction = PutOutCandle;
+        $_.LightState = LightState.Unlit;
+    }
+    {
+        var $_ = _tinderbox__chest_guard_room_W_0;
+        $_.Location = _chest_guard_room_W_0;
+        $_.Noun = "tinderbox";
+        $_.Adjectives = "small";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.UseOnAction = UseLighterOn;
+    }
+    {
+        var $_ = _dagger__chest_guard_room_W_0;
+        $_.Location = _chest_guard_room_W_0;
+        $_.Noun = "dagger";
+        $_.Adjectives = "short iron";
+        $_.TakeAction = TakeWeapon;
+        $_.DropAction = DropWeapon;
+        $_.UseAction = UseWeapon;
+        $_.AttackDamage = 20;
+    }
+    {
+        var $_ = __chest_guard_room_W_0_cap;
+        $_.Location = _chest_guard_room_W_0;
+        $_.Noun = "cap";
+        $_.Adjectives = "leather";
+        $_.TakeAction = TakeArmor;
+        $_.DropAction = DropArmor;
+        $_.UseAction = TakeArmor;
+        $_.ArmorKind = ArmorKind.Head;
+    }
+    {
+        var $_ = __chest_guard_room_W_0_vest;
+        $_.Location = _chest_guard_room_W_0;
+        $_.Noun = "vest";
+        $_.Adjectives = "leather";
+        $_.TakeAction = TakeArmor;
+        $_.DropAction = DropArmor;
+        $_.UseAction = TakeArmor;
+        $_.ArmorKind = ArmorKind.Torso;
+    }
+    {
+        var $_ = _door_store_roomstewards_room;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = stewards_room;
+        $_.LinkS = store_room;
+    }
+    {
+        var $_ = _door_knight_room_1knight_room_entry;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = knight_room_entry;
+        $_.LinkS = knight_room_1;
+    }
+    {
+        var $_ = _door_knight_room_entryknight_room_3;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = knight_room_3;
+        $_.LinkS = knight_room_entry;
+    }
+    {
+        var $_ = _door_knight_room_4armory;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = armory;
+        $_.LinkS = knight_room_4;
+    }
+    {
+        var $_ = _door_armorytower_NW_0;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.Key = tower_key;
+        $_.LinkN = tower_NW_0;
+        $_.LinkS = armory;
+    }
+    {
+        var $_ = _door_inner_court_NWhallway_NS;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = hallway_NS;
+        $_.LinkS = inner_court_NW;
+    }
+    {
+        var $_ = __hallway_NShallway_corner;
+        $_.LinkN = hallway_corner;
+        $_.LinkS = hallway_NS;
+    }
+    {
+        var $_ = _door_hallway_EWbakehouse;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = bakehouse;
+        $_.LinkS = hallway_EW;
+    }
+    {
+        var $_ = _door_store_roominner_court_SW;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = inner_court_SW;
+        $_.LinkW = store_room;
+    }
+    {
+        var $_ = _door_knight_room_2knight_room_entry;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = knight_room_entry;
+        $_.LinkW = knight_room_2;
+    }
+    {
+        var $_ = _door_knight_room_entryhallway_NS;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = hallway_NS;
+        $_.LinkW = knight_room_entry;
+    }
+    {
+        var $_ = _door_armoryhallway_corner;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = hallway_corner;
+        $_.LinkW = armory;
+    }
+    {
+        var $_ = __hallway_cornerhallway_EW;
+        $_.LinkE = hallway_EW;
+        $_.LinkW = hallway_corner;
+    }
+    {
+        var $_ = _door_hallway_EWcourtyard_N;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = courtyard_N;
+        $_.LinkW = hallway_EW;
+    }
+    {
+        var $_ = _rack_armory;
+        $_.Location = armory;
+        $_.Noun = "rack";
+        $_.Adjectives = "weapon";
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+    }
+    {
+        var $_ = _sword__rack_armory;
+        $_.Location = _rack_armory;
+        $_.Noun = "sword";
+        $_.Adjectives = "rusty short";
+        $_.TakeAction = TakeWeapon;
+        $_.DropAction = DropWeapon;
+        $_.UseAction = UseWeapon;
+        $_.AttackDamage = 30;
+    }
+    {
+        var $_ = _sword__rack_armory_1;
+        $_.Location = _rack_armory;
+        $_.Noun = "sword";
+        $_.Adjectives = "long";
+        $_.TakeAction = TakeWeapon;
+        $_.DropAction = DropWeapon;
+        $_.UseAction = UseWeapon;
+        $_.AttackDamage = 50;
+    }
+    {
+        var $_ = _chest_armory;
+        $_.Location = armory;
+        $_.Noun = "chest";
+        $_.Adjectives = "large wooden";
+        $_.OpenAction = OpenContainer;
+        $_.CloseAction = CloseDoor;
+        $_.DescribeAction = DescribeContainer;
+        $_.PutInAction = PutInContainer;
+        $_.DoorState = DoorState.Locked;
+        $_.Key = tower_key;
+    }
+    {
+        var $_ = __chest_armory_helmet;
+        $_.Location = _chest_armory;
+        $_.Noun = "helmet";
+        $_.Adjectives = "steel";
+        $_.TakeAction = TakeArmor;
+        $_.DropAction = DropArmor;
+        $_.UseAction = TakeArmor;
+        $_.ArmorKind = ArmorKind.Head;
+    }
+    {
+        var $_ = __chest_armory_shirt;
+        $_.Location = _chest_armory;
+        $_.Noun = "shirt";
+        $_.Adjectives = "chain mail";
+        $_.TakeAction = TakeArmor;
+        $_.DropAction = DropArmor;
+        $_.UseAction = TakeArmor;
+        $_.ArmorKind = ArmorKind.Torso;
+    }
+    {
+        var $_ = __chest_armory_leggings;
+        $_.Location = _chest_armory;
+        $_.Noun = "leggings";
+        $_.Adjectives = "chain";
+        $_.TakeAction = TakeArmor;
+        $_.DropAction = DropArmor;
+        $_.UseAction = TakeArmor;
+        $_.ArmorKind = ArmorKind.Leg;
+    }
+    {
+        var $_ = _door_inner_court_Ngreat_hall_W;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = great_hall_W;
+        $_.LinkS = inner_court_N;
+    }
+    {
+        var $_ = _door_kitchenpantry;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = pantry;
+        $_.LinkS = kitchen;
+    }
+    {
+        var $_ = _door_lords_chamberparlor;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = parlor;
+        $_.LinkS = lords_chamber;
+    }
+    {
+        var $_ = _door_parlorcourt;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = court;
+        $_.LinkS = parlor;
+    }
+    {
+        var $_ = _door_hallway_NSkitchen;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = kitchen;
+        $_.LinkW = hallway_NS;
+    }
+    {
+        var $_ = _door_kitchengreat_hall_W;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = great_hall_W;
+        $_.LinkW = kitchen;
+    }
+    {
+        var $_ = _door_pantrybuttery;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = buttery;
+        $_.LinkW = pantry;
+    }
+    {
+        var $_ = __great_hall_Wgreat_hall_E;
+        $_.LinkE = great_hall_E;
+        $_.LinkW = great_hall_W;
+    }
+    {
+        var $_ = _door_great_hall_Ecourt;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = court;
+        $_.LinkW = great_hall_E;
+    }
+    {
+        var $_ = bed_lords_chamber;
+        $_.Location = lords_chamber;
+        $_.Noun = "bed";
+        $_.Adjectives = "large four-poster";
+        $_.UseAction = UseBed;
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+    }
+    {
+        var $_ = _chest_lords_chamber;
+        $_.Location = lords_chamber;
+        $_.Noun = "chest";
+        $_.Adjectives = "carved wooden";
+        $_.OpenAction = OpenContainer;
+        $_.CloseAction = CloseDoor;
+        $_.DescribeAction = DescribeContainer;
+        $_.PutInAction = PutInContainer;
+        $_.DoorState = DoorState.Closed;
+    }
+    {
+        var $_ = _stair_tower_NE_0tower_NE_1;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_NE_1;
+        $_.LinkD = tower_NE_0;
+    }
+    {
+        var $_ = _stair_tower_NE_1tower_NE_2;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_NE_2;
+        $_.LinkD = tower_NE_1;
+    }
+    {
+        var $_ = _stair_tower_NE_2tower_NE_3;
+        $_.Noun = "stair";
+        $_.Adjectives = "spiral stone";
+        $_.LinkU = tower_NE_3;
+        $_.LinkD = tower_NE_2;
+    }
+    {
+        var $_ = __inner_court_Sfairyland_N;
+        $_.LinkN = inner_court_S;
+        $_.LinkS = fairyland_N;
+    }
+    {
+        var $_ = __fairyland_Nfairyland_center;
+        $_.LinkN = fairyland_N;
+        $_.LinkS = fairyland_center;
+    }
+    {
+        var $_ = __fairyland_centerfairyland_S;
+        $_.LinkN = fairyland_center;
+        $_.LinkS = fairyland_S;
+    }
+    {
+        var $_ = __fairyland_NWfairyland_W;
+        $_.LinkN = fairyland_NW;
+        $_.LinkS = fairyland_W;
+    }
+    {
+        var $_ = __fairyland_Wfairyland_SW;
+        $_.LinkN = fairyland_W;
+        $_.LinkS = fairyland_SW;
+    }
+    {
+        var $_ = __fairyland_NWfairyland_N;
+        $_.LinkE = fairyland_N;
+        $_.LinkW = fairyland_NW;
+    }
+    {
+        var $_ = __fairyland_Nfairyland_NE;
+        $_.LinkE = fairyland_NE;
+        $_.LinkW = fairyland_N;
+    }
+    {
+        var $_ = _door_fairyland_stablefairyland_W;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = fairyland_W;
+        $_.LinkW = fairyland_stable;
+    }
+    {
+        var $_ = __fairyland_Wfairyland_center;
+        $_.LinkE = fairyland_center;
+        $_.LinkW = fairyland_W;
+    }
+    {
+        var $_ = __fairyland_SWfairyland_S;
+        $_.LinkE = fairyland_S;
+        $_.LinkW = fairyland_SW;
+    }
+    {
+        var $_ = __fairyland_Sfairyland_SE;
+        $_.LinkE = fairyland_SE;
+        $_.LinkW = fairyland_S;
+    }
+    {
+        var $_ = _gate_fairyland_centerfairyland_church_yard_W;
+        $_.Noun = "gate";
+        $_.Adjectives = "wooden";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = fairyland_church_yard_W;
+        $_.LinkW = fairyland_center;
+    }
+    {
+        var $_ = _door_fairyland_church_yard_Wfairyland_church_W;
+        $_.Noun = "door";
+        $_.Adjectives = "carved wooden";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.Key = church_key;
+        $_.LinkE = fairyland_church_W;
+        $_.LinkW = fairyland_church_yard_W;
+    }
+    {
+        var $_ = __fairyland_church_Wfairyland_church_E;
+        $_.LinkE = fairyland_church_E;
+        $_.LinkW = fairyland_church_W;
+    }
+    {
+        var $_ = _door_fairyland_church_yard_Sfairyland_priest_house;
+        $_.Noun = "door";
+        $_.Adjectives = "oak";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Locked;
+        $_.Key = church_key;
+        $_.LinkE = fairyland_priest_house;
+        $_.LinkW = fairyland_church_yard_S;
+    }
+    {
+        var $_ = __fairyland_church_yard_Sfairyland_church_yard_W;
+        $_.LinkN = fairyland_church_yard_W;
+        $_.LinkS = fairyland_church_yard_S;
+    }
+    {
+        var $_ = __fairyland_church_yard_Wfairyland_church_yard_N;
+        $_.LinkN = fairyland_church_yard_N;
+        $_.LinkS = fairyland_church_yard_W;
+    }
+    {
+        var $_ = __fairyland_church_Efairyland_side_chapel;
+        $_.LinkN = fairyland_side_chapel;
+        $_.LinkS = fairyland_church_E;
+    }
+    {
+        var $_ = _door_fairyland_priest_housefairyland_church_E;
+        $_.Noun = "door";
+        $_.Adjectives = "small wooden";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkN = fairyland_church_E;
+        $_.LinkS = fairyland_priest_house;
+    }
+    {
+        var $_ = bed_fairyland_priest_house;
+        $_.Location = fairyland_priest_house;
+        $_.Noun = "bed";
+        $_.Adjectives = "lumpy";
+        $_.UseAction = UseBed;
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+    }
+    {
+        var $_ = _trunk_fairyland_priest_house;
+        $_.Location = fairyland_priest_house;
+        $_.Noun = "trunk";
+        $_.Adjectives = "pine";
+        $_.OpenAction = OpenContainer;
+        $_.CloseAction = CloseDoor;
+        $_.DescribeAction = DescribeContainer;
+        $_.PutInAction = PutInContainer;
+        $_.DoorState = DoorState.Closed;
+    }
+    {
+        var $_ = _robe_trunk_fairyland_priest_house;
+        $_.Location = _trunk_fairyland_priest_house;
+        $_.Noun = "robe";
+        $_.Adjectives = "black";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+    }
+    {
+        var $_ = _table_fairyland_priest_house;
+        $_.Location = fairyland_priest_house;
+        $_.Noun = "table";
+        $_.Adjectives = "wooden writing";
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+    }
+    {
+        var $_ = _paper_table_fairyland_priest_house;
+        $_.Location = _table_fairyland_priest_house;
+        $_.Noun = "paper";
+        $_.Adjectives = "white";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.Description = "The paper reads, 'My warnings have gone unheeded. The people have continued to offer sacrifice to infernal beings, and now we have been drawn into their world. Fiends are all around us! If we cannot escape this place, may God have mercy on our souls!'";
+    }
+    {
+        var $_ = inner_court_NE_well;
+        $_.Location = inner_court_NE;
+        $_.Noun = "well";
+        $_.UseAction = UseWell;
+    }
+    {
+        var $_ = outer_court_NW_well;
+        $_.Location = outer_court_NW;
+        $_.Noun = "well";
+        $_.UseAction = UseWell;
+    }
+    {
+        var $_ = fairyland_NW_well;
+        $_.Location = fairyland_NW;
+        $_.Noun = "well";
+        $_.UseAction = UseWell;
+    }
+    {
+        var $_ = _hallway_NS_goblin;
+        $_.Location = hallway_NS;
+        $_.Noun = "goblin";
+        $_.Adjectives = "small";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.UpdateAction = UpdateSurprisedMonster;
+        $_.OnAttackedAction = OnMonsterAttacked;
+        $_.Health = 50;
+        $_.MaxHealth = 50;
+        $_.AttackDamage = 20;
+        $_.DamageResistance = 10;
+    }
+    {
+        var $_ = _kitchen_imp;
+        $_.Location = kitchen;
+        $_.Noun = "imp";
+        $_.Adjectives = "hairy";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.UpdateAction = UpdateSurprisedMonster;
+        $_.OnAttackedAction = OnMonsterAttacked;
+        $_.Health = 40;
+        $_.MaxHealth = 40;
+        $_.AttackDamage = 20;
+        $_.DamageResistance = 10;
+    }
+    {
+        var $_ = _parlor_orc;
+        $_.Location = parlor;
+        $_.Noun = "orc";
+        $_.Adjectives = "large";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.UpdateAction = UpdateSurprisedMonster;
+        $_.OnAttackedAction = OnMonsterAttacked;
+        $_.Health = 100;
+        $_.MaxHealth = 100;
+        $_.AttackDamage = 30;
+        $_.DamageResistance = 10;
+    }
+    {
+        var $_ = _tower_NE_1_troll;
+        $_.Location = tower_NE_1;
+        $_.Noun = "troll";
+        $_.Adjectives = "cave";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.UpdateAction = UpdateSurprisedMonster;
+        $_.OnAttackedAction = OnMonsterAttacked;
+        $_.Health = 300;
+        $_.MaxHealth = 300;
+        $_.AttackDamage = 50;
+        $_.DamageResistance = 30;
+    }
+}
+turn
+{
+    if (player.Location == null)
+    {
+        Message("Error: player.Location has not been set.");
+    }
+    IncrementTime();if (player.Location == null)
+    {
+        Message("Error: player.Location has not been set.");
+    }
+    else
+    {
+        InitializeLighting();
+        InitializeWordMap();
+    }
+    UpdateItems();$currentFairyMessage = null;
+}

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "OxbowCastle (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "OxbowCastle (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
