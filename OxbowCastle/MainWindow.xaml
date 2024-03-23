@@ -71,7 +71,7 @@
             <ScrollViewer x:Name="m_outputScrollViewer" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}">
                 <StackPanel x:Name="m_outputStackPanel" Margin="20,10,20,10"/>
             </ScrollViewer>
-            <TextBox Grid.Row="1" x:Name="m_commandTextBox" KeyDown="TextBox_KeyDown"/>
+            <TextBox Grid.Row="1" x:Name="m_commandTextBox" KeyDown="TextBox_KeyDown" PlaceholderText="Type a command and press ENTER."/>
         </Grid>
     </Grid>
 </Window>
