@@ -1,54 +1,54 @@
-TestFiles\LexerTest.txt(2,0): Variable: $var
-TestFiles\LexerTest.txt(2,4): Symbol: Assign
-TestFiles\LexerTest.txt(2,6): String: 'String'
-TestFiles\LexerTest.txt(3,0): FormatString: 'Format {$var}'
-TestFiles\LexerTest.txt(3,16): String: 'Literal String'
-TestFiles\LexerTest.txt(6,0): Symbol: LeftParen
-TestFiles\LexerTest.txt(6,1): Int: 10
-TestFiles\LexerTest.txt(6,3): Symbol: Minus
-TestFiles\LexerTest.txt(6,5): Int: 2
-TestFiles\LexerTest.txt(6,7): Symbol: RightParen
-TestFiles\LexerTest.txt(6,8): Symbol: Times
-TestFiles\LexerTest.txt(6,10): Symbol: LeftParen
-TestFiles\LexerTest.txt(6,12): Int: 7
-TestFiles\LexerTest.txt(6,13): Symbol: Plus
-TestFiles\LexerTest.txt(6,15): Int: 1
-TestFiles\LexerTest.txt(6,17): Symbol: RightParen
-TestFiles\LexerTest.txt(6,18): Symbol: Divide
-TestFiles\LexerTest.txt(6,19): Int: 3
-TestFiles\LexerTest.txt(7,0): Symbol: Comma
-TestFiles\LexerTest.txt(7,1): Symbol: Or
-TestFiles\LexerTest.txt(7,4): Symbol: And
-TestFiles\LexerTest.txt(7,7): Symbol: Not
-TestFiles\LexerTest.txt(7,9): Symbol: Semicolon
-TestFiles\LexerTest.txt(7,11): Symbol: Colon
-TestFiles\LexerTest.txt(7,13): Symbol: Assign
-TestFiles\LexerTest.txt(7,15): Symbol: Less
-TestFiles\LexerTest.txt(7,17): Symbol: Greater
-TestFiles\LexerTest.txt(7,19): Symbol: Equals
-TestFiles\LexerTest.txt(7,22): Symbol: LessEquals
-TestFiles\LexerTest.txt(7,25): Symbol: GreaterEquals
-TestFiles\LexerTest.txt(7,28): Symbol: NotEquals
-TestFiles\LexerTest.txt(7,31): Symbol: Lambda
-TestFiles\LexerTest.txt(7,34): Symbol: RightArrow
-TestFiles\LexerTest.txt(10,0): Name: function
-TestFiles\LexerTest.txt(10,8): Symbol: LeftParen
-TestFiles\LexerTest.txt(10,9): Variable: $arg1
-TestFiles\LexerTest.txt(10,14): Symbol: Colon
-TestFiles\LexerTest.txt(10,15): Name: item
-TestFiles\LexerTest.txt(10,19): Symbol: Comma
-TestFiles\LexerTest.txt(10,20): Variable: $arg2
-TestFiles\LexerTest.txt(10,26): Symbol: Colon
-TestFiles\LexerTest.txt(10,27): Name: item
-TestFiles\LexerTest.txt(10,31): Symbol: RightParen
-TestFiles\LexerTest.txt(10,32): Symbol: Colon
-TestFiles\LexerTest.txt(10,34): Name: item
-TestFiles\LexerTest.txt(11,0): Symbol: LeftBrace
-TestFiles\LexerTest.txt(12,0): Variable: $varname
-TestFiles\LexerTest.txt(12,11): Symbol: Assign
-TestFiles\LexerTest.txt(12,13): Variable: $arg1
-TestFiles\LexerTest.txt(12,19): Symbol: Period
-TestFiles\LexerTest.txt(12,20): Name: Prop
-TestFiles\LexerTest.txt(12,24): Symbol: Semicolon
-TestFiles\LexerTest.txt(13,0): Symbol: RightBrace
+LexerTest.txt (2,0): Variable: $var
+LexerTest.txt (2,4): Symbol: Assign
+LexerTest.txt (2,6): String: 'String'
+LexerTest.txt (3,0): FormatString: 'Format {$var}'
+LexerTest.txt (3,16): String: 'Literal String'
+LexerTest.txt (6,0): Symbol: LeftParen
+LexerTest.txt (6,1): Int: 10
+LexerTest.txt (6,3): Symbol: Minus
+LexerTest.txt (6,5): Int: 2
+LexerTest.txt (6,7): Symbol: RightParen
+LexerTest.txt (6,8): Symbol: Times
+LexerTest.txt (6,10): Symbol: LeftParen
+LexerTest.txt (6,12): Int: 7
+LexerTest.txt (6,13): Symbol: Plus
+LexerTest.txt (6,15): Int: 1
+LexerTest.txt (6,17): Symbol: RightParen
+LexerTest.txt (6,18): Symbol: Divide
+LexerTest.txt (6,19): Int: 3
+LexerTest.txt (7,0): Symbol: Comma
+LexerTest.txt (7,1): Symbol: Or
+LexerTest.txt (7,4): Symbol: And
+LexerTest.txt (7,7): Symbol: Not
+LexerTest.txt (7,9): Symbol: Semicolon
+LexerTest.txt (7,11): Symbol: Colon
+LexerTest.txt (7,13): Symbol: Assign
+LexerTest.txt (7,15): Symbol: Less
+LexerTest.txt (7,17): Symbol: Greater
+LexerTest.txt (7,19): Symbol: Equals
+LexerTest.txt (7,22): Symbol: LessEquals
+LexerTest.txt (7,25): Symbol: GreaterEquals
+LexerTest.txt (7,28): Symbol: NotEquals
+LexerTest.txt (7,31): Symbol: Lambda
+LexerTest.txt (7,34): Symbol: RightArrow
+LexerTest.txt (10,0): Name: function
+LexerTest.txt (10,8): Symbol: LeftParen
+LexerTest.txt (10,9): Variable: $arg1
+LexerTest.txt (10,14): Symbol: Colon
+LexerTest.txt (10,15): Name: item
+LexerTest.txt (10,19): Symbol: Comma
+LexerTest.txt (10,20): Variable: $arg2
+LexerTest.txt (10,26): Symbol: Colon
+LexerTest.txt (10,27): Name: item
+LexerTest.txt (10,31): Symbol: RightParen
+LexerTest.txt (10,32): Symbol: Colon
+LexerTest.txt (10,34): Name: item
+LexerTest.txt (11,0): Symbol: LeftBrace
+LexerTest.txt (12,0): Variable: $varname
+LexerTest.txt (12,11): Symbol: Assign
+LexerTest.txt (12,13): Variable: $arg1
+LexerTest.txt (12,19): Symbol: Period
+LexerTest.txt (12,20): Name: Prop
+LexerTest.txt (12,24): Symbol: Semicolon
+LexerTest.txt (13,0): Symbol: RightBrace
 None
