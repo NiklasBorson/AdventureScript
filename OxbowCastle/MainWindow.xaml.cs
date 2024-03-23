@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using System.Collections.Generic;
 using System.IO;
 using AdventureLib;
+using System.Linq;
 
 namespace OxbowCastle
 {
@@ -10,12 +11,21 @@ namespace OxbowCastle
     {
         string m_gamePath = string.Empty;
         GameState m_game = null;
+        string[] m_lastOutput = null;
+
 
         public MainWindow()
         {
             this.InitializeComponent();
 
             InitializeGameList();
+
+            this.AppWindow.Closing += AppWindow_Closing;
+        }
+
+        private void AppWindow_Closing(Microsoft.UI.Windowing.AppWindow sender, Microsoft.UI.Windowing.AppWindowClosingEventArgs args)
+        {
+            SaveGame();
         }
 
         void InitializeGameList()
@@ -86,6 +96,26 @@ namespace OxbowCastle
             StartGame(Path.Combine(gameDir, App.GameFileName));
         }
 
+        void SaveGame()
+        {
+            if (m_game != null)
+            {
+                using (var writer = new StreamWriter(m_gamePath))
+                {
+                    if (m_lastOutput != null)
+                    {
+                        writer.WriteLine("game {");
+                        foreach (var para in m_lastOutput)
+                        {
+                            writer.WriteLine("    Message(\"{0}\");", para);
+                        }
+                        writer.WriteLine('}');
+                    }
+                    m_game.Save(writer);
+                }
+            }
+        }
+
         void AddOutputText(string text, Style style)
         {
             m_outputStackPanel.Children.Add(new TextBlock
@@ -113,6 +143,8 @@ namespace OxbowCastle
 
         void AddOutput(IList<string> output)
         {
+            m_lastOutput = output.ToArray();
+
             foreach (var para in output)
             {
                 if (para.StartsWith("# "))
