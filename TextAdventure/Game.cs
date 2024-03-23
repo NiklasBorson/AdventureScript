@@ -169,10 +169,5 @@ namespace TextAdventure
                 input = Console.ReadLine();
             }
         }
-
-        public void Save(string fileName)
-        {
-            m_game.Save(fileName);
-        }
     }
 }
