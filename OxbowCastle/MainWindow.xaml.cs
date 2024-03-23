@@ -95,6 +95,22 @@ namespace OxbowCastle
             });
         }
 
+        void AddOutputListItem(string text)
+        {
+            var grid = new Grid();
+            grid.Children.Add(new TextBlock
+            {
+                Text = "\x2022",
+                Style = m_listBulletStyle
+            });
+            grid.Children.Add(new TextBlock
+            {
+                Text = text,
+                Style = m_listParaStyle
+            });
+            m_outputStackPanel.Children.Add(grid);
+        }
+
         void AddOutput(IList<string> output)
         {
             foreach (var para in output)
@@ -102,6 +118,10 @@ namespace OxbowCastle
                 if (para.StartsWith("# "))
                 {
                     AddOutputText(para.Substring(2), m_headingParaStyle);
+                }
+                else if (para.StartsWith("- "))
+                {
+                    AddOutputListItem(para.Substring(2));
                 }
                 else
                 {
