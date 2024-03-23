@@ -25,7 +25,7 @@
 
         public override void WriteExpr(GameState game, CodeWriter writer)
         {
-            m_type.WriteValue(game, m_value, writer);
+            m_type.WriteValue(game, m_value, writer.TextWriter);
         }
     }
 }

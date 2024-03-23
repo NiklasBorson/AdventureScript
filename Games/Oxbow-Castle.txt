@@ -1,0 +1,1373 @@
+include "inc/Foundation-Debug.md";
+include "inc/Foundation.md";
+include "inc/Foundation-Combat.md";
+
+#############################################
+#
+# Item declarations
+#
+
+#
+# Outer court rooms
+#
+item outside;
+item outer_court_SW;
+item outer_court_S;
+item outer_court_SE;
+item stable;
+item outer_court_W;
+item outer_court_center;
+item outer_court_NW;
+item outer_court_N;
+item outer_court_NE;
+
+#
+# Church rooms
+#
+item church_yard_W;
+item church_yard_S;
+item church_yard_N;
+item church_W;
+item church_E;
+item side_chapel;
+item priest_house;
+
+#
+# Church items
+#
+item church_key;
+
+#
+# Inner court rooms
+#
+item inner_gate;
+item inner_court_S;
+item inner_court_SW;
+item inner_court_SE;
+item inner_court_N;
+item inner_court_NW;
+item inner_court_NE;
+
+#
+# Inner court items
+#
+item inner_court_statue;
+
+#
+# Walls and towers
+#
+item guard_room_W_0;
+item guard_room_E_0;
+item guard_room_W_1;
+item guard_room_E_1;
+item tower_SW_0;
+item tower_SW_1;
+item tower_SW_2;    # aligns with wall
+item tower_SW_roof;
+item tower_SE_0;
+item tower_SE_1;
+item tower_SE_2;    # aligns with wall
+item tower_SE_roof;
+item tower_NW_0;
+item tower_NW_1;
+item tower_NW_2;    # aligns with wall
+item tower_NW_roof;
+item gate_house_W_0;
+item gate_house_W_1;
+item gate_house_E_0;
+item gate_house_E_1;
+item gate_house_2;  # aligns with wall
+item gate_house_roof;
+item wall_SW;
+item wall_SE;
+item wall_W;
+item wall_E;
+item wall_N;
+
+#
+# Wall and tower items
+#
+item tower_key;
+
+#
+# West keep rooms
+#
+item store_room;
+item stewards_room;
+item knight_room_1;
+item knight_room_2;
+item knight_room_3;
+item knight_room_4;
+item knight_room_entry;
+item armory;
+item bakehouse;
+item hallway_NS;
+item hallway_corner;
+item hallway_EW;
+item courtyard_N;
+
+#
+# East keep rooms
+#
+item kitchen;
+item pantry;
+item buttery;
+item great_hall_W;
+item great_hall_E;
+item court;
+item parlor;
+item lords_chamber;
+item library;
+
+#
+# East keep items
+#
+item court_throne;
+item library_door;
+item library_key;
+item library_statue;
+
+#
+# Northeast tower rooms
+#
+item tower_NE_0;
+item tower_NE_1;
+item tower_NE_2;
+item tower_NE_3;
+
+#
+# Northeast tower items
+#
+item tower_NE_door;
+item kings_table;
+item silver_cup;
+item fairy_king;
+item fairy_prince1;
+item fairy_prince2;
+
+#
+# Fairlyland rooms
+#
+item fairyland_NW;
+item fairyland_N;
+item fairyland_NE;
+item fairyland_stable;
+item fairyland_W;
+item fairyland_center;
+item fairyland_SW;
+item fairyland_S;
+item fairyland_SE;
+
+#
+# Fairyland items.
+#
+item fairyland_table;
+item fairyland_food;
+item fairyland_wine;
+item fairy1;
+item fairy2;
+item fairy3;
+item fairy4;
+item fairy5;
+
+#
+# Fairyland church rooms
+#
+item fairyland_church_yard_W;
+item fairyland_church_yard_S;
+item fairyland_church_yard_N;
+item fairyland_church_W;
+item fairyland_church_E;
+item fairyland_side_chapel;
+item fairyland_priest_house;
+
+#
+# Fairyland church items
+#
+item priest;
+item maid;
+
+#############################################
+#
+# Welcome message
+#
+game
+{
+    Message("# Welcome to Oxbow Castle");
+    Message(
+        "You are a messenger sent by King Peregrin the Paranoid to find out what has "
+        "become of Oxbow castle and its ruler, Lord Kevin. Previous messengers have not "
+        "returned, and the king has begin to suspect Lord Kevin of plotting against him."
+    );
+    Message(
+        "That is one possibility, but you have also heard stranger rumors. In the "
+        "taverns, people whisper that something dark and sinister has befallen the "
+        "place. Of course, it may just be the ale talking. You are here to find out!"
+    );
+    Message(
+        "Oxbow Castle is situated in a sharp bend of the river Oxyl, such that it is "
+        "surrounded on three sides by water. It is late morning, and you have just "
+        "arrived at the only entrance to the castle, an open iron gate in the south "
+        "wall. It is strangely silent. No one seems to be around."
+    );
+    Message(
+        "At any time you can type 'help' to see a list of commands you can say."
+    );
+
+    player.Location = outside;
+}
+
+command "help"
+{
+    Message("Following are commands you can say:");
+    ListCommands();
+}
+
+#############################################
+#
+# IsDark Initialization
+#
+game
+{
+    # Set the IsDark predicate for all rooms to IsDarkAtNight.
+    # Setting this for non-room items has no effect.
+    foreach (var $item)
+    {
+        $item.IsDark = IsDarkAtNight;
+    }
+
+    # Make specific rooms dark always.
+    tower_NW_0.IsDark = IsDarkAlways;
+    tower_SW_0.IsDark = IsDarkAlways;
+    tower_SE_0.IsDark = IsDarkAlways;
+    tower_NE_0.IsDark = IsDarkAlways;
+    gate_house_W_0.IsDark = IsDarkAlways;
+    gate_house_E_0.IsDark = IsDarkAlways;
+    hallway_NS.IsDark = IsDarkAlways;
+    hallway_corner.IsDark = IsDarkAlways;
+    hallway_EW.IsDark = IsDarkAlways;
+    pantry.IsDark = IsDarkAlways;
+    buttery.IsDark = IsDarkAlways;
+    store_room.IsDark = IsDarkAlways;
+    stewards_room.IsDark = IsDarkAlways;
+    knight_room_1.IsDark = IsDarkAlways;
+    knight_room_2.IsDark = IsDarkAlways;
+    knight_room_3.IsDark = IsDarkAlways;
+    knight_room_4.IsDark = IsDarkAlways;
+    knight_room_entry.IsDark = IsDarkAlways;
+    armory.IsDark = IsDarkAlways;
+}
+
+#############################################
+#
+# Outer court
+#
+game
+{
+    # Outer court descriptions
+    outside.Description = "You are outside the main gate of Oxbow Castle.";
+    outer_court_S.Description = 
+        "You are at the south end of a large courtyard, which extends to the North, East, and West. "
+        "At the north end of the courtyard you can see the high walls of the keep.";
+    outer_court_SW.Description =
+        "You are at the southwest corner of a large outer courtyard, which extends to the North and East. "
+        "The south and west walls meet in a small round tower, which is open to the inside. There is nothing "
+        "in the tower.";
+    outer_court_SE.Description = 
+        "You are in the southeast corner of a large outer courtyard, which extends to the West. The way north "
+        "is blocked by a stone wall behind which you can see a tall stone church. The south and east walls meet "
+        "in a small round tower, which is open to the inside. There is nothing in the tower.";
+    stable.Description =
+        "You are in a large wooden stable with room for many horses. Neither hay nor horses are to be found "
+        "here now, only their lingering smell.";
+    outer_court_W.Description = 
+        "You are at the west side of a large outer courtyard, which extends to the North, South, and East. "
+        "Against the wall to your west is a wooden stable.";
+    outer_court_center.Description =
+        "You are in the center of a large outer courtyard, which extends to the North, West, and South. East "
+        "of you is a stone wall with a wooden gate behind which you can see a tall stone church.";
+    outer_court_NW.Description =
+        "You are in the northwest corner of a large outer courtyard, which extends to the South and East. "
+        "The high wall of the keep looms above you to the North.";
+    outer_court_N.Description = 
+        "You are at the north end of a large outer courtyard, which extends to the West, East, and South. "
+        "Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on "
+        "either side of an open portcullis.";
+    outer_court_NE.Description =
+        "You are in the northeast corner of a large outer courtyard, which extends to the West. The high wall "
+        "of the keep looms above you to the North. The way south is blocked by a stone wall behind which you "
+        "can see a tall stone church.";
+
+    # Outer court northward links
+    NewDoorItem(outside, outer_court_S, Direction.North, "iron", "gate", DoorState.Open);
+    NewLink(outer_court_SW, outer_court_W, Direction.North);
+    NewLink(outer_court_S, outer_court_center, Direction.North);
+    NewLink(outer_court_W, outer_court_NW, Direction.North);
+    NewLink(outer_court_center, outer_court_N, Direction.North);
+
+    # Outer court eastward links
+    NewLink(outer_court_SW, outer_court_S, Direction.East);
+    NewLink(outer_court_S, outer_court_SE, Direction.East);
+    NewClosedDoor(stable, outer_court_W, Direction.East);
+    NewLink(outer_court_W, outer_court_center, Direction.East);
+    NewLink(outer_court_NW, outer_court_N, Direction.East);
+    NewLink(outer_court_N, outer_court_NE, Direction.East);
+}
+
+#############################################
+#
+# Church
+#
+game
+{
+    # Church descriptions.
+    church_yard_W.Description =
+        "You are in a walled church yard. East of you is the arched doorway of a beautiful stone "
+        "church. The church yard wraps around the church to the North and South.";
+    church_yard_S.Description = 
+        "You are in a walled church yard south of the church. The church yard wraps around the church "
+        "to the North. East of you is a smaller stone building adjoining the church.";
+    church_yard_N.Description =
+        "You are in a walled churcn yard north of the church. The church yard wraps around the church "
+        "to the South. There are graves here.";
+    church_W.Description =
+        "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
+        "stone columns on either side. Windows set high in the walls let in light.";
+    church_E.Description =
+        "You are at the east end of the church. A long aisle runs from here to the West. Between "
+        "fluted columns to the North, you can see a side chapel.";
+    side_chapel.Description =
+        "You are in a side chapel with statues of saints. An opening to the South leads to the "
+        "main part of the church.";
+    priest_house.Description =
+        "You are in a one-room house, presumably the priest's residence.";
+
+    # Church eastward links.
+    NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
+    NewDoorItem(church_yard_W, church_W, Direction.East, "carved wooden", "door", DoorState.Closed).Key = church_key;
+    NewLink(church_W, church_E, Direction.East);
+    NewDoorItem(church_yard_S, priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = church_key;
+
+    # Church north links.
+    NewLink(church_yard_S, church_yard_W, Direction.North);
+    NewLink(church_yard_W, church_yard_N, Direction.North);
+    NewLink(church_E, side_chapel, Direction.North);
+    NewDoorItem(priest_house, church_E, Direction.North, "small wooden", "door", DoorState.Closed);
+}
+
+#############################################
+#
+# Priest house
+#
+game
+{
+    # Initialize priest house items
+    NewBed("lumpy", "bed", priest_house);
+
+    # Add trunk to priest house.
+    var $trunk = NewContainer("pine", "trunk", DoorState.Closed, priest_house);
+    NewPortableItem("black", "robe", $trunk);
+    InitializeKey(church_key, "ornate brass", "key", $trunk);
+
+    # Add table to priest house.
+    var $table = NewTable("wooden writing", "table", priest_house);
+    NewPortableItem("white", "paper", $table).Description =
+        "The paper appears to be a draft of a sermon. Between scratched-out words and ink blots, you "
+        "read a passionate diatribe criticizing the people for holding superstitious beliefs about "
+        "goblins and fairies.";
+}
+
+#############################################
+#
+# Special behavior when entering keep from outer court
+#
+function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
+{
+    if ($from == outer_court_N && $to == inner_court_S)
+    {
+        Message(
+            "You pass through the open portcullis into a dim tunnel. High in the walls on "
+            "either side are arrow loops through which defenders could rain down fire on "
+            "an attacker, and in the ceiling above you are murder holes through which "
+            "boulders could be dropped. However, no one challenges you or raises an alarm."
+            );
+        Message(
+            "At the north end of the tunnel, you pass through another open gate into an "
+            "inner courtyard. For a moment, the air around you seems to shimmer, but "
+            "perhaps you are only dazzled by the sun after leaving the dim tunnel."
+        );
+    }
+}
+
+function OnEnterCouterCourt($from:Item, $to:Item) : Bool
+{
+    if ($from == inner_court_S && $to == outer_court_N)
+    {
+        Message(
+            "You pass through the gate house tunnel and back into the outer courtyard. "
+            "It's the real outer couryard, not the forested fairyland with the purple "
+            "sky! You have broken the enchantment and reconnected the keep with the "
+            "real world."
+        );
+
+        if (priest.Location == inner_court_S && maid.Location == inner_court_S)
+        {
+            Message("The priest and maid follow you to safety.");
+        }
+        else
+        {
+            Message("It's a pity you didn't rescue the survivors...");
+        }
+
+        Message("Congratulations! You have won the game!");
+        EndGame(true);
+    }
+}
+
+#############################################
+#
+# Inner court
+#
+game
+{
+    # One-way link from outer court to inner court via. inner_gate.
+    LinkRoomsOneWay(outer_court_N, inner_court_S, inner_gate, Direction.North);
+    outer_court_N.LeaveAction = OnLeaveOuterCourt;
+    outer_court_N.EnterAction = OnEnterCouterCourt;
+
+    # Inner court descriptions
+    inner_court_S.Description =
+        "You are at the south end of the inner courtyard, which extends to the "
+        "North, East, and West. South of you is the main gatehouse of the keep "
+        "with its inner gate open. Across the courtyard to the North is the "
+        "great hall. Other buildings surround the courtyard on all sides.";
+    inner_court_SW.Description =
+        "You are in the southwest corner of the inner courtyard, which extends to "
+        "the North and East.";
+    inner_court_SE.Description =
+        "You are in the southeast corner of the inner courtyard, which extends to "
+        "the North and West.";
+    inner_court_N.Description =
+        "You are at the north end of the inner courtyard, which extends to the "
+        "South, East, and West.";
+    inner_court_NW.Description =
+        "You are in the northwest corner of the inner courtyard, which extends "
+        "to the South and East.";
+    inner_court_NE.Description =
+        "You are in the northeast corner of the inner courtyard, which extends "
+        "to the South and West.";
+    
+    # Inner court northward links
+    NewLink(inner_court_S, inner_court_N, Direction.North);
+    NewLink(inner_court_SW, inner_court_NW, Direction.North);
+    NewLink(inner_court_SE, inner_court_NE, Direction.North);
+
+    # Inner court eastward links
+    NewLink(inner_court_SW, inner_court_S, Direction.East);
+    NewLink(inner_court_S, inner_court_SE, Direction.East);
+    NewLink(inner_court_NW, inner_court_N, Direction.East);
+    NewLink(inner_court_N, inner_court_NE, Direction.East);
+}
+
+#############################################
+#
+# Inner court statue
+#
+# This is the key to getting out the keep and winning the game.
+#
+function PutInSilverCup($item:Item, $target:Item)
+{
+    if ($item == fairyland_wine)
+    {
+        Message(
+            "You pour the wine into the silver cup. Suddenly, the statue comes to "
+            "life. It says, 'The guests can't leave until the last cup is poured!' "
+            "and drains the cup in one long draft."
+        );
+
+        Message(
+            "The statue then vanishes with a flash of light. There is a sudden "
+            "breeze, and a not-unpleasant smell of grass and manure wafts in from "
+            "the open gate south of you."
+        );
+
+        # The statue is now gone.
+        inner_court_statue.Location = null;
+
+        # Link the inner court back to the real world.
+        LinkRoomsOneWay(inner_court_S, outer_court_N, inner_gate, Direction.South);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+
+function PutInSilverStatue($item:Item, $target:Item)
+{
+    if ($item == silver_cup)
+    {
+        Message(
+            "As you put the silver cup in the outstretched hands of the statue, the "
+            "fingers close around the cup, melding with it. The cup is now part of "
+            "the statue."
+        );
+
+        inner_court_statue.Description =
+            "You see a silver statue of a fairy with its hands wrapped around a "
+            "silver cup.";
+
+        # The cup is now in the statue and can no longer be taken.
+        $item.Location = $target;
+        $item.TakeAction = null;
+
+        # The cup is now primed for the final unlocking action.
+        $item.PutInAction = PutInSilverCup;
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+
+game
+{
+    inner_court_statue.Location = inner_court_S;
+    inner_court_statue.Adjectives = "silver";
+    inner_court_statue.Noun = "statue";
+    inner_court_statue.Description =
+        "The statue is of bright, untarnished silver and exquisite workmanship. "
+        "It depicts a young man, or perhaps a fairy for it has delicate wings. "
+        "Its empty hands are outstretched as if reaching for something.";
+    inner_court_statue.PutInAction = PutInSilverStatue;
+}
+
+#############################################
+#
+# South wall and towers
+#
+game
+{
+    # South wall and tower descriptions.
+    guard_room_W_0.Description =
+        "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
+    guard_room_E_0.Description =
+        "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
+    guard_room_W_1.Description =
+        "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the "
+        "inner courtyard and in the south wall facing the outer courtyard.";
+    guard_room_E_1.Description =
+        "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the "
+        "inner courtyard and in the south wall facing the outer courtyard.";
+    tower_SW_0.Description =
+        "You are on the ground floor of a round tower.";
+    tower_SW_1.Description =
+        "You are in a round tower with arrow loops opening to the outside.";
+    tower_SW_2.Description =    # aligns with wall
+        "You are in a round tower with arrow loops opening to the outside.";
+    tower_SW_roof.Description =
+        "You are on the roof of the soutwest corner tower. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
+        "a long east-west building across the inner courtyard from you. Adjoining it to the west "
+        "is a lower building. Other lower buildings line the east and west walls of the keep.";
+    tower_SE_0.Description =
+        "You are on the ground floor of a round tower.";
+    tower_SE_1.Description =
+        "You are in a round tower with arrow loops opening to the outside.";
+    tower_SE_2.Description =    # aligns with wall
+        "You are in a round tower with arrow loops opening to the outside.";
+    tower_SE_roof.Description =
+        "You are on the roof of the southeast corner tower. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
+        "a long east-west building across the inner courtyard from you. Adjoining it to the west "
+        "is a lower building. Other lower buildings line the east and west walls of the keep.";
+    tower_NW_0.Description =
+        "You are on the ground floor of a round tower.";
+    tower_NW_1.Description =
+        "You are in a round tower with arrow loops opening to the outside.";
+    tower_NW_2.Description =    # aligns with wall
+        "You are in a round tower with arrow loops opening to the outside.";
+    tower_NW_roof.Description =
+        "You are on the roof of the northwest corner tower. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
+        "southeast of you beyond some lower buildings. There is a small courtyard between the great "
+        "hall and the north wall and a larger courtyard between the great hall and the south wall.";
+    gate_house_W_0.Description =
+        "You are in a U-shaped stone chamber.";
+    gate_house_W_1.Description =
+        "You are in a U-shaped stone chamber. In the east wall are arrow loops looking down "
+        "on the entrance tunnel between the gatehouse towers.";
+    gate_house_E_0.Description =
+        "You are in a U-shaped stone chamber.";
+    gate_house_E_1.Description =
+        "You are in a U-shaped stone chamber. In the west wall are arrow loops looking down "
+        "on the entrance tunnel between the gatehouse towers.";
+    gate_house_2.Description =  # aligns with wall
+        "You are in a large, rectangular stone chamber. In the floor are murder holes looking down "
+        "on the entrance tunnel to the keep. In the south wall are arrow loops facing the outer "
+        "courtyard.";
+    gate_house_roof.Description =
+        "You are on the roof of the gatehouse. "
+        "From this height you can see the layout of the entire keep. There are round towers at all "
+        "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
+        "a long east-west building across the inner courtyard from you. Adjoining it to the west "
+        "is a lower building. Other lower buildings line the east and west walls of the keep.";
+    wall_SW.Description =
+        "You are on top of the south wall of the keep between the southwest tower and the "
+        "gatehouse. Looking north across a courtyard, you see the great hall flanked by lower "
+        "buildings.";
+    wall_SE.Description =
+        "You are on top of the south wall of the keep between the southeast tower and the "
+        "gatehouse. Looking north across a courtyard, you see the great hall flanked by lower "
+        "buildings.";
+    wall_W.Description =
+        "You are on the west wall of the keep. The great hall is east of you beyond some "
+        "lower buildings. There is a courtyard between the great hall and the south wall and "
+        "another smaller courtyard between the great hall and the north wall.";
+    wall_E.Description =
+        "You are on the east wall of the keep between the southeast tower and the taller "
+        "northeast tower. There is no entrance to the northeast tower from here.";
+    wall_N.Description =
+        "You are on the north wall of the keep between the northwest tower and the taller "
+        "northeast tower. There is no entrance to the northeast tower from here. Across a "
+        "small courtyard to your south is the great hall.";
+
+    # Wall and tower northward links.
+    NewClosedDoor(guard_room_W_0, inner_court_SW, Direction.North);
+    NewClosedDoor(guard_room_E_0, inner_court_SE, Direction.North);
+    NewClosedDoor(tower_SW_2, wall_W, Direction.North);
+    NewClosedDoor(wall_W, tower_NW_2, Direction.North);
+    NewClosedDoor(tower_SE_2, wall_E, Direction.North);
+
+    # Wall and tower eastward links.
+    NewLockedDoor(tower_SW_0, guard_room_W_0, Direction.East, tower_key);
+    NewOpening(guard_room_W_0, gate_house_W_0, Direction.East);
+    NewClosedDoor(tower_SW_1, guard_room_W_1, Direction.East);
+    NewOpening(guard_room_W_1, gate_house_W_1, Direction.East);
+    NewClosedDoor(tower_SW_2, wall_SW, Direction.East);
+    NewClosedDoor(wall_SW, gate_house_2, Direction.East);
+    NewClosedDoor(tower_NW_2, wall_N, Direction.East);
+
+    # Wall and tower westward links.
+    NewLockedDoor(tower_SE_0, guard_room_E_0, Direction.West, tower_key);
+    NewOpening(guard_room_E_0, gate_house_E_0, Direction.West);
+    NewClosedDoor(tower_SE_1, guard_room_E_1, Direction.West);
+    NewOpening(guard_room_E_1, gate_house_E_1, Direction.West);
+    NewClosedDoor(tower_SE_2, wall_SE, Direction.West);
+    NewClosedDoor(wall_SE, gate_house_2, Direction.West);
+
+    # Wall and tower upward links.
+    NewDoorItem(tower_SW_0, tower_SW_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SW_1, tower_SW_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SW_2, tower_SW_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SE_0, tower_SE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SE_1, tower_SE_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_SE_2, tower_SE_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NW_0, tower_NW_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NW_1, tower_NW_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NW_2, tower_NW_roof, Direction.Up, "spiral stone", "stair", DoorState.None);
+}
+
+game
+{
+    # West guard room items
+    var $chest = NewContainer("large wooden", "chest", DoorState.Closed, guard_room_W_0);
+    NewCandle("oil", "lamp", $chest);
+    NewLighter("small", "tinderbox", $chest);
+    NewWeapon("short iron", "dagger", 20, $chest);
+    NewArmor("leather", "cap", ArmorKind.Head, 10, $chest);
+    NewArmor("leather", "vest", ArmorKind.Torso, 10, $chest);
+    InitializeKey(tower_key, "large", "key", $chest);
+}
+
+#############################################
+#
+# West keep rooms
+#
+game
+{
+    # West keep room descriptions
+    store_room.Description =
+        "You are in a store room full of barrels.";
+    stewards_room.Description =
+        "You are in a bedchamber.";
+    knight_room_1.Description =
+        "You are in a small bedchamber.";
+    knight_room_2.Description =
+        "You are in a small bedchamber.";
+    knight_room_3.Description =
+        "You are in a small bedchamber.";
+    knight_room_4.Description =
+        "You are in a small bedchamber.";
+    knight_room_entry.Description =
+        "You are in a small entryway.";
+    armory.Description =
+        "You are in a large rectangular room.";
+    bakehouse.Description =
+        "You are in a rectangular room with a large oven. A window in the east wall "
+        "looks out upon a small courtyard.";
+    hallway_NS.Description =
+        "You are at one end of a hallway leading north.";
+    hallway_corner.Description =
+        "You are at the junction of two hallways leading south and east.";
+    hallway_EW.Description =
+        "You are at one end of a hallway leading west.";
+    courtyard_N.Description =
+        "You are in a courtyard bordered on the north by the keep's wall and on the "
+        "south by the great hall. Rising above other buildings to your east is the "
+        "keep's tall northeast tower with its conical roof.";
+
+    # West keep room northward links.
+    NewClosedDoor(store_room, stewards_room, Direction.North);
+    NewClosedDoor(knight_room_1, knight_room_entry, Direction.North);
+    NewClosedDoor(knight_room_entry, knight_room_3, Direction.North);
+    NewClosedDoor(knight_room_4, armory, Direction.North);
+    NewClosedDoor(armory, tower_NW_0, Direction.North).Key = tower_key;
+    NewClosedDoor(inner_court_NW, hallway_NS, Direction.North);
+    NewLink(hallway_NS, hallway_corner, Direction.North);
+    NewClosedDoor(hallway_EW, bakehouse, Direction.North);
+
+    # West keep eastward links.
+    NewClosedDoor(store_room, inner_court_SW, Direction.East);
+    NewClosedDoor(knight_room_2, knight_room_entry, Direction.East);
+    NewClosedDoor(knight_room_entry, hallway_NS, Direction.East);
+    NewClosedDoor(armory, hallway_corner, Direction.East);
+    NewLink(hallway_corner, hallway_EW, Direction.East);
+    NewClosedDoor(hallway_EW, courtyard_N, Direction.East);
+}
+
+#############################################
+#
+# Armory items
+#
+game
+{
+    var $rack = NewTable("weapon", "rack", armory);
+    NewWeapon("rusty short", "sword", 30, $rack);
+    NewWeapon("long", "sword", 50, $rack);
+
+    var $chest = NewContainer("large wooden", "chest", DoorState.Locked, armory);
+    $chest.Key = tower_key;
+
+    NewArmor("steel", "helmet", ArmorKind.Head, 25, $chest);
+    NewArmor("chain mail", "shirt", ArmorKind.Torso, 20, $chest);
+    NewArmor("chain", "leggings", ArmorKind.Leg, 20, $chest);
+}
+
+#############################################
+#
+# East keep rooms
+#
+game
+{
+    # East keep room descriptions
+    kitchen.Description =
+        "You are in a large kitchen.";
+    pantry.Description =
+        "You are in a pantry.";
+    buttery.Description =
+        "You are in the buttery.";
+    great_hall_W.Description =
+        "You are at the west end of the great hall.";
+    great_hall_E.Description =
+        "You are at the east end of the great hall.";
+    court.Description =
+        "You are in a large room with benches lining the east and west walls and a raised "
+        "throne at the north end. This is presumably where the lord of the castle holds court.";
+    parlor.Description =
+        "You are in a comfortable parlor with tapestries and expensive furnishings. Windows "
+        "in the west wall open onto the inner courtyard.";
+    lords_chamber.Description =
+        "You are in the lord's bedchamber. Windows in the west wall open onto the inner courtyard.";
+    library.Description =
+        "You are in a library. Windows in the west wall open onto the rear courtyard.";
+
+    # East keep northward links.
+    NewClosedDoor(inner_court_N, great_hall_W, Direction.North);
+    NewClosedDoor(kitchen, pantry, Direction.North);
+    NewClosedDoor(lords_chamber, parlor, Direction.North);
+    NewClosedDoor(parlor, court, Direction.North);
+    InitializeDoor(library_door, court, library, Direction.North, "discrete wooden", "door", DoorState.Locked);
+
+    # East keep eastward links.
+    NewClosedDoor(hallway_NS, kitchen, Direction.East);
+    NewClosedDoor(kitchen, great_hall_W, Direction.East);
+    NewClosedDoor(pantry, buttery, Direction.East);
+    NewLink(great_hall_W, great_hall_E, Direction.East);
+    NewClosedDoor(great_hall_E, court, Direction.East);
+}
+
+#############################################
+#
+# Lord's bedchamber items
+#
+game
+{
+    NewBed("large four-poster", "bed", lords_chamber);
+    var $chest = NewContainer("carved wooden", "chest", DoorState.Closed, lords_chamber);
+    InitializeKey(library_key, "fine silver", "key", $chest);
+}
+
+#############################################
+#
+# Court items
+#
+
+# Looking at the throne reveals the hidden library door.
+function DescribeThrone($item:Item)
+{
+    Message(
+        "The carved wooden throne sits on a raised platform in front of the paneled "
+        "north wall. On closer inspection, you notice a wooden door behind the throne, "
+        "which is made to discretely blend in with the paneling." 
+    );
+    library_door.IsHidden = false;    
+}
+
+game
+{
+    # The library door is initially hidden.
+    library_door.Key = library_key;
+    library_door.IsHidden = true;
+
+    # Looking at the throne reveals the hidden library door.
+    court_throne.Adjectives = "carved wooden";
+    court_throne.Noun = "throne";
+    court_throne.DescribeAction = DescribeThrone;
+    court_throne.Location = court;
+}
+
+#############################################
+#
+# Library items
+#
+game
+{
+    library_statue.Location = library;
+    library_statue.Adjectives = "silver";
+    library_statue.Noun = "statue";
+    library_statue.Description =
+        "The statue shows a tall, noble looking fairy with a crown on his head. "
+        "A fairy king, perhaps. A caption reads, 'The host of the feast.'";
+
+    # Initialize the door from the library to the NE tower.
+    InitializeDoor(tower_NE_door, library, tower_NE_0, Direction.North, "arched oak", "door", DoorState.Closed);
+    tower_NE_door.IsHidden = true;
+}
+
+command "say {$message:String}"
+{
+    if (player.Location == library_statue.Location &&
+        $message == "guests have arrived")
+    {
+        # The statue disappears and the door appears.
+        library_statue.Location = null;
+        tower_NE_door.IsHidden = false;
+
+        # Describe that in a more dramatic way.
+        Message(
+            "The statue of the fairy king comes to life and says, 'The host can't eat "
+            "until the guests have arrived!' Then it makes an elegant bow and vanishes. "
+            "In place of the statue, you now see an arched oak door leading north." 
+        );
+    }
+}
+
+#############################################
+#
+# Special "PutOnAction" implementation for the king's table
+#
+function PutOnKingsTable($item:Item, $table:Item)
+{
+    if ($item == fairyland_food)
+    {
+        # The fairy king and prince disappear.
+        fairy_king.Location = null;
+        fairy_prince1.Location = null;
+        fairy_prince2.Location = null;
+
+        # The food also disappears.
+        fairyland_food.Location = null;
+
+        # A silver cup appears on the table.
+        InitializePortableItem(silver_cup, "silver", "cup", kings_table);
+
+        # Change the room description to reflect the above changes.
+        tower_NE_3.Description =
+            "You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. "
+            "The wood-paneled walls have large windows.";
+
+        # Output messages.
+        Message(
+            "When you put the food on the table, it seems to grow and multiply into a great feast. "
+            "Plates and cups appear before the fairy king and his guests, and they begin to laugh "
+            "and eat with abandon. Although you are in the same room, the fairies continue to ignore "
+            "your presence, and it almost feels as though you are watching from a distance."
+        );
+        Message(
+            "Soon, the meal is finished. With a final clink of their glasses, the three fairies "
+            "vanish into thin air. The plates and food disappear as well, leaving behind only a "
+            "single silver cup."
+        );
+    }
+    else
+    {
+        PutOnTable($item, $table);
+    }
+}
+
+#############################################
+#
+# Northeast tower
+#
+game
+{
+    # Northeast tower room descriptions
+    tower_NE_0.Description =
+        "You are in a large, round stone chamber with a high ceiling.";
+    tower_NE_1.Description =
+        "You are in a large, round stone chamber with a high ceiling. There are arrow loops "
+        "in the walls but also rich tapestries.";
+    tower_NE_2.Description =
+        "You are in a large, round stone chamber with a high ceiling. The walls are hung with "
+        "tapestries and also have small windows.";
+    tower_NE_3.Description =
+        "You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. "
+        "The wood-paneled walls have large windows. Sitting at a long table is the fairy king "
+        "depicted by the statue downstairs along with two other noble-looking fairies. They take "
+        "no notice of you.";
+
+    # Northeast tower room upward links.
+    NewDoorItem(tower_NE_0, tower_NE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NE_1, tower_NE_2, Direction.Up, "spiral stone", "stair", DoorState.None);
+    NewDoorItem(tower_NE_2, tower_NE_3, Direction.Up, "spiral stone", "stair", DoorState.None);
+
+    # Initialize northeast tower table.
+    InitializeTable(kings_table, "long wooden", "table", tower_NE_3);
+    kings_table.PutOnAction = PutOnKingsTable;
+}
+
+#############################################
+#
+# Fairyland
+#
+game
+{
+    # Fairlyland room descriptions
+    fairyland_N.Description =
+        "You are at the north end of the outer courtyard, but somehow transformed into an alien place. "
+        "There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you "
+        "is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through "
+        "the trees.";
+    fairyland_NW.Description =
+        "You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. "
+        "The high wall of the keep looms above you to the north, and the outer wall is to the west. Trils "
+        "lead east and south through the trees.";
+    fairyland_NE.Description =
+        "You are in the northeast corner of the strangely-transformed outer courtyard. The high wall of "
+        "the keep looms above you to the north. To the east is the outer wall and to the south is the "
+        "wall of the church yard. There is a trail leading west.";
+    fairyland_W.Description =
+        "You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. "
+        "Trails lead north, east, and south through the trees.";
+    fairyland_stable.Description =
+        "You are in a large wooden stable.";
+    fairyland_center.Description =
+        "You are in a small clearing in the strangely-transformed outer courtyard. Trails lead north, south, "
+        "and west through the trees. East of you is the church yard wall.";
+    fairyland_SW.Description =
+        "You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you "
+        "are the castle walls, Trails lead north and east through the trees.";
+    fairyland_S.Description =
+        "You are at the south end of the strangely-transformed outer courtyard. South of you is the town gate, "
+        "which is shut tight. Trails lead north, east, and west.";
+    fairyland_SE.Description =
+        "You are in the southeast corner of the strangely-transformed outer courtyard. East and south of you "
+        "are the castle walls, and north of you is the church yard wall. A trail leads west through the trees.";
+
+    # Fairyland southward links.
+    NewLink(inner_court_S, fairyland_N, Direction.South);
+    NewLink(fairyland_N, fairyland_center, Direction.South);
+    NewLink(fairyland_center, fairyland_S, Direction.South);
+    NewLink(fairyland_NW, fairyland_W, Direction.South);
+    NewLink(fairyland_W, fairyland_SW, Direction.South);
+
+    # Fairyland eastward links.
+    NewLink(fairyland_NW, fairyland_N, Direction.East);
+    NewLink(fairyland_N, fairyland_NE, Direction.East);
+    NewClosedDoor(fairyland_stable, fairyland_W, Direction.East);
+    NewLink(fairyland_W, fairyland_center, Direction.East);
+    NewLink(fairyland_SW, fairyland_S, Direction.East);
+    NewLink(fairyland_S, fairyland_SE, Direction.East);
+}
+
+#############################################
+#
+# Fairyland table
+#
+
+game
+{
+    InitializeTable(fairyland_table, "long", "table", fairyland_NW);
+    InitializePortableItem(fairyland_food, "platter of", "food", fairyland_table);
+    InitializePortableItem(fairyland_wine, "flask of", "wine", fairyland_table);
+}
+
+#############################################
+#
+# Fairyland church
+#
+game
+{
+    # Fairyland church room descriptions
+    fairyland_church_yard_W.Description =
+        "You are in a walled church yard. East of you is the arched doorway of a beautiful stone "
+        "church. The church yard wraps around the church to the North and South.";
+    fairyland_church_yard_S.Description =
+        "You are in a walled church yard south of the church. The church yard wraps around the church "
+        "to the North. East of you is a smaller stone building adjoining the church.";
+    fairyland_church_yard_N.Description =
+        "You are in a walled churcn yard north of the church. The church yard wraps around the church "
+        "to the South. There are graves here.";
+    fairyland_church_W.Description =
+        "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
+        "stone columns on either side. Windows set high in the walls let in light.";
+    fairyland_church_E.Description =
+        "You are at the east end of the church. A long aisle runs from here to the West. Between "
+        "fluted columns to the North, you can see a side chapel.";
+    fairyland_side_chapel.Description =
+        "You are in a side chapel with statues of saints. An opening to the South leads to the "
+        "main part of the church.";
+    fairyland_priest_house.Description =
+        "You are in a one-room house, presumably the priest's residence.";
+
+    # Fairyland church eastward links.
+    NewDoorItem(fairyland_center, fairyland_church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
+    NewDoorItem(fairyland_church_yard_W, fairyland_church_W, Direction.East, "carved wooden", "door", DoorState.Closed).Key = church_key;
+    NewLink(fairyland_church_W, fairyland_church_E, Direction.East);
+    NewDoorItem(fairyland_church_yard_S, fairyland_priest_house, Direction.East, "oak", "door", DoorState.Locked).Key = church_key;
+
+    # Fairyland church north links.
+    NewLink(fairyland_church_yard_S, fairyland_church_yard_W, Direction.North);
+    NewLink(fairyland_church_yard_W, fairyland_church_yard_N, Direction.North);
+    NewLink(fairyland_church_E, fairyland_side_chapel, Direction.North);
+    NewDoorItem(fairyland_priest_house, fairyland_church_E, Direction.North, "small wooden", "door", DoorState.Closed);
+}
+
+#############################################
+#
+# Fairyland priest house
+#
+game
+{
+    # Initialize priest house items
+    NewBed("lumpy", "bed", fairyland_priest_house);
+
+    # Add trunk to priest house.
+    var $trunk = NewContainer("pine", "trunk", DoorState.Closed, fairyland_priest_house);
+    NewPortableItem("black", "robe", $trunk);
+
+    # Add table to priest house.
+    var $table = NewTable("wooden writing", "table", fairyland_priest_house);
+    NewPortableItem("white", "paper", $table).Description =
+        "The paper reads, 'My warnings have gone unheeded. The people have continued to offer sacrifice "
+        "to infernal beings, and now we have been drawn into their world. Fiends are all around us! "
+        "If we cannot escape this place, may God have mercy on our souls!'";
+}
+
+#############################################
+#
+# Wells
+#
+
+# Use action for a well.
+function UseWell($item:Item)
+{
+    Message("You draw water from the well and take a refreshing drink.");
+}
+
+# Helper function create a well in a specified location.
+function NewWell($loc:Item)
+{
+    var $well = NewItem($"{$loc}_well");
+    $well.Location = $loc;
+    $well.Noun = "well";
+    $well.UseAction = UseWell;
+}
+
+game
+{
+    NewWell(inner_court_NE);
+    NewWell(outer_court_NW);
+    NewWell(fairyland_NW);
+}
+
+#############################################
+#
+# Fairies
+#
+
+# Each fairy has a message.
+property Message : String;
+
+# Fairy message spoken this turn, if any. This global variable exists so
+# non-player characters can react to fairy actions.
+var $currentFairyMessage : String;
+
+# Reset the current fairy message to null each turn after all of the
+# update actions are executed.
+turn
+{
+    $currentFairyMessage = null;
+}
+
+# A fairy's initial update action is to say a message.
+function UpdateFairy($fairy:Item)
+{
+    if ($fairy.Location == player.Location && $fairy.Message != null)
+    {
+        Message($"The fairy says, '{$fairy.Message}'");
+        $currentFairyMessage = $fairy.Message;
+    }
+}
+
+# Make all fairies hostile.
+function EnrageFairies()
+{
+    foreach (var $item) where UpdateAction == UpdateFairy
+    {
+        $item.UpdateAction = UpdateHostileMonster;
+    }
+}
+
+# An attack on one fairy enrages all of them.
+function OnFairyAttacked($monster:Item)
+{
+    EnrageFairies();
+}
+
+function InitializeFairy(
+    $fairy:Item,
+    $adjectives:String,
+    $message:String,
+    $loc:Item
+    )
+{
+    InitializeMonster(
+        $fairy,
+        $adjectives,
+        "fairy",
+        100,    # health
+        100,    # invincible
+        100,    # attack damage
+        $loc
+    );
+    $fairy.Message = $message;
+    $fairy.UpdateAction = UpdateFairy;
+    $fairy.OnAttackedAction = OnFairyAttacked;
+}
+
+function InitializeFairyLord(
+    $fairy:Item,
+    $adjectives:String,
+    $noun:String,
+    $loc:Item
+    )
+{
+    InitializeMonster(
+        $fairy,
+        $adjectives,
+        $noun,
+        100,    # health
+        100,    # invincible
+        200,    # attack damage
+        $loc
+    );
+    $fairy.UpdateAction = UpdateFairy;
+    $fairy.OnAttackedAction = OnFairyAttacked;
+}
+
+game
+{
+    InitializeFairy(fairy1, "small blue", "The guests have arrived!", fairyland_W);
+    InitializeFairy(fairy2, "green", "The guests can't leave until the last cup is poured!", fairyland_SW);
+    InitializeFairy(fairy3, "pale", "The guests can't leave until the feast is over!", fairyland_S);
+    InitializeFairy(fairy4, "slim brown", "The host can't eat until the guests have arrived!", fairyland_SE);
+    InitializeFairy(fairy5, "bright yellow", "The host sits in the highest seat!", fairyland_NE);
+
+    InitializeFairyLord(fairy_king, "fairy", "king", tower_NE_3);
+    InitializeFairyLord(fairy_prince1, "blue fairy", "prince", tower_NE_3);
+    InitializeFairyLord(fairy_prince2, "dark fairy", "prince", tower_NE_3);
+}
+
+#############################################
+#
+# Monsters
+#
+game
+{
+    NewMonster(
+        "small",        # adjectives
+        "goblin",       # noun
+        50,             # health
+        10,             # damage resistance
+        20,             # attack damage
+        hallway_NS      # location
+    );
+    NewMonster(
+        "hairy",        # adjectives
+        "imp",          # noun
+        40,             # health
+        10,             # damage resistance
+        20,             # attack damage
+        kitchen         # location
+    );
+    NewMonster(
+        "large",        # adjectives
+        "orc",          # noun
+        100,            # health
+        10,             # damage resistance
+        30,             # attack damage
+        parlor          # location
+    );
+    NewMonster(
+        "cave",         # adjectives
+        "troll",        # noun
+        300,            # health
+        30,             # damage resistance
+        50,             # attack damage
+        tower_NE_1      # location
+    );
+}
+
+#############################################
+#
+# Priest and maid
+#
+var $hasPriestReactedToFairy = false;
+function UpdateFollowingPriest($npc:Item)
+{
+    if (TryFollowPlayer($npc))
+    {
+        # Room-specific actions
+    }
+
+    if ($currentFairyMessage != null && $npc.Location == player.Location)
+    {
+        if (!$hasPriestReactedToFairy)
+        {
+            Message(
+                "The priest says, `Do not trust these fiends! They speak only in riddles '"
+                "and they do not mean is well, I am sure!'"
+                );
+            $hasPriestReactedToFairy = true;
+        }
+        else
+        {
+            Message("The priest scowls and says, 'More riddles!'");
+        }
+    }
+}
+
+var $hasMaidReactedToFairy = false;
+var $hasMaidReactedToInnerCourtStatue = false;
+var $hasMaidReactedToLibraryStatue = false;
+function UpdateFollowingMaid($npc:Item)
+{
+    if (TryFollowPlayer($npc))
+    {
+        # Room-specific actions
+        if ($npc.Location == inner_court_statue.Location && !$hasMaidReactedToInnerCourtStatue)
+        {
+            Message(
+                "The maid says, 'Ooh! That statue wasn't here before! It's beautiful!'"
+            );
+            $hasMaidReactedToInnerCourtStatue = true;
+        }
+
+        if ($npc.Location == library_statue.Location && !$hasMaidReactedToLibraryStatue)
+        {
+            Message(
+                "The maid says, 'Ooh! Another of these silver statues! It's strange, though. "
+                "I've cleaned this room before, and there should be a door right where that "
+                "statue is. Maybe it will appear if we say the magic words!'"
+            );
+            Message(
+                "'Hocus pocus!' she says to the statue, but nothing happens."
+            );
+            $hasMaidReactedToLibraryStatue = true;
+        }
+    }
+
+    if ($currentFairyMessage != null && $npc.Location == player.Location)
+    {
+        if (!$hasMaidReactedToFairy)
+        {
+            Message(
+                "The maid says, 'Maybe there's some clue these words, but I don't "
+                "understand it.'"
+                );
+            $hasMaidReactedToFairy = true;
+        }
+    }
+}
+
+function UpdateIdlePriest($npc:Item)
+{
+    if (player.Location == $npc.Location)
+    {
+        Message(
+            "The priest says, 'At last, help has arrived! I see you wear the king's "
+            "livery. This chamber maid and I are the only survivors in the castle, as "
+            "far as we know. We will gladly follow you if you can show us the way out.'"
+        );
+        Message(
+            "Recognizing your duty, you promise to help if you can."
+        );
+        $npc.UpdateAction = UpdateFollowingPriest;
+    }
+}
+
+function UpdateIdleMaid($npc:Item)
+{
+    if (player.Location == $npc.Location)
+    {
+        Message(
+            "The maid exclaims, 'Oh, thank you sir! It was awful what happened here! "
+            "I was in Lord Kevin's chambers doing a bit of cleaning when those winged "
+            "creatures came. Lord Kevin and his men tried to fight them, but they were "
+            "all killed. I think the townspeople mostly fled. I fled too. I thought to "
+            "seek sanctuary in the church, and I found the church right enough, but it's "
+            "here in the middle of this strange forest and we don't know the way out!'"
+        );
+        $npc.UpdateAction = UpdateFollowingMaid;
+    }
+}
+
+game
+{
+    InitializeMonster(
+        priest,
+        "",
+        "priest",
+        1,              # health
+        0,              # damage resistance
+        1,              # attack damage
+        fairyland_church_W
+    );
+    priest.UpdateAction = UpdateIdlePriest;
+
+    InitializeMonster(
+        maid,
+        "chamber",
+        "maid",
+        1,              # health
+        0,              # damage resistance
+        1,              # attack damage
+        fairyland_church_W
+    );
+    maid.UpdateAction = UpdateIdleMaid;
+}

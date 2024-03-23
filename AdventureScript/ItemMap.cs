@@ -69,7 +69,7 @@
             {
                 writer.BeginBlock();
 
-                writer.Write("$_ = ");
+                writer.Write("var $_ = ");
 
                 string name = m_list[id].Name;
                 if (Lexer.IsName(name))
@@ -92,7 +92,7 @@
                     if (value != 0)
                     {
                         writer.Write($"$_.{prop.Name} = ");
-                        prop.Type.WriteValue(game, value, writer);
+                        prop.Type.WriteValue(game, value, writer.TextWriter);
                         writer.Write(";");
                         writer.EndLine();
                     }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using AdventureScript;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
@@ -177,9 +178,7 @@ namespace AdventureLib
             ReserveName(name, "type");
 
             // Parse the parameter list.
-            ReadSymbol(SymbolId.LeftParen);
             var paramList = ParseParamList();
-            ReadSymbol(SymbolId.RightParen);
 
             // Parse the return type.
             var returnType = ParseOptionalTypeDeclaration();
@@ -236,18 +235,34 @@ namespace AdventureLib
             // Advance past "var" <varName> "="
             Advance();
             string varName = ReadVariableName();
-            var declaredType = ParseOptionalTypeDeclaration();
-            ReadSymbol(SymbolId.Assign);
+            var type = ParseOptionalTypeDeclaration();
+            int value = 0;
 
-            // Parse the right-hand expression.
-            var frame = new VariableFrame(this);
-            var rightExpr = ParseExpression(frame);
-
-            // Make sure we have a type.
-            var type = DeriveAssignedTypeAllowVoid(declaredType, rightExpr);
-            if (type == Types.Void)
+            // Is there an initializer expression?
+            if (MatchSymbol(SymbolId.Assign))
             {
-                Fail($"The initializer for {varName} does not return a value.");
+                Advance();
+
+                // Parse the right-hand expression.
+                var frame = new VariableFrame(this);
+                var rightExpr = ParseExpression(frame);
+
+                // Make sure we have a type.
+                type = DeriveAssignedTypeAllowVoid(type, rightExpr);
+                if (type == Types.Void)
+                {
+                    Fail($"The initializer for {varName} does not return a value.");
+                }
+
+                // Compute the value.
+                value = rightExpr.Evaluate(
+                    this.Game,
+                    new int[frame.FrameSize]
+                    );
+            }
+            else if (type == Types.Void)
+            {
+                Fail($"No type specified for variable {varName}.");
             }
 
             // Try adding the variable.
@@ -257,11 +272,7 @@ namespace AdventureLib
                 Fail($"The variable {varName} is already defined.");
             }
 
-            // Compute the value.
-            newVar.Value = rightExpr.Evaluate(
-                this.Game, 
-                new int[frame.FrameSize]
-                );
+            newVar.Value = value;
 
             // Read the final semicolon.
             ReadSymbol(SymbolId.Semicolon);
@@ -282,15 +293,12 @@ namespace AdventureLib
             var functionName = ReadName();
             ReserveName(functionName, "function");
 
-            // Parse the parameter list.
-            ReadSymbol(SymbolId.LeftParen);
+            // Parse the parameter list and return type.
             var paramList = ParseParamList();
-
-            ReadSymbol(SymbolId.RightParen);
             var returnType = ParseOptionalTypeDeclaration();
 
-            var frame = new FunctionVariableFrame(this, paramList);
-            frame.SetReturnType(this, returnType);
+            // Create a variable frame for this function.
+            var frame = new FunctionVariableFrame(this, paramList, returnType);
 
             if (MatchSymbol(SymbolId.Lambda))
             {
@@ -550,6 +558,9 @@ namespace AdventureLib
         List<ParamDef> ParseParamList()
         {
             var paramList = new List<ParamDef>();
+
+            ReadSymbol(SymbolId.LeftParen);
+
             if (this.IsVariableToken)
             {
                 paramList.Add(ParseParamDef());
@@ -560,6 +571,9 @@ namespace AdventureLib
                     paramList.Add(ParseParamDef());
                 }
             }
+
+            ReadSymbol(SymbolId.RightParen);
+
             return paramList;
         }
 
@@ -648,7 +662,7 @@ namespace AdventureLib
                         Fail($"Cannot convert expression of type {right.Type.Name} to {expr.Type.Name}.");
                     }
 
-                    statement = new AssignStatement(expr, right, /*isNewVar*/ false);
+                    statement = new AssignStatement(expr, right);
                 }
                 else
                 {
@@ -668,28 +682,37 @@ namespace AdventureLib
             // Advance past the var keyword.
             Advance();
 
-            // Read $varName=
+            // Read the variable name and type.
             string varName = ReadVariableName();
-            var declaredType = ParseOptionalTypeDeclaration();
-            ReadSymbol(SymbolId.Assign);
+            var type = ParseOptionalTypeDeclaration();
 
-            // Parse the right-hand expression and get its type.
-            var rightExpr = ParseExpression(frame);
-            var type = DeriveAssignedTypeAllowVoid(declaredType, rightExpr);
-            if (type == Types.Void)
+            // Parse the right-hand express if specified.
+            Expr? rightExpr = null;
+            if (MatchSymbol(SymbolId.Assign))
             {
-                Fail("The expression does not return a value.");
+                Advance();
+                rightExpr = ParseExpression(frame);
+                type = DeriveAssignedTypeAllowVoid(type, rightExpr);
+                if (type == Types.Void)
+                {
+                    Fail("The expression does not return a value.");
+                }
+            }
+            else if (type == Types.Void)
+            {
+                Fail($"No type specified for variable {varName}.");
             }
 
-            // Add the variable and create an assignment statement.
-            var leftExpr = frame.AddVar(this, varName, type);
-            var statement = new AssignStatement(leftExpr, rightExpr, /*isNewVar*/ true);
+            // Add the variable and create the statement.
+            var newVar = frame.AddVar(this, varName, type);
+            var statement = new VarStatement(newVar, rightExpr);
 
             // Advance past the semicolon.
             ReadSymbol(SymbolId.Semicolon);
 
             return statement;
         }
+
         Statement ParseSwitchStatement(VariableFrame frame)
         {
             // Advance past the switch keyword.
@@ -794,7 +817,7 @@ namespace AdventureLib
             // Advance past the while keyword.
             Advance();
 
-            return new IfStatement(
+            return new WhileStatement(
                 this,
                 ParseIfCondition(frame),
                 ParseStatementBlock(frame)
@@ -803,38 +826,89 @@ namespace AdventureLib
 
         Statement ParseForeachStatement(VariableFrame frame)
         {
-            // The loop variable is scoped to the block.
-            frame.BeginBlock();
-
             // Advance past "foreach" "("
             Advance();
             ReadSymbol(SymbolId.LeftParen);
 
+            // Advance past the 'var' keyword.
+            ReadName("var");
+
             // Get the loop variable name.
-            var type = Types.Item;
-            var loopVar = frame.AddVar(this, ReadVariableName(), type);
+            string varName = ReadVariableName();
 
-            // Check for optional ":" <typeName>
-            if (MatchSymbol(SymbolId.Colon))
+            // Parse the optional type declaration.
+            var type = ParseOptionalTypeDeclaration();
+            if (type == Types.Void)
             {
-                Advance();
+                // Item type is the default.
+                type = Types.Item;
+            }
+            else if (type != Types.Item && !type.IsEnumType)
+            {
+                Fail("Only Item and enum types can be used with foreach.");
+            }
+            ReadSymbol(SymbolId.RightParen);
 
-                type = ParseTypeName();
-                if (type != Types.Item)
-                {
-                    if (!type.IsEnumType)
-                    {
-                        Fail("Only Item and enum types can be used with foreach.");
-                    }
-                    loopVar.SetType(type);
-                }
+            // Parse the where clause if specified.
+            WhereClause? whereClause = null;
+            if (type == Types.Item)
+            {
+                whereClause = ParseOptionalWhereClause(frame);
             }
 
-            ReadSymbol(SymbolId.RightParen);
+            // Add the loop variable, which is scoped to the block.
+            frame.BeginBlock();
+            var loopVar = frame.AddVar(this, varName, type);
+
             var body = ParseStatementBlock(frame);
             frame.EndBlock();
 
-            return new ForEachStatement(loopVar, type, body);
+            return new ForEachStatement(loopVar, type, whereClause, body);
+        }
+
+        WhereClause? ParseOptionalWhereClause(VariableFrame frame)
+        {
+            // Check for 'where' keyword and advance past it.
+            if (!MatchName("where"))
+            {
+                return null;
+            }
+            Advance();
+
+            // Read the property name, which the left argument.
+            string propName = ReadName();
+            var propDef = this.Game.Properties.TryGet(propName);
+            if (propDef == null)
+            {
+                Fail($"Undefined property: {propName}.");
+            }
+
+            // Read the binary operator.
+            var op = BinaryOperators.GetOp(m_lexer.SymbolValue);
+            if (op == null)
+            {
+                Fail("Expected binary operator.");
+            }
+            Advance();
+
+            // Parse the right-hand expression.
+            var rightArg = ParseUnaryExpression(frame);
+
+            // Determine the type of the binary expression.
+            var type = op.DeriveType(propDef.Type, rightArg.Type);
+            if (type != Types.Bool)
+            {
+                if (type == Types.Void)
+                {
+                    Fail($"Invalid argument types for '{op.SymbolText}' operator.");
+                }
+                else
+                {
+                    Fail("Expected Boolean operator in 'where' clause.");
+                }
+            }
+
+            return new WhereClause(propDef, op, rightArg);
         }
 
         Expr ParseExpression(VariableFrame frame)
@@ -1297,6 +1371,15 @@ namespace AdventureLib
         {
             return this.IsNameToken && 
                 MemoryExtensions.Equals(name, m_lexer.NameValue, StringComparison.Ordinal);  
+        }
+
+        void ReadName(string name)
+        {
+            if (!MatchName(name))
+            {
+                Fail($"Expected '{name}'");
+            }
+            Advance();
         }
 
         string ReadName()

@@ -84,6 +84,13 @@ namespace AdventureLib
                 Divide_Compute
                 ),
             new BinaryOp(
+                SymbolId.Modulo,
+                "%",
+                Precedence.MulDiv,
+                Arithmetic_DeriveType,
+                Modulo_Compute
+                ),
+            new BinaryOp(
                 SymbolId.Plus,
                 "+",
                 Precedence.AddSub,
@@ -144,12 +151,12 @@ namespace AdventureLib
             return canCompare ? Types.Bool : Types.Void;
         }
 
-        static int Equals_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int Equals_Compute(int arg1, int arg2)
         {
             return arg1 == arg2 ? 1 : 0;
         }
 
-        static int NotEquals_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int NotEquals_Compute(int arg1, int arg2)
         {
             return arg1 != arg2 ? 1 : 0;
         }
@@ -159,19 +166,19 @@ namespace AdventureLib
             return type1 == Types.Int && type2 == Types.Int ? Types.Bool: Types.Void;
         }
 
-        static int LessThan_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int LessThan_Compute(int arg1, int arg2)
         {
             return arg1 < arg2 ? 1 : 0;
         }
-        static int LessEquals_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int LessEquals_Compute(int arg1, int arg2)
         {
             return arg1 <= arg2 ? 1 : 0;
         }
-        static int GreaterThan_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int GreaterThan_Compute(int arg1, int arg2)
         {
             return arg1 > arg2 ? 1 : 0;
         }
-        static int GreaterEquals_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int GreaterEquals_Compute(int arg1, int arg2)
         {
             return arg1 >= arg2 ? 1 : 0;
         }
@@ -181,19 +188,23 @@ namespace AdventureLib
             return type1 == Types.Int && type2 == Types.Int ? Types.Int : Types.Void;
         }
 
-        static int Times_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int Times_Compute(int arg1, int arg2)
         {
             return arg1 * arg2;
         }
-        static int Divide_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int Divide_Compute(int arg1, int arg2)
         {
             return arg2 != 0 ? arg1 / arg2 : 0;
         }
-        static int Plus_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int Modulo_Compute(int arg1, int arg2)
+        {
+            return arg2 != 0 ? arg1 % arg2 : 0;
+        }
+        static int Plus_Compute(int arg1, int arg2)
         {
             return arg1 + arg2;
         }
-        static int Minus_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int Minus_Compute(int arg1, int arg2)
         {
             return arg1 - arg2;
         }
@@ -203,11 +214,11 @@ namespace AdventureLib
             return type1 == Types.Bool && type2 == Types.Bool ? Types.Bool : Types.Void;
         }
 
-        static int And_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int And_Compute(int arg1, int arg2)
         {
             return (arg1 != 0) && (arg2 != 0) ? 1 : 0;
         }
-        static int Or_Compute(GameState game, TypeDef type1, TypeDef type2, int arg1, int arg2)
+        static int Or_Compute(int arg1, int arg2)
         {
             return (arg1 != 0) || (arg2 != 0) ? 1 : 0;
         }

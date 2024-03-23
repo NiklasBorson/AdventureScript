@@ -128,22 +128,6 @@
             return result;
         }
 
-        public static IReadOnlyList<WordMapEntry> FilterMatches(
-            IReadOnlyList<WordMapEntry> inputList,
-            Span<string> inputAdjectives
-            )
-        {
-            var list = new List<WordMapEntry>();
-            foreach (var item in inputList)
-            {
-                if (MatchAdjectives(inputAdjectives, item.Adjectives))
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
-        }
-
         public IList<WordMapEntry> GetAllWords()
         {
             var itemWords = new List<WordMapEntry>();

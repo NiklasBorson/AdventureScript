@@ -10,26 +10,6 @@ namespace AdventureLib
         Loss
     }
 
-    public enum MessageType
-    {
-        Message,
-        Heading
-    }
-
-    public class MessageEventArgs : EventArgs
-    {
-        internal MessageEventArgs(MessageType messageType, string message)
-        {
-            this.MessageType = messageType;
-            this.Message = message;
-        }
-
-        public MessageType MessageType { get; }
-        public string Message { get; }
-    }
-
-    public delegate void MessageHandler(MessageType type, string message);
-
     public class GameState
     {
         #region Fields
@@ -43,6 +23,7 @@ namespace AdventureLib
         WordMap? m_wordMap = null;
         List<CodeBlock> m_gameBlocks = new List<CodeBlock>();
         List<CodeBlock> m_turnBlocks = new List<CodeBlock>();
+        List<string> m_messages = new List<string>();
         GameResult m_result = GameResult.None;
         #endregion
 
@@ -52,7 +33,7 @@ namespace AdventureLib
             m_varMap = new GlobalVarMap(m_stringMap);
         }
 
-        public void LoadGame(string filePath)
+        public IList<string> LoadGame(string filePath)
         {
             Parser.Parse(filePath, this);
 
@@ -67,29 +48,18 @@ namespace AdventureLib
 
             // Perform per-turn initialization before the first turn.
             InitializeTurn();
+
+            return m_messages;
         }
         #endregion
-
-        public event EventHandler<MessageEventArgs>? MessageEvent;
-
-        void RaiseMessageEvent(MessageType messageType, string message)
-        {
-            var raiseEvent = this.MessageEvent;
-            if (raiseEvent != null)
-            {
-                var args = new MessageEventArgs(
-                    messageType, 
-                    StringHelpers.NormalizeSpaces(message)
-                    );
-                raiseEvent(this, args);
-            }
-        }
 
         #region Properties
         //
         // Getters
         //
         public GameResult Result => m_result;
+
+        public bool IsGameOver => m_result != GameResult.None;
 
         internal TypeMap Types => m_typeMap;
         internal PropertyMap Properties => m_propMap;
@@ -129,17 +99,16 @@ namespace AdventureLib
             }
         }
 
-        public bool InvokeCommand(string commandLine)
+        public IList<string> InvokeCommand(string commandLine)
         {
-            if (this.Commands.TryInvoke(this, commandLine))
+            m_messages.Clear();
+
+            if (this.Commands.InvokeCommandLine(this, commandLine))
             {
                 InitializeTurn();
-                return true;
             }
-            else
-            {
-                return false;
-            }
+
+            return m_messages;
         }
 
         public void Save(string filePath)
@@ -215,18 +184,82 @@ namespace AdventureLib
             var words = label.Split().AsSpan();
             string noun = GetNoun(words);
             if (noun == string.Empty)
+            {
+                OutputNoItem(label);
                 return false;
+            }
 
             var adjectives = GetAdjectives(words);
 
             var matches = this.WordMap.GetMatches(noun, adjectives);
 
-            if (matches.Count == 1)
+            switch (matches.Count)
             {
-                itemId = matches[0].ItemId;
-                return true;
+                case 0:
+                    OutputNoItem(label);
+                    return false;
+
+                case 1:
+                    itemId = matches[0].ItemId;
+                    return true;
+
+                default:
+                    OutputAmbiguousItem(label, matches);
+                    return false;
             }
-            return false;
+        }
+
+        public void OutputInvalidCommand()
+        {
+            string message = this.IntrinsicVars.InvalidCommandString;
+            Message(message);
+        }
+
+        public void OutputInvalidCommandArg(string arg)
+        {
+            string formatString = this.IntrinsicVars.InvalidArgFormatString;
+            Message(string.Format(formatString, arg));
+        }
+
+        void OutputNoItem(string label)
+        {
+            string formatString = this.IntrinsicVars.NoItemFormatString;
+            Message(string.Format(formatString, label));
+        }
+
+        void OutputAmbiguousItem(string label, IReadOnlyList<WordMapEntry> matches)
+        {
+            string formatString = this.IntrinsicVars.AmbiguousItemFormatString;
+            Message(string.Format(formatString, label));
+
+            bool isNounFirst = this.IntrinsicVars.IsNounFirst;
+            var b = new StringBuilder();
+
+            foreach (var match in matches)
+            {
+                b.Clear();
+                b.Append("- ");
+
+                if (isNounFirst)
+                {
+                    b.Append(match.Noun);
+                    foreach (var adj in match.Adjectives)
+                    {
+                        b.Append(' ');
+                        b.Append(adj);
+                    }
+                }
+                else
+                {
+                    foreach (var adj in match.Adjectives)
+                    {
+                        b.Append(adj);
+                        b.Append(' ');
+                    }
+                    b.Append(match.Noun);
+                }
+                Message(b.ToString());
+            }
         }
 
         internal void ListWords()
@@ -278,12 +311,11 @@ namespace AdventureLib
 
         internal void Message(string message)
         {
-            RaiseMessageEvent(MessageType.Message, message);
-        }
-
-        internal void MessageHeading(string message)
-        {
-            RaiseMessageEvent(MessageType.Heading, message);
+            if (!IsGameOver)
+            {
+                message = StringHelpers.NormalizeSpaces(message);
+                m_messages.Add(message);
+            }
         }
         #endregion
     }

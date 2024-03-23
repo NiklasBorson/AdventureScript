@@ -39,7 +39,8 @@
 
             foreach (var elem in m_cases)
             {
-                m_type.WriteValue(game, elem.Key, writer);
+                writer.Write("case ");
+                m_type.WriteValue(game, elem.Key, writer.TextWriter);
                 writer.BeginBlock();
                 elem.Value.WriteStatement(game, writer);
                 writer.EndBlock();

@@ -29,7 +29,9 @@ namespace AdventureLib
             {
             }
 
-            public override void WriteValue(GameState game, int value, CodeWriter writer)
+            public override bool IsUserType => false;
+
+            public override void WriteValue(GameState game, int value, TextWriter writer)
             {
                 // There is no such thing as a void value.
             }
@@ -47,7 +49,9 @@ namespace AdventureLib
             {
             }
 
-            public override void WriteValue(GameState game, int value, CodeWriter writer)
+            public override bool IsUserType => false;
+
+            public override void WriteValue(GameState game, int value, TextWriter writer)
             {
                 Debug.Assert(value == 0);
                 writer.Write("null");
@@ -65,7 +69,9 @@ namespace AdventureLib
             public ItemType() : base("Item")
             {
             }
-            public override void WriteValue(GameState game, int value, CodeWriter writer)
+            public override bool IsUserType => false;
+
+            public override void WriteValue(GameState game, int value, TextWriter writer)
             {
                 string name = game.Items[value].Name;
                 if (Lexer.IsName(name))
@@ -89,7 +95,9 @@ namespace AdventureLib
             public StringType() : base("String")
             {
             }
-            public override void WriteValue(GameState game, int value, CodeWriter writer)
+            public override bool IsUserType => false;
+
+            public override void WriteValue(GameState game, int value, TextWriter writer)
             {
                 writer.Write(Lexer.Stringize(game.Strings[value]));
             }
@@ -103,9 +111,11 @@ namespace AdventureLib
             public IntType() : base("Int")
             {
             }
-            public override void WriteValue(GameState game, int value, CodeWriter writer)
+            public override bool IsUserType => false;
+
+            public override void WriteValue(GameState game, int value, TextWriter writer)
             {
-                writer.Write(value.ToString());
+                writer.Write(value);
             }
             public override string ValueToString(GameState game, int value)
             {
@@ -117,7 +127,9 @@ namespace AdventureLib
             public BoolType() : base("Bool")
             {
             }
-            public override void WriteValue(GameState game, int value, CodeWriter writer)
+            public override bool IsUserType => false;
+
+            public override void WriteValue(GameState game, int value, TextWriter writer)
             {
                 writer.Write(value != 0 ? "true" : "false");
             }

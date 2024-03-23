@@ -22,6 +22,7 @@ namespace AdventureLib
         Minus,
         Times,
         Divide,
+        Modulo,
         LeftParen,
         RightParen,
         LeftBrace,
@@ -211,6 +212,7 @@ namespace AdventureLib
                     case '-': return SymbolId.Minus;
                     case '*': return SymbolId.Times;
                     case '/': return SymbolId.Divide;
+                    case '%': return SymbolId.Modulo;
                     case '(': return SymbolId.LeftParen;
                     case ')': return SymbolId.RightParen;
                     case '{': return SymbolId.LeftBrace;
@@ -271,7 +273,7 @@ namespace AdventureLib
         const string m_intPattern = "[0-9]+";
         const string m_namePattern = "\\$?[A-Za-z_][A-Za-z_0-9]*";
         const string m_stringPattern = "\\$?\"[^\"]*\"";
-        const string m_symbolPattern = @"[\?+\*/(){}.,;:]|&&|\|\||=[=>]?|<=?|>=?|!=?|->?";
+        const string m_symbolPattern = @"[\?+\*%/(){}.,;:]|&&|\|\||=[=>]?|<=?|>=?|!=?|->?";
 
         // Regular expression that matches one token.
         // Each capture group cooresponds to a token type.

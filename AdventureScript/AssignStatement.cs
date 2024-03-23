@@ -6,13 +6,11 @@ namespace AdventureLib
     {
         Expr m_leftExpr;
         Expr m_rightExpr;
-        bool m_isNewVar;
 
-        public AssignStatement(Expr leftExpr, Expr rightExpr, bool isNewVar)
+        public AssignStatement(Expr leftExpr, Expr rightExpr)
         {
             m_leftExpr = leftExpr;
             m_rightExpr = rightExpr;
-            m_isNewVar = isNewVar;
 
             // The caller should have already verified that the left-hand expression can be set.
             Debug.Assert(leftExpr.CanSetValue);
@@ -35,10 +33,6 @@ namespace AdventureLib
 
         public override void WriteStatement(GameState game, CodeWriter writer)
         {
-            if (m_isNewVar)
-            {
-                writer.Write("var ");                
-            }
             m_leftExpr.WriteExpr(game, writer);
             writer.Write(" = ");
             m_rightExpr.WriteExpr(game, writer);

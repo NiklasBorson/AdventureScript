@@ -46,7 +46,7 @@
         {
             for (int i = 0; i < m_blocks.Count; i++)
             {
-                writer.Write(i == 0 ? "if" : "else");
+                writer.Write(i == 0 ? "if" : "elseif");
                 writer.Write(" (");
                 m_blocks[i].Condition.WriteExpr(game, writer);
                 writer.Write(")");

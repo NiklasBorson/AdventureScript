@@ -82,12 +82,108 @@ namespace AdventureLib
             return 0;
         }
 
-        static int _MessageHeading(GameState game, int[] frame)
+        static int _ListItem(GameState game, int[] frame)
         {
-            // MessageHeading($message:String)
-            //  - frame[1] -> $message
-            string message = game.Strings[frame[1]];
-            game.MessageHeading(message);
+            // ListItem($name:String)
+            //  - frame[1] -> $name
+            string name = game.Strings[frame[1]];
+            var itemMap = game.Items;
+            var item = itemMap.TryGetItem(name);
+
+            // If we didn't find the item, it may be a case mismatch.
+            // TryGetItem is case-sensitive and user-input is converted
+            // to lowercase.
+            if (item == null)
+            {
+                // Search for the item by doing a case-insensitive string
+                // comparison with each item's name.
+                int itemCount = itemMap.Count;
+                for (int i = 1; i < itemCount; i++)
+                {
+                    if (string.Compare(
+                        name,
+                        itemMap[i].Name,
+                        true
+                        ) == 0)
+                    {
+                        item = itemMap[i];
+                        break;
+                    }
+                }
+
+                // Output an error if we still didn't find the item.
+                if (item == null)
+                {
+                    game.Message($"Undefined item: {name}.");
+                    return 0;
+                }
+            }
+
+            // Output the item name.
+            game.Message($"Item {item.Name}");
+            int id = item.ID;
+
+            // Output each non-null property.
+            foreach (var prop in game.Properties)
+            {
+                int value = prop[id];
+                if (value != 0)
+                {
+                    var type = prop.Type;
+
+                    var writer = new StringWriter();
+                    writer.Write(
+                        "- {0} : {1} = ",
+                        prop.Name,
+                        type.Name
+                        );
+
+                    type.WriteValue(game, value, writer);
+                    writer.Write(';');
+
+                    game.Message(writer.ToString());
+                }
+            }
+            return 0;
+        }
+
+        static int _ListItems(GameState game, int[] frame)
+        {
+            // Iterate over all the items except the "null" item.
+            var itemMap = game.Items;
+            var itemCount = itemMap.Count;
+            for (int id = 1; id < itemCount; id++)
+            {
+                game.Message($"- item {itemMap[id].Name};");
+            }
+            return 0;
+        }
+
+        static int _ListProperties(GameState game, int[] frame)
+        {
+            foreach (var prop in game.Properties)
+            {
+                game.Message($"- {prop.Name} : {prop.Type.Name};");
+            }
+            return 0;
+        }
+
+        static int _ListTypes(GameState game, int[] frame)
+        {
+            foreach (var type in game.Types)
+            {
+                if (type.IsUserType)
+                {
+                    var writer = new StringWriter();
+                    writer.Write("- ");
+                    type.SaveDefinition(writer);
+                    game.Message(writer.ToString().Trim());
+                }
+                else
+                {
+                    game.Message($"- {type.Name};");
+                }
+            }
             return 0;
         }
 
@@ -95,17 +191,37 @@ namespace AdventureLib
         {
             foreach (var varExpr in game.GlobalVars)
             {
-                game.Message($"var {varExpr.Name} : {varExpr.Type.Name};");
+                var writer = new StringWriter();
+
+                writer.Write(
+                    "- var {0} : {1} = ",
+                    varExpr.Name,
+                    varExpr.Type.Name
+                    );
+                varExpr.Type.WriteValue(
+                    game,
+                    varExpr.Value,
+                    writer
+                    );
+                writer.Write(';');
+
+                game.Message(writer.ToString());
             }
             return 0;
         }
 
         static int _ListFunctions(GameState game, int[] frame)
         {
-            foreach (var funcDef in game.Functions)
+            // Iterate over all the functions except the "null"
+            // function.
+            var functionMap = game.Functions;
+            var functionCount = functionMap.Count;
+            for (int id = 1; id < functionCount; id++)
             {
+                var funcDef = functionMap[id];
+
                 var b = new StringBuilder();
-                b.Append($"function {funcDef.Name}(");
+                b.Append($"- function {funcDef.Name}(");
                 for (int i = 0; i < funcDef.ParamList.Count; i++)
                 {
                     var paramDef = funcDef.ParamList[i];
@@ -135,7 +251,7 @@ namespace AdventureLib
         {
             foreach (var def in game.Commands)
             {
-                game.Message(def.CommandSpec);
+                game.Message($"- {def.CommandSpec}");
             }
             return 0;
         }
@@ -158,15 +274,22 @@ namespace AdventureLib
             return 0;
         }
 
-        static int _AddAdjective(GameState game, int[] frame)
+        static int _AddAdjectives(GameState game, int[] frame)
         {
-            // AddAdjective($word:String, $item:Item)
+            // AddAdjectives($word:String, $item:Item)
             // - frame[1] -> $word
             // - frame[2] = $item
-            game.WordMap.AddAdjective(
-                /*word*/ game.Strings[frame[1]],
-                /*itemId*/ frame[2]
-                );
+            var words = game.Strings[frame[1]];
+            int itemId = frame[2];
+
+            // Remove leading and trailing spaces and combine multiple spaces.
+            words = StringHelpers.NormalizeSpaces(words);
+
+            // Add each word.
+            foreach (var word in words.Split())
+            {
+                game.WordMap.AddAdjective(word, itemId);
+            }
             return 0;
         }
 
@@ -205,12 +328,30 @@ namespace AdventureLib
                 _Message
                 ),
             new IntrinsicFunctionDef(
-                "MessageHeading",
+                "ListItems",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _ListItems
+                ),
+            new IntrinsicFunctionDef(
+                "ListItem",
                 new ParamDef[] {
-                    new ParamDef("$message", Types.String)
+                    new ParamDef("$name", Types.String)
                 },
                 /*returnType*/ Types.Void,
-                _MessageHeading
+                _ListItem
+                ),
+            new IntrinsicFunctionDef(
+                "ListProperties",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _ListProperties
+                ),
+            new IntrinsicFunctionDef(
+                "ListTypes",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _ListTypes
                 ),
             new IntrinsicFunctionDef(
                 "ListVariables",
@@ -246,13 +387,13 @@ namespace AdventureLib
                 _AddNoun
                 ),
             new IntrinsicFunctionDef(
-                "AddAdjective",
+                "AddAdjectives",
                 new ParamDef[] {
-                    new ParamDef("$word", Types.String),
+                    new ParamDef("$words", Types.String),
                     new ParamDef("$item", Types.Item)
                 },
                 /*returnType*/ Types.Void,
-                _AddAdjective
+                _AddAdjectives
                 ),
         };
     }

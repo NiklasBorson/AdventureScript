@@ -22,9 +22,12 @@ namespace AdventureLib
             m_commandList.Add(def);
         }
 
-        public bool TryInvoke(GameState game, string commandLine)
+        public bool InvokeCommandLine(GameState game, string commandLine)
         {
-            string input = NormalizeInputString(commandLine);
+            string input = StringHelpers.NormalizeInputString(
+                commandLine,
+                game.IntrinsicVars.IgnoreWords
+                );
 
             foreach (var def in m_commandList)
             {
@@ -34,13 +37,9 @@ namespace AdventureLib
                     return InvokeCommand(game, def, match.Groups);
                 }
             }
-            return false;
-        }
 
-        string NormalizeInputString(string commandLine)
-        {
-            // TODO
-            return commandLine.ToLowerInvariant();
+            game.OutputInvalidCommand();
+            return false;
         }
 
         bool InvokeCommand(GameState game, CommandDef def, IReadOnlyList<Group> groups)
@@ -48,7 +47,10 @@ namespace AdventureLib
             // Captures 1..N map to parameters 0..N-1.
             Debug.Assert(groups.Count - 1 == def.Params.Count);
             if (groups.Count - 1 < def.Params.Count)
+            {
+                game.OutputInvalidCommand();
                 return false;
+            }
 
             // Try mapping each of the parameters to values.
             // These are stored in the "stack" frame at indices 1..N.
@@ -99,7 +101,10 @@ namespace AdventureLib
             }
             else if (type == Types.Int)
             {
-                return Int32.TryParse(input, out value);
+                if (Int32.TryParse(input, out value))
+                {
+                    return true;
+                }
             }
             else if (type == Types.Bool)
             {
@@ -118,6 +123,8 @@ namespace AdventureLib
                         return true;
                 }
             }
+
+            game.OutputInvalidCommandArg(input);
             value = 0;
             return false;
         }

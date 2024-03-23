@@ -80,26 +80,22 @@ namespace AdventureLib
 
     class FunctionVariableFrame : VariableFrame
     {
-        public FunctionVariableFrame(Parser parser, IList<ParamDef> paramDefs) : base(parser)
+        public FunctionVariableFrame(Parser parser, IList<ParamDef> paramDefs, TypeDef returnType) : base(parser)
         {
-            // Always reserve space for the "$return" variable, but we'll add it to the variable
-            // make later only if the function has a return type.
-            this.ReturnVariable = PushVar("$return", Types.Void);
+            // Always reserve space for the "$return" variable
+            // at index zero in the frame.
+            var returnVar = PushVar("$return", returnType);
+
+            // Add the "$return" variable to the variable map only
+            // if the return type is not void.
+            if (returnType != Types.Void)
+            {
+                AddVarToMap(parser, returnVar);
+            }
 
             foreach (var def in paramDefs)
             {
                 AddVar(parser, def.Name, def.Type);
-            }
-        }
-
-        public VariableExpr ReturnVariable { get; }
-
-        public void SetReturnType(Parser parser, TypeDef type)
-        {
-            if (type != Types.Void)
-            {
-                this.ReturnVariable.SetType(type);
-                AddVarToMap(parser, this.ReturnVariable);
             }
         }
     };
