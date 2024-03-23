@@ -88,7 +88,7 @@ namespace OxbowCastle
 
         void AddOutputText(string text, Style style)
         {
-            m_outputList.Items.Add(new TextBlock
+            m_outputStackPanel.Children.Add(new TextBlock
             {
                 Text = text,
                 Style = style
@@ -101,11 +101,11 @@ namespace OxbowCastle
             {
                 if (para.StartsWith("# "))
                 {
-                    AddOutputText(para.Substring(2), m_headingStyle);
+                    AddOutputText(para.Substring(2), m_headingParaStyle);
                 }
                 else
                 {
-                    AddOutputText(para, m_bodyStyle);
+                    AddOutputText(para, m_bodyParaStyle);
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace OxbowCastle
             m_game = game;
             m_gamePath = filePath;
 
-            m_outputList.Items.Clear();
+            m_outputStackPanel.Children.Clear();
             AddOutput(output);
 
             m_gameControl.Visibility = Visibility.Visible;
@@ -131,6 +131,9 @@ namespace OxbowCastle
             {
                 AddOutputText(input, m_commandStyle);
                 AddOutput(m_game.InvokeCommand(input));
+
+                m_outputScrollViewer.Measure(m_outputScrollViewer.RenderSize);
+                m_outputScrollViewer.ScrollToVerticalOffset(m_outputScrollViewer.ScrollableHeight);
             }
         }
 

@@ -10,17 +10,27 @@
     
     <Grid Background="{StaticResource AccentAAFillColorSecondaryBrush}">
         <Grid.Resources>
-            <Style x:Key="HeadingStyle" x:Name="m_headingStyle" TargetType="TextBlock">
+            <Style x:Key="HeadingStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="20"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
-            <Style x:Key="BodyStyle" x:Name="m_bodyStyle" TargetType="TextBlock">
+            <Style x:Key="BodyStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style x:Key="HeadingParaStyle" x:Name="m_headingParaStyle" TargetType="TextBlock" BasedOn="{StaticResource HeadingStyle}">
+                <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="Margin" Value="0,10,0,0"/>
+            </Style>
+            <Style x:Key="BodyParaStyle" x:Name="m_bodyParaStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStyle}">
+                <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="Margin" Value="0,5,0,5"/>
             </Style>
             <Style x:Key="CommandStyle" x:Name="m_commandStyle" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Foreground" Value="{StaticResource AccentTextFillColorPrimaryBrush}"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="Margin" Value="0,20,0,0"/>
+                <Setter Property="Foreground" Value="{StaticResource AccentTextFillColorSecondaryBrush}"/>
             </Style>
         </Grid.Resources>
         
@@ -50,7 +60,9 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="m_outputList" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}"/>
+            <ScrollViewer x:Name="m_outputScrollViewer" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}">
+                <StackPanel x:Name="m_outputStackPanel" Margin="40,10,20,10"/>
+            </ScrollViewer>
             <TextBox Grid.Row="1" x:Name="m_commandTextBox" KeyDown="TextBox_KeyDown"/>
         </Grid>
     </Grid>
