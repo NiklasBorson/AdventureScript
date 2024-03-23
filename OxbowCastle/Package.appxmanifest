@@ -9,7 +9,7 @@
 
   <Identity
     Name="b40af1d3-1267-4847-8493-13d449660233"
-    Publisher="CN=nebor"
+    Publisher="CN=NiklasBorson"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="b40af1d3-1267-4847-8493-13d449660233" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
