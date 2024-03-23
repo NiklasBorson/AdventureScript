@@ -30,5 +30,13 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Grid x:Name="m_gameControl" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ListView x:Name="m_outputList" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}"/>
+            <TextBox Grid.Row="1" x:Name="m_commandTextBox"/>
+        </Grid>
     </Grid>
 </Window>
