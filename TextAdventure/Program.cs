@@ -1,213 +1,92 @@
 ﻿using AdventureLib;
+using System.Diagnostics;
 
-namespace CsAdventure
+namespace TextAdventure
 {
     class Program
     {
-        GameState m_game;
-
-        Program(string inputFile)
-        {
-            m_game = new GameState();
-            var output = m_game.LoadGame(inputFile);
-            WriteOutput(output);
-        }
-
-        void WriteOutput(IList<string> output)
-        {
-            bool inList = false;
-
-            foreach (var para in output)
-            {
-                if (para.StartsWith("- "))
-                {
-                    // Special handling for list items.
-                    WriteWrapped(
-                        para,
-                        /*startPos*/ 2,
-                        /*firstLinePrefix*/ "- ",
-                        /*linePrefix*/ "  ",
-                        /*lineSuffix*/ string.Empty
-                        );
-                    inList = true;
-                }
-                else
-                {
-                    // Not a list item, so end the list if we're on one.
-                    if (inList)
-                    {
-                        Console.WriteLine();
-                        inList = false;
-                    }
-
-                    if (para.StartsWith("# "))
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("+------------------------------------------------------------------------------+");
-                        WriteWrapped(
-                            para,
-                            /*startPos*/ 2,
-                            /*firstLinePrefix*/ "| ",
-                            /*linePrefix*/ "| ",
-                            /*lineSuffix*/ " |"
-                            );
-                        Console.WriteLine("+------------------------------------------------------------------------------+");
-                    }
-                    else
-                    {
-                        WriteWrapped(
-                            para,
-                            /*startPos*/ 0,
-                            /*firstLinePrefix*/ string.Empty,
-                            /*linePrefix*/ string.Empty,
-                            /*lineSuffix*/ string.Empty
-                            );
-                    }
-                    Console.WriteLine();
-                }
-            }
-            if (inList)
-            {
-                Console.WriteLine();
-            }
-        }
-
-        const int ColumnWidth = 80;
-
-        void WriteWrapped(
-            string para,
-            int startPos,
-            string firstLinePrefix,
-            string linePrefix,
-            string lineSuffix
+        static void Run(
+            string inputFileName,
+            string? outputFileName,
+            TextWriter? traceFile,
+            bool parseFlag
             )
-        {
-            if (para.Length <= startPos)
-                return;
-
-            string currentLinePrefix = firstLinePrefix;
-            int maxLength = ColumnWidth - (currentLinePrefix.Length + lineSuffix.Length);
-            int lineStart = startPos;
-
-            while (para.Length - lineStart > maxLength)
-            {
-                int endIndex = Math.Min(para.Length, lineStart + maxLength);
-
-                int breakStart = endIndex;
-                int breakEnd = endIndex;
-
-                for (int i = lineStart; i < endIndex; i++)
-                {
-                    if (para[i] == ' ')
-                    {
-                        breakStart = i++;
-                        while (i < para.Length && para[i] == ' ')
-                            i++;
-                        breakEnd = i;
-                    }
-                }
-
-                WriteLine(para, lineStart, breakStart - lineStart, currentLinePrefix, lineSuffix);
-                lineStart = breakEnd;
-                currentLinePrefix = linePrefix;
-                maxLength = ColumnWidth - (currentLinePrefix.Length + lineSuffix.Length);
-            }
-
-            if (lineStart < para.Length)
-            {
-                WriteLine(para, lineStart, para.Length - lineStart, currentLinePrefix, lineSuffix);
-            }
-        }
-
-        void WriteLine(string input, int startPos, int length, string linePrefix, string lineSuffix)
-        {
-            Console.Write(linePrefix);
-            Console.Write(input.Substring(startPos, length));
-            if (lineSuffix.Length != 0)
-            {
-                int padding = ColumnWidth - (linePrefix.Length + length + lineSuffix.Length);
-                for (int i = 0; i < padding; i++)
-                {
-                    Console.Write(' ');
-                }
-                Console.Write(lineSuffix);
-            }
-            Console.WriteLine();
-        }
-
-        void Run()
-        {
-            Console.Write("> ");
-            var input = Console.ReadLine();
-            while (input != null && input != "q")
-            {
-                var output = m_game.InvokeCommand(input);
-                WriteOutput(output);
-
-                if (m_game.IsGameOver)
-                {
-                    break;
-                }
-
-                Console.Write("> ");
-                input = Console.ReadLine();
-            }
-        }
-
-        public void Save(string fileName)
-        {
-            m_game.Save(fileName);
-        }
-
-        public static void Main(string[] args)
         {
             try
             {
-                bool parseFlag = false;
-                string inputFile = string.Empty;
-                string outputFile = string.Empty ;
-
-                for (int i = 0; i < args.Length; i++)
-                {
-                    if (args[i] == "-parse")
-                    {
-                        parseFlag = true;
-                    }
-                    else if (inputFile == string.Empty)
-                    {
-                        inputFile = args[i];
-                    }
-                    else if (outputFile == string.Empty)
-                    {
-                        outputFile = args[i];
-                    }
-                    else
-                    {
-                        Console.Error.WriteLine("Error: Too many command line arguments.");
-                    }
-                }
-
-                if (inputFile == string.Empty)
-                {
-                    Console.Error.WriteLine("Error: No input file specified.");
-                    return;
-                }
-
-                var program = new Program(inputFile);
+                var program = new Game(inputFileName, traceFile);
 
                 if (!parseFlag)
                 {
                     program.Run();
                 }
 
-                if (outputFile != string.Empty)
+                if (outputFileName != null)
                 {
-                    program.Save(outputFile);
+                    program.Save(outputFileName);
                 }
             }
             catch (ParseException e)
             {
                 Console.Error.WriteLine($"Error: {e.Message}");
+            }
+        }
+
+        public static void Main(string[] args)
+        {
+            bool parseFlag = false;
+            string? traceFileName = null;
+            string? inputFileName = null;
+            string? outputFileName = null;
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (args[i] == "-parse")
+                {
+                    parseFlag = true;
+                }
+                else if (args[i] == "-trace")
+                {
+                    if (++i < args.Length)
+                    {
+                        traceFileName = args[i];
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine("Error: Expected file name after -trace.");
+                        return;
+                    }
+                }
+                else if (inputFileName == null)
+                {
+                    inputFileName = args[i];
+                }
+                else if (outputFileName == null)
+                {
+                    outputFileName = args[i];
+                }
+                else
+                {
+                    Console.Error.WriteLine("Error: Too many command line arguments.");
+                }
+            }
+
+            if (inputFileName == null)
+            {
+                Console.Error.WriteLine("Error: No input file specified.");
+                return;
+            }
+
+            if (traceFileName != null)
+            {
+                using (var traceFile = new StreamWriter(traceFileName))
+                {
+                    Run(inputFileName, outputFileName, traceFile, parseFlag);
+                }
+            }
+            else
+            {
+                Run(inputFileName, outputFileName, null, parseFlag);
             }
         }
     }

@@ -337,6 +337,8 @@ use the current time to determine if there is daylight.
 ```text
 var $currentTime = 11*60; # default initial time is 11am
 
+function IsNight() => $currentTime < 8*60 || $currentTime >= 20*60;
+
 function IncrementTime()
 {
     $currentTime = $currentTime < (23*60) + 59 ? $currentTime + 1 : 0;
@@ -360,84 +362,17 @@ Possible values of the `IsDark` property include the following functions:
 
 ```text
 property IsDark : ItemPredicate;
-function IsDarkAtNight($item:Item) => $currentTime < 8*60 || $currentTime >= 20*60;
+
+function IsDarkAtNight($item:Item) => IsNight();
+
 function IsDarkAlways($item:Item) => true;
 ```
 
-## Lighting Helpers
+## IsDark Helpers
 
-The section contains internal helpers used to implement lighting.
+Helper functions in this section are used to determine if it is currently dark.
 
 ```text
-# TurnOnAction for a light source that behaves like an electric light
-function TurnOnLight($item:Item)
-{
-    if ($item.LightState != LightState.On)
-    {
-        $item.LightState = LightState.On;
-        Message($"The {Label($item)} is now on.");
-    }
-    else
-    {
-        Message($"The {Label($item)} is already on.");
-    }
-}
-# TurnOfAction for a light source that behaves like an electric light
-function TurnOffLight($item:Item)
-{
-    if ($item.LightState == LightState.On)
-    {
-        $item.LightState = LightState.Off;
-        Message($"The {Label($item)} is now off.");
-    }
-    else
-    {
-        Message($"The {Label($item)} is already off.");
-    }
-}
-# TurnOnAction for a candle-like light source
-function TurnOnCandle($item:Item)
-{
-    Message($"You can't turn on the {Label($item)}. You need to light it with something.");
-}
-# IgniteAction for a candle-like light source
-function IgniteCandle($item:Item)
-{
-    if ($item.LightState != LightState.Lit)
-    {
-        $item.LightState = LightState.Lit;
-        Message($"The {Label($item)} is now lit.");
-    }
-    else
-    {
-        Message($"The {Label($item)} is already lit.");
-    }
-}
-# PutOutAction for a candle-like light source
-function PutOutCandle($item:Item)
-{
-    if ($item.LightState == LightState.Lit)
-    {
-        $item.LightState = LightState.Unlit;
-        Message($"The {Label($item)} is now out.");
-    }
-    else
-    {
-        Message($"The {Label($item)} is already out.");
-    }
-}
-# UseAction for a lighter item
-function UseLighterOn($item:Item, $target:Item)
-{
-    if ($target.IgniteAction != null)
-    {
-        $target.IgniteAction($target);
-    }
-    else
-    {
-        Message($"You cannot light the {Label($target)}.");
-    }
-}
 map IsActiveLightState LightState -> Bool {
     None -> false,
     Off -> false,
@@ -445,16 +380,18 @@ map IsActiveLightState LightState -> Bool {
     Unlit -> false,
     Lit -> true
 }
+
 # Called during turn initialization.
 var $currentLightSource : Item = null;
 var $isNowDark = false;
+
 function InitializeLighting()
 {
     $currentLightSource = null;
 
     if (player.Location.IsDark(player.Location))
     {
-        foreach (var $item)
+        foreach (var $item) where LightState != LightState.None
         {
             if (IsActiveLightState($item.LightState) && IsAccessible($item))
             {
@@ -466,104 +403,6 @@ function InitializeLighting()
     else
     {
         $isNowDark = false;
-    }
-}
-```
-
-## InitializeLight and NewLight Functions
-
-The functions in this section create or initialize light sources that can be turned on
-or off light electric lights.
-
-The `InitializeLight` function sets the properties of a light item.
-
-The `NewLight` function creates and initializes a new light item.
-
-The `IsLight` function tests whether an item is a light.
-
-```text
-function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
-{
-    InitializePortableItem($item, $adjectives, $noun, $loc);
-    $item.LightState = LightState.Off;
-    $item.TurnOnAction = TurnOnLight;
-    $item.TurnOffAction = TurnOffLight;
-    $item.PutOutAction = TurnOffLight;
-}
-function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
-{
-    var $item = NewItem($"_{$noun}_{$loc}");
-    InitializeLight($item, $adjectives, $noun, $loc);
-    $return = $item;
-}
-function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
-```
-
-## InitializeCandle and NewCandle Functions
-
-The functions in this section create or initialize light sources that behave like
-candles. This includes oil lamps, torches, or any other light source that must be
-"lit" rather than merely turned on.
-
-The `InitializeCandle` function sets the properties of a candle item.
-
-The `NewCandle` function creates and initializes a new candle item.
-
-The `IsCandle` function tests whether an item is a candle.
-
-```text
-function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
-{
-    InitializePortableItem($item, $adjectives, $noun, $loc);
-    $item.LightState = LightState.Unlit;
-    $item.TurnOnAction = TurnOnCandle;  # displays error message
-    $item.IgniteAction = IgniteCandle;  # sets to LightState.Lit
-    $item.TurnOffAction = PutOutCandle; # sets to LightState.Unlit
-    $item.PutOutAction = PutOutCandle;  # sets to LightState.Unlit
-}
-function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
-{
-    var $item = NewItem($"_{$noun}_{$loc}");
-    InitializeCandle($item, $adjectives, $noun, $loc);
-    $return = $item;
-}
-function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
-```
-
-## InitializeLighter and NewLighter Functions
-
-The functions in this section create or initialize _lighter items_, which can be used
-to invoke the ignite action on other items.
-
-The `InitializeLighter` function sets the properties of a lighter item.
-
-The `NewLighter` function creates and initializes a new lighter item.
-
-The `IsLighter` function tests whether an item is a lighter.
-
-```text
-function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
-{
-    InitializePortableItem($item, $adjectives, $noun, $loc);
-    $item.UseOnAction = UseLighterOn;
-}
-function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
-{
-    var $item = NewItem($"_{$noun}_{$loc}");
-    InitializeLighter($item, $adjectives, $noun, $loc);
-    $return = $item;
-}
-function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
-
-function LightWith($target:Item, $lighter:Item)
-{
-    if (IsLighter($lighter))
-    {
-        UseLighterOn($lighter, $target);
-    }
-    else
-    {
-        Message($"The {Label($lighter)} has no effect.");
     }
 }
 ```
@@ -1202,7 +1041,14 @@ function Look()
     {
         if ($currentLightSource != null)
         {
-            Message($"The {Label($currentLightSource)} illuminates the darkness.");
+            if (player.Location.IsDark == IsDarkAtNight)
+            {
+                Message($"It is night, but the {Label($currentLightSource)} illuminates the darkness.");
+            }
+            else
+            {
+                Message($"The {Label($currentLightSource)} illuminates the darkness.");
+            }
         }
 
         Describe($room);
@@ -1223,6 +1069,192 @@ function Look()
                 Message($"There is a {LabelWithState($item)} here.");
             }
         }
+    }
+}
+```
+
+## Lighting Helpers
+
+The section contains internal helpers used to implement lighting.
+
+```text
+function OnLightActivated($lightSource:Item)
+{
+    if ($isNowDark)
+    {
+        $isNowDark = false;
+        $currentLightSource = $lightSource;
+        Look();
+    }
+}
+
+# TurnOnAction for a light source that behaves like an electric light
+function TurnOnLight($item:Item)
+{
+    if ($item.LightState != LightState.On)
+    {
+        $item.LightState = LightState.On;
+        Message($"The {Label($item)} is now on.");
+        OnLightActivated($item);
+    }
+    else
+    {
+        Message($"The {Label($item)} is already on.");
+    }
+}
+# TurnOfAction for a light source that behaves like an electric light
+function TurnOffLight($item:Item)
+{
+    if ($item.LightState == LightState.On)
+    {
+        $item.LightState = LightState.Off;
+        Message($"The {Label($item)} is now off.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already off.");
+    }
+}
+# TurnOnAction for a candle-like light source
+function TurnOnCandle($item:Item)
+{
+    Message($"You can't turn on the {Label($item)}. You need to light it with something.");
+}
+# IgniteAction for a candle-like light source
+function IgniteCandle($item:Item)
+{
+    if ($item.LightState != LightState.Lit)
+    {
+        $item.LightState = LightState.Lit;
+        Message($"The {Label($item)} is now lit.");
+        OnLightActivated($item);
+    }
+    else
+    {
+        Message($"The {Label($item)} is already lit.");
+    }
+}
+# PutOutAction for a candle-like light source
+function PutOutCandle($item:Item)
+{
+    if ($item.LightState == LightState.Lit)
+    {
+        $item.LightState = LightState.Unlit;
+        Message($"The {Label($item)} is now out.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already out.");
+    }
+}
+# UseAction for a lighter item
+function UseLighterOn($item:Item, $target:Item)
+{
+    if ($target.IgniteAction != null)
+    {
+        $target.IgniteAction($target);
+    }
+    else
+    {
+        Message($"You cannot light the {Label($target)}.");
+    }
+}
+```
+
+## InitializeLight and NewLight Functions
+
+The functions in this section create or initialize light sources that can be turned on
+or off light electric lights.
+
+The `InitializeLight` function sets the properties of a light item.
+
+The `NewLight` function creates and initializes a new light item.
+
+The `IsLight` function tests whether an item is a light.
+
+```text
+function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.LightState = LightState.Off;
+    $item.TurnOnAction = TurnOnLight;
+    $item.TurnOffAction = TurnOffLight;
+    $item.PutOutAction = TurnOffLight;
+}
+function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLight($item, $adjectives, $noun, $loc);
+    $return = $item;
+}
+function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
+```
+
+## InitializeCandle and NewCandle Functions
+
+The functions in this section create or initialize light sources that behave like
+candles. This includes oil lamps, torches, or any other light source that must be
+"lit" rather than merely turned on.
+
+The `InitializeCandle` function sets the properties of a candle item.
+
+The `NewCandle` function creates and initializes a new candle item.
+
+The `IsCandle` function tests whether an item is a candle.
+
+```text
+function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.LightState = LightState.Unlit;
+    $item.TurnOnAction = TurnOnCandle;  # displays error message
+    $item.IgniteAction = IgniteCandle;  # sets to LightState.Lit
+    $item.TurnOffAction = PutOutCandle; # sets to LightState.Unlit
+    $item.PutOutAction = PutOutCandle;  # sets to LightState.Unlit
+}
+function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeCandle($item, $adjectives, $noun, $loc);
+    $return = $item;
+}
+function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
+```
+
+## InitializeLighter and NewLighter Functions
+
+The functions in this section create or initialize _lighter items_, which can be used
+to invoke the ignite action on other items.
+
+The `InitializeLighter` function sets the properties of a lighter item.
+
+The `NewLighter` function creates and initializes a new lighter item.
+
+The `IsLighter` function tests whether an item is a lighter.
+
+```text
+function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.UseOnAction = UseLighterOn;
+}
+function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLighter($item, $adjectives, $noun, $loc);
+    $return = $item;
+}
+function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
+
+function LightWith($target:Item, $lighter:Item)
+{
+    if (IsLighter($lighter))
+    {
+        UseLighterOn($lighter, $target);
+    }
+    else
+    {
+        Message($"The {Label($lighter)} has no effect.");
     }
 }
 ```

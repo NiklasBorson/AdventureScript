@@ -1260,7 +1260,7 @@ function UpdateFollowingPriest($npc:Item)
         if (!$hasPriestReactedToFairy)
         {
             Message(
-                "The priest says, `Do not trust these fiends! They speak only in riddles '"
+                "The priest says, 'Do not trust these fiends! They speak only in riddles "
                 "and they do not mean is well, I am sure!'"
                 );
             $hasPriestReactedToFairy = true;
@@ -1307,8 +1307,8 @@ function UpdateFollowingMaid($npc:Item)
         if (!$hasMaidReactedToFairy)
         {
             Message(
-                "The maid says, 'Maybe there's some clue these words, but I don't "
-                "understand it.'"
+                "The maid says, 'Maybe these words are giving us some important clue, but I "
+                "don't understand it.'"
                 );
             $hasMaidReactedToFairy = true;
         }
