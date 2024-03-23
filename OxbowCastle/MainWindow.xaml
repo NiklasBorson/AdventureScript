@@ -7,8 +7,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
+    
     <Grid Background="{StaticResource AccentAAFillColorSecondaryBrush}">
+        <Grid.Resources>
+            <Style x:Key="HeadingStyle" x:Name="m_headingStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+            <Style x:Key="BodyStyle" x:Name="m_bodyStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+            <Style x:Key="CommandStyle" x:Name="m_commandStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Foreground" Value="{StaticResource AccentTextFillColorPrimaryBrush}"/>
+            </Style>
+        </Grid.Resources>
+        
         <ItemsControl x:Name="m_gameListControl" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -23,8 +38,8 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock HorizontalAlignment="Center" Text="{x:Bind Action}" FontSize="14"/>
-                            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{x:Bind Name}" FontSize="18" FontWeight="Bold"/>
+                            <TextBlock HorizontalAlignment="Center" Text="{x:Bind Action}" Style="{StaticResource BodyStyle}"/>
+                            <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{x:Bind Name}" Style="{StaticResource HeadingStyle}"/>
                         </Grid>
                     </Button>
                 </DataTemplate>
@@ -36,7 +51,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <ListView x:Name="m_outputList" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}"/>
-            <TextBox Grid.Row="1" x:Name="m_commandTextBox"/>
+            <TextBox Grid.Row="1" x:Name="m_commandTextBox" KeyDown="TextBox_KeyDown"/>
         </Grid>
     </Grid>
 </Window>

@@ -86,11 +86,27 @@ namespace OxbowCastle
             StartGame(Path.Combine(gameDir, App.GameFileName));
         }
 
+        void AddOutputText(string text, Style style)
+        {
+            m_outputList.Items.Add(new TextBlock
+            {
+                Text = text,
+                Style = style
+            });
+        }
+
         void AddOutput(IList<string> output)
         {
             foreach (var para in output)
             {
-                m_outputList.Items.Add(new TextBlock { Text = para });
+                if (para.StartsWith("# "))
+                {
+                    AddOutputText(para.Substring(2), m_headingStyle);
+                }
+                else
+                {
+                    AddOutputText(para, m_bodyStyle);
+                }
             }
         }
 
@@ -107,6 +123,25 @@ namespace OxbowCastle
 
             m_gameControl.Visibility = Visibility.Visible;
             m_gameListControl.Visibility = Visibility.Collapsed;
+        }
+
+        void InvokeCommand(string input)
+        {
+            if (input != string.Empty)
+            {
+                AddOutputText(input, m_commandStyle);
+                AddOutput(m_game.InvokeCommand(input));
+            }
+        }
+
+        void TextBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                InvokeCommand(m_commandTextBox.Text);
+                m_commandTextBox.Text = string.Empty;
+                e.Handled = true;
+            }
         }
     }
 }
