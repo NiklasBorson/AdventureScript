@@ -5,26 +5,12 @@ namespace TextAdventure
 {
     class Program
     {
-        static void Run(
-            string inputFileName,
-            string? outputFileName,
-            TextWriter? traceFile,
-            bool parseFlag
-            )
+        static void Run(string inputFileName, TextWriter? traceFile)
         {
             try
             {
-                var program = new Game(inputFileName, traceFile);
-
-                if (!parseFlag)
-                {
-                    program.Run();
-                }
-
-                if (outputFileName != null)
-                {
-                    program.Save(outputFileName);
-                }
+                var game = new Game(inputFileName, traceFile);
+                game.Run();
             }
             catch (ParseException e)
             {
@@ -32,61 +18,77 @@ namespace TextAdventure
             }
         }
 
+        static void Trace(string inputFileName, string traceFileName)
+        {
+            using (var traceFile = new StreamWriter(traceFileName))
+            {
+                Run(inputFileName, traceFile);
+            }
+        }
+
+        static void Compile(string inputFileName, string outputFileName)
+        {
+            var game = new GameState();
+            var output = game.LoadGame(inputFileName);
+
+            using (var writer = new StreamWriter(outputFileName))
+            {
+                if (output.Count != 0)
+                {
+                    writer.WriteLine("game {");
+                    foreach (var message in output)
+                    {
+                        writer.WriteLine(
+                            "    Message(\"{0}\");",
+                            message
+                            );
+                    }
+                    writer.WriteLine("}");
+                }
+                game.Save(writer);
+            }
+        }
+
+        const string Usage =
+            "TextAdventure <inputFile>\n" +
+            "TextAdventure -compile <inputFile> <outputFile>\n" +
+            "TextAdventure -trace <inputFile> <traceFile>\n";
+
         public static void Main(string[] args)
         {
-            bool parseFlag = false;
-            string? traceFileName = null;
-            string? inputFileName = null;
-            string? outputFileName = null;
-
-            for (int i = 0; i < args.Length; i++)
+            if (args.Length == 0)
             {
-                if (args[i] == "-parse")
-                {
-                    parseFlag = true;
-                }
-                else if (args[i] == "-trace")
-                {
-                    if (++i < args.Length)
-                    {
-                        traceFileName = args[i];
-                    }
-                    else
-                    {
-                        Console.Error.WriteLine("Error: Expected file name after -trace.");
-                        return;
-                    }
-                }
-                else if (inputFileName == null)
-                {
-                    inputFileName = args[i];
-                }
-                else if (outputFileName == null)
-                {
-                    outputFileName = args[i];
-                }
-                else
-                {
-                    Console.Error.WriteLine("Error: Too many command line arguments.");
-                }
-            }
-
-            if (inputFileName == null)
-            {
-                Console.Error.WriteLine("Error: No input file specified.");
+                Console.WriteLine(Usage);
                 return;
             }
 
-            if (traceFileName != null)
+            string firstArg = args[0];
+            if (firstArg[0] == '-')
             {
-                using (var traceFile = new StreamWriter(traceFileName))
+                if (firstArg == "-?" || firstArg == "--help")
                 {
-                    Run(inputFileName, outputFileName, traceFile, parseFlag);
+                    Console.WriteLine(Usage);
                 }
+                else if (firstArg == "-compile" && args.Length == 3)
+                {
+                    Compile(args[1], args[2]);
+                }
+                else if (firstArg == "-trace" && args.Length == 3)
+                {
+                    Trace(args[1], args[2]);
+                }
+                else
+                {
+                    Console.Error.WriteLine("Error: Invalid command line.");
+                }
+            }
+            else if (args.Length == 1)
+            {
+                Run(args[0], null);
             }
             else
             {
-                Run(inputFileName, outputFileName, null, parseFlag);
+                Console.Error.WriteLine("Error: Invalid command line.");
             }
         }
     }
