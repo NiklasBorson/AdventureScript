@@ -1,0 +1,99 @@
+n
+n
+n
+n
+w
+s
+open chest
+take key
+take tinderbox
+take lamp
+n
+n
+n
+n
+use tinderbox on lamp
+w
+look at rack
+take long sword
+open chest
+use key on chest
+open chest
+take helmet
+take shirt
+take leggings
+e
+s
+attack goblin
+attack goblin
+s
+e
+s
+s
+s
+e
+e
+w
+w
+w
+s
+n
+n
+look at table
+take food
+take wine
+e
+n
+look at statue
+n
+n
+e
+e
+s
+attack orc
+attack orc
+attack orc
+s
+open chest
+take silver key
+use bed
+look
+put out lamp
+n
+n
+n
+use tinderbox on lamp
+look at throne
+n
+use silver key on north door
+n
+look at statue
+say the guests have arrived
+n
+put out lamp
+up
+up
+up
+up
+use tinderbox on lamp
+put food on table
+take cup
+put out lamp
+down
+down
+down
+down
+s
+use tinderbox on lamp
+s
+s
+s
+n
+n
+w
+w
+s
+s
+put cup in statue
+put wine in cup
+s

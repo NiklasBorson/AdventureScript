@@ -25,7 +25,7 @@
     <None Update="Baseline\StringLexer.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="TestFiles\Oxbow-Castle-trace.txt">
+    <None Update="Baseline\Oxbow-Castle-trace.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
