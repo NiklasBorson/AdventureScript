@@ -635,6 +635,28 @@ namespace AdventureScript
             {
                 ParseForeachStatement(builder);
             }
+            else if (MatchName("break"))
+            {
+                var loop = builder.CurrentLoop;
+                if (loop == null)
+                {
+                    Fail("break can only be inside a loop.");
+                }
+                builder.AddStatement(new BreakStatement(loop));
+                Advance();
+                ReadSymbol(SymbolId.Semicolon);
+            }
+            else if (MatchName("continue"))
+            {
+                var loop = builder.CurrentLoop;
+                if (loop == null)
+                {
+                    Fail("continue can only be inside a loop.");
+                }
+                builder.AddStatement(new ContinueStatement(loop));
+                Advance();
+                ReadSymbol(SymbolId.Semicolon);
+            }
             else if (MatchSymbol(SymbolId.LeftBrace))
             {
                 builder.AddStatement(new BlockStartStatement());

@@ -33,6 +33,8 @@ namespace AdventureScript
             m_currentLoop = loop.Parent;
         }
 
+        public LoopStatement? CurrentLoop => m_currentLoop;
+
         public FunctionBody CreateFunctionBody()
         {
             ElideDummyStatements();
