@@ -38,6 +38,7 @@ namespace AdventureScript
                 m_rightExpr.WriteExpr(game, writer);
             }
             writer.Write(";");
+            writer.EndLine();
         }
     }
 }

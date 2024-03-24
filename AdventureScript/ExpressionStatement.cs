@@ -18,6 +18,7 @@
         {
             m_expr.WriteExpr(game, writer);
             writer.Write(";");
+            writer.EndLine();
         }
     }
 }

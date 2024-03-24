@@ -42,7 +42,7 @@ namespace AdventureScript
 
         public override void WriteStatement(GameState game, CodeWriter writer)
         {
-            writer.Write($"foreach (var {m_loopVar.Name} : {m_type.Name})");
+            writer.Write($"foreach (var {m_loopVar.Name}:{m_type.Name})");
             writer.BeginBlock();
         }
     }
