@@ -1,4 +1,4 @@
-﻿using AdventureLib;
+﻿using AdventureScript;
 
 namespace TextAdventure
 {

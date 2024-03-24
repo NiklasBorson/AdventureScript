@@ -1,33 +1,79 @@
-﻿namespace AdventureLib
-{
-    sealed class SwitchStatement : Statement
-    {
-        Expr m_expr;
-        TypeDef m_type;
-        IDictionary<int, Statement> m_cases;
-        Statement? m_defaultCase;
+﻿using System.Diagnostics;
 
-        public SwitchStatement(Expr expr, TypeDef type, IDictionary<int, Statement> cases, Statement? defaultCase)
+namespace AdventureScript
+{
+    sealed class CaseStatement : DummyStatement
+    {
+        TypeDef m_type;
+        int m_value;
+
+        public CaseStatement(TypeDef type, int value)
         {
-            m_expr = expr;
             m_type = type;
-            m_cases = cases;
-            m_defaultCase = defaultCase;
+            m_value = value;
         }
 
-        public override void Invoke(GameState game, int[] frame)
+        public override void WriteStatement(GameState game, CodeWriter writer)
+        {
+            writer.Write("case ");
+            m_type.WriteValue(game, m_value, writer.TextWriter);
+            writer.BeginBlock();
+        }
+    }
+
+    sealed class DefaultCaseStatement : DummyStatement
+    {
+        public override void WriteStatement(GameState game, CodeWriter writer)
+        {
+            writer.Write("default");
+            writer.BeginBlock();
+        }
+    }
+
+
+    sealed class SwitchStatement : BranchStatement
+    {
+        Expr m_expr;
+        Dictionary<int, CaseStatement> m_cases = new Dictionary<int, CaseStatement>();
+        DefaultCaseStatement? m_defaultCase = null;
+
+        public SwitchStatement(Expr expr)
+        {
+            m_expr = expr;
+        }
+
+        public override int Invoke(GameState game, int[] frame)
         {
             int value = m_expr.Evaluate(game, frame);
 
-            Statement? branch;
+            CaseStatement? branch;
             if (m_cases.TryGetValue(value, out branch))
             {
-                branch.Invoke(game, frame);
+                return branch.NextStatementIndex;
             }
             else if (m_defaultCase != null)
             {
-                m_defaultCase.Invoke(game, frame);
+                return m_defaultCase.NextStatementIndex;
             }
+            else
+            {
+                return BlockEnd.NextStatementIndex;
+            }
+        }
+
+        public int CaseCount => m_cases.Count;
+
+        public CaseStatement? TryCreateCase(int value)
+        {
+            var statement = new CaseStatement(m_expr.Type, value);
+            return m_cases.TryAdd(value, statement) ? statement : null;
+        }
+
+        public DefaultCaseStatement CreateDefaultCase()
+        {
+            Debug.Assert(m_defaultCase == null);
+            m_defaultCase = new DefaultCaseStatement();
+            return m_defaultCase;
         }
 
         public override void WriteStatement(GameState game, CodeWriter writer)
@@ -36,17 +82,6 @@
             m_expr.WriteExpr(game, writer);
             writer.Write(")");
             writer.BeginBlock();
-
-            foreach (var elem in m_cases)
-            {
-                writer.Write("case ");
-                m_type.WriteValue(game, elem.Key, writer.TextWriter);
-                writer.BeginBlock();
-                elem.Value.WriteStatement(game, writer);
-                writer.EndBlock();
-            }
-
-            writer.EndBlock();
         }
     }
 }

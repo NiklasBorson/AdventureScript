@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     sealed class AssignStatement : Statement
     {
@@ -25,10 +25,11 @@ namespace AdventureLib
             return leftType == rightType || rightType == Types.Null;
         }
 
-        public override void Invoke(GameState game, int[] frame)
+        public override int Invoke(GameState game, int[] frame)
         {
             int value = m_rightExpr.Evaluate(game, frame);
             m_leftExpr.SetValue(game, frame, value);
+            return NextStatementIndex;
         }
 
         public override void WriteStatement(GameState game, CodeWriter writer)

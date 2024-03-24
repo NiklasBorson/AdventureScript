@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Xml.Linq;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     class TypeMap : IEnumerable<TypeDef>
     {

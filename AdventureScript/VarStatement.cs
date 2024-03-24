@@ -1,5 +1,4 @@
-﻿using AdventureLib;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace AdventureScript
 {
@@ -18,10 +17,11 @@ namespace AdventureScript
                 AssignStatement.CanAssignTypes(m_var.Type, m_rightExpr.Type));
         }
 
-        public override void Invoke(GameState game, int[] frame)
+        public override int Invoke(GameState game, int[] frame)
         {
             int value = m_rightExpr?.Evaluate(game, frame) ?? 0;
             m_var.SetValue(game, frame, value);
+            return NextStatementIndex;
         }
 
         public override void WriteStatement(GameState game, CodeWriter writer)

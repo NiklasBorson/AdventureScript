@@ -1,6 +1,6 @@
 ﻿using System.Reflection.Emit;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     record struct ParamDef(string Name, TypeDef Type);
 
@@ -66,6 +66,4 @@ namespace AdventureLib
             writer.Write(param.Type.Name);
         }
     }
-
-    record class CodeBlock(int FrameSize, Statement Statement);
 }

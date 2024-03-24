@@ -1,4 +1,4 @@
-using AdventureLib;
+using AdventureScript;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System.Collections.Generic;

@@ -1,13 +1,14 @@
-﻿using System.Xml.Linq;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     class VariableFrame
     {
         GlobalVarMap m_globals;
         Dictionary<string, VariableExpr> m_varMap = new Dictionary<string, VariableExpr>();
         Stack<VariableExpr> m_varStack = new Stack<VariableExpr>();
-        Stack<int> m_blockStack = new Stack<int>();
+        Stack<int> m_blockStack = new Stack<int>(); // stack of variable counts
         int m_maxVarCount = 0;
 
         public VariableFrame(Parser parser)
@@ -15,13 +16,40 @@ namespace AdventureLib
             m_globals = parser.Game.GlobalVars;
         }
 
+        public void InitializeFunction(Parser parser, IList<ParamDef> paramDefs, TypeDef returnType)
+        {
+            // This should be the first thing we do.
+            Debug.Assert(m_maxVarCount == 0);
+
+            // Always reserve space for the "$return" variable
+            // at index zero in the frame.
+            var returnVar = PushVariable("$return", returnType);
+
+            // Add the "$return" variable to the variable map only
+            // if the return type is not void.
+            if (returnType != Types.Void)
+            {
+                AddVarToMap(parser, returnVar);
+            }
+
+            foreach (var def in paramDefs)
+            {
+                AddVariable(parser, def.Name, def.Type);
+            }
+        }
+
         public int FrameSize => m_maxVarCount;
 
-        public VariableExpr AddVar(Parser parser, string name, TypeDef type)
+        public VariableExpr AddVariable(Parser parser, string name, TypeDef type)
         {
-            var expr = PushVar(name, type);
+            var expr = PushVariable(name, type);
             AddVarToMap(parser, expr);
             return expr;
+        }
+
+        public VariableExpr AddHiddenVariable(TypeDef type)
+        {
+            return PushVariable(string.Empty, type);
         }
 
         public VariableExprBase? TryGetVar(string varName)
@@ -32,7 +60,7 @@ namespace AdventureLib
                 m_globals.TryGet(varName);
         }
 
-        protected VariableExpr PushVar(string name, TypeDef type)
+        protected VariableExpr PushVariable(string name, TypeDef type)
         {
             var expr = new VariableExpr(name, type, m_varStack.Count);
             m_varStack.Push(expr);
@@ -55,13 +83,13 @@ namespace AdventureLib
             }
         }
 
-        public void BeginBlock()
+        public void PushScope()
         {
             // Push the variable count for the outer block.
             m_blockStack.Push(m_varStack.Count);
         }
 
-        public void EndBlock()
+        public void PopScope()
         {
             // Get the variable count for the outer block.
             int count = m_blockStack.Pop();
@@ -77,26 +105,4 @@ namespace AdventureLib
             }
         }
     }
-
-    class FunctionVariableFrame : VariableFrame
-    {
-        public FunctionVariableFrame(Parser parser, IList<ParamDef> paramDefs, TypeDef returnType) : base(parser)
-        {
-            // Always reserve space for the "$return" variable
-            // at index zero in the frame.
-            var returnVar = PushVar("$return", returnType);
-
-            // Add the "$return" variable to the variable map only
-            // if the return type is not void.
-            if (returnType != Types.Void)
-            {
-                AddVarToMap(parser, returnVar);
-            }
-
-            foreach (var def in paramDefs)
-            {
-                AddVar(parser, def.Name, def.Type);
-            }
-        }
-    };
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     sealed class IntrinsicFunctionDef : FunctionDef
     {

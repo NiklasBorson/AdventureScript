@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     public enum TokenType
     {

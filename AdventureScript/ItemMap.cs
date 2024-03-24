@@ -1,4 +1,4 @@
-﻿namespace AdventureLib
+﻿namespace AdventureScript
 {
     internal record class Item(string Name, int ID);
 

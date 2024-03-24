@@ -1,5 +1,4 @@
-﻿using AdventureLib;
-using System.Diagnostics;
+﻿using AdventureScript;
 
 namespace TextAdventure
 {
