@@ -4,59 +4,43 @@ namespace EngineTest
 {
     static class GameTests
     {
-        static bool MatchOutput(IList<string> output, TextReader reader, TextWriter writer)
+        static void WriteOutput(IList<string> output, TextWriter writer)
         {
-            foreach (string line in output)
+            foreach (var line in output)
             {
                 writer.WriteLine(line);
-                if (reader.ReadLine() != line)
-                    return false;
             }
-            return true;
-        }
-
-        static bool TestGame(TextReader reader, TextWriter writer, string gamePath)
-        {
-            var game = new GameState();
-            var output = game.LoadGame(gamePath);
-            if (!MatchOutput(output, reader, writer))
-                return false;
-
-            for (var input = reader.ReadLine();
-                input != null;
-                input = reader.ReadLine())
-            {
-                if (!input.StartsWith("> "))
-                    return false;
-
-                writer.WriteLine(input);
-
-                output = game.InvokeCommand(input.Substring(2));
-
-                if (!MatchOutput(output, reader, writer))
-                    return false;
-            }
-            return true;
         }
 
         static void TestGame(TestConfig config, string name)
         {
             string gamePath = config.GamePath($"{name}.txt");
-            string traceFilePath = config.TestFilePath($"{name}-trace.txt");
-            string outputPath = config.OutputPath($"{name}-trace.txt");
+            string inputPath = config.TestFilePath($"{name}-input.txt");
+            string traceFileName = $"{name}-trace.txt";
+            string outputPath = config.OutputPath(traceFileName);
 
-            using (var reader = new StreamReader(traceFilePath))
+            using (var reader = new StreamReader(inputPath))
             {
                 using (var writer = new StreamWriter(outputPath))
                 {
-                    if (!TestGame(reader, writer, gamePath))
+                    var game = new GameState();
+                    WriteOutput(game.LoadGame(gamePath), writer);
+
+                    for (var input = reader.ReadLine();
+                        input != null;
+                        input = reader.ReadLine())
                     {
-                        Console.Error.WriteLine($"TestGame.{name}: Game output does not match trace.");
-                        Console.Error.WriteLine($"  Baseline: {traceFilePath}");
-                        Console.Error.WriteLine($"  Output: {outputPath}");
+                        writer.WriteLine("> {0}", input);
+
+                        WriteOutput(game.InvokeCommand(input), writer);
+
+                        if (game.IsGameOver)
+                            break;
                     }
                 }
             }
+
+            config.CompareMaster(traceFileName);
         }
 
         public static void Run(TestConfig config)
