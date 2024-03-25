@@ -286,12 +286,12 @@ function IsAccessible($item:Item) : Bool
         if (IsCurrentRoomOrInventory($loc))
         {
             # Item is in the current room or player inventory.
-            $return = true;
+            return true;
         }
         elseif ($loc.Location == player.Location && !IsClosedOrLocked($loc.DoorState))
         {
             # Item is in an open container or on a table in the current room.
-            $return = true;
+            return true;
         }
     }
 }
@@ -635,12 +635,12 @@ function GetLink($item:Item, $dir:Direction) : Item
 {
     switch ($dir)
     {
-        case Direction.North { $return = $item.LinkN; }
-        case Direction.South { $return = $item.LinkS; }
-        case Direction.East  { $return = $item.LinkE; }
-        case Direction.West  { $return = $item.LinkW; }
-        case Direction.Up    { $return = $item.LinkU; }
-        case Direction.Down  { $return = $item.LinkD; }
+        case Direction.North { return $item.LinkN; }
+        case Direction.South { return $item.LinkS; }
+        case Direction.East  { return $item.LinkE; }
+        case Direction.West  { return $item.LinkW; }
+        case Direction.Up    { return $item.LinkU; }
+        case Direction.Down  { return $item.LinkD; }
     }
 }
 
@@ -753,7 +753,7 @@ function NewDoorItem($from:Item, $to:Item, $dir:Direction, $adjectives:String, $
 }
 function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
+    return NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
 }
 function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
 {
@@ -762,11 +762,11 @@ function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
 }
 function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
+    return NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
 }
 function NewLink($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "", "", DoorState.None);
+    return NewDoorItem($from, $to, $dir, "", "", DoorState.None);
 }
 ```
 
@@ -816,7 +816,7 @@ function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $key = NewItem($"_{$noun}_{$loc}");
     InitializeKey($key, $adjectives, $noun, $loc);
-    $return = $key;
+    return $key;
 }
 function IsKey($item:Item) => $item.UseOnAction == UseKeyOn;
 ```
@@ -931,7 +931,7 @@ function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:I
 {
     var $container = NewItem($"_{$noun}_{$loc}");
     InitializeContainer($container, $adjectives, $noun, $state, $loc);
-    $return = $container;    
+    return $container;    
 }
 
 function IsContainer($item:Item) => $item.PutInAction != null;
@@ -1186,7 +1186,7 @@ function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeLight($item, $adjectives, $noun, $loc);
-    $return = $item;
+    return $item;
 }
 function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
 ```
@@ -1217,7 +1217,7 @@ function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeCandle($item, $adjectives, $noun, $loc);
-    $return = $item;
+    return $item;
 }
 function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
 ```
@@ -1243,7 +1243,7 @@ function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeLighter($item, $adjectives, $noun, $loc);
-    $return = $item;
+    return $item;
 }
 function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
 

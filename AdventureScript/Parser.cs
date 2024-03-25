@@ -635,6 +635,10 @@ namespace AdventureScript
             {
                 ParseForeachStatement(builder);
             }
+            else if (MatchName("return"))
+            {
+                ParseReturnStatement(builder);
+            }
             else if (MatchName("break"))
             {
                 var loop = builder.CurrentLoop;
@@ -1033,6 +1037,32 @@ namespace AdventureScript
             }
 
             builder.PopScope();
+        }
+
+        void ParseReturnStatement(FunctionBuilder builder)
+        {
+            // Advance past return keyword
+            Advance();
+
+            if (MatchSymbol(SymbolId.Semicolon))
+            {
+                builder.AddStatement(new ReturnStatement());
+                Advance();
+            }
+            else if (builder.ReturnType != Types.Void)
+            {
+                Expr expr = ParseExpression(builder);
+                if (!AssignStatement.CanAssignTypes(builder.ReturnType, expr.Type))
+                {
+                    Fail($"Cannot convert expression of type {expr.Type.Name} to the return type.");
+                }
+                builder.AddStatement(new ReturnValueStatement(expr));
+                ReadSymbol(SymbolId.Semicolon);
+            }
+            else
+            {
+                Fail("A return value is not expected here.");
+            }
         }
 
         Expr ParseExpression(VariableFrame frame)
@@ -1450,7 +1480,9 @@ namespace AdventureScript
 
         static readonly string[] m_keywords = new string[]
         {
+            "break",
             "case",
+            "continue",
             "else",
             "elseif",
             "enum",
@@ -1462,6 +1494,7 @@ namespace AdventureScript
             "include",
             "null",
             "property",
+            "return",
             "switch",
             "true",
             "turn",

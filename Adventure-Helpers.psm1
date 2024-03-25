@@ -61,6 +61,24 @@ function Invoke-Game([string] $FileName) {
     }
 }
 
+function Build-Games {
+    $destRoot = Join-Path $PSScriptRoot 'OxbowCastle' 'Assets' 'Games'
+    $exePath = Get-ExePath('TextAdventure')
+
+    Get-ChildItem $GamesDir -File | ForEach-Object {
+        $destDir = Join-Path $destRoot ($_.BaseName -replace '-',' ')
+
+        if (-not (Test-Path $destDir)) {
+            mkdir $destDir | Out-Null
+        }
+
+        $destPath = Join-Path $destDir 'adventure.txt'
+
+        Write-Host "$exePath -compile $_.FullName $destPath"
+        & $exePath -compile $_.FullName $destPath
+    }
+}
+
 function Get-CommandsFromTrace([string] $TraceFile)
 {
     Get-Content $TraceFile | Where-Object { $_.StartsWith('> ') } | ForEach-Object { $_.Substring(2) }
@@ -71,4 +89,5 @@ Export-ModuleMember -Function Invoke-Test
 Export-ModuleMember -Function Update-Masters
 Export-ModuleMember -Function Get-Games
 Export-ModuleMember -Function Invoke-Game
+Export-ModuleMember -Function Build-Games
 Export-ModuleMember -Function Get-CommandsFromTrace

@@ -393,11 +393,11 @@ function IsAccessible($item:Item) : Bool
         var $loc = $item.Location;
         if (IsCurrentRoomOrInventory($loc))
         {
-            $return = true;
+            return true;
         }
         elseif ($loc.Location == player.Location && !IsClosedOrLocked($loc.DoorState))
         {
-            $return = true;
+            return true;
         }
     }
 }
@@ -552,27 +552,27 @@ function GetLink($item:Item, $dir:Direction) : Item
     {
         case Direction.North
         {
-            $return = $item.LinkN;
+            return $item.LinkN;
         }
         case Direction.South
         {
-            $return = $item.LinkS;
+            return $item.LinkS;
         }
         case Direction.East
         {
-            $return = $item.LinkE;
+            return $item.LinkE;
         }
         case Direction.West
         {
-            $return = $item.LinkW;
+            return $item.LinkW;
         }
         case Direction.Up
         {
-            $return = $item.LinkU;
+            return $item.LinkU;
         }
         case Direction.Down
         {
-            $return = $item.LinkD;
+            return $item.LinkD;
         }
     }
 }
@@ -681,7 +681,7 @@ function NewDoorItem($from:Item, $to:Item, $dir:Direction, $adjectives:String, $
 }
 function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
+    return NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
 }
 function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
 {
@@ -690,11 +690,11 @@ function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
 }
 function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
+    return NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
 }
 function NewLink($from:Item, $to:Item, $dir:Direction) : Item
 {
-    $return = NewDoorItem($from, $to, $dir, "", "", DoorState.None);
+    return NewDoorItem($from, $to, $dir, "", "", DoorState.None);
 }
 function UseKeyOn($key:Item, $target:Item)
 {
@@ -725,7 +725,7 @@ function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $key = NewItem($"_{$noun}_{$loc}");
     InitializeKey($key, $adjectives, $noun, $loc);
-    $return = $key;
+    return $key;
 }
 function IsKey($item:Item) => $item.UseOnAction == UseKeyOn;
 function ListContainerContents($container:Item)
@@ -811,7 +811,7 @@ function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:I
 {
     var $container = NewItem($"_{$noun}_{$loc}");
     InitializeContainer($container, $adjectives, $noun, $state, $loc);
-    $return = $container;
+    return $container;
 }
 function IsContainer($item:Item) => $item.PutInAction != null;
 function IsOpenContainer($item:Item) => IsContainer($item) && !IsClosedOrLocked($item.DoorState);
@@ -994,7 +994,7 @@ function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeLight($item, $adjectives, $noun, $loc);
-    $return = $item;
+    return $item;
 }
 function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
 function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
@@ -1010,7 +1010,7 @@ function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeCandle($item, $adjectives, $noun, $loc);
-    $return = $item;
+    return $item;
 }
 function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
 function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
@@ -1022,7 +1022,7 @@ function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeLighter($item, $adjectives, $noun, $loc);
-    $return = $item;
+    return $item;
 }
 function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
 function LightWith($target:Item, $lighter:Item)

@@ -184,14 +184,33 @@ parameter list as follows:
 function HealthPercentage($item:Item) : Int
 {
     # Note: divide-by-zero in AdventureScript returns zero.
-    $return = $item.Health * 100 / $item.MaxHealth;
+    return $item.Health * 100 / $item.MaxHealth;
 }
 ```
 
-If a function has a return type, a local variable of that type is automatically defined
-named `$return`. The return value of the function is whatever value is assigned to that
-variable. If no value is assigned to the `$return` variable, the default value for that
-type is returned.
+A value may be returned in one of two ways. One way is to use the `return` keyword as
+shown above. This means the flow of control immediately exits the function and the
+specified value is returned to the caller.
+
+The other way to return a value is to assign a value to the implicitly-defined `$return`
+variable. The function continues to execute rather than returning immediately. When the
+function later returns (either by reaching the end of the function, or via a `return`
+statement with no argument) the value of the `$return` variable is returned to the caller.
+
+Note that it is not required to specify a return value (or assign to the `$return`
+variable) even if the function declares a return type. If no return value is specified,
+the default value of that type is returned.
+
+To summarize, the following two ways of return a value are functionally equivalent:
+
+```text
+# Option 1
+return 10;
+
+# Option 2
+$return = 10;
+return;
+```
 
 ### Lambda Function Definition
 
@@ -581,3 +600,36 @@ compute the absolute value of an integer:
 ```text
 function AbsoluteValue($n:Int) => $n >= 0 ? $n : -$n;
 ```
+
+## Null Values
+
+Every type is a default "null" value associated with it. This is the value of a
+variable that has not been assigned to, for example.
+
+Null values in AdventureScript are always safe to use. It is not necessary to do
+a null check before getting a property of an item, for example. The null item is
+defined by an item for which the value of every property is null. For example,
+the following is safe:
+
+```text
+# Example: Using null items is safe
+property NextItem : Item;
+var $itemA : Item = null;
+var $itemB = $itemA.NextItem.NextItem;
+# $itemB is now null
+```
+
+Setting a property on the null item has no effect but does cause a runtime error.
+
+Calling a null delegate has no effect but does not cause a runtime error. If the
+delegate type has a return value, the return value of the null delegate is the
+null value for that type.
+
+| Type              | Associated Null Value                         |
+|-------------------|-----------------------------------------------|
+| Item              | Null item (see above)                         |
+| Delegate type     | Null delegate (see above)                     |
+| String            | ""                                            |
+| Int               | 0                                             |
+| Bool              | false                                         |
+| Enum type         | First named enum value                        |
