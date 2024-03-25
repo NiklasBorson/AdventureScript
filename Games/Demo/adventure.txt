@@ -60,3 +60,9 @@ game
     #
     Look();
 }
+
+command "map" {
+    Message(
+        "[FloorPlan.png]"
+        );
+}

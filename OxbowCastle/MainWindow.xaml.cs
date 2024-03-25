@@ -1,8 +1,11 @@
+using ABI.System;
 using AdventureScript;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Imaging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using Windows.Media;
@@ -208,6 +211,24 @@ namespace OxbowCastle
             m_outputStackPanel.Children.Add(grid);
         }
 
+        void AddOutputImage(string fileName)
+        {
+            var path = Path.Combine(
+                Path.GetDirectoryName(m_gamePath),
+                fileName
+                );
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.UriSource = new System.Uri(path);
+            var image = new Image 
+            {
+                Stretch = Microsoft.UI.Xaml.Media.Stretch.None,
+                Source = bitmapImage 
+            };
+
+            m_outputStackPanel.Children.Add(image);
+        }
+
         void AddOutput(IList<string> output)
         {
             m_lastOutput = output.ToArray();
@@ -221,6 +242,10 @@ namespace OxbowCastle
                 else if (para.StartsWith("- "))
                 {
                     AddOutputListItem(para.Substring(2));
+                }
+                else if (para.StartsWith('[') && para.EndsWith(']'))
+                {
+                    AddOutputImage(para.Substring(1, para.Length - 2));
                 }
                 else
                 {
