@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Windows.Media;
+using Windows.Media.AppBroadcasting;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 
@@ -68,29 +70,52 @@ namespace OxbowCastle
 
         void LaunchNewGame(string sourceDir)
         {
-            var sourceDirInfo = new DirectoryInfo(sourceDir);
-            string gameName = sourceDirInfo.Name;
-
-            var savedGamesDir = App.SavedGamesDir;
-            var destDir = Path.Combine(savedGamesDir, gameName);
-
-            if (!Directory.Exists(savedGamesDir))
+            try
             {
-                Directory.CreateDirectory(savedGamesDir);
+                // Get the source file info.
+                var sourceDirInfo = new DirectoryInfo(sourceDir);
+                string sourceFilePath = Path.Combine(sourceDirInfo.FullName, App.GameFileName);
+                string gameName = sourceDirInfo.Name;
+
+                // Load the game.
+                var game = new GameState();
+                var output = game.LoadGame(sourceFilePath);
+
+                // Get the destination directory and file.
+                var savedGamesDir = App.SavedGamesDir;
+                var destDir = Path.Combine(savedGamesDir, gameName);
+                var destFilePath = Path.Combine(destDir, App.GameFileName);
+
+                // Make sure the saved games directory exists.
+                // Delete any old destination directory.
+                if (!Directory.Exists(savedGamesDir))
+                {
+                    Directory.CreateDirectory(savedGamesDir);
+                }
+                else if (Directory.Exists(destDir))
+                {
+                    Directory.Delete(destDir, /*recursive*/ true);
+                }
+
+                // Create the destination directory.
+                Directory.CreateDirectory(destDir);
+
+                // Copy all from the source directory except *.txt and *.md.
+                foreach (var file in sourceDirInfo.GetFiles())
+                {
+                    if (file.Extension != ".txt" && file.Extension != ".md")
+                    {
+                        File.Copy(file.FullName, Path.Combine(destDir, file.Name));
+                    }
+                }
+
+                // Start the game.
+                StartGame(game, output.ToArray(), destFilePath);
             }
-            else if (Directory.Exists(destDir))
+            catch (ParseException e)
             {
-                Directory.Delete(destDir, /*recursive*/ true);
+                ShowErrorMessage(e.Message);
             }
-
-            Directory.CreateDirectory(destDir);
-
-            foreach (var file in sourceDirInfo.GetFiles())
-            {
-                File.Copy(file.FullName, Path.Combine(destDir, file.Name));
-            }
-
-            StartGame(Path.Combine(destDir, App.GameFileName));
         }
 
         internal void LaunchNewGame(NewGameInfo gameInfo)
@@ -135,23 +160,26 @@ namespace OxbowCastle
             }
         }
 
+        void SaveGame(GameState game, IList<string> lastOutput, string gamePath)
+        {
+            using (var writer = new StreamWriter(gamePath))
+            {
+                writer.WriteLine("game {");
+                foreach (var para in lastOutput)
+                {
+                    writer.WriteLine("    Message(\"{0}\");", para);
+                }
+                writer.WriteLine('}');
+
+                game.Save(writer);
+            }
+        }
+
         void SaveGame()
         {
-            if (m_game != null)
+            if (m_game != null && m_lastOutput != null)
             {
-                using (var writer = new StreamWriter(m_gamePath))
-                {
-                    if (m_lastOutput != null)
-                    {
-                        writer.WriteLine("game {");
-                        foreach (var para in m_lastOutput)
-                        {
-                            writer.WriteLine("    Message(\"{0}\");", para);
-                        }
-                        writer.WriteLine('}');
-                    }
-                    m_game.Save(writer);
-                }
+                SaveGame(m_game, m_lastOutput, m_gamePath);
             }
         }
 
@@ -201,21 +229,26 @@ namespace OxbowCastle
             }
         }
 
+        void StartGame(GameState game, string[] output, string filePath)
+        {
+            m_game = game;
+            m_gamePath = filePath;
+            m_lastOutput = output;
+
+            m_outputStackPanel.Children.Clear();
+            AddOutput(output);
+
+            m_gameControl.Visibility = Visibility.Visible;
+            m_gameListControl.Visibility = Visibility.Collapsed;
+        }
+
         void StartGame(string filePath)
         {
             try
             {
                 var game = new GameState();
                 var output = game.LoadGame(filePath);
-
-                m_game = game;
-                m_gamePath = filePath;
-
-                m_outputStackPanel.Children.Clear();
-                AddOutput(output);
-
-                m_gameControl.Visibility = Visibility.Visible;
-                m_gameListControl.Visibility = Visibility.Collapsed;
+                StartGame(game, output.ToArray(), filePath);
             }
             catch (ParseException e)
             {
