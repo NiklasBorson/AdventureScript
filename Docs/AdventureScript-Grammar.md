@@ -175,6 +175,7 @@ Statement = "var" VarName TypeDecl? ( "=" Expr )? ";"
           | "switch" "(" Expr ")" "{" CaseBlock+ DefaultCaseBlock? "}"
           | "while" "(" Expr ")" StatementBlock
           | "foreach" "(" "var" VarName TypeDecl? ")" WhereClause? StatementBlock
+          | "return" Expr? ";"
           | "break" ";"
           | "continue" ";"
           | StatementBlock
