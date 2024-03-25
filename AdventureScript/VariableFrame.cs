@@ -5,6 +5,7 @@ namespace AdventureScript
 {
     class VariableFrame
     {
+        TypeDef m_returnType = Types.Void;
         GlobalVarMap m_globals;
         Dictionary<string, VariableExpr> m_varMap = new Dictionary<string, VariableExpr>();
         Stack<VariableExpr> m_varStack = new Stack<VariableExpr>();
@@ -27,6 +28,7 @@ namespace AdventureScript
 
             // Add the "$return" variable to the variable map only
             // if the return type is not void.
+            m_returnType = returnType;
             if (returnType != Types.Void)
             {
                 AddVarToMap(parser, returnVar);
@@ -37,6 +39,8 @@ namespace AdventureScript
                 AddVariable(parser, def.Name, def.Type);
             }
         }
+
+        public TypeDef ReturnType => m_returnType;
 
         public int FrameSize => m_maxVarCount;
 
