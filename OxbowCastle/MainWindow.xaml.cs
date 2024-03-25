@@ -1,9 +1,12 @@
 using AdventureScript;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 
 namespace OxbowCastle
 {
@@ -48,6 +51,9 @@ namespace OxbowCastle
                 gameList.Add(new NewGameInfo(dir.Name));
             }
 
+            // Add the browse option.
+            gameList.Add(new BrowseGameInfo());
+
             m_gameListControl.ItemsSource = gameList;
         }
 
@@ -60,10 +66,13 @@ namespace OxbowCastle
             }
         }
 
-        internal void LaunchNewGame(NewGameInfo gameInfo)
+        void LaunchNewGame(string sourceDir)
         {
+            var sourceDirInfo = new DirectoryInfo(sourceDir);
+            string gameName = sourceDirInfo.Name;
+
             var savedGamesDir = App.SavedGamesDir;
-            var destDir = Path.Combine(savedGamesDir, gameInfo.Name);
+            var destDir = Path.Combine(savedGamesDir, gameName);
 
             if (!Directory.Exists(savedGamesDir))
             {
@@ -71,22 +80,22 @@ namespace OxbowCastle
             }
             else if (Directory.Exists(destDir))
             {
-                // TODO - prompt to confirm overwrite of saved game
-
                 Directory.Delete(destDir, /*recursive*/ true);
             }
 
             Directory.CreateDirectory(destDir);
 
-            foreach (var file in new DirectoryInfo(Path.Combine(App.GamesDir, gameInfo.Name)).GetFiles())
+            foreach (var file in sourceDirInfo.GetFiles())
             {
-                File.Copy(
-                    file.FullName,
-                    Path.Combine(destDir, file.Name)
-                    );
+                File.Copy(file.FullName, Path.Combine(destDir, file.Name));
             }
 
             StartGame(Path.Combine(destDir, App.GameFileName));
+        }
+
+        internal void LaunchNewGame(NewGameInfo gameInfo)
+        {
+            LaunchNewGame(Path.Combine(App.GamesDir, gameInfo.Name));
         }
 
         internal void LoadSavedGame(SavedGameInfo gameInfo)
@@ -94,6 +103,36 @@ namespace OxbowCastle
             var gameDir = Path.Combine(App.SavedGamesDir, gameInfo.Name);
 
             StartGame(Path.Combine(gameDir, App.GameFileName));
+        }
+
+        internal async void BrowseForGame()
+        {
+            // Create the file picker
+            var folderPicker = new FolderPicker();
+
+            // Get the current window's HWND by passing in the Window object
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+            // Associate the HWND with the file picker
+            WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, hwnd);
+
+            // Use file picker like normal!
+            var folder = await folderPicker.PickSingleFolderAsync().AsTask();
+
+            if (folder != null)
+            {
+                string dirPath = folder.Path;
+
+                string filePath = Path.Combine(dirPath, "adventure.txt");
+                if (File.Exists(filePath))
+                {
+                    LaunchNewGame(dirPath);
+                }
+                else
+                {
+                    ShowErrorMessage("The folder does not have an adventure.txt file.");
+                }
+            }
         }
 
         void SaveGame()
@@ -164,17 +203,38 @@ namespace OxbowCastle
 
         void StartGame(string filePath)
         {
-            var game = new GameState();
-            var output = game.LoadGame(filePath);
+            try
+            {
+                var game = new GameState();
+                var output = game.LoadGame(filePath);
 
-            m_game = game;
-            m_gamePath = filePath;
+                m_game = game;
+                m_gamePath = filePath;
 
-            m_outputStackPanel.Children.Clear();
-            AddOutput(output);
+                m_outputStackPanel.Children.Clear();
+                AddOutput(output);
 
-            m_gameControl.Visibility = Visibility.Visible;
-            m_gameListControl.Visibility = Visibility.Collapsed;
+                m_gameControl.Visibility = Visibility.Visible;
+                m_gameListControl.Visibility = Visibility.Collapsed;
+            }
+            catch (ParseException e)
+            {
+                ShowErrorMessage(e.Message);
+            }
+        }
+
+        async void ShowErrorMessage(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+
+            // Get the current window's HWND by passing in the Window object
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+            // Associate the HWND with the message dialog
+            WinRT.Interop.InitializeWithWindow.Initialize(messageDialog, hwnd);
+
+            // Show the message dialog
+            await messageDialog.ShowAsync();
         }
 
         void InvokeCommand(string input)

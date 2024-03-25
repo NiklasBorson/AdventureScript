@@ -1,0 +1,62 @@
+include "../inc/Foundation-Debug.md";
+include "../inc/Foundation.md";
+
+#
+# Room items
+#
+item front_porch;
+item entry_way;
+item back_hallway;
+item garage;
+item kitchen;
+item dining_room;
+item living_room;
+
+game
+{
+    #
+    # Room descriptions
+    #
+    front_porch.Description = "You are on the front porch.";
+    entry_way.Description = "You are in an entryway.";
+    back_hallway.Description = "You are in back hallway.";
+    garage.Description = "You are in garage.";
+    kitchen.Description = "You are in kitchen.";
+    dining_room.Description = "You are in dining room.";
+    living_room.Description = "You are in living room.";
+
+    #
+    # Link rooms together
+    #
+    NewClosedDoor(front_porch, entry_way, Direction.North);
+    NewOpening(entry_way, back_hallway, Direction.North);
+    NewClosedDoor(back_hallway, garage, Direction.West);
+    NewOpening(back_hallway, kitchen, Direction.East);
+    NewOpening(kitchen, dining_room, Direction.East);
+    NewOpening(dining_room, living_room, Direction.South);
+    NewOpening(living_room, entry_way, Direction.West);
+
+    #
+    # Set player's initial location
+    #
+    player.Location = front_porch;
+
+    #
+    # Output some initial messages
+    #
+    Message(
+        "# AdventureScript Demo"
+        );
+    Message(
+        "This demo shows how to create a set of linked rooms using the "
+        "following floor plan."
+    );
+    Message(
+        "[FloorPlan.png]"
+        );
+
+    #
+    # Describe the current location`
+    #
+    Look();
+}
