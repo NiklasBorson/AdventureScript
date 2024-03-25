@@ -65,17 +65,26 @@ function Build-Games {
     $destRoot = Join-Path $PSScriptRoot 'OxbowCastle' 'Assets' 'Games'
     $exePath = Get-ExePath('TextAdventure')
 
-    Get-ChildItem $GamesDir -File | ForEach-Object {
-        $destDir = Join-Path $destRoot ($_.BaseName -replace '-',' ')
+    Get-ChildItem $GamesDir -Directory | ForEach-Object {
+        $sourcePath = Join-Path $_.FullName 'adventure.txt'
+        if (Test-Path $sourcePath) {
 
-        if (-not (Test-Path $destDir)) {
-            mkdir $destDir | Out-Null
+            # Create the destination directory if it does not already exist.
+            $destDir = Join-Path $destRoot $_.Name
+            if (-not (Test-Path $destDir)) {
+                mkdir $destDir | Out-Null
+            }
+
+            # Compile adventure.txt.
+            $destPath = Join-Path $destDir 'adventure.txt'
+            Write-Host "$exePath -compile $sourcePath $destPath"
+            & $exePath -compile $sourcePath $destPath
+
+            # Copy other files except .txt and .md files.
+            Get-ChildItem $_.FullName -File -Exclude '*.txt','*.md' | ForEach-Object {
+                Copy-Item -Path $_.FullName -Destination $destDir
+            }
         }
-
-        $destPath = Join-Path $destDir 'adventure.txt'
-
-        Write-Host "$exePath -compile $_.FullName $destPath"
-        & $exePath -compile $_.FullName $destPath
     }
 }
 
