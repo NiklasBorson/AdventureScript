@@ -1,16 +1,16 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AdventureLib
+namespace AdventureScript
 {
-    class CommandBuilder
+    class CommandBuilder : FunctionBuilder
     {
         string m_commandSpec;
         StringBuilder m_matchString = new StringBuilder();
         List<ParamDef> m_paramList = new List<ParamDef>();
-        FunctionVariableFrame? m_frame = null;
 
-        public CommandBuilder(string commandSpec)
+        public CommandBuilder(Parser parser, string commandSpec) : base(parser)
         {
             m_commandSpec = commandSpec;
             m_matchString.Append('^');
@@ -32,38 +32,25 @@ namespace AdventureLib
 
         void CheckNotFinalized()
         {
-            if (m_frame != null)
-                throw new InvalidOperationException();
+            Debug.Assert(this.FrameSize == 0);
         }
 
         public void FinalizeCommandString(Parser parser)
         {
             CheckNotFinalized();
             m_matchString.Append('$');
-            m_frame = new FunctionVariableFrame(parser, m_paramList, Types.Void);
+            InitializeFunction(parser, m_paramList, Types.Void);
         }
 
-        public VariableFrame GetVariableFrame()
+        public CommandDef CreateCommand()
         {
-            if (m_frame == null)
-            {
-                throw new InvalidOperationException();
-            }
-            return m_frame;
-        }
-
-        public CommandDef CreateCommand(Statement body)
-        {
-            var frame = GetVariableFrame();
-
             string pattern = m_matchString.ToString().ToLowerInvariant();
 
             return new CommandDef(
                 m_commandSpec,
                 new Regex(pattern),
                 m_paramList,
-                frame.FrameSize,
-                body
+                CreateFunctionBody()
                 );
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection.Emit;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     class MapFunctionDef : FunctionDef
     {

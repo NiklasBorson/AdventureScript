@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     class StringMap
     {

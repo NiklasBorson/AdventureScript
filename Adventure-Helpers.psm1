@@ -31,7 +31,7 @@ function Invoke-Test {
 
     # Run the test
     $exePath = Get-ExePath('EngineTest')
-    Write-Output "Running $exePath..."
+    Write-Output "$exePath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir"
     & $exePath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir
 }
 
@@ -53,6 +53,7 @@ function Invoke-Game([string] $FileName) {
     $FilePath = Join-Path $GamesDir $FileName
     if (Test-Path $FilePath) {
         $exePath = Get-ExePath('TextAdventure')
+        Write-Output "$exePath $FilePath"
         & $exePath $FilePath
     }
     else {

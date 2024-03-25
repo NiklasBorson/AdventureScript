@@ -1,4 +1,4 @@
-﻿namespace AdventureLib
+﻿namespace AdventureScript
 {
     internal abstract class TypeDef
     {

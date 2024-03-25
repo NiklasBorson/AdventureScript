@@ -1,6 +1,6 @@
 ﻿using System.Reflection.Emit;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     class LambdaFunctionDef : FunctionDef
     {

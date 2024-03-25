@@ -1,4 +1,4 @@
-﻿namespace AdventureLib
+﻿namespace AdventureScript
 {
     internal abstract class VariableExprBase : Expr
     {
@@ -33,22 +33,22 @@
 
     sealed class VariableExpr : VariableExprBase
     {
-        int m_frameIndex;
-
         public VariableExpr(string name, TypeDef type, int frameIndex) : 
             base(name, type)
         {
-            m_frameIndex = frameIndex;
+            this.FrameIndex = frameIndex;
         }
+
+        public int FrameIndex { get; }
 
         public override int Evaluate(GameState game, int[] frame)
         {
-            return frame[m_frameIndex];
+            return frame[FrameIndex];
         }
 
         public override void SetValue(GameState game, int[] frame, int value)
         {
-            frame[m_frameIndex] = value;
+            frame[FrameIndex] = value;
         }
     }
 }

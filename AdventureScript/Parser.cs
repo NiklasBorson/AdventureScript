@@ -1,9 +1,8 @@
-﻿using AdventureScript;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     class Parser
     {
@@ -284,6 +283,13 @@ namespace AdventureLib
             this.Game.Items.AddItem(name);
         }
 
+        FunctionBody ParseCodeBlock()
+        {
+            var builder = new FunctionBuilder(this);
+            ParseStatementBlock(builder);
+            return builder.CreateFunctionBody();
+        }
+
         void ParseFunctionDefinition()
         {
             // Advance past the "function" keyword.
@@ -297,11 +303,14 @@ namespace AdventureLib
             var paramList = ParseParamList();
             var returnType = ParseOptionalTypeDeclaration();
 
-            // Create a variable frame for this function.
-            var frame = new FunctionVariableFrame(this, paramList, returnType);
-
             if (MatchSymbol(SymbolId.Lambda))
             {
+                // Create a variable frame for this function.
+                var frame = new VariableFrame(this);
+
+                // Add variables for the return type and parameters.
+                frame.InitializeFunction(this, paramList, returnType);
+
                 // Parse the lambda expression.
                 Advance();
                 var expr = ParseExpression(frame);
@@ -324,16 +333,21 @@ namespace AdventureLib
             }
             else
             {
+                // Create a function builder.
+                var builder = new FunctionBuilder(this);
+
+                // Add variables for the return type and parameters.
+                builder.InitializeFunction(this, paramList, returnType);
+
                 // Parse the function body.
-                var statement = ParseStatementBlock(frame);
+                ParseStatementBlock(builder);
 
                 // Create the function.
                 var functionDef = new UserFunctionDef(
                     functionName,
                     paramList,
                     returnType,
-                    frame.FrameSize,
-                    statement
+                    builder.CreateFunctionBody()
                     );
                 this.Game.Functions.Add(functionDef);
             }
@@ -394,7 +408,7 @@ namespace AdventureLib
             Advance();
 
             string inputString = ReadString();
-            var builder = new CommandBuilder(inputString);
+            var builder = new CommandBuilder(this, inputString);
 
             // Scan the input string for embedded parameters.
             int inputPos = 0;
@@ -445,13 +459,10 @@ namespace AdventureLib
 
             builder.FinalizeCommandString(this);
 
-            // Parse the body of the command.
-            var body = ParseStatementBlock(
-                builder.GetVariableFrame()
-                );
+            ParseStatementBlock(builder);
 
             // Add the command.
-            this.Game.Commands.Add(builder.CreateCommand(body));
+            this.Game.Commands.Add(builder.CreateCommand());
         }
 
         void ParseMapDefinition()
@@ -585,66 +596,76 @@ namespace AdventureLib
             return new ParamDef(varName, type);
         }
 
-        CodeBlock ParseCodeBlock()
-        {
-            var frame = new VariableFrame(this);
-
-            var statement = ParseStatementBlock(frame);
-
-            return new CodeBlock(frame.FrameSize, statement);
-        }
-
-        Statement ParseStatementBlock(VariableFrame frame)
+        void ParseStatementBlock(FunctionBuilder builder)
         {
             // Advance past the opening brace for the block.
             ReadSymbol(SymbolId.LeftBrace);
-            frame.BeginBlock();
+            builder.PushScope();
 
             // Parse statements until we get to the closing brace.
-            List<Statement> statements = new List<Statement>();
             while (!this.MatchSymbol(SymbolId.RightBrace))
             {
-                statements.Add(ParseStatement(frame));
+                ParseStatement(builder);
             }
 
             // Advance past the closing brace.
             Advance();
-
-            frame.EndBlock();
-
-            return StatementBlock.Create(statements);
+            builder.PopScope();
         }
 
-        Statement ParseStatement(VariableFrame frame)
+        void ParseStatement(FunctionBuilder builder)
         {
             if (MatchName("var"))
             {
-                return ParseVarStatement(frame);
+                ParseVarStatement(builder);
             }
             else if (MatchName("switch"))
             {
-                return ParseSwitchStatement(frame);
+                ParseSwitchStatement(builder);
             }
             else if (MatchName("if"))
             {
-                return ParseIfStatement(frame);
+                ParseIfStatement(builder);
             }
             else if (MatchName("while"))
             {
-                return ParseWhileStatement(frame);
+                ParseWhileStatement(builder);
             }
             else if (MatchName("foreach"))
             {
-                return ParseForeachStatement(frame);
+                ParseForeachStatement(builder);
+            }
+            else if (MatchName("break"))
+            {
+                var loop = builder.CurrentLoop;
+                if (loop == null)
+                {
+                    Fail("break can only be inside a loop.");
+                }
+                builder.AddStatement(new BreakStatement(loop));
+                Advance();
+                ReadSymbol(SymbolId.Semicolon);
+            }
+            else if (MatchName("continue"))
+            {
+                var loop = builder.CurrentLoop;
+                if (loop == null)
+                {
+                    Fail("continue can only be inside a loop.");
+                }
+                builder.AddStatement(new ContinueStatement(loop));
+                Advance();
+                ReadSymbol(SymbolId.Semicolon);
             }
             else if (MatchSymbol(SymbolId.LeftBrace))
             {
-                return ParseStatementBlock(frame);
+                builder.AddStatement(new BlockStartStatement());
+                ParseStatementBlock(builder);
+                builder.AddStatement(new BlockEndStatement());
             }
             else
             {
-                var expr = ParseExpression(frame);
-                Statement? statement;
+                var expr = ParseExpression(builder);
 
                 if (MatchSymbol(SymbolId.Assign))
                 {
@@ -654,7 +675,7 @@ namespace AdventureLib
                     }
                     Advance();
 
-                    var right = ParseExpression(frame);
+                    var right = ParseExpression(builder);
                     ReadSymbol(SymbolId.Semicolon);
 
                     if (!AssignStatement.CanAssignTypes(expr.Type, right.Type))
@@ -662,7 +683,7 @@ namespace AdventureLib
                         Fail($"Cannot convert expression of type {right.Type.Name} to {expr.Type.Name}.");
                     }
 
-                    statement = new AssignStatement(expr, right);
+                    builder.AddStatement(new AssignStatement(expr, right));
                 }
                 else
                 {
@@ -671,13 +692,12 @@ namespace AdventureLib
                     {
                         Fail("The expression has no effect.");
                     }
-                    statement = new ExpressionStatement(expr);
+                    builder.AddStatement(new ExpressionStatement(expr));
                 }
-                return statement;
             }
         }
 
-        Statement ParseVarStatement(VariableFrame frame)
+        void ParseVarStatement(FunctionBuilder builder)
         {
             // Advance past the var keyword.
             Advance();
@@ -691,7 +711,7 @@ namespace AdventureLib
             if (MatchSymbol(SymbolId.Assign))
             {
                 Advance();
-                rightExpr = ParseExpression(frame);
+                rightExpr = ParseExpression(builder);
                 type = DeriveAssignedTypeAllowVoid(type, rightExpr);
                 if (type == Types.Void)
                 {
@@ -704,41 +724,43 @@ namespace AdventureLib
             }
 
             // Add the variable and create the statement.
-            var newVar = frame.AddVar(this, varName, type);
-            var statement = new VarStatement(newVar, rightExpr);
+            var newVar = builder.AddVariable(this, varName, type);
+            builder.AddStatement(new VarStatement(newVar, rightExpr));
 
             // Advance past the semicolon.
             ReadSymbol(SymbolId.Semicolon);
-
-            return statement;
         }
 
-        Statement ParseSwitchStatement(VariableFrame frame)
+        void ParseSwitchStatement(FunctionBuilder builder)
         {
             // Advance past the switch keyword.
             Advance();
 
             // Parse the test expression.
             ReadSymbol(SymbolId.LeftParen);
-            var expr = ParseExpression(frame);
+            var expr = ParseExpression(builder);
             var type = expr.Type;
             if (type == Types.Void)
             {
                 Fail("Expression does not return a value.");
             }
             ReadSymbol(SymbolId.RightParen);
-
-            Dictionary<int, Statement> cases = new Dictionary<int, Statement>();
-            Statement? defaultCase = null;
-
             ReadSymbol(SymbolId.LeftBrace);
 
+            // Create and add the switch statement.
+            var switchStatement = new SwitchStatement(expr);
+            builder.AddStatement(switchStatement);
+
+            // Remember the ends of all the nested blocks.
+            List<BlockEndStatement> blockEndList = new List<BlockEndStatement>();
+
+            // Parse all the case blocks.
             while (MatchName("case"))
             {
                 Advance();
 
                 // Parse the constant case expression.
-                var caseExpr = ParseExpression(frame);
+                var caseExpr = ParseExpression(builder);
                 if (caseExpr.Type != type)
                 {
                     Fail("Case expression is the wrong type.");
@@ -749,59 +771,131 @@ namespace AdventureLib
                 }
                 int value = caseExpr.EvaluateConst(this.Game);
 
-                if (cases.ContainsKey(value))
+                // Create and add the case statement.
+                var caseStatement = switchStatement.TryCreateCase(value);
+                if (caseStatement == null)
                 {
                     Fail("Duplicate case.");
                 }
+                builder.AddStatement(caseStatement);
 
-                // Parse the statement block.
-                cases.Add(value, ParseStatementBlock(frame));
+                // Parse the body of the case block.
+                ParseStatementBlock(builder);
+
+                // Add a block end statement for the end of the block.
+                var blockEnd = new BlockEndStatement();
+                builder.AddStatement(blockEnd);
+                blockEndList.Add(blockEnd);
             }
 
-            if (cases.Count == 0)
+            if (switchStatement.CaseCount == 0)
             {
                 Fail("'case' expected in switch block.");
             }
 
+            // Check for optional "default" case.
             if (MatchName("default"))
             {
                 Advance();
-                defaultCase = ParseStatementBlock(frame);
+
+                // Create and add the default case statement.
+                builder.AddStatement(switchStatement.CreateDefaultCase());
+
+                // Parse the body of the default case block.
+                ParseStatementBlock(builder);
+
+                // Add a block end statement for the end of the block.
+                var blockEnd = new BlockEndStatement();
+                builder.AddStatement(blockEnd);
+                blockEndList.Add(blockEnd);
             }
 
+            // Read the final closing brace for the switch statement.
             ReadSymbol(SymbolId.RightBrace);
 
-            return new SwitchStatement(expr, type, cases, defaultCase);
+            // Add the final block-end for the switch statement.
+            builder.AddStatement(switchStatement.BlockEnd);
+
+            // Make the block-end for each nested block point to the final block end.
+            int nextIndex = switchStatement.BlockEnd.NextStatementIndex;
+            foreach (var blockEnd in blockEndList)
+            {
+                blockEnd.NextStatementIndex = nextIndex;
+            }
         }
 
-        Statement ParseIfStatement(VariableFrame frame)
+        void ParseIfStatement(FunctionBuilder builder)
         {
             // Advance past the if keyword.
             Advance();
 
-            var result = new IfStatement(
-                this, 
-                ParseIfCondition(frame), 
-                ParseStatementBlock(frame)
-                );
+            var blockEndList = new List<BlockEndStatement>();
+
+            // Create and add the if statement.
+            var statement = new IfStatement(ParseIfCondition(builder), "if");
+            builder.AddStatement(statement);
+
+            // Parse the body of the if block.
+            ParseStatementBlock(builder);
+
+            // Add the end block, and remember it for later.
+            builder.AddStatement(statement.BlockEnd);
+            blockEndList.Add(statement.BlockEnd);
+
+            // Remember the last statement in the if/elseif chain.
+            var lastStatement = statement;
 
             while (MatchName("elseif"))
             {
                 Advance();
-                result.AddBlock(
-                    this,
-                    ParseIfCondition(frame),
-                    ParseStatementBlock(frame)
-                    );
+
+                // Create and add the elseif statement.
+                statement = new IfStatement(ParseIfCondition(builder), "elseif");
+                builder.AddStatement(statement);
+
+                // Parse the body of the elseif block.
+                ParseStatementBlock(builder);
+
+                // Add the end block, and remember it for later.
+                builder.AddStatement(statement.BlockEnd);
+                blockEndList.Add(statement.BlockEnd);
+
+                // Let the last if/elseif statement point to the new one as its "else" branch.
+                lastStatement.ElseBranch = statement;
+                lastStatement = statement;
             }
 
             if (MatchName("else"))
             {
                 Advance();
-                result.SetElseBlock(ParseStatementBlock(frame));
+
+                // Create and add the "else" statement.
+                var elseStatement = new ElseStatement();
+                builder.AddStatement(elseStatement);
+
+                // Parse the body of the else block.
+                ParseStatementBlock(builder);
+
+                // Add the end block and remember it for later.
+                var blockEnd = new BlockEndStatement();
+                builder.AddStatement(blockEnd);
+                blockEndList.Add(blockEnd);
+
+                // Let the last if/elseif statement point to the else block as its
+                // "else" branch.
+                lastStatement.ElseBranch = elseStatement;
             }
 
-            return result;
+            // Make the block-end for each block jump to the final block end.
+            int blockCount = blockEndList.Count;
+            if (blockCount != 0)
+            {
+                int nextIndex = blockEndList[--blockCount].NextStatementIndex;
+                for (int i = 0; i < blockCount; i++)
+                {
+                    blockEndList[i].NextStatementIndex = nextIndex;
+                }
+            }
         }
 
         Expr ParseIfCondition(VariableFrame frame)
@@ -812,25 +906,27 @@ namespace AdventureLib
             return expr;
         }
 
-        Statement ParseWhileStatement(VariableFrame frame)
+        void ParseWhileStatement(FunctionBuilder builder)
         {
             // Advance past the while keyword.
             Advance();
 
-            return new WhileStatement(
-                this,
-                ParseIfCondition(frame),
-                ParseStatementBlock(frame)
-                );
+            var loop = new WhileStatement(this, ParseIfCondition(builder));
+            builder.BeginLoop(loop);
+
+            ParseStatementBlock(builder);
+
+            builder.EndLoop(loop);
         }
 
-        Statement ParseForeachStatement(VariableFrame frame)
+        void ParseForeachStatement(FunctionBuilder builder)
         {
-            // Advance past "foreach" "("
+            // Begin a new scope for the loop variable.
+            builder.PushScope();
+
+            // Advance past "foreach" "(" "var"
             Advance();
             ReadSymbol(SymbolId.LeftParen);
-
-            // Advance past the 'var' keyword.
             ReadName("var");
 
             // Get the loop variable name.
@@ -843,72 +939,100 @@ namespace AdventureLib
                 // Item type is the default.
                 type = Types.Item;
             }
-            else if (type != Types.Item && !type.IsEnumType)
+            var loopVar = builder.AddVariable(this, varName, type);
+            ReadSymbol(SymbolId.RightParen);
+
+            // Is there a where clause?
+            if (MatchName("where"))
+            {
+                if (type != Types.Item)
+                {
+                    Fail("Loop variable used with 'where' must have type Item.");
+                }
+                Advance();
+
+                // Read the property name, which is the left argument.
+                string propName = ReadName();
+                var propDef = this.Game.Properties.TryGet(propName);
+                if (propDef == null)
+                {
+                    Fail($"Undefined property: {propName}.");
+                }
+
+                // Read the binary operator.
+                var op = BinaryOperators.GetOp(m_lexer.SymbolValue);
+                if (op == null)
+                {
+                    Fail("Expected binary operator.");
+                }
+                Advance();
+
+                // Parse the right-hand expression.
+                var rightArg = ParseUnaryExpression(builder);
+
+                // Determine the type of the binary expression.
+                var exprType = op.DeriveType(propDef.Type, rightArg.Type);
+                if (exprType != Types.Bool)
+                {
+                    if (exprType == Types.Void)
+                    {
+                        Fail($"Invalid argument types for '{op.SymbolText}' operator.");
+                    }
+                    else
+                    {
+                        Fail("Expected Boolean operator in 'where' clause.");
+                    }
+                }
+
+                // Add an unnamed variable to store the value of the right-hand expression.
+                var hiddenVar = builder.AddHiddenVariable(rightArg.Type);
+
+                // Create the loop statement.
+                var loop = new ForEachItemWhereStatement(
+                    loopVar,
+                    propDef,
+                    op,
+                    rightArg,
+                    hiddenVar.FrameIndex
+                    );
+
+                builder.BeginLoop(loop);
+
+                // Parse the loop body.
+                ParseStatementBlock(builder);
+
+                builder.EndLoop(loop);
+            }
+            else if (type == Types.Item)
+            {
+                // Create the loop statement.
+                var loop = new ForEachItemStatement(loopVar);
+
+                builder.BeginLoop(loop);
+
+                // Parse the loop body.
+                ParseStatementBlock(builder);
+
+                builder.EndLoop(loop);
+            }
+            else if (type.IsEnumType)
+            {
+                // Create the loop statement.
+                var loop = new ForEachEnumStatement(loopVar, type);
+
+                builder.BeginLoop(loop);
+
+                // Parse the loop body.
+                ParseStatementBlock(builder);
+
+                builder.EndLoop(loop);
+            }
+            else
             {
                 Fail("Only Item and enum types can be used with foreach.");
             }
-            ReadSymbol(SymbolId.RightParen);
 
-            // Parse the where clause if specified.
-            WhereClause? whereClause = null;
-            if (type == Types.Item)
-            {
-                whereClause = ParseOptionalWhereClause(frame);
-            }
-
-            // Add the loop variable, which is scoped to the block.
-            frame.BeginBlock();
-            var loopVar = frame.AddVar(this, varName, type);
-
-            var body = ParseStatementBlock(frame);
-            frame.EndBlock();
-
-            return new ForEachStatement(loopVar, type, whereClause, body);
-        }
-
-        WhereClause? ParseOptionalWhereClause(VariableFrame frame)
-        {
-            // Check for 'where' keyword and advance past it.
-            if (!MatchName("where"))
-            {
-                return null;
-            }
-            Advance();
-
-            // Read the property name, which the left argument.
-            string propName = ReadName();
-            var propDef = this.Game.Properties.TryGet(propName);
-            if (propDef == null)
-            {
-                Fail($"Undefined property: {propName}.");
-            }
-
-            // Read the binary operator.
-            var op = BinaryOperators.GetOp(m_lexer.SymbolValue);
-            if (op == null)
-            {
-                Fail("Expected binary operator.");
-            }
-            Advance();
-
-            // Parse the right-hand expression.
-            var rightArg = ParseUnaryExpression(frame);
-
-            // Determine the type of the binary expression.
-            var type = op.DeriveType(propDef.Type, rightArg.Type);
-            if (type != Types.Bool)
-            {
-                if (type == Types.Void)
-                {
-                    Fail($"Invalid argument types for '{op.SymbolText}' operator.");
-                }
-                else
-                {
-                    Fail("Expected Boolean operator in 'where' clause.");
-                }
-            }
-
-            return new WhereClause(propDef, op, rightArg);
+            builder.PopScope();
         }
 
         Expr ParseExpression(VariableFrame frame)

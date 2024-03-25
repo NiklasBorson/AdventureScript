@@ -1,24 +1,22 @@
-﻿namespace AdventureLib
+﻿namespace AdventureScript
 {
     sealed class UserFunctionDef : FunctionDef
     {
-        int m_frameSize;
-        Statement m_code;
+        FunctionBody m_body;
 
-        public UserFunctionDef(string name, IList<ParamDef> paramList, TypeDef returnType, int frameSize, Statement code) :
+        public UserFunctionDef(string name, IList<ParamDef> paramList, TypeDef returnType, FunctionBody body) :
             base(name, paramList, returnType)
         {
-            m_frameSize = frameSize;
-            m_code = code;
+            m_body = body;
         }
 
         public override int Invoke(GameState game, int[] frame)
         {
-            m_code.Invoke(game, frame);
+            m_body.Invoke(game, frame);
             return frame[0];
         }
 
-        public override int FrameSize => m_frameSize;
+        public override int FrameSize => m_body.FrameSize;
 
         public override void SaveDefinition(GameState game, CodeWriter writer)
         {
@@ -29,9 +27,7 @@
             WriteReturnType(this.ReturnType, writer.TextWriter);
 
             // Write the function body.
-            writer.BeginBlock();
-            m_code.WriteStatement(game, writer);
-            writer.EndBlock();
+            m_body.Write(game, writer);
         }
     }
 }

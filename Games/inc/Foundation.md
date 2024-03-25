@@ -396,6 +396,7 @@ function InitializeLighting()
             if (IsActiveLightState($item.LightState) && IsAccessible($item))
             {
                 $currentLightSource = $item;
+                break;
             }
         }
         $isNowDark = $currentLightSource == null;

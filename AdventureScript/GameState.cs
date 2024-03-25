@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     public enum GameResult
     {
@@ -21,8 +21,8 @@ namespace AdventureLib
         CommandMap m_commandMap = new CommandMap();
         GlobalVarMap m_varMap;
         WordMap? m_wordMap = null;
-        List<CodeBlock> m_gameBlocks = new List<CodeBlock>();
-        List<CodeBlock> m_turnBlocks = new List<CodeBlock>();
+        List<FunctionBody> m_gameBlocks = new List<FunctionBody>();
+        List<FunctionBody> m_turnBlocks = new List<FunctionBody>();
         List<string> m_messages = new List<string>();
         GameResult m_result = GameResult.None;
         #endregion
@@ -40,7 +40,7 @@ namespace AdventureLib
             foreach (var block in this.GameBlocks)
             {
                 var frame = new int[block.FrameSize];
-                block.Statement.Invoke(this, frame);
+                block.Invoke(this, frame);
             }
 
             // Saving regenerates the game block from item properties.
@@ -69,8 +69,8 @@ namespace AdventureLib
         internal IntrinsicVars IntrinsicVars => m_varMap.Intrinsics;
         internal ItemMap Items => m_itemMap;
         internal StringMap Strings => m_stringMap;
-        internal IList<CodeBlock> GameBlocks => m_gameBlocks;
-        internal IList<CodeBlock> TurnBlocks => m_turnBlocks;
+        internal IList<FunctionBody> GameBlocks => m_gameBlocks;
+        internal IList<FunctionBody> TurnBlocks => m_turnBlocks;
 
         internal WordMap WordMap
         {
@@ -95,7 +95,7 @@ namespace AdventureLib
             foreach (var block in this.TurnBlocks)
             {
                 var frame = new int[block.FrameSize];
-                block.Statement.Invoke(this, frame);
+                block.Invoke(this, frame);
             }
         }
 
@@ -129,18 +129,17 @@ namespace AdventureLib
             this.GlobalVars.SaveDefinitions(this, codeWriter);
             this.Functions.SaveDefinitions(this, codeWriter);
             this.Commands.SaveDefinitions(this, codeWriter);
+
             codeWriter.Write("game");
             codeWriter.BeginBlock();
             this.Items.SaveProperties(this, codeWriter);
             codeWriter.EndBlock();
 
-            codeWriter.Write("turn");
-            codeWriter.BeginBlock();
             foreach (var block in this.TurnBlocks)
             {
-                block.Statement.WriteStatement(this, codeWriter);
+                codeWriter.Write("turn");
+                block.Write(this, codeWriter);
             }
-            codeWriter.EndBlock();
         }
         #endregion
 

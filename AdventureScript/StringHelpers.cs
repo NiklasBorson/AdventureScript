@@ -1,4 +1,4 @@
-﻿namespace AdventureLib
+﻿namespace AdventureScript
 {
     public static class StringHelpers
     {

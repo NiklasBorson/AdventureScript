@@ -3,14 +3,13 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     record class CommandDef(
         string CommandSpec,
         Regex MatchExpr,
         IList<ParamDef> Params,
-        int FrameSize,
-        Statement Body
+        FunctionBody Body
         );
 
     class CommandMap : IEnumerable<CommandDef>
@@ -54,7 +53,7 @@ namespace AdventureLib
 
             // Try mapping each of the parameters to values.
             // These are stored in the "stack" frame at indices 1..N.
-            var frame = new int[def.FrameSize];
+            var frame = new int[def.Body.FrameSize];
             for (int i = 0; i < def.Params.Count; i++)
             {
                 if (!TryMapParamValue(
@@ -137,10 +136,7 @@ namespace AdventureLib
                 writer.Write("command \"");
                 writer.Write(def.CommandSpec);
                 writer.Write("\"");
-
-                writer.BeginBlock();
-                def.Body.WriteStatement(game, writer);
-                writer.EndBlock();
+                def.Body.Write(game, writer);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace AdventureLib
+namespace AdventureScript
 {
     class PropertyMap : IEnumerable<PropertyDef>
     {

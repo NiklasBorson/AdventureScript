@@ -83,3 +83,135 @@ _NameList_ comprises one or more _Name_ symbols separated by commas:
 ```text
 NameList = Name ( "," Name )*
 ```
+
+## Top-Level Elements
+
+An AdventureScript file comprises zero or more _definitions_ defined as follows:
+
+```text
+AdventureScriptFile = Definition*
+
+Definition = "include" String ";"
+           | "enum" Name "(" NameList ")" ";"
+           | "delegate" Name ParamList TypeDecl? ";"
+           | "property" NameList TypeDecl? ";"
+           | "item" ( Name | String )
+           | "var" VarName TypeDecl? ( = Expr )? ";"
+           | "function" Name ParamList TypeDecl? StatementBLock
+           | "function" Name ParamList "=>" Expression ";"
+           | "map" Name Name -> Name "{" MapEntry ( "," MapEntry )* "}"
+           | "command" String StatementBlock
+           | "game" StatementBlock
+           | "turn" StatementBlock
+```
+
+## Basic Building Blocks
+
+A _String_ is zero or more characters enclosed in double quotation marks.
+
+A _FormatString_ is a string preceded by the '$' character. A format string may have
+expressions embedded in it enclosed in curly braces.
+
+An _Int_ is an integer literal, represented as sequence of decimal digits.
+
+A _Name_ comprises a name-start character followed by zero or more name characters:
+
+```text
+NameStartChar = [A-Za-z_]
+NameChar = NameStartChar | [0-9]
+Name = NameStartChar NameChar*
+```
+
+A _VarName_ (variable name) is a _Name_ preceded by a '$' symbol:
+
+```text
+VarName = "$" Name
+```
+
+A _NameList_ is one or more names separated by commas:
+
+```text
+NameList = Name ( "," Name )*
+```
+
+A _TypeDecl_ is a ":" followed by the name of a previously-defined type:
+
+```text
+TypeDecl = ":" Name
+```
+
+A _ParamList_ is a comma-separated list of parameter definitions enclosed in
+parentheses. Each parameter definition comprises a _VarName_ and _TypeDecl_:
+
+```text
+ParamDef = VarName TypeDecl
+ParamList = "(" ( ParamDef ( "," ParamDef )* )? ")"
+```
+
+A _StatementBlock_ comprises zero or more _statements_ enclosed in curly braces.
+Statements are described in a later section.
+
+```text
+StatementBlock = "{" Statement* "}"
+```
+
+A _MapEntry_ maps an enum value name to either another enum value name or to a
+constant expression. Expressions are described in a later section.
+
+```text
+MapEntry = Name "->" ( Name | Expr )
+```
+
+## Statements
+
+Functions, commands, game blocks, and turn blocks are defined in terms of
+_statements_, which are defined as follows:
+
+```text
+Statement = "var" VarName TypeDecl? ( "=" Expr )? ";"
+          | Expr "=" Expr ";"
+          | Expr ";"
+          | IfBlock ElseifBlock* ElseBlock?
+          | "switch" "(" Expr ")" "{" CaseBlock+ DefaultCaseBlock? "}"
+          | "while" "(" Expr ")" StatementBlock
+          | "foreach" "(" "var" VarName TypeDecl? ")" WhereClause? StatementBlock
+          | "break" ";"
+          | "continue" ";"
+          | StatementBlock
+
+IfBlock = "if" "(" Expr ")" StatementBlock
+ElseifBlock = "if" "(" Expr ")" StatementBlock
+ElseBlock = "else" StatementBlock
+
+CaseBlock = "case" Expr StatementBlock
+DefaultCaseBlock "default" StatementBlock
+
+WhereClause = "where" Name BinaryOp UnaryExpr
+```
+
+## Expressions
+
+Expressions are the building blocks of statements.
+
+```text
+Expr      = UnaryExpr
+          | Expr BinaryOp Expr              # uses operator precedence
+          | Expr "?" Expr ":" Expr
+
+UnaryExpr = String | FormatString | Int     # literal value
+          | "true" | "false" | "null"       # literal value
+          | Name                            # item name
+          | VarName                         # variable
+          | Name "." Name                   # enum value
+          | UnaryExpr ( "." Name )+         # property
+          | Name "(" ArgList ")"            # function call
+          | Expr "(" ArgList ")"            # delegate call
+          | UnaryOp UnaryExpr
+          | "(" Expr ")"
+
+BinaryOp  = "==" | "!=" | "<" | "<=" | ">" | ">="   # comparison
+          | "*" | "/" | "%" | "+" | "-"             # arithmetic
+          | "&&" | "||"                             # logical
+
+UnaryOp   = "!" | "-"                       # not or negative
+```

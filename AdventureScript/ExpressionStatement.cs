@@ -1,4 +1,4 @@
-﻿namespace AdventureLib
+﻿namespace AdventureScript
 {
     sealed class ExpressionStatement : Statement
     {
@@ -8,15 +8,17 @@
             m_expr = expr;
         }
 
-        public override void Invoke(GameState game, int[] frame)
+        public override int Invoke(GameState game, int[] frame)
         {
             m_expr.Evaluate(game, frame);
+            return NextStatementIndex;
         }
 
         public override void WriteStatement(GameState game, CodeWriter writer)
         {
             m_expr.WriteExpr(game, writer);
             writer.Write(";");
+            writer.EndLine();
         }
     }
 }

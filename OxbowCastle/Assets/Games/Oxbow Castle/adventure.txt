@@ -426,6 +426,7 @@ function InitializeLighting()
             if (IsActiveLightState($item.LightState) && IsAccessible($item))
             {
                 $currentLightSource = $item;
+                break;
             }
         }
         $isNowDark = $currentLightSource == null;
@@ -3879,7 +3880,14 @@ turn
     {
         Message("Error: player.Location has not been set.");
     }
-    IncrementTime();if (player.Location == null)
+}
+turn
+{
+    IncrementTime();
+}
+turn
+{
+    if (player.Location == null)
     {
         Message("Error: player.Location has not been set.");
     }
@@ -3888,5 +3896,12 @@ turn
         InitializeLighting();
         InitializeWordMap();
     }
-    UpdateItems();$currentFairyMessage = null;
+}
+turn
+{
+    UpdateItems();
+}
+turn
+{
+    $currentFairyMessage = null;
 }

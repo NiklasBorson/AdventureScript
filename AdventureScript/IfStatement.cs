@@ -1,67 +1,42 @@
-﻿namespace AdventureLib
+﻿namespace AdventureScript
 {
-    class IfStatement : Statement
+    sealed class IfStatement : BranchStatement
     {
-        record struct Block(Expr Condition, Statement Body);
-        List<Block> m_blocks = new List<Block>();
-        Statement? m_elseBlock = null;
+        Expr m_expr;
+        string m_keyword;
 
-        public IfStatement(Parser parser, Expr expr, Statement body)
+        public IfStatement(Expr expr, string keyword)
         {
-            AddBlock(parser, expr, body);
+            m_expr = expr;
+            m_keyword = keyword;
+            ElseBranch = this.BlockEnd;
         }
 
-        public void AddBlock(Parser parser, Expr expr, Statement body)
-        {
-            if (expr.Type != Types.Bool)
-            {
-                parser.Fail("Expected Boolean expression.");
-            }
-            m_blocks.Add(new Block(expr, body));
-        }
+        public Statement ElseBranch { get; set; }
 
-        public void SetElseBlock(Statement body)
+        public override int Invoke(GameState game, int[] frame)
         {
-            m_elseBlock = body;
-        }
-
-        public override void Invoke(GameState game, int[] frame)
-        {
-            foreach (var block in m_blocks)
-            {
-                if (block.Condition.Evaluate(game, frame) != 0)
-                {
-                    block.Body.Invoke(game, frame);
-                    return;
-                }
-            }
-
-            if (m_elseBlock != null)
-            {
-                m_elseBlock.Invoke(game, frame);
-            }
+            return m_expr.Evaluate(game, frame) != 0 ?
+                NextStatementIndex :
+                ElseBranch.Invoke(game, frame);
         }
 
         public override void WriteStatement(GameState game, CodeWriter writer)
         {
-            for (int i = 0; i < m_blocks.Count; i++)
-            {
-                writer.Write(i == 0 ? "if" : "elseif");
-                writer.Write(" (");
-                m_blocks[i].Condition.WriteExpr(game, writer);
-                writer.Write(")");
-                writer.BeginBlock();
-                m_blocks[i].Body.WriteStatement(game, writer);
-                writer.EndBlock();
-            }
+            writer.Write(m_keyword);
+            writer.Write(" (");
+            m_expr.WriteExpr(game, writer);
+            writer.Write(")");
+            writer.BeginBlock();
+        }
+    }
 
-            if (m_elseBlock != null)
-            {
-                writer.Write("else");
-                writer.BeginBlock();
-                m_elseBlock.WriteStatement(game, writer);
-                writer.EndBlock();
-            }
+    sealed class ElseStatement : DummyStatement
+    {
+        public override void WriteStatement(GameState game, CodeWriter writer)
+        {
+            writer.Write("else");
+            writer.BeginBlock();
         }
     }
 }
