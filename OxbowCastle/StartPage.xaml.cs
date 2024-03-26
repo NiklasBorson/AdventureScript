@@ -61,45 +61,8 @@ namespace OxbowCastle
         {
             try
             {
-                // Get the source file info.
-                var sourceDirInfo = new DirectoryInfo(sourceDir);
-                string sourceFilePath = Path.Combine(sourceDirInfo.FullName, App.GameFileName);
-                string gameName = sourceDirInfo.Name;
-
-                // Load the game.
-                var game = new GameState();
-                var output = game.LoadGame(sourceFilePath);
-
-                // Get the destination directory and file.
-                var savedGamesDir = App.SavedGamesDir;
-                var destDir = Path.Combine(savedGamesDir, gameName);
-                var destFilePath = Path.Combine(destDir, App.GameFileName);
-
-                // Make sure the saved games directory exists.
-                // Delete any old destination directory.
-                if (!Directory.Exists(savedGamesDir))
-                {
-                    Directory.CreateDirectory(savedGamesDir);
-                }
-                else if (Directory.Exists(destDir))
-                {
-                    Directory.Delete(destDir, /*recursive*/ true);
-                }
-
-                // Create the destination directory.
-                Directory.CreateDirectory(destDir);
-
-                // Copy all from the source directory except *.txt and *.md.
-                foreach (var file in sourceDirInfo.GetFiles())
-                {
-                    if (file.Extension != ".txt" && file.Extension != ".md")
-                    {
-                        File.Copy(file.FullName, Path.Combine(destDir, file.Name));
-                    }
-                }
-
-                // Start the game.
-                StartGame(game, destFilePath, output.ToArray());
+                var game = ActiveGame.CreateNew(sourceDir);
+                StartGame(game);
             }
             catch (ParseException e)
             {
@@ -114,9 +77,13 @@ namespace OxbowCastle
 
         internal void LoadSavedGame(SavedGameReference gameInfo)
         {
-            var gameDir = Path.Combine(App.SavedGamesDir, gameInfo.Name);
+            var folderPath = Path.Combine(App.SavedGamesDir, gameInfo.Name);
+            var filePath = Path.Combine(folderPath, App.GameFileName);
 
-            StartGame(Path.Combine(gameDir, App.GameFileName));
+            var game = new GameState();
+            var output = game.LoadGame(filePath);
+
+            StartGame(new ActiveGame(game, folderPath, output.ToArray()));
         }
 
         internal async void BrowseForGame()
@@ -149,26 +116,10 @@ namespace OxbowCastle
             }
         }
 
-        void StartGame(GameState game, string filePath, string[] initialOutput)
+        void StartGame(ActiveGame game)
         {
-            var app = (App)(Application.Current);
-            app.ActiveGame = new ActiveGame(game, filePath, initialOutput);
+            App.Current.ActiveGame = game;
             this.Frame.Navigate(typeof(GamePage));
-        }
-
-
-        void StartGame(string filePath)
-        {
-            try
-            {
-                var game = new GameState();
-                var output = game.LoadGame(filePath);
-                StartGame(game, filePath, output.ToArray());
-            }
-            catch (ParseException e)
-            {
-                ShowErrorMessage(e.Message);
-            }
         }
 
         async void ShowErrorMessage(string message)

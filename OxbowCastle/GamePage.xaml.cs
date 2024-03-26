@@ -33,13 +33,21 @@ namespace OxbowCastle
         {
             base.OnNavigatedTo(e);
 
-            var app = (App)(Application.Current);
-            m_game = app.ActiveGame;
+            m_game = App.Current.ActiveGame;
 
             m_outputStackPanel.Children.Clear();
             AddOutput(m_game.LastOutput);
 
             m_commandTextBox.IsEnabled = !m_game.Game.IsGameOver;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            m_game?.Save();
+
+            App.Current.ActiveGame = null;
         }
 
         void AddOutputText(string text, Style style)
@@ -69,10 +77,7 @@ namespace OxbowCastle
 
         void AddOutputImage(string fileName)
         {
-            var path = Path.Combine(
-                Path.GetDirectoryName(m_game.FilePath),
-                fileName
-                );
+            var path = Path.Combine(m_game.FolderPath, fileName);
 
             var bitmapImage = new BitmapImage();
             bitmapImage.UriSource = new System.Uri(path);

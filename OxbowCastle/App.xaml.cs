@@ -21,6 +21,8 @@ namespace OxbowCastle
             this.InitializeComponent();
         }
 
+        internal static new App Current => (App)(Application.Current);
+
         internal ActiveGame ActiveGame { get; set; }
 
         /// <summary>
