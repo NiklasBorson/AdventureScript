@@ -20,10 +20,10 @@ The [adventure.txt](../Games/Demo/adventure.txt) file for the Demo game contains
 the complete definition with comments. This document provides a longer commentary
 of selected elements of the game.
 
-The goal of the Demo game is to get out of a house. However, the front door is locked,
-so you need to find the key in the garage. However, to get to the garage you need to
-get past a goblin. There are also various items scattered around the house, including
-knives which can be used as weapons.
+The goal of the Demo game is to get out of a house. To do so, you must find the key
+to the front door, which is in the garage. However, to get to the garage you must
+get past a goblin. You can kill the goblin using a knife in the kitchen drawer.
+A few other items are also scattered around the house.
 
 Following is the floor plan used by the game:
 
@@ -31,7 +31,7 @@ Following is the floor plan used by the game:
 
 ## Include Files
 
-The demo game definition file begins by including two files from the AdventureScript
+The demo game definition file begins by including files from the AdventureScript
 foundation library.
 
 ```text
@@ -44,11 +44,10 @@ The library files are in the `inc` subdirectory under `Games`, so the relative p
 from the `Demo` directory begins with "../inc".
 
 [Foundation-Debug.md](../Games/inc/Foundation-Debug.md) is an optional module that
-degugging commands like "list items". It is useful to include while you are debugging
-and testing your game.
+defines commands useful when debugging and testing your game.
 
 [Foundation.md](../Games/inc/Foundation.md) is the core module of the AdventureScript
-foundation library. It defines basic concepts like rooms, doors, keys, containers,
+Foundation Library. It defines basic things like rooms, doors, keys, containers,
 lighting, and navigation commands.
 
 [Foundation-Combat.md](../Games/inc/Foundation-Combat.md) is an optiona module that
@@ -57,7 +56,7 @@ implements a simple combat system. It defines weapons, armor, and monsters.
 ## Items and Properties
 
 Items are general-purpose objects in AdventureScript. The player is an item. Rooms
-and doors are items, as are keys, weapons, monsters, and anything else the player
+and doors are items. So are keys, weapons, monsters, and anything else the player
 might interact with.
 
 An item is created in one of the following ways:
@@ -95,17 +94,11 @@ The following example shows how two rooms in the Demo game are defined.
 item entry_way;
 item back_hallway;
 
-# ... other code ...
-
 game {
-
-    # ... other code ...
 
     # Set room descriptions inside a game block.
     entry_way.Description = "You are in an entryway.";
     back_hallway.Description = "You are in back hallway.";
-
-    # ... other code ...
 
     # Link rooms together inside a game block.
     NewOpening(entry_way, back_hallway, Direction.North);
@@ -172,7 +165,5 @@ game
 {
     # Set the front_porch enter action.
     front_porch.EnterAction = OnExitHouse;
-
-    # ... other game initialization ...
 }
 ```

@@ -2,7 +2,7 @@ game {
     Message("# AdventureScript Demo");
     Message("This demo shows how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.");
     Message("At any time you can type 'map' to see a floor plan.");
-    Message("You are in an entryway.");
+    Message("You are in the entryway.");
     Message("There is a opening to the North.");
     Message("There is a closed door to the South.");
     Message("There is a opening to the East.");
@@ -1510,38 +1510,38 @@ game
     }
     {
         var $_ = entry_way;
-        $_.Description = "You are in an entryway.";
+        $_.Description = "You are in the entryway.";
         $_.LinkN = _opening_entry_wayback_hallway;
         $_.LinkS = _door_front_porchentry_way;
         $_.LinkE = _opening_living_roomentry_way;
     }
     {
         var $_ = back_hallway;
-        $_.Description = "You are in back hallway.";
+        $_.Description = "You are in the back hallway.";
         $_.LinkS = _opening_entry_wayback_hallway;
         $_.LinkE = _opening_back_hallwaykitchen;
         $_.LinkW = _door_back_hallwaygarage;
     }
     {
         var $_ = garage;
-        $_.Description = "You are in garage.";
+        $_.Description = "You are in the garage.";
         $_.LinkE = _door_back_hallwaygarage;
     }
     {
         var $_ = kitchen;
-        $_.Description = "You are in kitchen.";
+        $_.Description = "You are in the kitchen.";
         $_.LinkE = _opening_kitchendining_room;
         $_.LinkW = _opening_back_hallwaykitchen;
     }
     {
         var $_ = dining_room;
-        $_.Description = "You are in dining room.";
+        $_.Description = "You are in the dining room.";
         $_.LinkS = _opening_dining_roomliving_room;
         $_.LinkW = _opening_kitchendining_room;
     }
     {
         var $_ = living_room;
-        $_.Description = "You are in living room.";
+        $_.Description = "You are in the living room.";
         $_.LinkN = _opening_dining_roomliving_room;
         $_.LinkW = _opening_living_roomentry_way;
     }
