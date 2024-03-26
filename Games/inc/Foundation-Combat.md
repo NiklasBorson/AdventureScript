@@ -182,7 +182,7 @@ function DescribePlayerHealth($item:Item)
         }
         elseif ($percentage < 40)
         {
-            Message("You are severaly injured.");
+            Message("You are severely injured.");
         }
         elseif ($percentage < 70)
         {

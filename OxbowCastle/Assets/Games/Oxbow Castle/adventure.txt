@@ -1056,9 +1056,11 @@ function Go($dir:Direction)
     {
         if ($door.DoorState == DoorState.Closed)
         {
-            Message($"You open the {Label($door)} and go {$dir}.");
+            Message($"You open the {Label($door)}.");
             $door.DoorState = DoorState.Open;
+            Tick();
         }
+        Message($"You go {$dir}.");
         var $dest = GetLink($door, $dir);
         if (!$source.LeaveAction($source, $dest) && !$dest.EnterAction($source, $dest))
         {
@@ -1198,7 +1200,7 @@ function DescribePlayerHealth($item:Item)
         }
         elseif ($percentage < 40)
         {
-            Message("You are severaly injured.");
+            Message("You are severely injured.");
         }
         elseif ($percentage < 70)
         {
@@ -1747,38 +1749,6 @@ function UpdateIdleMaid($npc:Item)
         Message("The maid exclaims, 'Oh, thank you sir! It was awful what happened here! I was in Lord Kevin's chambers doing a bit of cleaning when those winged creatures came. Lord Kevin and his men tried to fight them, but they were all killed. I think the townspeople mostly fled. I fled too. I thought to seek sanctuary in the church, and I found the church right enough, but it's here in the middle of this strange forest and we don't know the way out!'");
         $npc.UpdateAction = UpdateFollowingMaid;
     }
-}
-command "list items"
-{
-    ListItems();
-}
-command "list item {$name:String}"
-{
-    ListItem($name);
-}
-command "list properties"
-{
-    ListProperties();
-}
-command "list types"
-{
-    ListTypes();
-}
-command "list variables"
-{
-    ListVariables();
-}
-command "list functions"
-{
-    ListFunctions();
-}
-command "list commands"
-{
-    ListCommands();
-}
-command "list words"
-{
-    ListWords();
 }
 command "go {$dir:Direction}"
 {

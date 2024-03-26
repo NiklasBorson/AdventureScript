@@ -1,9 +1,17 @@
+using ABI.System;
 using AdventureScript;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Imaging;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using Windows.Media;
+using Windows.Media.AppBroadcasting;
+using Windows.Storage.Pickers;
+using Windows.UI.Popups;
 
 namespace OxbowCastle
 {
@@ -48,6 +56,9 @@ namespace OxbowCastle
                 gameList.Add(new NewGameInfo(dir.Name));
             }
 
+            // Add the browse option.
+            gameList.Add(new BrowseGameInfo());
+
             m_gameListControl.ItemsSource = gameList;
         }
 
@@ -60,33 +71,59 @@ namespace OxbowCastle
             }
         }
 
+        void LaunchNewGame(string sourceDir)
+        {
+            try
+            {
+                // Get the source file info.
+                var sourceDirInfo = new DirectoryInfo(sourceDir);
+                string sourceFilePath = Path.Combine(sourceDirInfo.FullName, App.GameFileName);
+                string gameName = sourceDirInfo.Name;
+
+                // Load the game.
+                var game = new GameState();
+                var output = game.LoadGame(sourceFilePath);
+
+                // Get the destination directory and file.
+                var savedGamesDir = App.SavedGamesDir;
+                var destDir = Path.Combine(savedGamesDir, gameName);
+                var destFilePath = Path.Combine(destDir, App.GameFileName);
+
+                // Make sure the saved games directory exists.
+                // Delete any old destination directory.
+                if (!Directory.Exists(savedGamesDir))
+                {
+                    Directory.CreateDirectory(savedGamesDir);
+                }
+                else if (Directory.Exists(destDir))
+                {
+                    Directory.Delete(destDir, /*recursive*/ true);
+                }
+
+                // Create the destination directory.
+                Directory.CreateDirectory(destDir);
+
+                // Copy all from the source directory except *.txt and *.md.
+                foreach (var file in sourceDirInfo.GetFiles())
+                {
+                    if (file.Extension != ".txt" && file.Extension != ".md")
+                    {
+                        File.Copy(file.FullName, Path.Combine(destDir, file.Name));
+                    }
+                }
+
+                // Start the game.
+                StartGame(game, output.ToArray(), destFilePath);
+            }
+            catch (ParseException e)
+            {
+                ShowErrorMessage(e.Message);
+            }
+        }
+
         internal void LaunchNewGame(NewGameInfo gameInfo)
         {
-            var savedGamesDir = App.SavedGamesDir;
-            var destDir = Path.Combine(savedGamesDir, gameInfo.Name);
-
-            if (!Directory.Exists(savedGamesDir))
-            {
-                Directory.CreateDirectory(savedGamesDir);
-            }
-            else if (Directory.Exists(destDir))
-            {
-                // TODO - prompt to confirm overwrite of saved game
-
-                Directory.Delete(destDir, /*recursive*/ true);
-            }
-
-            Directory.CreateDirectory(destDir);
-
-            foreach (var file in new DirectoryInfo(Path.Combine(App.GamesDir, gameInfo.Name)).GetFiles())
-            {
-                File.Copy(
-                    file.FullName,
-                    Path.Combine(destDir, file.Name)
-                    );
-            }
-
-            StartGame(Path.Combine(destDir, App.GameFileName));
+            LaunchNewGame(Path.Combine(App.GamesDir, gameInfo.Name));
         }
 
         internal void LoadSavedGame(SavedGameInfo gameInfo)
@@ -96,23 +133,56 @@ namespace OxbowCastle
             StartGame(Path.Combine(gameDir, App.GameFileName));
         }
 
+        internal async void BrowseForGame()
+        {
+            // Create the file picker
+            var folderPicker = new FolderPicker();
+
+            // Get the current window's HWND by passing in the Window object
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+            // Associate the HWND with the file picker
+            WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, hwnd);
+
+            // Use file picker like normal!
+            var folder = await folderPicker.PickSingleFolderAsync().AsTask();
+
+            if (folder != null)
+            {
+                string dirPath = folder.Path;
+
+                string filePath = Path.Combine(dirPath, App.GameFileName);
+                if (File.Exists(filePath))
+                {
+                    LaunchNewGame(dirPath);
+                }
+                else
+                {
+                    ShowErrorMessage($"File not found in directory: {App.GameFileName}.");
+                }
+            }
+        }
+
+        void SaveGame(GameState game, IList<string> lastOutput, string gamePath)
+        {
+            using (var writer = new StreamWriter(gamePath))
+            {
+                writer.WriteLine("game {");
+                foreach (var para in lastOutput)
+                {
+                    writer.WriteLine("    Message(\"{0}\");", para);
+                }
+                writer.WriteLine('}');
+
+                game.Save(writer);
+            }
+        }
+
         void SaveGame()
         {
-            if (m_game != null)
+            if (m_game != null && m_lastOutput != null)
             {
-                using (var writer = new StreamWriter(m_gamePath))
-                {
-                    if (m_lastOutput != null)
-                    {
-                        writer.WriteLine("game {");
-                        foreach (var para in m_lastOutput)
-                        {
-                            writer.WriteLine("    Message(\"{0}\");", para);
-                        }
-                        writer.WriteLine('}');
-                    }
-                    m_game.Save(writer);
-                }
+                SaveGame(m_game, m_lastOutput, m_gamePath);
             }
         }
 
@@ -141,6 +211,25 @@ namespace OxbowCastle
             m_outputStackPanel.Children.Add(grid);
         }
 
+        void AddOutputImage(string fileName)
+        {
+            var path = Path.Combine(
+                Path.GetDirectoryName(m_gamePath),
+                fileName
+                );
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.UriSource = new System.Uri(path);
+            var image = new Image 
+            {
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Stretch = Microsoft.UI.Xaml.Media.Stretch.None,
+                Source = bitmapImage 
+            };
+
+            m_outputStackPanel.Children.Add(image);
+        }
+
         void AddOutput(IList<string> output)
         {
             m_lastOutput = output.ToArray();
@@ -155,6 +244,10 @@ namespace OxbowCastle
                 {
                     AddOutputListItem(para.Substring(2));
                 }
+                else if (para.StartsWith('[') && para.EndsWith(']'))
+                {
+                    AddOutputImage(para.Substring(1, para.Length - 2));
+                }
                 else
                 {
                     AddOutputText(para, m_bodyParaStyle);
@@ -162,19 +255,45 @@ namespace OxbowCastle
             }
         }
 
-        void StartGame(string filePath)
+        void StartGame(GameState game, string[] output, string filePath)
         {
-            var game = new GameState();
-            var output = game.LoadGame(filePath);
-
             m_game = game;
             m_gamePath = filePath;
+            m_lastOutput = output;
 
             m_outputStackPanel.Children.Clear();
             AddOutput(output);
 
             m_gameControl.Visibility = Visibility.Visible;
             m_gameListControl.Visibility = Visibility.Collapsed;
+        }
+
+        void StartGame(string filePath)
+        {
+            try
+            {
+                var game = new GameState();
+                var output = game.LoadGame(filePath);
+                StartGame(game, output.ToArray(), filePath);
+            }
+            catch (ParseException e)
+            {
+                ShowErrorMessage(e.Message);
+            }
+        }
+
+        async void ShowErrorMessage(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+
+            // Get the current window's HWND by passing in the Window object
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+            // Associate the HWND with the message dialog
+            WinRT.Interop.InitializeWithWindow.Initialize(messageDialog, hwnd);
+
+            // Show the message dialog
+            await messageDialog.ShowAsync();
         }
 
         void InvokeCommand(string input)

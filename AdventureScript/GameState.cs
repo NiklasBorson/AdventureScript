@@ -111,6 +111,11 @@ namespace AdventureScript
             return m_messages;
         }
 
+        internal void Tick()
+        {
+            InitializeTurn();
+        }
+
         public void Save(string filePath)
         {
             using (var writer = new StreamWriter(filePath))

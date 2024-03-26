@@ -41,4 +41,18 @@
             window.LaunchNewGame(this);
         }
     }
+
+    sealed class BrowseGameInfo : GameInfo
+    {
+        public BrowseGameInfo() : base("Browse")
+        {
+        }
+
+        public override string Action => "Select game from disk";
+
+        public override void Invoke(MainWindow window)
+        {
+            window.BrowseForGame();
+        }
+    }
 }

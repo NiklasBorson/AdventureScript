@@ -1,0 +1,1702 @@
+game {
+    Message("# AdventureScript Demo");
+    Message("This demo shows how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.");
+    Message("At any time you can type 'map' to see a floor plan.");
+    Message("You are in the entryway.");
+    Message("There is a opening to the North.");
+    Message("There is a closed door to the South.");
+    Message("There is a opening to the East.");
+}
+delegate ItemDelegate($item:Item);
+delegate Item2Delegate($item1:Item, $item2:Item);
+delegate ItemPredicate($item:Item) : Bool;
+delegate NavigationAction($from:Item, $to:Item) : Bool;
+enum DoorState(None,Open,Closed,Locked);
+enum LightState(None,Off,On,Unlit,Lit);
+enum Direction(North,South,East,West,Up,Down);
+enum ArmorKind(None,Head,Torso,Leg);
+property Location: Item;
+property Noun: String;
+property Adjectives: String;
+property TakeAction: ItemDelegate;
+property DropAction: ItemDelegate;
+property UseAction: ItemDelegate;
+property UseOnAction: Item2Delegate;
+property OpenAction: ItemDelegate;
+property CloseAction: ItemDelegate;
+property DescribeAction: ItemDelegate;
+property DescribeHealthAction: ItemDelegate;
+property TurnOnAction: ItemDelegate;
+property TurnOffAction: ItemDelegate;
+property IgniteAction: ItemDelegate;
+property PutOutAction: ItemDelegate;
+property PutInAction: Item2Delegate;
+property PutOnAction: Item2Delegate;
+property LeaveAction: NavigationAction;
+property EnterAction: NavigationAction;
+property DoorState: DoorState;
+property Key: Item;
+property IsHidden: Bool;
+property LightState: LightState;
+property IsDark: ItemPredicate;
+property Description: String;
+property LinkN: Item;
+property LinkS: Item;
+property LinkE: Item;
+property LinkW: Item;
+property LinkU: Item;
+property LinkD: Item;
+property UpdateAction: ItemDelegate;
+property OnAttackedAction: ItemDelegate;
+property Health: Int;
+property MaxHealth: Int;
+property AttackDamage: Int;
+property DamageResistance: Int;
+property CurrentWeapon: Item;
+property ArmorKind: ArmorKind;
+item player;
+item front_porch;
+item entry_way;
+item back_hallway;
+item garage;
+item kitchen;
+item dining_room;
+item living_room;
+item _key_garage;
+item _door_front_porchentry_way;
+item _opening_entry_wayback_hallway;
+item _door_back_hallwaygarage;
+item _opening_back_hallwaykitchen;
+item _opening_kitchendining_room;
+item _opening_dining_roomliving_room;
+item _opening_living_roomentry_way;
+item _back_hallway_goblin;
+item _drawer_kitchen;
+item _knife__drawer_kitchen;
+item _table_dining_room;
+item _plate_table_dining_room;
+item _knife__table_dining_room;
+item _fork__table_dining_room;
+var $currentTime = 661;
+var $currentLightSource : Item;
+var $isNowDark : Bool;
+var $lastRoom : Item;
+var $headArmor : Item;
+var $torsoArmor : Item;
+var $legArmor : Item;
+var $isSleeping : Bool;
+function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
+{
+    $item.Adjectives = $adjectives;
+    $item.Noun = $noun;
+}
+function Label($item:Item) => $"{$item.Adjectives} {$item.Noun}";
+function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
+{
+    if ($func != null)
+    {
+        $func($item);
+    }
+    else
+    {
+        Message($"You cannot {$verb} the {Label($item)}.");
+    }
+}
+function InvokeItemActionWithFallback($func:ItemDelegate, $item:Item, $fallback:ItemDelegate)
+{
+    if ($func != null)
+    {
+        $func($item);
+    }
+    else
+    {
+        $fallback($item);
+    }
+}
+map IsClosedOrLocked DoorState -> Bool
+{
+    None -> false,
+    Open -> false,
+    Closed -> true,
+    Locked -> true
+}
+function TakePortableItem($item:Item)
+{
+    if ($item.Location != player)
+    {
+        $item.Location = player;
+        Message($"The {Label($item)} is now in your inventory.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already in your inventory.");
+    }
+}
+function DropPortableItem($item:Item)
+{
+    if ($item.Location == player)
+    {
+        $item.Location = player.Location;
+        Message($"You've dropped the {Label($item)}.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is not in your inventory.");
+    }
+}
+function InitializePortableItem($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    SetLabelProperties($item, $adjectives, $noun);
+    $item.TakeAction = TakePortableItem;
+    $item.DropAction = DropPortableItem;
+    $item.Location = $loc;
+}
+function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}{$loc}");
+    InitializePortableItem($return, $adjectives, $noun, $loc);
+}
+function IsPortable($item:Item) => $item.TakeAction != null;
+function IsCurrentRoomOrInventory($loc:Item) => $loc == player.Location || $loc == player;
+function IsAccessible($item:Item) : Bool
+{
+    if (!$item.IsHidden && $item.Noun != null)
+    {
+        var $loc = $item.Location;
+        if (IsCurrentRoomOrInventory($loc))
+        {
+            return true;
+        }
+        elseif ($loc.Location == player.Location && !IsClosedOrLocked($loc.DoorState))
+        {
+            return true;
+        }
+    }
+}
+function IsNight() => $currentTime < 480 || $currentTime >= 1200;
+function IncrementTime()
+{
+    $currentTime = $currentTime < 1439 ? $currentTime + 1 : 0;
+}
+function IsDarkAtNight($item:Item) => IsNight();
+function IsDarkAlways($item:Item) => true;
+map IsActiveLightState LightState -> Bool
+{
+    None -> false,
+    Off -> false,
+    On -> true,
+    Unlit -> false,
+    Lit -> true
+}
+function InitializeLighting()
+{
+    $currentLightSource = null;
+    if (player.Location.IsDark(player.Location))
+    {
+        foreach (var $item) where LightState != LightState.None
+        {
+            if (IsActiveLightState($item.LightState) && IsAccessible($item))
+            {
+                $currentLightSource = $item;
+                break;
+            }
+        }
+        $isNowDark = $currentLightSource == null;
+    }
+    else
+    {
+        $isNowDark = false;
+    }
+}
+map LightStateAdj LightState -> String
+{
+    None -> "",
+    Off -> "off",
+    On -> "on",
+    Unlit -> "unlit",
+    Lit -> "lit"
+}
+map DoorStateAdj DoorState -> String
+{
+    None -> "",
+    Open -> "open",
+    Closed -> "closed",
+    Locked -> "closed"
+}
+function AddStateQualifier($item:Item, $phrase:String) => $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" : $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}" : $phrase;
+function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
+function Inventory()
+{
+    var $haveItems = false;
+    foreach (var $item) where Location == player
+    {
+        if (!$haveItems)
+        {
+            Message("You have the following items:");
+            $haveItems = true;
+        }
+        Message($"- A {LabelWithState($item)}.");
+    }
+    if (!$haveItems)
+    {
+        Message("There is nothing in your inventory.");
+    }
+}
+function DescribeCommon($item:Item)
+{
+    if ($item.Description != null)
+    {
+        Message($item.Description);
+        if ($item.DoorState != null && $item.Noun != null)
+        {
+            Message($"The {Label($item)} is {DoorStateAdj($item.DoorState)}.");
+        }
+    }
+    elseif ($item.Noun != null)
+    {
+        Message($"You see a {LabelWithState($item)}.");
+    }
+    $item.DescribeHealthAction($item);
+}
+function Take($item:Item) => InvokeItemAction($item.TakeAction, $item, "take");
+function Drop($item:Item) => InvokeItemAction($item.DropAction, $item, "drop");
+function Use($item:Item) => InvokeItemAction($item.UseAction, $item, "use");
+function Open($item:Item) => InvokeItemAction($item.OpenAction, $item, "open");
+function Close($item:Item) => InvokeItemAction($item.CloseAction, $item, "close");
+function TurnOn($item:Item) => InvokeItemAction($item.TurnOnAction, $item, "turn on");
+function TurnOff($item:Item) => InvokeItemAction($item.TurnOffAction, $item, "turn off");
+function PutOut($item:Item) => InvokeItemAction($item.PutOutAction, $item, "put out");
+function Describe($item:Item) => InvokeItemActionWithFallback($item.DescribeAction, $item, DescribeCommon);
+function UseOn($item:Item, $target:Item)
+{
+    if ($item.UseOnAction != null)
+    {
+        $item.UseOnAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't use the {Label($item)}.");
+    }
+}
+function PutIn($item:Item, $target:Item)
+{
+    if ($target.PutInAction != null)
+    {
+        $target.PutInAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+function PutOn($item:Item, $target:Item)
+{
+    if ($target.PutOnAction != null)
+    {
+        $target.PutOnAction($item, $target);
+    }
+    else
+    {
+        Message($"You can't put the {Label($item)} on the {Label($target)}.");
+    }
+}
+map Opposite Direction -> Direction
+{
+    North -> South,
+    South -> North,
+    East -> West,
+    West -> East,
+    Up -> Down,
+    Down -> Up
+}
+map DirectionPhrase Direction -> String
+{
+    North -> "to the North",
+    South -> "to the South",
+    East -> "to the East",
+    West -> "to the West",
+    Up -> "leading upward",
+    Down -> "leading downward"
+}
+function GetLink($item:Item, $dir:Direction) : Item
+{
+    switch ($dir)
+    {
+        case Direction.North
+        {
+            return $item.LinkN;
+        }
+        case Direction.South
+        {
+            return $item.LinkS;
+        }
+        case Direction.East
+        {
+            return $item.LinkE;
+        }
+        case Direction.West
+        {
+            return $item.LinkW;
+        }
+        case Direction.Up
+        {
+            return $item.LinkU;
+        }
+        case Direction.Down
+        {
+            return $item.LinkD;
+        }
+    }
+}
+function SetLink($from:Item, $to:Item, $dir:Direction)
+{
+    switch ($dir)
+    {
+        case Direction.North
+        {
+            $from.LinkN = $to;
+        }
+        case Direction.South
+        {
+            $from.LinkS = $to;
+        }
+        case Direction.East
+        {
+            $from.LinkE = $to;
+        }
+        case Direction.West
+        {
+            $from.LinkW = $to;
+        }
+        case Direction.Up
+        {
+            $from.LinkU = $to;
+        }
+        case Direction.Down
+        {
+            $from.LinkD = $to;
+        }
+    }
+}
+function OpenDoor($item:Item)
+{
+    switch ($item.DoorState)
+    {
+        case DoorState.None
+        {
+            Message("You can't open that.");
+        }
+        case DoorState.Open
+        {
+            Message($"The {Label($item)} is already open.");
+        }
+        case DoorState.Closed
+        {
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now open.");
+        }
+        case DoorState.Locked
+        {
+            Message($"The {Label($item)} is locked.");
+        }
+    }
+}
+function CloseDoor($item:Item)
+{
+    switch ($item.DoorState)
+    {
+        case DoorState.None
+        {
+            Message("You can't open that.");
+        }
+        case DoorState.Open
+        {
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now closed.");
+        }
+        case DoorState.Closed
+        {
+            Message($"The {Label($item)} is already closed.");
+        }
+        case DoorState.Locked
+        {
+            Message($"The {Label($item)} is already closed.");
+        }
+    }
+}
+function IsOpenable($item:Item) => $item.OpenAction != null;
+function LinkRoomsOneWay($from:Item, $to:Item, $via:Item, $dir:Direction)
+{
+    SetLink($from, $via, $dir);
+    SetLink($via, $to, $dir);
+}
+function LinkRooms($from:Item, $to:Item, $via:Item, $dir:Direction)
+{
+    LinkRoomsOneWay($from, $to, $via, $dir);
+    LinkRoomsOneWay($to, $from, $via, Opposite($dir));
+}
+function InitializeDoor($door:Item, $from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState)
+{
+    SetLabelProperties($door, $adjectives, $noun);
+    $door.DoorState = $state;
+    if ($state != DoorState.None)
+    {
+        $door.OpenAction = OpenDoor;
+        $door.CloseAction = CloseDoor;
+    }
+    LinkRooms($from, $to, $door, $dir);
+}
+function NewDoorItem($from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState) : Item
+{
+    $return = NewItem($"_{$noun}_{$from}{$to}");
+    InitializeDoor($return, $from, $to, $dir, $adjectives, $noun, $state);
+}
+function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
+{
+    return NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
+}
+function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
+{
+    $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Locked);
+    $return.Key = $key;
+}
+function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
+{
+    return NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
+}
+function NewLink($from:Item, $to:Item, $dir:Direction) : Item
+{
+    return NewDoorItem($from, $to, $dir, "", "", DoorState.None);
+}
+function UseKeyOn($key:Item, $target:Item)
+{
+    if ($target.Key == $key && $target.DoorState != DoorState.None)
+    {
+        if ($target.DoorState == DoorState.Locked)
+        {
+            $target.DoorState = DoorState.Closed;
+            Message($"The {Label($target)} is now unlocked.");
+        }
+        else
+        {
+            $target.DoorState = DoorState.Locked;
+            Message($"The {Label($target)} is now locked.");
+        }
+    }
+    else
+    {
+        Message($"The {Label($key)} doesn't work on that.");
+    }
+}
+function InitializeKey($key:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($key, $adjectives, $noun, $loc);
+    $key.UseOnAction = UseKeyOn;
+}
+function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $key = NewItem($"_{$noun}_{$loc}");
+    InitializeKey($key, $adjectives, $noun, $loc);
+    return $key;
+}
+function IsKey($item:Item) => $item.UseOnAction == UseKeyOn;
+function ListContainerContents($container:Item)
+{
+    var $haveItems = false;
+    foreach (var $item) where Location == $container
+    {
+        if (!$haveItems)
+        {
+            Message($"Inside the {$container.Noun} are the following:");
+            $haveItems = true;
+        }
+        Message($" - A {LabelWithState($item)}.");
+    }
+    if (!$haveItems)
+    {
+        Message($"The {$container.Noun} is empty.");
+    }
+}
+function OpenContainer($item:Item)
+{
+    switch ($item.DoorState)
+    {
+        case DoorState.None
+        {
+            Message("You can't open that.");
+        }
+        case DoorState.Open
+        {
+            Message($"The {Label($item)} is already open.");
+        }
+        case DoorState.Closed
+        {
+            $item.DoorState = DoorState.Open;
+            Message($"The {Label($item)} is now open.");
+            ListContainerContents($item);
+        }
+        case DoorState.Locked
+        {
+            Message($"The {Label($item)} is locked.");
+        }
+    }
+}
+function DescribeContainer($container:Item)
+{
+    DescribeCommon($container);
+    if (!IsClosedOrLocked($container.DoorState))
+    {
+        ListContainerContents($container);
+    }
+}
+function PutInContainer($item:Item, $container:Item)
+{
+    if (!IsPortable($item))
+    {
+        Message($"You can't move the {Label($item)}.");
+    }
+    elseif (IsClosedOrLocked($container.DoorState))
+    {
+        Message($"The {Label($container)} is closed.");
+    }
+    elseif ($item.Location == $container)
+    {
+        Message($"The {Label($item)} is already in the {Label($container)}.");
+    }
+    else
+    {
+        $item.Location = $container;
+        Message($"The {Label($item)} is now in the {Label($container)}.");
+    }
+}
+function InitializeContainer($container:Item, $adjectives:String, $noun:String, $state:DoorState, $loc:Item)
+{
+    SetLabelProperties($container, $adjectives, $noun);
+    $container.DoorState = $state;
+    $container.PutInAction = PutInContainer;
+    $container.OpenAction = OpenContainer;
+    $container.CloseAction = CloseDoor;
+    $container.DescribeAction = DescribeContainer;
+    $container.Location = $loc;
+}
+function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:Item) : Item
+{
+    var $container = NewItem($"_{$noun}_{$loc}");
+    InitializeContainer($container, $adjectives, $noun, $state, $loc);
+    return $container;
+}
+function IsContainer($item:Item) => $item.PutInAction != null;
+function IsOpenContainer($item:Item) => IsContainer($item) && !IsClosedOrLocked($item.DoorState);
+function DescribeTable($table:Item)
+{
+    DescribeCommon($table);
+    var $haveItems = false;
+    foreach (var $item) where Location == $table
+    {
+        if (!$haveItems)
+        {
+            Message($"On the {$table.Noun} are the following:");
+            $haveItems = true;
+        }
+        Message($" - A {LabelWithState($item)}.");
+    }
+}
+function PutOnTable($item:Item, $table:Item)
+{
+    if (!IsPortable($item))
+    {
+        Message($"You can't move the {Label($item)}.");
+    }
+    elseif ($item.Location == $table)
+    {
+        Message($"The {Label($item)} is already on the {Label($table)}.");
+    }
+    else
+    {
+        $item.Location = $table;
+        Message($"The {Label($item)} is now on the {Label($table)}.");
+    }
+}
+function InitializeTable($table:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    SetLabelProperties($table, $adjectives, $noun);
+    $table.PutOnAction = PutOnTable;
+    $table.DescribeAction = DescribeTable;
+    $table.Location = $loc;
+}
+function NewTable($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeTable($return, $adjectives, $noun, $loc);
+}
+function IsTable($item:Item) => $item.PutOnAction != null;
+function Look()
+{
+    var $room = player.Location;
+    if ($isNowDark)
+    {
+        Message("You are in the dark.");
+        foreach (var $dir:Direction)
+        {
+            var $door = GetLink($room, $dir);
+            if ($door != null && !IsClosedOrLocked($door.DoorState))
+            {
+                var $linkedRoom = GetLink($door, $dir);
+                if (!$linkedRoom.IsDark($linkedRoom))
+                {
+                    Message($"A faint light filters in from the {$door.Noun} {DirectionPhrase($dir)}.");
+                }
+            }
+        }
+    }
+    else
+    {
+        if ($currentLightSource != null)
+        {
+            if (player.Location.IsDark == IsDarkAtNight)
+            {
+                Message($"It is night, but the {Label($currentLightSource)} illuminates the darkness.");
+            }
+            else
+            {
+                Message($"The {Label($currentLightSource)} illuminates the darkness.");
+            }
+        }
+        Describe($room);
+        foreach (var $dir:Direction)
+        {
+            var $door = GetLink(player.Location, $dir);
+            if ($door != null && $door.Noun != null && !$door.IsHidden)
+            {
+                Message($"There is a {LabelWithState($door)} {DirectionPhrase($dir)}.");
+            }
+        }
+        foreach (var $item) where Location == $room
+        {
+            if (!$item.IsHidden && $item.Noun != null)
+            {
+                Message($"There is a {LabelWithState($item)} here.");
+            }
+        }
+    }
+}
+function OnLightActivated($lightSource:Item)
+{
+    if ($isNowDark)
+    {
+        $isNowDark = false;
+        $currentLightSource = $lightSource;
+        Look();
+    }
+}
+function TurnOnLight($item:Item)
+{
+    if ($item.LightState != LightState.On)
+    {
+        $item.LightState = LightState.On;
+        Message($"The {Label($item)} is now on.");
+        OnLightActivated($item);
+    }
+    else
+    {
+        Message($"The {Label($item)} is already on.");
+    }
+}
+function TurnOffLight($item:Item)
+{
+    if ($item.LightState == LightState.On)
+    {
+        $item.LightState = LightState.Off;
+        Message($"The {Label($item)} is now off.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already off.");
+    }
+}
+function TurnOnCandle($item:Item)
+{
+    Message($"You can't turn on the {Label($item)}. You need to light it with something.");
+}
+function IgniteCandle($item:Item)
+{
+    if ($item.LightState != LightState.Lit)
+    {
+        $item.LightState = LightState.Lit;
+        Message($"The {Label($item)} is now lit.");
+        OnLightActivated($item);
+    }
+    else
+    {
+        Message($"The {Label($item)} is already lit.");
+    }
+}
+function PutOutCandle($item:Item)
+{
+    if ($item.LightState == LightState.Lit)
+    {
+        $item.LightState = LightState.Unlit;
+        Message($"The {Label($item)} is now out.");
+    }
+    else
+    {
+        Message($"The {Label($item)} is already out.");
+    }
+}
+function UseLighterOn($item:Item, $target:Item)
+{
+    if ($target.IgniteAction != null)
+    {
+        $target.IgniteAction($target);
+    }
+    else
+    {
+        Message($"You cannot light the {Label($target)}.");
+    }
+}
+function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.LightState = LightState.Off;
+    $item.TurnOnAction = TurnOnLight;
+    $item.TurnOffAction = TurnOffLight;
+    $item.PutOutAction = TurnOffLight;
+}
+function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLight($item, $adjectives, $noun, $loc);
+    return $item;
+}
+function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
+function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.LightState = LightState.Unlit;
+    $item.TurnOnAction = TurnOnCandle;
+    $item.IgniteAction = IgniteCandle;
+    $item.TurnOffAction = PutOutCandle;
+    $item.PutOutAction = PutOutCandle;
+}
+function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeCandle($item, $adjectives, $noun, $loc);
+    return $item;
+}
+function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
+function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializePortableItem($item, $adjectives, $noun, $loc);
+    $item.UseOnAction = UseLighterOn;
+}
+function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = NewItem($"_{$noun}_{$loc}");
+    InitializeLighter($item, $adjectives, $noun, $loc);
+    return $item;
+}
+function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
+function LightWith($target:Item, $lighter:Item)
+{
+    if (IsLighter($lighter))
+    {
+        UseLighterOn($lighter, $target);
+    }
+    else
+    {
+        Message($"The {Label($lighter)} has no effect.");
+    }
+}
+function Go($dir:Direction)
+{
+    var $source = player.Location;
+    var $door = GetLink($source, $dir);
+    if ($door == null || $door.IsHidden)
+    {
+        Message($"You cannot go {$dir}.");
+    }
+    elseif (IsClosedOrLocked($door.DoorState) && $isNowDark)
+    {
+        Message($"You cannot go {$dir}.");
+    }
+    elseif ($door.DoorState == DoorState.Locked)
+    {
+        Message($"The {Label($door)} is locked.");
+    }
+    else
+    {
+        if ($door.DoorState == DoorState.Closed)
+        {
+            Message($"You open the {Label($door)}.");
+            $door.DoorState = DoorState.Open;
+            Tick();
+        }
+        Message($"You go {$dir}.");
+        var $dest = GetLink($door, $dir);
+        if (!$source.LeaveAction($source, $dest) && !$dest.EnterAction($source, $dest))
+        {
+            $lastRoom = player.Location;
+player            .Location = $dest;
+            InitializeLighting();
+            Look();
+        }
+    }
+}
+function AddItemWords($item:Item)
+{
+    AddAdjectives($item.Adjectives, $item);
+    AddNoun($item.Noun, $item);
+}
+function InitializeWordMap()
+{
+    if ($isNowDark)
+    {
+        foreach (var $item) where Location == player
+        {
+            AddItemWords($item);
+        }
+    }
+    else
+    {
+        foreach (var $item)
+        {
+            if (IsAccessible($item))
+            {
+                AddItemWords($item);
+            }
+        }
+        foreach (var $dir:Direction)
+        {
+            var $door = GetLink(player.Location, $dir);
+            if ($door.DoorState != DoorState.None)
+            {
+                AddAdjectives($"{$dir}", $door);
+                AddItemWords($door);
+            }
+        }
+    }
+}
+function UpdateItems()
+{
+    foreach (var $item)
+    {
+        $item.UpdateAction($item);
+    }
+}
+function ComputeDamage($attackDamage:Int, $DamageResistance:Int) : Int
+{
+    var $damage = $attackDamage - $DamageResistance;
+    $damage = $damage - $damage * $DamageResistance / 100;
+    $return = $damage > 0 ? $damage : 0;
+}
+function DescribeItemHealth($item:Item)
+{
+    if ($item.MaxHealth > 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        var $label = Label($item);
+        if ($health < 0)
+        {
+            Message($"The {$label} is destroyed!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message($"The {$label} is critically damanged.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message($"The {$label} is severely damanged.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message($"The {$label} is significantly damanged.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message($"The {$label} is slightly damaged.");
+        }
+        else
+        {
+            Message($"The {$label} is undamaged.");
+        }
+    }
+}
+function DescribeCreatureHealth($item:Item)
+{
+    if ($item.MaxHealth > 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        var $label = Label($item);
+        if ($health < 0)
+        {
+            Message($"The {$label} is dead!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message($"The {$label} is critically injured.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message($"The {$label} is severely injured.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message($"The {$label} is significantly injured.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message($"The {$label} is slightly injured.");
+        }
+        else
+        {
+            Message($"The {$label} is uninjured.");
+        }
+    }
+}
+function DescribePlayerHealth($item:Item)
+{
+    if ($item.MaxHealth != 0)
+    {
+        var $health = $item.Health;
+        var $percentage = $health * 100 / $item.MaxHealth;
+        if ($health < 0)
+        {
+            Message("You are dead!");
+        }
+        elseif ($percentage < 20)
+        {
+            Message("You are critically injured.");
+        }
+        elseif ($percentage < 40)
+        {
+            Message("You are severely injured.");
+        }
+        elseif ($percentage < 70)
+        {
+            Message("You are significantly injured.");
+        }
+        elseif ($percentage < 100)
+        {
+            Message("You are slightly injured.");
+        }
+        else
+        {
+            Message("You are uninjured.");
+        }
+    }
+}
+function UpdatePlayer($item:Item)
+{
+    if ($item.Health < $item.MaxHealth)
+    {
+        $item.Health = $item.Health + 1;
+    }
+}
+function SetItemHealth($item:Item, $health:Int)
+{
+    $item.Health = $health;
+    $item.MaxHealth = $health;
+    $item.DescribeHealthAction = DescribeItemHealth;
+}
+function GetArmor($kind:ArmorKind) : Item
+{
+    switch ($kind)
+    {
+        case ArmorKind.Head
+        {
+            $return = $headArmor;
+        }
+        case ArmorKind.Torso
+        {
+            $return = $torsoArmor;
+        }
+        case ArmorKind.Leg
+        {
+            $return = $legArmor;
+        }
+    }
+}
+function SetArmor($kind:ArmorKind, $item:Item)
+{
+    switch ($kind)
+    {
+        case ArmorKind.Head
+        {
+            $headArmor = $item;
+        }
+        case ArmorKind.Torso
+        {
+            $torsoArmor = $item;
+        }
+        case ArmorKind.Leg
+        {
+            $legArmor = $item;
+        }
+    }
+}
+function SetPlayerDamageResistance()
+{
+player    .DamageResistance = ($headArmor.DamageResistance * 30 + $torsoArmor.DamageResistance * 50 + $legArmor.DamageResistance * 20) / 100;
+}
+function TakeArmor($item:Item)
+{
+    var $kind = $item.ArmorKind;
+    if ($kind != ArmorKind.None)
+    {
+        var $current = GetArmor($kind);
+        if ($current == $item)
+        {
+            Message($"You're already wearing the {Label($item)}.");
+        }
+        else
+        {
+            if ($current != null)
+            {
+                Message($"You drop the {Label($current)} and put on the {Label($item)}.");
+                $current.Location = player.Location;
+            }
+            else
+            {
+                Message($"You put on the {Label($item)}.");
+            }
+            $item.Location = player;
+            SetArmor($kind, $item);
+            SetPlayerDamageResistance();
+        }
+    }
+    else
+    {
+        Message($"You can't take the {Label($item)}.");
+    }
+}
+function DropArmor($item:Item)
+{
+    if ($item.Location == player)
+    {
+        Message($"You remove the {Label($item)}.");
+        $item.Location = player.Location;
+        SetArmor($item.ArmorKind, null);
+        SetPlayerDamageResistance();
+    }
+    else
+    {
+        Message($"You're not wearing the {Label($item)}.");
+    }
+}
+function InitializeArmor($item:Item, $adjectives:String, $noun:String, $kind:ArmorKind, $DamageResistance:Int, $loc:Item)
+{
+    SetLabelProperties($item, $adjectives, $noun);
+    $item.ArmorKind = $kind;
+    $item.Location = $loc;
+    $item.TakeAction = TakeArmor;
+    $item.UseAction = TakeArmor;
+    $item.DropAction = DropArmor;
+}
+function NewArmor($adjectives:String, $noun:String, $kind:ArmorKind, $DamageResistance:Int, $loc:Item) : Item
+{
+    $return = NewItem($"_{$loc}_{$noun}");
+    InitializeArmor($return, $adjectives, $noun, $kind, $DamageResistance, $loc);
+}
+function DestroyItem($item:Item)
+{
+    foreach (var $inner) where Location == $item
+    {
+        $inner.Location = $item.Location;
+    }
+    $item.Location = null;
+}
+function AttackItemWith($target:Item, $weapon:Item)
+{
+    if ($target.MaxHealth == 0)
+    {
+        Message($"You can't attack the {Label($target)}.");
+    }
+    elseif ($weapon != null && $weapon.AttackDamage == 0)
+    {
+        Message($"The {Label($weapon)} is not a weapon.");
+    }
+    else
+    {
+        var $weaponName = $weapon != null ? $"the {Label($weapon)}" : "your bare hands";
+        var $weaponDamage = $weapon != null ? $weapon.AttackDamage : player.AttackDamage;
+        var $damage = ComputeDamage($weaponDamage, $target.DamageResistance);
+        if ($damage <= 0)
+        {
+            Message($"You attack the {Label($target)} with {$weaponName} but do no damage.");
+        }
+        else
+        {
+            Message($"You attack the {Label($target)} with {$weaponName}.");
+            $target.Health = $target.Health - $damage;
+            $target.DescribeHealthAction($target);
+            if ($target.Health < 0)
+            {
+                DestroyItem($target);
+            }
+        }
+        if ($target.Health >= 0)
+        {
+            $target.OnAttackedAction($target);
+        }
+    }
+}
+function AttackPlayer($foe:Item)
+{
+    var $weapon = $foe.CurrentWeapon;
+    var $withPhrase = $weapon != null ? $" with {Label($weapon)}" : "";
+    var $weaponDamage = $weapon != null ? $weapon.AttackDamage : $foe.AttackDamage;
+    var $damage = ComputeDamage($weaponDamage, player.DamageResistance);
+    if ($damage <= 0)
+    {
+        Message($"The {Label($foe)} attacks you{$withPhrase} but does no damage.");
+    }
+    else
+    {
+        Message($"The {Label($foe)} attacks you{$withPhrase}.");
+player        .Health = player.Health - $damage;
+player        .DescribeHealthAction(player);
+        if (player.Health < 0)
+        {
+            Message("Better luck next time!");
+            EndGame(false);
+        }
+    }
+}
+function UseWeapon($item:Item)
+{
+    if (player.CurrentWeapon == $item)
+    {
+        Message($"The {Label($item)} is already your current weapon.");
+    }
+    else
+    {
+        if ($item.Location != player)
+        {
+            $item.Location = player;
+            Message($"The {Label($item)} is now in your inventory.");
+        }
+player        .CurrentWeapon = $item;
+        Message($"The {Label($item)} is now your current weapon.");
+    }
+}
+function TakeWeapon($item:Item)
+{
+    TakePortableItem($item);
+    if (player.CurrentWeapon == null)
+    {
+player        .CurrentWeapon = $item;
+        Message($"The {Label($item)} is now your current weapon.");
+    }
+    else
+    {
+        Message($"The {Label(player.CurrentWeapon)} is still your current weapon.");
+        Message($"You can 'use {Label($item)}' to change that.");
+    }
+}
+function DropWeapon($item:Item)
+{
+    if ($item.Location == player)
+    {
+        $item.Location = player.Location;
+        Message($"You've dropped the {Label($item)}.");
+        if (player.CurrentWeapon == $item)
+        {
+player            .CurrentWeapon = null;
+            Message("You no longer have a current weapon.");
+        }
+    }
+    else
+    {
+        Message($"The {Label($item)} is not in your inventory.");
+    }
+}
+function InitializeWeapon($item:Item, $adjectives:String, $noun:String, $damage:Int, $loc:Item)
+{
+    SetLabelProperties($item, $adjectives, $noun);
+    $item.UseAction = UseWeapon;
+    $item.TakeAction = TakeWeapon;
+    $item.DropAction = DropWeapon;
+    $item.AttackDamage = $damage;
+    $item.Location = $loc;
+}
+function NewWeapon($adjectives:String, $noun:String, $damage:Int, $loc:Item) : Item
+{
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeWeapon($return, $adjectives, $noun, $damage, $loc);
+}
+function DescribePlayerWithArms($item:Item)
+{
+    DescribeCommon($item);
+    if ($headArmor != null)
+    {
+        Message($"On your head is a {Label($headArmor)}.");
+    }
+    if ($torsoArmor != null)
+    {
+        Message($"You're wearing a {Label($torsoArmor)}.");
+    }
+    if ($legArmor != null)
+    {
+        Message($"On your legs are {Label($legArmor)}.");
+    }
+    if (player.CurrentWeapon != null)
+    {
+        Message($"You wield a {Label(player.CurrentWeapon)}.");
+    }
+}
+function TryFollowPlayer($monster:Item) : Bool
+{
+    if (!$isNowDark && $monster.Location == $lastRoom)
+    {
+        $monster.Location = player.Location;
+        AddItemWords($monster);
+        Message($"The {Label($monster)} follows you.");
+        $return = true;
+    }
+}
+function UpdateHostileMonster($monster:Item)
+{
+    if (!$isNowDark)
+    {
+        if ($monster.Location == player.Location)
+        {
+            AttackPlayer($monster);
+        }
+        else
+        {
+            TryFollowPlayer($monster);
+        }
+    }
+}
+function UpdateSurprisedMonster($monster:Item)
+{
+    if ($monster.Location == player.Location && !$isNowDark)
+    {
+        Message($"The {Label($monster)} notices you.");
+        $monster.UpdateAction = UpdateHostileMonster;
+    }
+}
+function UpdateFriendlyMonster($monster:Item)
+{
+    TryFollowPlayer($monster);
+}
+function OnMonsterAttacked($monster:Item)
+{
+    $monster.UpdateAction = UpdateHostileMonster;
+}
+function InitializeMonster($monster:Item, $adjectives:String, $noun:String, $health:Int, $damageResistance:Int, $attackDamage:Int, $loc:Item)
+{
+    SetLabelProperties($monster, $adjectives, $noun);
+    $monster.Health = $health;
+    $monster.MaxHealth = $health;
+    $monster.DescribeHealthAction = DescribeCreatureHealth;
+    $monster.DamageResistance = $damageResistance;
+    $monster.AttackDamage = $attackDamage;
+    $monster.Location = $loc;
+    $monster.OnAttackedAction = OnMonsterAttacked;
+    $monster.UpdateAction = UpdateSurprisedMonster;
+}
+function NewMonster($adjectives:String, $noun:String, $health:Int, $damageResistance:Int, $attackDamage:Int, $loc:Item) : Item
+{
+    $return = NewItem($"_{$loc}_{$noun}");
+    InitializeMonster($return, $adjectives, $noun, $health, $damageResistance, $attackDamage, $loc);
+}
+function Sleep($minutes:Int) : Bool
+{
+    $isSleeping = true;
+    while ($isSleeping && $minutes > 0)
+    {
+        IncrementTime();
+        UpdateItems();
+        $minutes = $minutes - 1;
+    }
+    $return = $isSleeping;
+    $isSleeping = false;
+}
+function OnPlayerAttacked($item:Item)
+{
+    $isSleeping = false;
+}
+function UseBed($item:Item)
+{
+    Message($"You go to sleep in the {Label($item)}.");
+    if (Sleep(480))
+    {
+        Message("You wake up after eight hours.");
+    }
+    else
+    {
+        Message("You wake up after being attacked.");
+    }
+}
+function InitializeBed($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    InitializeTable($item, $adjectives, $noun, $loc);
+    $item.UseAction = UseBed;
+}
+function NewBed($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = NewItem($"{$noun}_{$loc}");
+    InitializeBed($return, $adjectives, $noun, $loc);
+}
+function OnExitHouse($from:Item, $to:Item) : Bool
+{
+    Message("Congratulations! You made it out of the house! You win!");
+    EndGame(true);
+}
+command "list items"
+{
+    ListItems();
+}
+command "list item {$name:String}"
+{
+    ListItem($name);
+}
+command "list properties"
+{
+    ListProperties();
+}
+command "list types"
+{
+    ListTypes();
+}
+command "list variables"
+{
+    ListVariables();
+}
+command "list functions"
+{
+    ListFunctions();
+}
+command "list commands"
+{
+    ListCommands();
+}
+command "list words"
+{
+    ListWords();
+}
+command "go {$dir:Direction}"
+{
+    Go($dir);
+}
+command "n"
+{
+    Go(Direction.North);
+}
+command "s"
+{
+    Go(Direction.South);
+}
+command "e"
+{
+    Go(Direction.East);
+}
+command "w"
+{
+    Go(Direction.West);
+}
+command "up"
+{
+    Go(Direction.Up);
+}
+command "down"
+{
+    Go(Direction.Down);
+}
+command "inventory"
+{
+    Inventory();
+}
+command "i"
+{
+    Inventory();
+}
+command "take {$item:Item}"
+{
+    Take($item);
+}
+command "drop {$item:Item}"
+{
+    Take($item);
+}
+command "put {$item:Item} in {$container:Item}"
+{
+    PutIn($item, $container);
+}
+command "put {$item:Item} on {$table:Item}"
+{
+    PutOn($item, $table);
+}
+command "use {$item:Item} on {$target:Item}"
+{
+    UseOn($item, $target);
+}
+command "use {$item:Item}"
+{
+    Use($item);
+}
+command "open {$item:Item}"
+{
+    Open($item);
+}
+command "close {$item:Item}"
+{
+    Close($item);
+}
+command "turn on {$item:Item}"
+{
+    TurnOn($item);
+}
+command "turn off {$item:Item}"
+{
+    TurnOff($item);
+}
+command "light {$target:Item} with {$lighter:Item}"
+{
+    LightWith($target, $lighter);
+}
+command "put out {$item:Item}"
+{
+    PutOut($item);
+}
+command "look at me"
+{
+    Describe(player);
+}
+command "look at self"
+{
+    Describe(player);
+}
+command "look at {$item:Item}"
+{
+    Describe($item);
+}
+command "look"
+{
+    Look();
+}
+command "attack {$target:Item} with {$weapon:Item}"
+{
+    AttackItemWith($target, $weapon);
+}
+command "attack {$target:Item}"
+{
+    AttackItemWith($target, player.CurrentWeapon);
+}
+command "map"
+{
+    Message("[FloorPlan.png]");
+}
+game
+{
+    {
+        var $_ = player;
+        $_.Location = entry_way;
+        $_.DescribeAction = DescribePlayerWithArms;
+        $_.DescribeHealthAction = DescribePlayerHealth;
+        $_.UpdateAction = UpdatePlayer;
+        $_.OnAttackedAction = OnPlayerAttacked;
+        $_.Health = 250;
+        $_.MaxHealth = 250;
+        $_.AttackDamage = 5;
+    }
+    {
+        var $_ = front_porch;
+        $_.EnterAction = OnExitHouse;
+        $_.Description = "You are on the front porch.";
+        $_.LinkN = _door_front_porchentry_way;
+    }
+    {
+        var $_ = entry_way;
+        $_.Description = "You are in the entryway.";
+        $_.LinkN = _opening_entry_wayback_hallway;
+        $_.LinkS = _door_front_porchentry_way;
+        $_.LinkE = _opening_living_roomentry_way;
+    }
+    {
+        var $_ = back_hallway;
+        $_.Description = "You are in the back hallway.";
+        $_.LinkS = _opening_entry_wayback_hallway;
+        $_.LinkE = _opening_back_hallwaykitchen;
+        $_.LinkW = _door_back_hallwaygarage;
+    }
+    {
+        var $_ = garage;
+        $_.Description = "You are in the garage.";
+        $_.LinkE = _door_back_hallwaygarage;
+    }
+    {
+        var $_ = kitchen;
+        $_.Description = "You are in the kitchen.";
+        $_.LinkE = _opening_kitchendining_room;
+        $_.LinkW = _opening_back_hallwaykitchen;
+    }
+    {
+        var $_ = dining_room;
+        $_.Description = "You are in the dining room.";
+        $_.LinkS = _opening_dining_roomliving_room;
+        $_.LinkW = _opening_kitchendining_room;
+    }
+    {
+        var $_ = living_room;
+        $_.Description = "You are in the living room.";
+        $_.LinkN = _opening_dining_roomliving_room;
+        $_.LinkW = _opening_living_roomentry_way;
+    }
+    {
+        var $_ = _key_garage;
+        $_.Location = garage;
+        $_.Noun = "key";
+        $_.Adjectives = "brass house";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+        $_.UseOnAction = UseKeyOn;
+    }
+    {
+        var $_ = _door_front_porchentry_way;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Locked;
+        $_.Key = _key_garage;
+        $_.LinkN = entry_way;
+        $_.LinkS = front_porch;
+    }
+    {
+        var $_ = _opening_entry_wayback_hallway;
+        $_.Noun = "opening";
+        $_.LinkN = back_hallway;
+        $_.LinkS = entry_way;
+    }
+    {
+        var $_ = _door_back_hallwaygarage;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
+        $_.LinkE = back_hallway;
+        $_.LinkW = garage;
+    }
+    {
+        var $_ = _opening_back_hallwaykitchen;
+        $_.Noun = "opening";
+        $_.LinkE = kitchen;
+        $_.LinkW = back_hallway;
+    }
+    {
+        var $_ = _opening_kitchendining_room;
+        $_.Noun = "opening";
+        $_.LinkE = dining_room;
+        $_.LinkW = kitchen;
+    }
+    {
+        var $_ = _opening_dining_roomliving_room;
+        $_.Noun = "opening";
+        $_.LinkN = dining_room;
+        $_.LinkS = living_room;
+    }
+    {
+        var $_ = _opening_living_roomentry_way;
+        $_.Noun = "opening";
+        $_.LinkE = living_room;
+        $_.LinkW = entry_way;
+    }
+    {
+        var $_ = _back_hallway_goblin;
+        $_.Location = back_hallway;
+        $_.Noun = "goblin";
+        $_.Adjectives = "hairy";
+        $_.DescribeHealthAction = DescribeCreatureHealth;
+        $_.UpdateAction = UpdateSurprisedMonster;
+        $_.OnAttackedAction = OnMonsterAttacked;
+        $_.Health = 50;
+        $_.MaxHealth = 50;
+        $_.AttackDamage = 80;
+    }
+    {
+        var $_ = _drawer_kitchen;
+        $_.Location = kitchen;
+        $_.Noun = "drawer";
+        $_.Adjectives = "cutlery";
+        $_.OpenAction = OpenContainer;
+        $_.CloseAction = CloseDoor;
+        $_.DescribeAction = DescribeContainer;
+        $_.PutInAction = PutInContainer;
+        $_.DoorState = DoorState.Closed;
+    }
+    {
+        var $_ = _knife__drawer_kitchen;
+        $_.Location = _drawer_kitchen;
+        $_.Noun = "knife";
+        $_.Adjectives = "carving";
+        $_.TakeAction = TakeWeapon;
+        $_.DropAction = DropWeapon;
+        $_.UseAction = UseWeapon;
+        $_.AttackDamage = 30;
+    }
+    {
+        var $_ = _table_dining_room;
+        $_.Location = dining_room;
+        $_.Noun = "table";
+        $_.Adjectives = "dining room";
+        $_.DescribeAction = DescribeTable;
+        $_.PutOnAction = PutOnTable;
+    }
+    {
+        var $_ = _plate_table_dining_room;
+        $_.Location = _table_dining_room;
+        $_.Noun = "plate";
+        $_.TakeAction = TakePortableItem;
+        $_.DropAction = DropPortableItem;
+    }
+    {
+        var $_ = _knife__table_dining_room;
+        $_.Location = _table_dining_room;
+        $_.Noun = "knife";
+        $_.Adjectives = "butter";
+        $_.TakeAction = TakeWeapon;
+        $_.DropAction = DropWeapon;
+        $_.UseAction = UseWeapon;
+        $_.AttackDamage = 10;
+    }
+    {
+        var $_ = _fork__table_dining_room;
+        $_.Location = _table_dining_room;
+        $_.Noun = "fork";
+        $_.TakeAction = TakeWeapon;
+        $_.DropAction = DropWeapon;
+        $_.UseAction = UseWeapon;
+        $_.AttackDamage = 10;
+    }
+}
+turn
+{
+    if (player.Location == null)
+    {
+        Message("Error: player.Location has not been set.");
+    }
+}
+turn
+{
+    IncrementTime();
+}
+turn
+{
+    if (player.Location == null)
+    {
+        Message("Error: player.Location has not been set.");
+    }
+    else
+    {
+        InitializeLighting();
+        InitializeWordMap();
+    }
+}
+turn
+{
+    UpdateItems();
+}

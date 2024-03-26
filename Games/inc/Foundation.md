@@ -1287,9 +1287,12 @@ function Go($dir:Direction)
     {
         if ($door.DoorState == DoorState.Closed)
         {
-            Message($"You open the {Label($door)} and go {$dir}.");
+            Message($"You open the {Label($door)}.");
             $door.DoorState = DoorState.Open;
+            Tick();
         }
+
+        Message($"You go {$dir}.");
 
         var $dest = GetLink($door, $dir);
         if (!$source.LeaveAction($source, $dest) &&

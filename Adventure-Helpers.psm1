@@ -49,8 +49,8 @@ function Get-Games {
     (Get-ChildItem -Path $GamesDir -File).Name
 }
 
-function Invoke-Game([string] $FileName) {
-    $FilePath = Join-Path $GamesDir $FileName
+function Invoke-Game([string] $Name) {
+    $FilePath = Join-Path $GamesDir $Name 'adventure.txt'
     if (Test-Path $FilePath) {
         $exePath = Get-ExePath('TextAdventure')
         Write-Output "$exePath $FilePath"
@@ -61,21 +61,38 @@ function Invoke-Game([string] $FileName) {
     }
 }
 
-function Build-Games {
-    $destRoot = Join-Path $PSScriptRoot 'OxbowCastle' 'Assets' 'Games'
+function Build-Game([string] $Path, [string] $Destination) {
+
+    $sourceFile = Join-Path $Path 'adventure.txt'
+    if (-not (Test-Path $sourceFile)) {
+        Write-Error "Error: $sourceFile does not exist."
+        return
+    }
+
+    if (-not (Test-Path $Destination)) {
+        mkdir $Destination | Out-Null
+    }
+
+    $destFile = Join-Path $Destination 'adventure.txt'
     $exePath = Get-ExePath('TextAdventure')
 
-    Get-ChildItem $GamesDir -File | ForEach-Object {
-        $destDir = Join-Path $destRoot ($_.BaseName -replace '-',' ')
+    # Compile adventure.txt.
+    Write-Host "$exePath -compile $sourceFile $destFile"
+    & $exePath -compile $sourceFile $destFile
 
-        if (-not (Test-Path $destDir)) {
-            mkdir $destDir | Out-Null
+    # Copy other files except .txt and .md files.
+    Get-ChildItem (Join-Path $Path '*') -File -Exclude '*.txt','*.md' | ForEach-Object {
+        Copy-Item -Path $_.FullName -Destination $Destination
+    }
+}
+
+function Build-AllGames {
+    $destRoot = Join-Path $PSScriptRoot 'OxbowCastle' 'Assets' 'Games'
+
+    Get-ChildItem $GamesDir -Directory | ForEach-Object {
+        if (Test-Path (Join-Path $_.FullName 'adventure.txt')) {
+            Build-Game -Path $_.FullName -Destination (Join-Path $destRoot $_.Name)
         }
-
-        $destPath = Join-Path $destDir 'adventure.txt'
-
-        Write-Host "$exePath -compile $_.FullName $destPath"
-        & $exePath -compile $_.FullName $destPath
     }
 }
 
@@ -89,5 +106,6 @@ Export-ModuleMember -Function Invoke-Test
 Export-ModuleMember -Function Update-Masters
 Export-ModuleMember -Function Get-Games
 Export-ModuleMember -Function Invoke-Game
-Export-ModuleMember -Function Build-Games
+Export-ModuleMember -Function Build-Game
+Export-ModuleMember -Function Build-AllGames
 Export-ModuleMember -Function Get-CommandsFromTrace

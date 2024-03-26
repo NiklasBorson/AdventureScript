@@ -14,7 +14,10 @@ namespace EngineTest
 
         static void TestGame(TestConfig config, string name)
         {
-            string gamePath = config.GamePath($"{name}.txt");
+            string gamePath = config.GamePath($"{name}/adventure.txt");
+
+            name = name.Replace(' ', '-');
+
             string inputPath = config.TestFilePath($"{name}-input.txt");
             string traceFileName = $"{name}-trace.txt";
             string outputPath = config.OutputPath(traceFileName);
@@ -45,8 +48,7 @@ namespace EngineTest
 
         public static void Run(TestConfig config)
         {
-            TestGame(config, "Oxbow-Castle");
-
+            TestGame(config, "Oxbow Castle");
         }
     }
 }

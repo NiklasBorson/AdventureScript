@@ -82,6 +82,13 @@ namespace AdventureScript
             return 0;
         }
 
+        static int _Tick(GameState game, int[] frame)
+        {
+            // Tick()
+            game.Tick();
+            return 0;
+        }
+
         static int _ListItem(GameState game, int[] frame)
         {
             // ListItem($name:String)
@@ -326,6 +333,12 @@ namespace AdventureScript
                 },
                 /*returnType*/ Types.Void,
                 _Message
+                ),
+            new IntrinsicFunctionDef(
+                "Tick",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _Tick
                 ),
             new IntrinsicFunctionDef(
                 "ListItems",
