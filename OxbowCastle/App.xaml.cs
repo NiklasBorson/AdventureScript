@@ -1,20 +1,5 @@
 ﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -36,6 +21,10 @@ namespace OxbowCastle
             this.InitializeComponent();
         }
 
+        internal static new App Current => (App)(Application.Current);
+
+        internal ActiveGame ActiveGame { get; set; }
+
         /// <summary>
         /// Invoked when the application is launched.
         /// </summary>
@@ -44,6 +33,12 @@ namespace OxbowCastle
         {
             m_window = new MainWindow();
             m_window.Activate();
+            m_window.AppWindow.Closing += AppWindow_Closing;
+        }
+
+        private void AppWindow_Closing(Microsoft.UI.Windowing.AppWindow sender, Microsoft.UI.Windowing.AppWindowClosingEventArgs args)
+        {
+            ActiveGame?.Save();
         }
 
         private Window m_window;
