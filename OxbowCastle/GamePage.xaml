@@ -35,12 +35,26 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer x:Name="m_outputScrollViewer" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}">
+        <Grid Background="{ThemeResource SystemAccentColorDark1}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Click="BackButton_Click">
+                <SymbolIcon Symbol="Back"/>
+            </Button>
+            <TextBlock x:Name="m_titleTextBlock"
+                       Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Style="{StaticResource HeadingStyle}"
+                       Foreground="{StaticResource SystemAccentColorLight1}"/>
+        </Grid>
+        <ScrollViewer Grid.Row="1" x:Name="m_outputScrollViewer" Background="{StaticResource AcrylicBackgroundFillColorDefaultBrush}">
             <StackPanel x:Name="m_outputStackPanel" Margin="20,10,20,10"/>
         </ScrollViewer>
-        <TextBox Grid.Row="1" x:Name="m_commandTextBox" KeyDown="TextBox_KeyDown" PlaceholderText="Type a command and press ENTER."/>
+        <TextBox Grid.Row="2" x:Name="m_commandTextBox" KeyDown="TextBox_KeyDown" PlaceholderText="Type a command and press ENTER."/>
     </Grid>
 </Page>

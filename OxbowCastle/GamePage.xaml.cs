@@ -35,6 +35,8 @@ namespace OxbowCastle
 
             m_game = App.Current.ActiveGame;
 
+            m_titleTextBlock.Text = m_game.Title;
+
             m_outputStackPanel.Children.Clear();
             AddOutput(m_game.LastOutput);
 
@@ -147,6 +149,11 @@ namespace OxbowCastle
                 m_commandTextBox.Text = string.Empty;
                 e.Handled = true;
             }
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
         }
     }
 }
