@@ -1,5 +1,9 @@
+#
+# Include modules from the AdventureScript Foundation Library.
+#
 include "../inc/Foundation-Debug.md";
 include "../inc/Foundation.md";
+include "../inc/Foundation-Combat.md";
 
 #
 # Room items
@@ -12,10 +16,33 @@ item kitchen;
 item dining_room;
 item living_room;
 
+#
+# The goal is to make it out of the house. We can detect this by setting the
+# EnterAction property of the front_porch item. This property is a delegate,
+# so we define a function with the same parameters and return type as the
+# delegate type.
+#
+function OnExitHouse($from:Item, $to:Item) : Bool
+{
+    Message("Congratulations! You made it out of the house! You win!");
+    EndGame(true);
+}
+
 game
 {
     #
-    # Room descriptions
+    # Set the front_porch enter action (see above).
+    #
+    front_porch.EnterAction = OnExitHouse;
+
+    #
+    # Set the player's initial location
+    #
+    player.Location = entry_way;
+
+    #
+    # Set the Description property for each room. The description is part of
+    # output when the player enters a room or types the "look" command.
     #
     front_porch.Description = "You are on the front porch.";
     entry_way.Description = "You are in an entryway.";
@@ -26,9 +53,27 @@ game
     living_room.Description = "You are in living room.";
 
     #
-    # Link rooms together
+    # Create a front door key,
     #
-    NewClosedDoor(front_porch, entry_way, Direction.North);
+    var $key = NewKey(
+        "brass house",  # adjectives
+        "key",          # noun
+        garage          # initial location
+        );
+
+    #
+    # Create a locked door between the front porch and entry way.
+    #
+    NewLockedDoor(
+        front_porch,        # first "from" room
+        entry_way,          # second "to" room
+        Direction.North,    # direction from 1st to 2nd room
+        $key                # key to the locked door
+        );
+
+    #
+    # Create other doors and openings to link the other rooms together.
+    #
     NewOpening(entry_way, back_hallway, Direction.North);
     NewClosedDoor(back_hallway, garage, Direction.West);
     NewOpening(back_hallway, kitchen, Direction.East);
@@ -37,32 +82,86 @@ game
     NewOpening(living_room, entry_way, Direction.West);
 
     #
-    # Set player's initial location
+    # Create a monster, which the player will have to get past to
+    # retrieve the key from the garage.
     #
-    player.Location = front_porch;
+    NewMonster(
+        "hairy",        # adjectives
+        "goblin",       # noun
+        50,             # health
+        0,              # damage resistance
+        150,            # attack damage
+        back_hallway    # location
+        );
 
     #
-    # Output some initial messages
+    # Create a kitchen drawer, which is an example of a container.
+    #
+    var $drawer = NewContainer(
+        "cutlery",          # adjectives
+        "drawer",           # noun
+        DoorState.Closed,   # initial door state
+        kitchen             # location
+        );
+
+    #
+    # Put a carving knife in the kitchen drawer, which can be used
+    # as a weapon.
+    #
+    NewWeapon(
+        "carving",      # adjectives
+        "knife",        # noun
+        30,             # attack damage
+        $drawer         # initial location
+        );
+
+    #
+    # Create a dining room table.
+    #
+    var $table = NewTable(
+        "dining room",  # adjectives
+        "table",        # noun
+        dining_room     # initial location
+        );
+
+    #
+    # Put a knife and fork on the table, which are inferior weapons.
+    # Also put a plate on the table, which is not a weapon.
+    #
+    NewPortableItem("", "plate", $table);
+    NewWeapon("butter", "knife", 10, $table);
+    NewWeapon("", "fork", 10, $table);
+
+    #
+    # Output some initial messages.
+    # A message beginning with "# " is a heading.
+    # A message beginning with "- " is a bulleted item.
+    # A message in square brackets is an image file.
     #
     Message(
         "# AdventureScript Demo"
         );
     Message(
-        "This demo shows how to create a set of linked rooms using the "
-        "following floor plan."
+        "This demo shows how to create a set of rooms, link them with doors "
+        "and openings, create monsters, and define keys, weapons, and other "
+        "items. The goal of this game is to leave the house, but the front "
+        "door is locked."
     );
     Message(
-        "[FloorPlan.png]"
+        "At any time you can type 'map' to see a floor plan."
         );
 
     #
-    # Describe the current location`
+    # Describe the current location.
     #
     Look();
 }
 
+#
+# Define a "map" command that the player can type to display the floor plan.
+#
 command "map" {
-    Message(
-        "[FloorPlan.png]"
-        );
+
+    # A message in square brackets is an image file.
+    Message("[FloorPlan.png]");
 }

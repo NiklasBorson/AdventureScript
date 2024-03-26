@@ -151,14 +151,14 @@ namespace OxbowCastle
             {
                 string dirPath = folder.Path;
 
-                string filePath = Path.Combine(dirPath, "adventure.txt");
+                string filePath = Path.Combine(dirPath, App.GameFileName);
                 if (File.Exists(filePath))
                 {
                     LaunchNewGame(dirPath);
                 }
                 else
                 {
-                    ShowErrorMessage("The folder does not have an adventure.txt file.");
+                    ShowErrorMessage($"File not found in directory: {App.GameFileName}.");
                 }
             }
         }
@@ -222,6 +222,7 @@ namespace OxbowCastle
             bitmapImage.UriSource = new System.Uri(path);
             var image = new Image 
             {
+                HorizontalAlignment = HorizontalAlignment.Left,
                 Stretch = Microsoft.UI.Xaml.Media.Stretch.None,
                 Source = bitmapImage 
             };

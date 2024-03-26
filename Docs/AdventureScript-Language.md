@@ -1,20 +1,23 @@
 # AdventureScript Language
 
 The AdventureScript language is a scripting language designed for implementing
-text adventure games.
+text adventure games. This document describes the syntax and core concepts of
+the AdventureScript language.
 
-This document describes the syntax and core concepts of the AdventureScript
-language.
+See [Getting Started](Getting-Started.md) for an introduction to creating your
+own text adventure games using AdventureScript.
+
+See [AdventureScript Grammar](AdventureScript-Grammar.md) for a formal description
+of the AdventureScript language's grammar.
 
 Many building blocks of text adventure games are not part of the language itself
-but instead are implemented by the AdventureScript Foundation library. This
-library is itself implemented in AdventureScript and implements functionality
-such as rooms, doors, movement, and so on. For a guide to creating text
-adventure games using the AdventureScript Foundation Library, see
-[Foundation Library Guide](Foundation-Library-Guide.md).
+but are implemented by the AdventureScript Foundation library, which is itself
+written in AdventureScript. For reference information about the foundation
+library, see the following links:
 
-For a reference to the AdventureScript language grammer, see
-[AdventureScript Grammar](AdventureScript-Grammar.md).
+- [Core library (Foundation.md)](../Games/inc/Foundation.md)
+- [Combat library (Foundation-Combat.md)](../Games/inc/Foundation-Combat.md)
+- [Debug library (Foundation_Debug.md)](../Games/inc/Foundation-Debug.md)
 
 ## Core Concepts
 
@@ -40,7 +43,7 @@ file extension. This means the following rules apply:
 
 - Code blocks (delimited by ```) are treated as AdventureScript code.
 - Markdown links to other `.md` files are treated as include statements.
-` All other markdown content is ignored.
+- All other markdown content is ignored.
 
 ## Top-Level Elements
 
@@ -308,7 +311,7 @@ turn
 
 A statement block comprises a sequence of statements enclosed in curly braces. Examples
 of statement blocks include the body of a function, the body of a "game" or "turn" block,
-the body of a command definition, the body of a foreach loop, and so on.
+the body of a command definition, the body of a loop, and so on.
 
 The following subsections describe the different kinds of statements that can be used in
 a statement block.
@@ -478,6 +481,14 @@ foreach (var $item) where Location == player.Location
 The where clause must be a binary expression in which the left-hand argument
 is simply a property name.
 
+### Break and Continue Statements
+
+The `break` keyword breaks out of a loop and transfers control to the next
+statement after the loop body.
+
+The `continue` statement transfers control to the end of the loop body and
+continues to the next iteration, if any.
+
 ## Expressions
 
 Expressions are the building blocks of statements.
@@ -608,7 +619,7 @@ variable that has not been assigned to, for example.
 
 Null values in AdventureScript are always safe to use. It is not necessary to do
 a null check before getting a property of an item, for example. The null item is
-defined by an item for which the value of every property is null. For example,
+defined to be an item for which the value of every property is null. For example,
 the following is safe:
 
 ```text
