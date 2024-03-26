@@ -1,7 +1,6 @@
 using AdventureScript;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
 using System.Collections.Generic;
 using System.IO;
 using Windows.Storage.Pickers;
@@ -91,11 +90,8 @@ namespace OxbowCastle
             // Create the file picker
             var folderPicker = new FolderPicker();
 
-            // Get the current window's HWND by passing in the Window object
-            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-
-            // Associate the HWND with the file picker
-            WinRT.Interop.InitializeWithWindow.Initialize(folderPicker, hwnd);
+            // Associate the app's HWND with the file picker
+            App.Current.InitializeWithWindow(folderPicker);
 
             // Use file picker like normal!
             var folder = await folderPicker.PickSingleFolderAsync().AsTask();
@@ -126,11 +122,8 @@ namespace OxbowCastle
         {
             var messageDialog = new MessageDialog(message);
 
-            // Get the current window's HWND by passing in the Window object
-            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
-
-            // Associate the HWND with the message dialog
-            WinRT.Interop.InitializeWithWindow.Initialize(messageDialog, hwnd);
+            // Associate the app's HWND with the message dialog.
+            App.Current.InitializeWithWindow(messageDialog);
 
             // Show the message dialog
             await messageDialog.ShowAsync();

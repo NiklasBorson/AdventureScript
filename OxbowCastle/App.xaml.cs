@@ -1,6 +1,7 @@
 ﻿using Microsoft.UI.Xaml;
 using System;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -24,6 +25,17 @@ namespace OxbowCastle
         internal static new App Current => (App)(Application.Current);
 
         internal ActiveGame ActiveGame { get; set; }
+
+        // Associate the application's HWND with an object such as a
+        // folder picker or message box.
+        internal void InitializeWithWindow(object obj)
+        {
+            // Get the current window's HWND by passing in the Window object
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(m_window);
+
+            // Associate the HWND with the file picker
+            WinRT.Interop.InitializeWithWindow.Initialize(obj, hwnd);
+        }
 
         /// <summary>
         /// Invoked when the application is launched.
