@@ -50,6 +50,8 @@ namespace EngineTest
 
         static string TestStringLexer(TestConfig config, string fileName)
         {
+            Console.WriteLine("LexerTest.TestStringLexer");
+
             using (var writer = new StreamWriter(config.OutputPath(fileName)))
             {
                 var lexer = new StringLexer("", "$varName", 1, 0);
@@ -60,6 +62,8 @@ namespace EngineTest
 
         static string TestLexer(TestConfig config, string fileName)
         {
+            Console.WriteLine("LexerTest.TestLexer");
+
             using (var writer = new StreamWriter(config.OutputPath(fileName)))
             {
                 using (var lexer = new FileLexer(config.TestFilePath(fileName)))

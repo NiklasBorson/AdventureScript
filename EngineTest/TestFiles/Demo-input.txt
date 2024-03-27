@@ -1,0 +1,15 @@
+e
+n
+look at table
+w
+open drawer
+take knife
+w
+attack goblin
+attack goblin
+w
+take key
+e
+s
+use key on door
+s

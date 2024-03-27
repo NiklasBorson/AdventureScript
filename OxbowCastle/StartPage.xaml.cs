@@ -7,6 +7,7 @@ using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using System;
 using System.Linq;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace OxbowCastle
 {
@@ -18,6 +19,11 @@ namespace OxbowCastle
         public StartPage()
         {
             this.InitializeComponent();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
             InitializeGameList();
         }
 

@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Navigation;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -15,6 +16,7 @@ namespace OxbowCastle
     public sealed partial class GamePage : Page
     {
         ActiveGame m_game;
+        string m_lastCommand = null;
 
         public GamePage()
         {
@@ -26,6 +28,7 @@ namespace OxbowCastle
             base.OnNavigatedTo(e);
 
             m_game = App.Current.ActiveGame;
+            m_lastCommand = null;
 
             m_titleTextBlock.Text = m_game.Title;
 
@@ -135,11 +138,22 @@ namespace OxbowCastle
 
         void TextBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
-            if (e.Key == Windows.System.VirtualKey.Enter)
+            switch (e.Key)
             {
-                InvokeCommand(m_commandTextBox.Text);
-                m_commandTextBox.Text = string.Empty;
-                e.Handled = true;
+                case VirtualKey.Enter:
+                    m_lastCommand = m_commandTextBox.Text;
+                    InvokeCommand(m_lastCommand);
+                    m_commandTextBox.Text = string.Empty;
+                    e.Handled = true;
+                    break;
+
+                case VirtualKey.Up:
+                    if (m_lastCommand != null)
+                    {
+                        m_commandTextBox.Text = m_lastCommand;
+                    }
+                    e.Handled = true;
+                    break;
             }
         }
 
