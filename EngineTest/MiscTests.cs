@@ -8,6 +8,8 @@ namespace EngineTest
 
         static void TestStringHelpers()
         {
+            Console.WriteLine("MiscTests.TestStringHelpers");
+
             var testCases = new StringTestCase[]
             {
             new StringTestCase("", ""),
@@ -36,6 +38,8 @@ namespace EngineTest
 
         static void TestEscapeRegexSpecialChars()
         {
+            Console.WriteLine("MiscTests.TestEscapeRegexSpecialChars");
+
             var testCases = new StringTestCase[]
             {
             new StringTestCase("", ""),

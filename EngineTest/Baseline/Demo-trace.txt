@@ -1,0 +1,79 @@
+# AdventureScript Demo
+This demo shows how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.
+At any time you can type 'map' to see a floor plan.
+You are in the entryway.
+There is a opening to the North.
+There is a closed door to the South.
+There is a opening to the East.
+> e
+You go East.
+You are in the living room.
+There is a opening to the North.
+There is a opening to the West.
+> n
+You go North.
+You are in the dining room.
+There is a opening to the South.
+There is a opening to the West.
+There is a dining room table here.
+> look at table
+You see a dining room table.
+On the table are the following:
+- A plate.
+- A butter knife.
+- A fork.
+> w
+You go West.
+You are in the kitchen.
+There is a opening to the East.
+There is a opening to the West.
+There is a closed cutlery drawer here.
+> open drawer
+The cutlery drawer is now open.
+Inside the drawer are the following:
+- A carving knife.
+> take knife
+The carving knife is now in your inventory.
+The carving knife is now your current weapon.
+> w
+You go West.
+You are in the back hallway.
+There is a opening to the South.
+There is a opening to the East.
+There is a closed door to the West.
+There is a hairy goblin here.
+The hairy goblin notices you.
+> attack goblin
+You attack the hairy goblin with the carving knife.
+The hairy goblin is significantly injured.
+The hairy goblin attacks you.
+You are significantly injured.
+> attack goblin
+You attack the hairy goblin with the carving knife.
+The hairy goblin is dead!
+> w
+You open the door.
+You go West.
+You are in the garage.
+There is a open door to the East.
+There is a brass house key here.
+> take key
+The brass house key is now in your inventory.
+> e
+You go East.
+You are in the back hallway.
+There is a opening to the South.
+There is a opening to the East.
+There is a open door to the West.
+> s
+You go South.
+You are in the entryway.
+There is a opening to the North.
+There is a closed door to the South.
+There is a opening to the East.
+> use key on door
+The door is now unlocked.
+> s
+You open the door.
+You go South.
+Congratulations! You made it out of the house! You win!
