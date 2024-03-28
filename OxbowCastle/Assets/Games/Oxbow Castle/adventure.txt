@@ -1981,7 +1981,7 @@ game
     {
         var $_ = church_yard_N;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in a walled churcn yard north of the church. The church yard wraps around the church to the South. There are graves here.";
+        $_.Description = "You are in a walled church yard north of the church. The church yard wraps around the church to the South. There are graves here.";
         $_.LinkS = __church_yard_Wchurch_yard_N;
     }
     {
@@ -2760,7 +2760,7 @@ game
     {
         var $_ = fairyland_church_yard_N;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in a walled churcn yard north of the church. The church yard wraps around the church to the South. There are graves here.";
+        $_.Description = "You are in a walled church yard north of the church. The church yard wraps around the church to the South. There are graves here.";
         $_.LinkS = __fairyland_church_yard_Wfairyland_church_yard_N;
     }
     {

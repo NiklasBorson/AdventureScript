@@ -7,7 +7,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource AccentAAFillColorSecondaryBrush}">
+    >
+
+    <Page.Background>
+        <ImageBrush ImageSource="Assets/sand_castle.jpg"/>
+    </Page.Background>
 
     <Grid>
         <ItemsControl x:Name="m_gameListControl" HorizontalAlignment="Center" VerticalAlignment="Center">
