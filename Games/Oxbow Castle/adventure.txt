@@ -327,7 +327,7 @@ game
         "You are in a walled church yard south of the church. The church yard wraps around the church "
         "to the North. East of you is a smaller stone building adjoining the church.";
     church_yard_N.Description =
-        "You are in a walled churcn yard north of the church. The church yard wraps around the church "
+        "You are in a walled church yard north of the church. The church yard wraps around the church "
         "to the South. There are graves here.";
     church_W.Description =
         "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
@@ -1029,7 +1029,7 @@ game
         "You are in a walled church yard south of the church. The church yard wraps around the church "
         "to the North. East of you is a smaller stone building adjoining the church.";
     fairyland_church_yard_N.Description =
-        "You are in a walled churcn yard north of the church. The church yard wraps around the church "
+        "You are in a walled church yard north of the church. The church yard wraps around the church "
         "to the South. There are graves here.";
     fairyland_church_W.Description =
         "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
