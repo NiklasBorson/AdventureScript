@@ -8,15 +8,15 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="b40af1d3-1267-4847-8493-13d449660233"
-    Publisher="CN=NiklasBorson"
+    Name="39605NiklasBorson.42154807135A1"
+    Publisher="CN=EB325726-6587-4E89-ADAB-7550E4DF3FC5"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="b40af1d3-1267-4847-8493-13d449660233" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="d6b13323-eb4a-4e64-88c6-e19c4ef8c084" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>OxbowCastle</DisplayName>
-    <PublisherDisplayName>nebor</PublisherDisplayName>
+    <DisplayName>Oxbow Castle</DisplayName>
+    <PublisherDisplayName>Niklas Borson</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
