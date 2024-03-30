@@ -71,17 +71,7 @@ namespace OxbowCastle
         {
             if (!Game.IsGameOver)
             {
-                using (var writer = new StreamWriter(FilePath))
-                {
-                    writer.WriteLine("game {");
-                    foreach (var para in LastOutput)
-                    {
-                        writer.WriteLine("    Message(\"{0}\");", para);
-                    }
-                    writer.WriteLine('}');
-
-                    Game.Save(writer);
-                }
+                Game.Save(FilePath);
             }
             else
             {
