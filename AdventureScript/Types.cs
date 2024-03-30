@@ -80,7 +80,7 @@ namespace AdventureScript
                 }
                 else
                 {
-                    name = Lexer.Stringize(name);
+                    name = StringHelpers.ToStringLiteral(name);
                     writer.Write($"GetItem({name})");
                 }
             }
@@ -99,7 +99,7 @@ namespace AdventureScript
 
             public override void WriteValue(GameState game, int value, TextWriter writer)
             {
-                writer.Write(Lexer.Stringize(game.Strings[value]));
+                writer.Write(StringHelpers.ToStringLiteral(game.Strings[value]));
             }
             public override string ValueToString(GameState game, int value)
             {

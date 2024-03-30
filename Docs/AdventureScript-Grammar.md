@@ -100,7 +100,8 @@ Definition = "include" String ";"
 
 ## Basic Building Blocks
 
-A _String_ is zero or more characters enclosed in double quotation marks.
+A _String_ is zero or more characters enclosed in double quotation marks. It may
+include the escape sequences '\\\\', '\\"', and '\\n'.
 
 A _FormatString_ is a string preceded by the '$' character. A format string may have
 expressions embedded in it enclosed in curly braces.

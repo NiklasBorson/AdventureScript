@@ -128,6 +128,8 @@ namespace AdventureScript
         {
             var codeWriter = new CodeWriter(writer);
 
+            WriteMessages(codeWriter);            
+
             this.Types.Save(writer);
             this.Properties.Save(writer);
             this.Items.SaveDefinitions(writer);
@@ -145,6 +147,22 @@ namespace AdventureScript
                 codeWriter.Write("turn");
                 block.Write(this, codeWriter);
             }
+        }
+
+        void WriteMessages(CodeWriter writer)
+        {
+            writer.Write("game");
+            writer.BeginBlock();
+
+            foreach (string message in m_messages)
+            {
+                writer.Write("Message(");
+                writer.Write(StringHelpers.ToStringLiteral(message));
+                writer.Write(");");
+                writer.EndLine();
+            }
+
+            writer.EndBlock();
         }
         #endregion
 

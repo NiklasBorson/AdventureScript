@@ -29,23 +29,7 @@ namespace TextAdventure
         {
             var game = new GameState();
             var output = game.LoadGame(inputFileName);
-
-            using (var writer = new StreamWriter(outputFileName))
-            {
-                if (output.Count != 0)
-                {
-                    writer.WriteLine("game {");
-                    foreach (var message in output)
-                    {
-                        writer.WriteLine(
-                            "    Message(\"{0}\");",
-                            message
-                            );
-                    }
-                    writer.WriteLine("}");
-                }
-                game.Save(writer);
-            }
+            game.Save(outputFileName);
         }
 
         const string Usage =
