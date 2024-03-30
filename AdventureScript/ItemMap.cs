@@ -56,7 +56,7 @@
                 string name = m_list[id].Name;
                 if (!Lexer.IsName(name))
                 {
-                    name = Lexer.Stringize(name);
+                    name = StringHelpers.ToStringLiteral(name);
                 }
 
                 writer.WriteLine($"item {name};");
@@ -79,7 +79,7 @@
                 else
                 {
                     writer.Write("GetItem(");
-                    writer.Write(Lexer.Stringize(name));
+                    writer.Write(StringHelpers.ToStringLiteral(name));
                     writer.Write(")");
                 }
 

@@ -157,9 +157,8 @@ namespace AdventureScript
             foreach (string message in m_messages)
             {
                 writer.Write("Message(");
-                writer.Write("\"");
-                writer.Write(message);
-                writer.Write("\");");
+                writer.Write(StringHelpers.ToStringLiteral(message));
+                writer.Write(");");
                 writer.EndLine();
             }
 

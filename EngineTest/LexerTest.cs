@@ -34,7 +34,7 @@ namespace EngineTest
                         break;
 
                     case TokenType.FormatString:
-                        writer.Write($"FormatString: '{lexer.FormatStringValue}'");
+                        writer.Write($"FormatString: '{lexer.StringValue}'");
                         break;
 
                     case TokenType.Symbol:

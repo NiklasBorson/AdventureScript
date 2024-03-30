@@ -65,6 +65,7 @@ namespace AdventureScript
         TokenType m_tokenType = TokenType.None;
         SymbolId m_symbolId = SymbolId.None;
         int m_intValue = 0;
+        string m_stringValue = string.Empty;
 
         protected Lexer(string filePath, int lineNumber, int colOffset)
         {
@@ -85,8 +86,7 @@ namespace AdventureScript
         public SymbolId SymbolValue => m_symbolId;
         public int IntValue => m_intValue;
         public ReadOnlySpan<char> NameValue => GetCapture();
-        public ReadOnlySpan<char> StringValue => m_inputLine.AsSpan(m_matchPos + 1, m_matchLength - 2);
-        public ReadOnlySpan<char> FormatStringValue => m_inputLine.AsSpan(m_matchPos + 2, m_matchLength - 3);
+        public string StringValue => m_stringValue;
 
         protected abstract string? ReadLine();
 
@@ -99,7 +99,7 @@ namespace AdventureScript
             {
                 if (m_match != Match.Empty)
                 {
-                    m_match = m_match.NextMatch();
+                    m_match = m_tokenRegex.Match(m_inputLine, m_matchPos + m_matchLength);
                 }
                 else
                 {
@@ -127,6 +127,7 @@ namespace AdventureScript
             m_tokenType = TokenType.None;
             m_symbolId = SymbolId.None;
             m_intValue = 0;
+            m_stringValue = string.Empty;
         }
 
         ReadOnlySpan<char> GetCapture()
@@ -146,33 +147,34 @@ namespace AdventureScript
                 m_tokenType = TokenType.Error;
                 m_matchLength = m_match.Index - m_matchPos;
             }
-            else if (IsGroupMatch(1, TokenType.Int))
+            else if (IsGroupMatch(CaptureIndex.Int, TokenType.Int))
             {
                 if (!int.TryParse(GetCapture(), out m_intValue))
                 {
                     m_tokenType = TokenType.Error;
                 }
             }
-            else if (IsGroupMatch(2, TokenType.Name))
+            else if (IsGroupMatch(CaptureIndex.Name, TokenType.Name))
             {
                 if (m_inputLine[m_matchPos] == '$')
                 {
                     m_tokenType = TokenType.Variable;
                 }
             }
-            else if (IsGroupMatch(3, TokenType.String))
+            else if (IsGroupMatch(CaptureIndex.String, TokenType.String))
             {
-                if (m_inputLine[m_matchPos] == '$')
-                {
-                    m_tokenType = TokenType.FormatString;
-                }
+                InitializeStringToken(m_matchPos);
             }
-            else if (IsGroupMatch(4, TokenType.Symbol))
+            else if (IsGroupMatch(CaptureIndex.FString, TokenType.FormatString))
+            {
+                InitializeStringToken(m_matchPos + 1);
+            }
+            else if (IsGroupMatch(CaptureIndex.Symbol, TokenType.Symbol))
             {
                 m_symbolId = StringToSymbol(GetCapture());
                 Debug.Assert(m_symbolId != SymbolId.None);
             }
-            else if (IsGroupMatch(5, TokenType.None))
+            else if (IsGroupMatch(CaptureIndex.End, TokenType.None))
             {
                 // End of input line.
                 m_match = Match.Empty;
@@ -186,9 +188,27 @@ namespace AdventureScript
             }
         }
 
-        bool IsGroupMatch(int groupIndex, TokenType tokenType)
+        void InitializeStringToken(int startPos)
         {
-            var group = m_match.Groups[groupIndex];
+            int tokenLength = StringHelpers.ParseStringLiteral(
+                m_inputLine.AsSpan(startPos),
+                out m_stringValue
+                );
+
+            if (tokenLength > 0)
+            {
+                m_matchLength = startPos + tokenLength - m_matchPos;
+            }
+            else
+            {
+                m_tokenType = TokenType.Error;
+                m_matchLength = 0;
+            }
+        }
+
+        bool IsGroupMatch(CaptureIndex groupIndex, TokenType tokenType)
+        {
+            var group = m_match.Groups[(int) groupIndex];
             if (group.Success)
             {
                 m_tokenType = tokenType;
@@ -272,8 +292,20 @@ namespace AdventureScript
 
         const string m_intPattern = "[0-9]+";
         const string m_namePattern = "\\$?[A-Za-z_][A-Za-z_0-9]*";
-        const string m_stringPattern = "\\$?\"[^\"]*\"";
+        const string m_stringPattern = "\"";
+        const string m_fstringPattern = "\\$\"";
         const string m_symbolPattern = @"[\?+\*%/(){}.,;:]|&&|\|\||=[=>]?|<=?|>=?|!=?|->?";
+
+        enum CaptureIndex : int
+        {
+            Token,
+            Int,
+            Name,
+            String,
+            FString,
+            Symbol,
+            End
+        }
 
         // Regular expression that matches one token.
         // Each capture group cooresponds to a token type.
@@ -281,9 +313,10 @@ namespace AdventureScript
             " *(?:" +
             $"({m_intPattern})" +       // 1 -> Int
             $"|({m_namePattern})" +     // 2 -> Name/Variable
-            $"|({m_stringPattern})" +   // 3 -> String/FormatString
-            $"|({m_symbolPattern})" +   // 4 -> Symbol
-            "|(#|$)" +                  // 5 -> end of input
+            $"|({m_stringPattern})" +   // 3 -> String
+            $"|({m_fstringPattern})" +  // 4 -> FormatString
+            $"|({m_symbolPattern})" +   // 5 -> Symbol
+            "|(#|$)" +                  // 6 -> end of input
             ")"
             );
 
@@ -294,11 +327,6 @@ namespace AdventureScript
         public static bool IsName(string name)
         {
             return m_nameRegex.IsMatch(name);
-        }
-
-        public static string Stringize(string value)
-        {
-            return $"\"{value}\"";
         }
     }
 

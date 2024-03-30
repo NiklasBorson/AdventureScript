@@ -1349,7 +1349,7 @@ namespace AdventureScript
 
         Expr ParseFormatStringExpr(VariableFrame frame)
         {
-            var input = m_lexer.FormatStringValue;
+            var input = m_lexer.StringValue;
             var pos = m_lexer.SourcePos;
             Advance();
 
@@ -1358,7 +1358,7 @@ namespace AdventureScript
             {
                 return new LiteralExpr(
                     Types.String,
-                    this.Game.Strings[new string(input)]
+                    this.Game.Strings[input]
                     );
             }
 
@@ -1405,7 +1405,7 @@ namespace AdventureScript
                     // Parse the embedded expression.
                     exprList.Add(ParseEmbeddedExpression(
                         frame,
-                        new string(input.Slice(start, i - start)),
+                        input.Substring(start, i - start),
                         pos.LineNumber,
                         pos.ColumnNumber + start
                         ));
@@ -1573,12 +1573,12 @@ namespace AdventureScript
                 Fail("Expected string.");
             }
 
-            var value = m_lexer.StringValue;
+            string value = m_lexer.StringValue;
             Advance();
 
             if (!this.IsStringToken)
             {
-                return new string(value);
+                return value;
             }
 
             // Concatenate consecutive string tokens.

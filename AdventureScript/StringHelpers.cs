@@ -1,4 +1,6 @@
-﻿namespace AdventureScript
+﻿using System.Text;
+
+namespace AdventureScript
 {
     public static class StringHelpers
     {
@@ -74,7 +76,10 @@
                 buffer[di++] = ch;
             }
 
-            return new string(buffer, 0, di);
+            string result = new string(buffer, 0, di);
+            ReleaseBuffer(buffer);
+
+            return result;
         }
 
         public static string NormalizeSpaces(string input)
@@ -212,6 +217,128 @@
             }
 
             return new string(chars, 0, resultLength);
+        }
+
+        static readonly char[] m_escapedChars = new char[] { '\"', '\n', '\\' };
+
+        public static string ToStringLiteral(string input)
+        {
+            // Allocate a buffer equal to the maximum possible size.
+            var buffer = GetBuffer(input.Length * 2 + 2);
+            int length = 0;
+
+            // Add the opening quotation mark.
+            buffer[length++] = '\"';
+
+            // Copy the remaining characters, escaping those that require it.
+            for (int i = 0; i < input.Length; i++)
+            {
+                char ch = input[i];
+                switch (ch)
+                {
+                    case '\t':
+                        // Replace tabs with spaces
+                        buffer[length++] = ' ';
+                        break;
+
+                    case '\n':
+
+                        // Replace newline with \n
+                        buffer[length++] = '\\';
+                        buffer[length++] = 'n';
+                        break;
+
+                    case '\\':
+                    case '\"':
+                        // Escape other special characters
+                        buffer[length++] = '\\';
+                        buffer[length++] = ch;
+                        break;
+
+                    default:
+                        if (ch >= 0x20)
+                        {
+                            // Add literal, non-control character.
+                            buffer[length++] = ch;
+                        }
+                        else
+                        {
+                            // Elide control character. This includes the return
+                            // character, which is always followed by newline anyway.
+                        }
+                        break;
+                }
+            }
+
+            // Add the closing quotation mark.
+            buffer[length++] = '\"';
+
+            string result = new string(buffer, 0, length);
+
+            ReleaseBuffer(buffer);
+
+            return result;
+        }
+
+        // Returns the length of the token if valid or -1 if not.
+        public static int ParseStringLiteral(ReadOnlySpan<char> input, out string value)
+        {
+            value = string.Empty;
+            if (input.Length == 0 || input[0] != '\"')
+                return -1;
+
+            var buffer = GetBuffer(input.Length);
+            int length = 0;
+
+            for (int i = 1; i < input.Length; i++)
+            {
+                char ch = input[i];
+
+                if (ch == '\"')
+                {
+                    // Success!
+                    value = new string(buffer, 0, length);
+                    ReleaseBuffer(buffer);
+                    return i + 1;
+                }
+                else if (ch == '\\')
+                {
+                    if (++i < input.Length)
+                    {
+                        ch = input[i];
+                        switch (ch)
+                        {
+                            case 'n':
+                                buffer[length++] = '\n';
+                                break;
+
+                            case '\\':
+                            case '\"':
+                                buffer[length++] = ch;
+                                break;
+
+                            default:
+                                // Error
+                                i = input.Length;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        // Error
+                        break;
+                    }
+                }
+                else
+                {
+                    // Unescaped character.
+                    buffer[length++] = ch;
+                }
+            }
+
+            // Invalid token.
+            ReleaseBuffer(buffer);
+            return -1;
         }
     }
 }

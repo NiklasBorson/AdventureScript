@@ -9,7 +9,7 @@ static class Program
         {
             var config = new TestConfig(args);
 
-            MiscTests.Run();
+            StringTests.Run();
             LexerTest.Run(config);
             GameTests.Run(config);
         }
