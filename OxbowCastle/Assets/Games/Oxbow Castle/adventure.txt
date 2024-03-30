@@ -2575,7 +2575,7 @@ game
     {
         var $_ = fairyland_NW;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north, and the outer wall is to the west. Trils lead east and south through the trees.";
+        $_.Description = "You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.";
         $_.LinkS = __fairyland_NWfairyland_W;
         $_.LinkE = __fairyland_NWfairyland_N;
     }
@@ -2591,7 +2591,7 @@ game
     {
         var $_ = fairyland_NE;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in the northeast corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north. To the east is the outer wall and to the south is the wall of the church yard. There is a trail leading west.";
+        $_.Description = "You are in the northeast corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north. To the east is the outer wall and to the south is the wall of the church yard. There is a path leading west.";
         $_.LinkW = __fairyland_Nfairyland_NE;
     }
     {
@@ -2603,7 +2603,7 @@ game
     {
         var $_ = fairyland_W;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Trails lead north, east, and south through the trees.";
+        $_.Description = "You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Paths lead north, east, and south through the trees.";
         $_.LinkN = __fairyland_NWfairyland_W;
         $_.LinkS = __fairyland_Wfairyland_SW;
         $_.LinkE = __fairyland_Wfairyland_center;
@@ -2612,7 +2612,7 @@ game
     {
         var $_ = fairyland_center;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in a small clearing in the strangely-transformed outer courtyard. Trails lead north, south, and west through the trees. East of you is the church yard wall.";
+        $_.Description = "You are in a small clearing in the strangely-transformed outer courtyard. Paths lead north, south, and west through the trees. East of you is the church yard wall.";
         $_.LinkN = __fairyland_Nfairyland_center;
         $_.LinkS = __fairyland_centerfairyland_S;
         $_.LinkE = _gate_fairyland_centerfairyland_church_yard_W;
@@ -2621,14 +2621,14 @@ game
     {
         var $_ = fairyland_SW;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you are the castle walls, Trails lead north and east through the trees.";
+        $_.Description = "You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you are the castle walls, Paths lead north and east through the trees.";
         $_.LinkN = __fairyland_Wfairyland_SW;
         $_.LinkE = __fairyland_SWfairyland_S;
     }
     {
         var $_ = fairyland_S;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are at the south end of the strangely-transformed outer courtyard. South of you is the town gate, which is shut tight. Trails lead north, east, and west.";
+        $_.Description = "You are at the south end of the strangely-transformed outer courtyard. South of you is the town gate, which is shut tight. Paths lead north, east, and west.";
         $_.LinkN = __fairyland_centerfairyland_S;
         $_.LinkE = __fairyland_Sfairyland_SE;
         $_.LinkW = __fairyland_SWfairyland_S;
@@ -2636,7 +2636,7 @@ game
     {
         var $_ = fairyland_SE;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are in the southeast corner of the strangely-transformed outer courtyard. East and south of you are the castle walls, and north of you is the church yard wall. A trail leads west through the trees.";
+        $_.Description = "You are in the southeast corner of the strangely-transformed outer courtyard. East and south of you are the castle walls, and north of you is the church yard wall. A path leads west through the trees.";
         $_.LinkW = __fairyland_Sfairyland_SE;
     }
     {

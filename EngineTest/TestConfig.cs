@@ -80,7 +80,7 @@
 
                     if (baselineLine != outputLine)
                     {
-                        Console.Error.WriteLine($"{fileName}({lineNumber}): Output differs from baseline.");
+                        Console.Error.WriteLine($"Error: {fileName}({lineNumber}): Output differs from baseline.");
                         Console.Error.WriteLine($"  Baseline: {baselinePath}");
                         Console.Error.WriteLine($"  Output: {outputPath}");
                     }

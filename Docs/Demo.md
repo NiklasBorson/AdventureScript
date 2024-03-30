@@ -1,6 +1,7 @@
-# Getting Started
+# Demo Adventure
 
-This document describes how to get started writing your own adventure.
+This document demonstrates how to use AdventureScript by walking you through
+a simple "Demo" adventure game.
 
 The AdventureScript repo has a `Games` directory with subdirectories for each game.
 Each game subdirectory has the following contents:
@@ -11,14 +12,14 @@ Each game subdirectory has the following contents:
 
 - Optional image files used by the game.
 
-## Demo Game
+## Demo Game Overview
 
 This document describes the Demo game, which is in the `Demo` subdirectory under
-the `Games` directory. 
+the `Games` directory.
 
 The [adventure.txt](../Games/Demo/adventure.txt) file for the Demo game contains
-the complete definition with comments. This document provides a longer commentary
-of selected elements of the game.
+the complete definition with comments. This document provides a more detailed
+explanation of selected elements of the game.
 
 The goal of the Demo game is to get out of a house. To do so, you must find the key
 to the front door, which is in the garage. However, to get to the garage you must

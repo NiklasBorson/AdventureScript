@@ -1,11 +1,11 @@
 game {
-    Message("# AdventureScript Demo");
-    Message("This demo shows how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.");
+    Message("# Demo Adventure");
+    Message("This simple game is intended as a sample to show you how to create your own games in AdventureScript. It demonstrates how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.");
+    Message("For more information, see the following links:");
+    Message("[Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md)");
+    Message("[Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt)");
     Message("At any time you can type 'map' to see a floor plan.");
-    Message("You are in the entryway.");
-    Message("There is a opening to the North.");
-    Message("There is a closed door to the South.");
-    Message("There is a opening to the East.");
+    Message("Type 'look' to see your initial surroundings.");
 }
 delegate ItemDelegate($item:Item);
 delegate Item2Delegate($item1:Item, $item2:Item);
@@ -1370,6 +1370,10 @@ command "list variables"
 command "list functions"
 {
     ListFunctions();
+}
+command "list function {$name:String}"
+{
+    ListFunction($name);
 }
 command "list commands"
 {

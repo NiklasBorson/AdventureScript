@@ -1,6 +1,7 @@
 using AdventureScript;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using System.IO;
@@ -88,6 +89,16 @@ namespace OxbowCastle
             m_outputStackPanel.Children.Add(image);
         }
 
+        void AddOutputLink(string text, string url)
+        {
+            var link = new HyperlinkButton
+            {
+                Content = text,
+                NavigateUri = new System.Uri(url)
+            };
+            m_outputStackPanel.Children.Add(link);
+        }
+
         void AddOutput(string[] output)
         {
             foreach (var para in output)
@@ -103,6 +114,20 @@ namespace OxbowCastle
                 else if (para.StartsWith('[') && para.EndsWith(']'))
                 {
                     AddOutputImage(para.Substring(1, para.Length - 2));
+                }
+                else if (para.StartsWith('[') && para.EndsWith(')'))
+                {
+                    int i = para.IndexOf("](");
+                    if (i >= 0)
+                    {
+                        string text = para.Substring(1, i - 1);
+                        string url = para.Substring(i + 2, para.Length - i - 3);
+                        AddOutputLink(text, url);
+                    }
+                    else
+                    {
+                        AddOutputText(para, m_bodyParaStyle);
+                    }
                 }
                 else
                 {

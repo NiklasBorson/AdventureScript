@@ -143,7 +143,7 @@ You go South.
 You are at the north end of the outer courtyard, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.
 > s
 You go South.
-You are in a small clearing in the strangely-transformed outer courtyard. Trails lead north, south, and west through the trees. East of you is the church yard wall.
+You are in a small clearing in the strangely-transformed outer courtyard. Paths lead north, south, and west through the trees. East of you is the church yard wall.
 There is a closed wooden gate to the East.
 > e
 You open the wooden gate.
@@ -170,13 +170,13 @@ The priest follows you.
 The chamber maid follows you.
 > w
 You go West.
-You are in a small clearing in the strangely-transformed outer courtyard. Trails lead north, south, and west through the trees. East of you is the church yard wall.
+You are in a small clearing in the strangely-transformed outer courtyard. Paths lead north, south, and west through the trees. East of you is the church yard wall.
 There is a open wooden gate to the East.
 The priest follows you.
 The chamber maid follows you.
 > w
 You go West.
-You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Trails lead north, east, and south through the trees.
+You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
 There is a closed door to the West.
 There is a small blue fairy here.
 The fairy says, 'The guests have arrived!'
@@ -186,7 +186,7 @@ The chamber maid follows you.
 The maid says, 'Maybe these words are giving us some important clue, but I don't understand it.'
 > s
 You go South.
-You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you are the castle walls, Trails lead north and east through the trees.
+You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you are the castle walls, Paths lead north and east through the trees.
 There is a green fairy here.
 The fairy says, 'The guests can't leave until the last cup is poured!'
 The priest follows you.
@@ -194,7 +194,7 @@ The priest scowls and says, 'More riddles!'
 The chamber maid follows you.
 > n
 You go North.
-You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Trails lead north, east, and south through the trees.
+You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
 There is a closed door to the West.
 There is a small blue fairy here.
 The fairy says, 'The guests have arrived!'
@@ -203,7 +203,7 @@ The priest scowls and says, 'More riddles!'
 The chamber maid follows you.
 > n
 You go North.
-You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north, and the outer wall is to the west. Trils lead east and south through the trees.
+You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.
 There is a long table here.
 There is a well here.
 The priest follows you.

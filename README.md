@@ -13,6 +13,5 @@ adventure games. This repo contains the following subdirectories:
 
 - **Games** contains games implemented in AdventureScript.
 
-- **Docs** contains a [Getting Started](Docs/Getting-Started.md) guide to creating your
-  own adventures and an [AdventureScript Language](Docs/AdventureScript-Language.md)
-  reference document.
+- **Docs** contains a walkthrough of the [Demo Adventure](Docs/Demo.md) as well as
+  the [AdventureScript Language](Docs/AdventureScript-Language.md) reference.
