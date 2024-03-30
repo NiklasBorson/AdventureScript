@@ -5,12 +5,8 @@ using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Collections.Generic;
 using Windows.System;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace OxbowCastle
 {
@@ -33,8 +29,8 @@ namespace OxbowCastle
 
             m_titleTextBlock.Text = m_game.Title;
 
-            m_outputStackPanel.Children.Clear();
-            AddOutput(m_game.LastOutput);
+            m_outputControl.Blocks.Clear();
+            AddOutput(m_game.Game.LastOutput);
 
             m_commandTextBox.IsEnabled = !m_game.Game.IsGameOver;
         }
@@ -48,92 +44,14 @@ namespace OxbowCastle
             App.Current.ActiveGame = null;
         }
 
-        void AddOutputText(string text, Style style)
+
+        void AddOutput(IList<string> output)
         {
-            m_outputStackPanel.Children.Add(new TextBlock
-            {
-                Text = text,
-                Style = style
-            });
-        }
-
-        void AddOutputListItem(string text)
-        {
-            var grid = new Grid();
-            grid.Children.Add(new TextBlock
-            {
-                Text = "\x2022",
-                Style = m_listBulletStyle
-            });
-            grid.Children.Add(new TextBlock
-            {
-                Text = text,
-                Style = m_listParaStyle
-            });
-            m_outputStackPanel.Children.Add(grid);
-        }
-
-        void AddOutputImage(string fileName)
-        {
-            var path = Path.Combine(m_game.FolderPath, fileName);
-
-            var bitmapImage = new BitmapImage();
-            bitmapImage.UriSource = new System.Uri(path);
-            var image = new Image
-            {
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Stretch = Microsoft.UI.Xaml.Media.Stretch.None,
-                Source = bitmapImage
-            };
-
-            m_outputStackPanel.Children.Add(image);
-        }
-
-        void AddOutputLink(string text, string url)
-        {
-            var link = new HyperlinkButton
-            {
-                Content = text,
-                NavigateUri = new System.Uri(url)
-            };
-            m_outputStackPanel.Children.Add(link);
-        }
-
-        void AddOutput(string[] output)
-        {
-            foreach (var para in output)
-            {
-                if (para.StartsWith("# "))
-                {
-                    AddOutputText(para.Substring(2), m_headingParaStyle);
-                }
-                else if (para.StartsWith("- "))
-                {
-                    AddOutputListItem(para.Substring(2));
-                }
-                else if (para.StartsWith('[') && para.EndsWith(']'))
-                {
-                    AddOutputImage(para.Substring(1, para.Length - 2));
-                }
-                else if (para.StartsWith('[') && para.EndsWith(')'))
-                {
-                    int i = para.IndexOf("](");
-                    if (i >= 0)
-                    {
-                        string text = para.Substring(1, i - 1);
-                        string url = para.Substring(i + 2, para.Length - i - 3);
-                        AddOutputLink(text, url);
-                    }
-                    else
-                    {
-                        AddOutputText(para, m_bodyParaStyle);
-                    }
-                }
-                else
-                {
-                    AddOutputText(para, m_bodyParaStyle);
-                }
-            }
+            MarkdownParser.AddContent(
+                m_game.FolderPath,
+                output,
+                m_outputControl
+                );
             m_outputScrollViewer.Measure(m_outputScrollViewer.RenderSize);
             m_outputScrollViewer.ChangeView(null, m_outputScrollViewer.ScrollableHeight, null);
         }
@@ -142,13 +60,11 @@ namespace OxbowCastle
             if (input != string.Empty)
             {
                 // Add the command itself to the output.
-                AddOutputText(input, m_commandStyle);
+                // TODO - specify command style
+                MarkdownParser.AddCommandParagraph(input, m_outputControl);
 
                 // Process the command get its output.
-                var output = m_game.Game.InvokeCommand(input).ToArray();
-
-                // Remember the output of the last command.
-                m_game.LastOutput = output;
+                var output = m_game.Game.InvokeCommand(input);
 
                 // Display the output.
                 AddOutput(output);

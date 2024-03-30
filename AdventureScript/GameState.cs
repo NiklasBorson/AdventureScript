@@ -59,6 +59,8 @@ namespace AdventureScript
         //
         public GameResult Result => m_result;
 
+        public IList<string> LastOutput => m_messages;
+
         public bool IsGameOver => m_result != GameResult.None;
 
         internal TypeMap Types => m_typeMap;

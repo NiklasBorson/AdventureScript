@@ -1,11 +1,9 @@
-game {
+game
+{
     Message("# Demo Adventure");
-    Message("This simple game is intended as a sample to show you how to create your own games in AdventureScript. It demonstrates how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.");
-    Message("For more information, see the following links:");
-    Message("[Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md)");
-    Message("[Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt)");
-    Message("At any time you can type 'map' to see a floor plan.");
-    Message("Type 'look' to see your initial surroundings.");
+    Message("You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.");
+    Message("# Game Description");
+    Message("The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.");
 }
 delegate ItemDelegate($item:Item);
 delegate Item2Delegate($item1:Item, $item2:Item);
@@ -1493,7 +1491,7 @@ command "attack {$target:Item}"
 }
 command "map"
 {
-    Message("[FloorPlan.png]");
+    Message("![Floor Plan](FloorPlan.png)");
 }
 game
 {

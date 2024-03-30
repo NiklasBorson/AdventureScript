@@ -1,4 +1,5 @@
-game {
+game
+{
     Message("# Welcome to Oxbow Castle");
     Message("You are a messenger sent by King Peregrin the Paranoid to find out what has become of Oxbow castle and its ruler, Lord Kevin. Previous messengers have not returned, and the king has begin to suspect Lord Kevin of plotting against him.");
     Message("That is one possibility, but you have also heard stranger rumors. In the taverns, people whisper that something dark and sinister has befallen the place. Of course, it may just be the ale talking. You are here to find out!");

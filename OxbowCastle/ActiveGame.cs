@@ -8,12 +8,11 @@ namespace OxbowCastle
 {
     class ActiveGame
     {
-        public ActiveGame(GameState game, string title, string folderPath, string[] lastOutput)
+        public ActiveGame(GameState game, string title, string folderPath)
         {
             this.Game = game;
             this.Title = title;
             this.FolderPath = folderPath;
-            this.LastOutput = lastOutput;
         }
 
         public GameState Game { get; }
@@ -22,8 +21,6 @@ namespace OxbowCastle
         public string FolderPath { get; }
 
         public string FilePath => Path.Combine(FolderPath, App.GameFileName);
-
-        public string[] LastOutput { get; set; }
 
         static public ActiveGame CreateNew(string sourceFolderPath)
         {
@@ -34,7 +31,7 @@ namespace OxbowCastle
 
             // Load the game.
             var game = new GameState();
-            var output = game.LoadGame(sourceFilePath);
+            game.LoadGame(sourceFilePath);
 
             // Get the destination directory and file.
             var savedGamesDir = App.SavedGamesDir;
@@ -64,7 +61,7 @@ namespace OxbowCastle
                 }
             }
 
-            return new ActiveGame(game, gameName, destFolderPath, output.ToArray());
+            return new ActiveGame(game, gameName, destFolderPath);
         }
 
         public void Save()
