@@ -254,6 +254,49 @@ namespace AdventureScript
             return 0;
         }
 
+        static int _ListFunction(GameState game, int[] frame)
+        {
+            // ListFunction($name:String)
+            //  - frame[1] -> $name
+            string name = game.Strings[frame[1]];
+            var funcMap = game.Functions;
+            var func = funcMap.TryGetFunction(name);
+
+            // If we didn't find the function, it may be a case mismatch.
+            // TryGetFunction is case-sensitive and user-input is converted
+            // to lowercase.
+            if (func == null)
+            {
+                // Search for the function by doing a case-insensitive string
+                // comparison with each function's name.
+                int funcCount = funcMap.Count;
+                for (int i = 0; i < funcCount; i++)
+                {
+                    if (string.Compare(
+                        name,
+                        funcMap[i].Name,
+                        true
+                        ) == 0)
+                    {
+                        func = funcMap[i];
+                        break;
+                    }
+                }
+
+                // Output an error if we still didn't find the item.
+                if (func == null)
+                {
+                    game.Message($"Undefined function: {name}.");
+                    return 0;
+                }
+            }
+
+            var s = new StringWriter();
+            func.SaveDefinition(game, new CodeWriter(s));
+            game.Message(s.ToString().TrimEnd());
+            return 0;
+        }
+
         static int _ListCommands(GameState game, int[] frame)
         {
             foreach (var def in game.Commands)
@@ -377,6 +420,14 @@ namespace AdventureScript
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListFunctions
+                ),
+            new IntrinsicFunctionDef(
+                "ListFunction",
+                new ParamDef[] {
+                    new ParamDef("$name", Types.String)
+                },
+                /*returnType*/ Types.Void,
+                _ListFunction
                 ),
             new IntrinsicFunctionDef(
                 "ListCommands",

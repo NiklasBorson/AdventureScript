@@ -9,6 +9,7 @@ command "list properties" { ListProperties(); }
 command "list types" { ListTypes(); }
 command "list variables" { ListVariables(); }
 command "list functions" { ListFunctions(); }
+command "list function {$name:String}" { ListFunction($name); }
 command "list commands" { ListCommands(); }
 command "list words" { ListWords(); }
 ```

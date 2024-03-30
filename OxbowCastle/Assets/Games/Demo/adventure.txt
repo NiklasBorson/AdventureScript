@@ -1371,6 +1371,10 @@ command "list functions"
 {
     ListFunctions();
 }
+command "list function {$name:String}"
+{
+    ListFunction($name);
+}
 command "list commands"
 {
     ListCommands();
