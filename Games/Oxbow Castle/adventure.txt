@@ -963,29 +963,29 @@ game
         "the trees.";
     fairyland_NW.Description =
         "You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. "
-        "The high wall of the keep looms above you to the north, and the outer wall is to the west. Trils "
+        "The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths "
         "lead east and south through the trees.";
     fairyland_NE.Description =
         "You are in the northeast corner of the strangely-transformed outer courtyard. The high wall of "
         "the keep looms above you to the north. To the east is the outer wall and to the south is the "
-        "wall of the church yard. There is a trail leading west.";
+        "wall of the church yard. There is a path leading west.";
     fairyland_W.Description =
         "You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. "
-        "Trails lead north, east, and south through the trees.";
+        "Paths lead north, east, and south through the trees.";
     fairyland_stable.Description =
         "You are in a large wooden stable.";
     fairyland_center.Description =
-        "You are in a small clearing in the strangely-transformed outer courtyard. Trails lead north, south, "
+        "You are in a small clearing in the strangely-transformed outer courtyard. Paths lead north, south, "
         "and west through the trees. East of you is the church yard wall.";
     fairyland_SW.Description =
         "You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you "
-        "are the castle walls, Trails lead north and east through the trees.";
+        "are the castle walls, Paths lead north and east through the trees.";
     fairyland_S.Description =
         "You are at the south end of the strangely-transformed outer courtyard. South of you is the town gate, "
-        "which is shut tight. Trails lead north, east, and west.";
+        "which is shut tight. Paths lead north, east, and west.";
     fairyland_SE.Description =
         "You are in the southeast corner of the strangely-transformed outer courtyard. East and south of you "
-        "are the castle walls, and north of you is the church yard wall. A trail leads west through the trees.";
+        "are the castle walls, and north of you is the church yard wall. A path leads west through the trees.";
 
     # Fairyland southward links.
     NewLink(inner_court_S, fairyland_N, Direction.South);
