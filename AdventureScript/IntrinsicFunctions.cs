@@ -293,7 +293,9 @@ namespace AdventureScript
 
             var s = new StringWriter();
             func.SaveDefinition(game, new CodeWriter(s));
+            game.Message("```");
             game.Message(s.ToString().TrimEnd());
+            game.Message("```");
             return 0;
         }
 

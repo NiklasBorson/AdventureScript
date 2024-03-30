@@ -86,9 +86,9 @@ namespace OxbowCastle
             var filePath = Path.Combine(folderPath, App.GameFileName);
 
             var game = new GameState();
-            var output = game.LoadGame(filePath);
+            game.LoadGame(filePath);
 
-            StartGame(new ActiveGame(game, gameInfo.Name, folderPath, output.ToArray()));
+            StartGame(new ActiveGame(game, gameInfo.Name, folderPath));
         }
 
         internal async void BrowseForGame()

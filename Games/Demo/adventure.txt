@@ -134,28 +134,22 @@ game
 
     #
     # Output some initial messages.
-    # A message beginning with "# " is a heading.
-    # A message beginning with "- " is a bulleted item.
-    # A message in square brackets is an image file.
+    # Messages may include markdown headings, bulleted lists, and links.
     #
     Message(
         "# Demo Adventure"
         );
     Message(
-        "You can use this simple game as an example to write your own games "
-        "in AdventureScript. The following link takes you to a document that "
-        "describes how the Demo game is written"
-    );
-    Message(
-        "[Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md)"
-    );
-    Message(
-        "The following link takes you to the Demo game's source code."
-    );
-    Message(
-        "[Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt)"
+        "You can use this simple game as an example to write your own games in AdventureScript. See "
+        "[Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md) "
+        "for an overview of how the Demo game is implemented. See "
+        "[Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) "
+        "to see the complete source code for the Demo game."
     );
 
+    Message(
+        "# Game Description"
+    );
     Message(
         "The goal of this game is to leave the house, but first you have to "
         "find the key to the front door. At any time you can type 'map' to see "
@@ -168,6 +162,6 @@ game
 #
 command "map" {
 
-    # A message in square brackets is an image file.
-    Message("[FloorPlan.png]");
+    # A message may include a Markdown image.
+    Message("![Floor Plan](FloorPlan.png)");
 }

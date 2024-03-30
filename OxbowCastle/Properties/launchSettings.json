@@ -1,7 +1,8 @@
 {
   "profiles": {
     "OxbowCastle (Package)": {
-      "commandName": "MsixPackage"
+      "commandName": "MsixPackage",
+      "nativeDebugging": true
     },
     "OxbowCastle (Unpackaged)": {
       "commandName": "Project"
