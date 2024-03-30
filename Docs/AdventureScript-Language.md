@@ -500,9 +500,9 @@ which may include the following escape sequences:
 
 | Escape Sequence   | Meaning                       |
 |-------------------|-------------------------------|
-| \"                | Literal quotation mark        |
-| \\                | Literal backslash character   |
-| \n                | Newline character             |
+| \\"               | Literal quotation mark        |
+| \\\\              | Literal backslash character   |
+| \\n               | Newline character             |
 
 An _integer literal_ is a sequence of decimal digits.
 
