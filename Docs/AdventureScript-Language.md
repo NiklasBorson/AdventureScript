@@ -4,8 +4,8 @@ The AdventureScript language is a scripting language designed for implementing
 text adventure games. This document describes the syntax and core concepts of
 the AdventureScript language.
 
-See [Getting Started](Getting-Started.md) for an introduction to creating your
-own text adventure games using AdventureScript.
+See [Demo Adventure](Demo.md) to learn how to use AdventureScript to create a
+simple "Demo" adventure game.
 
 See [AdventureScript Grammar](AdventureScript-Grammar.md) for a formal description
 of the AdventureScript language's grammar.

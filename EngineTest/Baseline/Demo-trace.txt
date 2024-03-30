@@ -1,10 +1,10 @@
-# AdventureScript Demo
-This demo shows how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.
+# Demo Adventure
+This simple game is intended as a sample to show you how to create your own games in AdventureScript. It demonstrates how to create a set of rooms, link them with doors and openings, create monsters, and define keys, weapons, and other items. The goal of this game is to leave the house, but the front door is locked.
+For more information, see the following links:
+[Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md)
+[Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt)
 At any time you can type 'map' to see a floor plan.
-You are in the entryway.
-There is a opening to the North.
-There is a closed door to the South.
-There is a opening to the East.
+Type 'look' to see your initial surroundings.
 > e
 You go East.
 You are in the living room.

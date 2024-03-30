@@ -139,22 +139,31 @@ game
     # A message in square brackets is an image file.
     #
     Message(
-        "# AdventureScript Demo"
+        "# Demo Adventure"
         );
     Message(
-        "This demo shows how to create a set of rooms, link them with doors "
-        "and openings, create monsters, and define keys, weapons, and other "
-        "items. The goal of this game is to leave the house, but the front "
-        "door is locked."
+        "This simple game is intended as a sample to show you how to create "
+        "your own games in AdventureScript. It demonstrates how to create a "
+        "set of rooms, link them with doors and openings, create monsters, "
+        "and define keys, weapons, and other items. The goal of this game "
+        "is to leave the house, but the front door is locked."
     );
+    Message(
+        "For more information, see the following links:"
+    );
+    Message(
+        "[Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md)"
+    );
+    Message(
+        "[Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt)"
+    );
+
     Message(
         "At any time you can type 'map' to see a floor plan."
         );
-
-    #
-    # Describe the current location.
-    #
-    Look();
+    Message(
+        "Type 'look' to see your initial surroundings."
+        );
 }
 
 #
