@@ -237,27 +237,9 @@ namespace AdventureScript
                 var funcDef = functionMap[id];
 
                 var b = new StringBuilder();
-                b.Append($"- `function {funcDef.Name}(");
-                for (int i = 0; i < funcDef.ParamList.Count; i++)
-                {
-                    var paramDef = funcDef.ParamList[i];
-
-                    if (i != 0)
-                    {
-                        b.Append(", ");
-                    }
-
-                    b.Append($"{paramDef.Name}:{paramDef.Type.Name}");
-                }
-                var type = funcDef.ReturnType;
-                if (type != Types.Void)
-                {
-                    b.Append($") : {type.Name};`");
-                }
-                else
-                {
-                    b.Append(");`");
-                }
+                b.Append("- `");
+                funcDef.GetDeclaration(b);
+                b.Append('`');
                 game.RawMessage(b.ToString());
             }
             return 0;
@@ -300,10 +282,35 @@ namespace AdventureScript
                 }
             }
 
-            var s = new StringWriter();
-            func.SaveDefinition(game, new CodeWriter(s));
+            // Begin a code block.
             game.RawMessage("```");
-            game.RawMessage(s.ToString().TrimEnd());
+
+            if (func is IntrinsicFunctionDef)
+            {
+                // Output a comment.
+                game.RawMessage("# Intrinsic function");
+
+                // Output the declaration.
+                var b = new StringBuilder();
+                func.GetDeclaration(b);
+                game.RawMessage(b.ToString());
+            }
+            else
+            {
+                // Save the definition to a StringWriter.
+                var writer = new StringWriter();
+                func.SaveDefinition(game, new CodeWriter(writer));
+
+                // Write each line of the definition.
+                var reader = new StringReader(writer.ToString());
+                string? line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    game.RawMessage(line);
+                }
+            }
+
+            // End the code block.
             game.RawMessage("```");
             return 0;
         }

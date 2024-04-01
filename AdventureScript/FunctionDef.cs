@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Emit;
+using System.Text;
 
 namespace AdventureScript
 {
@@ -21,6 +22,28 @@ namespace AdventureScript
         public abstract int Invoke(GameState game, int[] frame);
 
         public abstract int FrameSize { get; }
+
+        public void GetDeclaration(StringBuilder b)
+        {
+            b.Append($"function {Name}(");
+            for (int i = 0; i < ParamList.Count; i++)
+            {
+                var paramDef = ParamList[i];
+                if (i != 0)
+                {
+                    b.Append(", ");
+                }
+                b.Append($"{paramDef.Name}:{paramDef.Type.Name}");
+            }
+            if (ReturnType != Types.Void)
+            {
+                b.Append($") : {ReturnType.Name};");
+            }
+            else
+            {
+                b.Append(");");
+            }
+        }
 
         public abstract void SaveDefinition(GameState game, CodeWriter writer);
 
