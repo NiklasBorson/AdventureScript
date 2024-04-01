@@ -266,34 +266,34 @@ game
     # Outer court descriptions
     outside.Description = "You are outside the main gate of Oxbow Castle.";
     outer_court_S.Description = 
-        "You are at the south end of a large courtyard, which extends to the North, East, and West. "
+        "You are at the **south** end of a large **courtyard**, which extends to the North, East, and West. "
         "At the north end of the courtyard you can see the high walls of the keep.";
     outer_court_SW.Description =
-        "You are at the southwest corner of a large outer courtyard, which extends to the North and East. "
+        "You are at the **southwest** corner of a large outer **courtyard**, which extends to the North and East. "
         "The south and west walls meet in a small round tower, which is open to the inside. There is nothing "
         "in the tower.";
     outer_court_SE.Description = 
-        "You are in the southeast corner of a large outer courtyard, which extends to the West. The way north "
+        "You are in the **southeast** corner of a large outer **courtyard**, which extends to the West. The way north "
         "is blocked by a stone wall behind which you can see a tall stone church. The south and east walls meet "
         "in a small round tower, which is open to the inside. There is nothing in the tower.";
     stable.Description =
-        "You are in a large wooden stable with room for many horses. Neither hay nor horses are to be found "
+        "You are in a large wooden **stable** with room for many horses. Neither hay nor horses are to be found "
         "here now, only their lingering smell.";
     outer_court_W.Description = 
-        "You are at the west side of a large outer courtyard, which extends to the North, South, and East. "
+        "You are at the **west** side of a large outer **courtyard**, which extends to the North, South, and East. "
         "Against the wall to your west is a wooden stable.";
     outer_court_center.Description =
-        "You are in the center of a large outer courtyard, which extends to the North, West, and South. East "
+        "You are in the **center** of a large outer **courtyard**, which extends to the North, West, and South. East "
         "of you is a stone wall with a wooden gate behind which you can see a tall stone church.";
     outer_court_NW.Description =
-        "You are in the northwest corner of a large outer courtyard, which extends to the South and East. "
+        "You are in the **northwest** corner of a large outer **courtyard**, which extends to the South and East. "
         "The high wall of the keep looms above you to the North.";
     outer_court_N.Description = 
-        "You are at the north end of a large outer courtyard, which extends to the West, East, and South. "
+        "You are at the **north** end of a large outer **courtyard**, which extends to the West, East, and South. "
         "Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on "
         "either side of an open portcullis.";
     outer_court_NE.Description =
-        "You are in the northeast corner of a large outer courtyard, which extends to the West. The high wall "
+        "You are in the **northeast** corner of a large outer **courtyard**, which extends to the West. The high wall "
         "of the keep looms above you to the North. The way south is blocked by a stone wall behind which you "
         "can see a tall stone church.";
 
@@ -321,25 +321,25 @@ game
 {
     # Church descriptions.
     church_yard_W.Description =
-        "You are in a walled church yard. East of you is the arched doorway of a beautiful stone "
+        "You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone "
         "church. The church yard wraps around the church to the North and South.";
     church_yard_S.Description = 
-        "You are in a walled church yard south of the church. The church yard wraps around the church "
+        "You are in a walled **church yard** south of the church. The church yard wraps around the church "
         "to the North. East of you is a smaller stone building adjoining the church.";
     church_yard_N.Description =
-        "You are in a walled church yard north of the church. The church yard wraps around the church "
+        "You are in a walled **church yard** north of the church. The church yard wraps around the church "
         "to the South. There are graves here.";
     church_W.Description =
-        "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
+        "You are at the **west** end of the **church**. A long aisle runs from here to the East, with fluted "
         "stone columns on either side. Windows set high in the walls let in light.";
     church_E.Description =
-        "You are at the east end of the church. A long aisle runs from here to the West. Between "
+        "You are at the **east** end of the **church**. A long aisle runs from here to the West. Between "
         "fluted columns to the North, you can see a side chapel.";
     side_chapel.Description =
-        "You are in a side chapel with statues of saints. An opening to the South leads to the "
+        "You are in a **side chapel** with statues of saints. An opening to the South leads to the "
         "main part of the church.";
     priest_house.Description =
-        "You are in a one-room house, presumably the priest's residence.";
+        "You are in a one-room house, presumably the **priest's residence**.";
 
     # Church eastward links.
     NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
@@ -418,7 +418,7 @@ function OnEnterCouterCourt($from:Item, $to:Item) : Bool
             Message("It's a pity you didn't rescue the survivors...");
         }
 
-        Message("Congratulations! You have won the game!");
+        Message("**Congratulations!** You have won the game!");
         EndGame(true);
     }
 }
@@ -436,24 +436,24 @@ game
 
     # Inner court descriptions
     inner_court_S.Description =
-        "You are at the south end of the inner courtyard, which extends to the "
+        "You are at the **south** end of the **inner courtyard**, which extends to the "
         "North, East, and West. South of you is the main gatehouse of the keep "
         "with its inner gate open. Across the courtyard to the North is the "
         "great hall. Other buildings surround the courtyard on all sides.";
     inner_court_SW.Description =
-        "You are in the southwest corner of the inner courtyard, which extends to "
+        "You are in the **southwest** corner of the **inner courtyard**, which extends to "
         "the North and East.";
     inner_court_SE.Description =
-        "You are in the southeast corner of the inner courtyard, which extends to "
+        "You are in the **southeast** corner of the **inner courtyard**, which extends to "
         "the North and West.";
     inner_court_N.Description =
-        "You are at the north end of the inner courtyard, which extends to the "
+        "You are at the **north** end of the **inner courtyard**, which extends to the "
         "South, East, and West.";
     inner_court_NW.Description =
-        "You are in the northwest corner of the inner courtyard, which extends "
+        "You are in the **northwest** corner of the **inner courtyard**, which extends "
         "to the South and East.";
     inner_court_NE.Description =
-        "You are in the northeast corner of the inner courtyard, which extends "
+        "You are in the **northeast** corner of the **inner courtyard**, which extends "
         "to the South and West.";
     
     # Inner court northward links
@@ -549,88 +549,88 @@ game
 {
     # South wall and tower descriptions.
     guard_room_W_0.Description =
-        "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
+        "You are in a **rectangular stone chamber**. There are barred windows high on the north wall.";
     guard_room_E_0.Description =
-        "You are in a rectangular stone chamber. There are barred windows high on the north wall.";
+        "You are in a **rectangular stone chamber**. There are barred windows high on the north wall.";
     guard_room_W_1.Description =
-        "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the "
+        "You are in a **rectangular stone chamber**. There are arrow loops in the north wall facing the "
         "inner courtyard and in the south wall facing the outer courtyard.";
     guard_room_E_1.Description =
-        "You are in a rectangular stone chamber. There are arrow loops in the north wall facing the "
+        "You are in a **rectangular stone chamber**. There are arrow loops in the north wall facing the "
         "inner courtyard and in the south wall facing the outer courtyard.";
     tower_SW_0.Description =
-        "You are on the ground floor of a round tower.";
+        "You are on the **ground floor of a round tower**.";
     tower_SW_1.Description =
-        "You are in a round tower with arrow loops opening to the outside.";
+        "You are in a **round tower** with arrow loops opening to the outside.";
     tower_SW_2.Description =    # aligns with wall
-        "You are in a round tower with arrow loops opening to the outside.";
+        "You are in a **round tower** with arrow loops opening to the outside.";
     tower_SW_roof.Description =
-        "You are on the roof of the soutwest corner tower. "
+        "You are on the **roof of the southwest corner tower**. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
         "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
         "a long east-west building across the inner courtyard from you. Adjoining it to the west "
         "is a lower building. Other lower buildings line the east and west walls of the keep.";
     tower_SE_0.Description =
-        "You are on the ground floor of a round tower.";
+        "You are on the **ground floor of a round tower**.";
     tower_SE_1.Description =
-        "You are in a round tower with arrow loops opening to the outside.";
+        "You are in a **round tower** with arrow loops opening to the outside.";
     tower_SE_2.Description =    # aligns with wall
-        "You are in a round tower with arrow loops opening to the outside.";
+        "You are in a **round tower** with arrow loops opening to the outside.";
     tower_SE_roof.Description =
-        "You are on the roof of the southeast corner tower. "
+        "You are on the **roof of the southeast corner tower**. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
         "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
         "a long east-west building across the inner courtyard from you. Adjoining it to the west "
         "is a lower building. Other lower buildings line the east and west walls of the keep.";
     tower_NW_0.Description =
-        "You are on the ground floor of a round tower.";
+        "You are on the **ground floor of a round tower**.";
     tower_NW_1.Description =
-        "You are in a round tower with arrow loops opening to the outside.";
+        "You are in a **round tower** with arrow loops opening to the outside.";
     tower_NW_2.Description =    # aligns with wall
-        "You are in a round tower with arrow loops opening to the outside.";
+        "You are in a **round tower** with arrow loops opening to the outside.";
     tower_NW_roof.Description =
-        "You are on the roof of the northwest corner tower. "
+        "You are on the **roof of the northwest corner tower**. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
         "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
         "southeast of you beyond some lower buildings. There is a small courtyard between the great "
         "hall and the north wall and a larger courtyard between the great hall and the south wall.";
     gate_house_W_0.Description =
-        "You are in a U-shaped stone chamber.";
+        "You are in a **U-shaped stone chamber**.";
     gate_house_W_1.Description =
-        "You are in a U-shaped stone chamber. In the east wall are arrow loops looking down "
+        "You are in a **U-shaped stone chamber**. In the east wall are arrow loops looking down "
         "on the entrance tunnel between the gatehouse towers.";
     gate_house_E_0.Description =
-        "You are in a U-shaped stone chamber.";
+        "You are in a **U-shaped stone chamber**.";
     gate_house_E_1.Description =
-        "You are in a U-shaped stone chamber. In the west wall are arrow loops looking down "
+        "You are in a **U-shaped stone chamber**. In the west wall are arrow loops looking down "
         "on the entrance tunnel between the gatehouse towers.";
     gate_house_2.Description =  # aligns with wall
-        "You are in a large, rectangular stone chamber. In the floor are murder holes looking down "
+        "You are in a large, **rectangular stone chamber**. In the floor are murder holes looking down "
         "on the entrance tunnel to the keep. In the south wall are arrow loops facing the outer "
         "courtyard.";
     gate_house_roof.Description =
-        "You are on the roof of the gatehouse. "
+        "You are on the **roof of the gatehouse**. "
         "From this height you can see the layout of the entire keep. There are round towers at all "
         "four corners. The northeast tower is the tallest and has a conical roof. The great hall is "
         "a long east-west building across the inner courtyard from you. Adjoining it to the west "
         "is a lower building. Other lower buildings line the east and west walls of the keep.";
     wall_SW.Description =
-        "You are on top of the south wall of the keep between the southwest tower and the "
+        "You are on **top of the south wall** of the keep between the southwest tower and the "
         "gatehouse. Looking north across a courtyard, you see the great hall flanked by lower "
         "buildings.";
     wall_SE.Description =
-        "You are on top of the south wall of the keep between the southeast tower and the "
+        "You are on **top of the south wall** of the keep between the southeast tower and the "
         "gatehouse. Looking north across a courtyard, you see the great hall flanked by lower "
         "buildings.";
     wall_W.Description =
-        "You are on the west wall of the keep. The great hall is east of you beyond some "
+        "You are on top of the **west wall** of the keep. The great hall is east of you beyond some "
         "lower buildings. There is a courtyard between the great hall and the south wall and "
         "another smaller courtyard between the great hall and the north wall.";
     wall_E.Description =
-        "You are on the east wall of the keep between the southeast tower and the taller "
+        "You are on top of the **east wall** of the keep between the southeast tower and the taller "
         "northeast tower. There is no entrance to the northeast tower from here.";
     wall_N.Description =
-        "You are on the north wall of the keep between the northwest tower and the taller "
+        "You are on top of the **north wall** of the keep between the northwest tower and the taller "
         "northeast tower. There is no entrance to the northeast tower from here. Across a "
         "small courtyard to your south is the great hall.";
 
@@ -690,32 +690,32 @@ game
 {
     # West keep room descriptions
     store_room.Description =
-        "You are in a store room full of barrels.";
+        "You are in a **store room** full of barrels.";
     stewards_room.Description =
-        "You are in a bedchamber.";
+        "You are in a **bedchamber**.";
     knight_room_1.Description =
-        "You are in a small bedchamber.";
+        "You are in a small **bedchamber**.";
     knight_room_2.Description =
-        "You are in a small bedchamber.";
+        "You are in a small **bedchamber**.";
     knight_room_3.Description =
-        "You are in a small bedchamber.";
+        "You are in a small **bedchamber**.";
     knight_room_4.Description =
-        "You are in a small bedchamber.";
+        "You are in a small **bedchamber**.";
     knight_room_entry.Description =
-        "You are in a small entryway.";
+        "You are in a small **entryway**.";
     armory.Description =
-        "You are in a large rectangular room.";
+        "You are in a large **rectangular room**.";
     bakehouse.Description =
-        "You are in a rectangular room with a large oven. A window in the east wall "
+        "You are in a **bakehouse** with a large oven. A window in the east wall "
         "looks out upon a small courtyard.";
     hallway_NS.Description =
-        "You are at one end of a hallway leading north.";
+        "You are at one end of a **hallway leading north**.";
     hallway_corner.Description =
-        "You are at the junction of two hallways leading south and east.";
+        "You are at the **junction of two hallways** leading south and east.";
     hallway_EW.Description =
-        "You are at one end of a hallway leading west.";
+        "You are at one end of a **hallway leading west**.";
     courtyard_N.Description =
-        "You are in a courtyard bordered on the north by the keep's wall and on the "
+        "You are in a **small courtyard** bordered on the north by the keep's wall and on the "
         "south by the great hall. Rising above other buildings to your east is the "
         "keep's tall northeast tower with its conical roof.";
 
@@ -764,25 +764,25 @@ game
 {
     # East keep room descriptions
     kitchen.Description =
-        "You are in a large kitchen.";
+        "You are in a large **kitchen**.";
     pantry.Description =
-        "You are in a pantry.";
+        "You are in a **pantry**.";
     buttery.Description =
-        "You are in the buttery.";
+        "You are in the **buttery**.";
     great_hall_W.Description =
-        "You are at the west end of the great hall.";
+        "You are at the **west** end of the **great hall**.";
     great_hall_E.Description =
-        "You are at the east end of the great hall.";
+        "You are at the **east** end of the **great hall**.";
     court.Description =
         "You are in a large room with benches lining the east and west walls and a raised "
-        "throne at the north end. This is presumably where the lord of the castle holds court.";
+        "throne at the north end. This is presumably where the lord of the castle holds **court**.";
     parlor.Description =
-        "You are in a comfortable parlor with tapestries and expensive furnishings. Windows "
+        "You are in a comfortable **parlor** with tapestries and expensive furnishings. Windows "
         "in the west wall open onto the inner courtyard.";
     lords_chamber.Description =
-        "You are in the lord's bedchamber. Windows in the west wall open onto the inner courtyard.";
+        "You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.";
     library.Description =
-        "You are in a library. Windows in the west wall open onto the rear courtyard.";
+        "You are in a **library**. Windows in the west wall open onto the rear courtyard.";
 
     # East keep northward links.
     NewClosedDoor(inner_court_N, great_hall_W, Direction.North);
@@ -926,15 +926,15 @@ game
 {
     # Northeast tower room descriptions
     tower_NE_0.Description =
-        "You are in a large, round stone chamber with a high ceiling.";
+        "You are in a large, **round stone chamber** with a high ceiling.";
     tower_NE_1.Description =
-        "You are in a large, round stone chamber with a high ceiling. There are arrow loops "
+        "You are in a large, **round stone chamber** with a high ceiling. There are arrow loops "
         "in the walls but also rich tapestries.";
     tower_NE_2.Description =
-        "You are in a large, round stone chamber with a high ceiling. The walls are hung with "
+        "You are in a large, **round stone chamber** with a high ceiling. The walls are hung with "
         "tapestries and also have small windows.";
     tower_NE_3.Description =
-        "You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. "
+        "You are on the **top floor** of a large, round **tower**. Above you is a conical, wooden ceiling. "
         "The wood-paneled walls have large windows. Sitting at a long table is the fairy king "
         "depicted by the statue downstairs along with two other noble-looking fairies. They take "
         "no notice of you.";
@@ -957,34 +957,34 @@ game
 {
     # Fairlyland room descriptions
     fairyland_N.Description =
-        "You are at the north end of the outer courtyard, but somehow transformed into an alien place. "
+        "You are at the **north** end of the **outer courtyard**, but somehow transformed into an alien place. "
         "There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you "
         "is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through "
         "the trees.";
     fairyland_NW.Description =
-        "You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. "
+        "You are in a clearing in the the **northwest** corner of the strangely-transformed **outer courtyard**. "
         "The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths "
         "lead east and south through the trees.";
     fairyland_NE.Description =
-        "You are in the northeast corner of the strangely-transformed outer courtyard. The high wall of "
+        "You are in the **northeast** corner of the strangely-transformed **outer courtyard**. The high wall of "
         "the keep looms above you to the north. To the east is the outer wall and to the south is the "
         "wall of the church yard. There is a path leading west.";
     fairyland_W.Description =
-        "You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. "
+        "You are in the strangely-transformed **outer courtyard**. There is a wooden stable to your west. "
         "Paths lead north, east, and south through the trees.";
     fairyland_stable.Description =
-        "You are in a large wooden stable.";
+        "You are in a large wooden **stable**.";
     fairyland_center.Description =
-        "You are in a small clearing in the strangely-transformed outer courtyard. Paths lead north, south, "
+        "You are in a small clearing in the strangely-transformed **outer courtyard**. Paths lead north, south, "
         "and west through the trees. East of you is the church yard wall.";
     fairyland_SW.Description =
-        "You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you "
+        "You are in the **southwest** corner of the strangely-transformed **outer courtyard**. West and south of you "
         "are the castle walls, Paths lead north and east through the trees.";
     fairyland_S.Description =
-        "You are at the south end of the strangely-transformed outer courtyard. South of you is the town gate, "
+        "You are at the **south** end of the strangely-transformed **outer courtyard**. South of you is the town gate, "
         "which is shut tight. Paths lead north, east, and west.";
     fairyland_SE.Description =
-        "You are in the southeast corner of the strangely-transformed outer courtyard. East and south of you "
+        "You are in the **southeast** corner of the strangely-transformed **outer courtyard**. East and south of you "
         "are the castle walls, and north of you is the church yard wall. A path leads west through the trees.";
 
     # Fairyland southward links.
@@ -1023,25 +1023,25 @@ game
 {
     # Fairyland church room descriptions
     fairyland_church_yard_W.Description =
-        "You are in a walled church yard. East of you is the arched doorway of a beautiful stone "
+        "You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone "
         "church. The church yard wraps around the church to the North and South.";
     fairyland_church_yard_S.Description =
-        "You are in a walled church yard south of the church. The church yard wraps around the church "
+        "You are in a walled **church yard** south of the church. The church yard wraps around the church "
         "to the North. East of you is a smaller stone building adjoining the church.";
     fairyland_church_yard_N.Description =
-        "You are in a walled church yard north of the church. The church yard wraps around the church "
+        "You are in a walled **church yard** north of the church. The church yard wraps around the church "
         "to the South. There are graves here.";
     fairyland_church_W.Description =
-        "You are at the west end of the church. A long aisle runs from here to the East, with fluted "
+        "You are at the **west** end of the **church**. A long aisle runs from here to the East, with fluted "
         "stone columns on either side. Windows set high in the walls let in light.";
     fairyland_church_E.Description =
-        "You are at the east end of the church. A long aisle runs from here to the West. Between "
+        "You are at the **east** end of the **church**. A long aisle runs from here to the West. Between "
         "fluted columns to the North, you can see a side chapel.";
     fairyland_side_chapel.Description =
-        "You are in a side chapel with statues of saints. An opening to the South leads to the "
+        "You are in a **side chapel** with statues of saints. An opening to the South leads to the "
         "main part of the church.";
     fairyland_priest_house.Description =
-        "You are in a one-room house, presumably the priest's residence.";
+        "You are in a one-room house, presumably the **priest's residence**.";
 
     # Fairyland church eastward links.
     NewDoorItem(fairyland_center, fairyland_church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);

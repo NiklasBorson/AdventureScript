@@ -12,6 +12,9 @@ namespace OxbowCastle
 {
     static class MarkdownParser
     {
+        static FontFamily m_monoFont = new FontFamily("Consolas");
+        const float m_monoSize = 14;
+
         public static void AddCommandParagraph(string commandString, RichTextBlock control)
         {
             var para = new Paragraph();
@@ -36,6 +39,7 @@ namespace OxbowCastle
 
                     if (inCodeBlock)
                     {
+                        // Add vertical space before first code paragraph.
                         AddSpacingParagraph(control, para);
                     }
                     continue;
@@ -43,6 +47,8 @@ namespace OxbowCastle
                 else if (inCodeBlock)
                 {
                     SetCodeStyle(para);
+
+                    // Ignore markup within a code paragraph.
                     para.Inlines.Add(new Run { Text = input });
                 }
                 else
@@ -54,6 +60,7 @@ namespace OxbowCastle
 
                         if (!inList)
                         {
+                            // Add vertical space before first list item.
                             AddSpacingParagraph(control);
                             inList = true;
                         }
@@ -73,17 +80,12 @@ namespace OxbowCastle
                         }
                     }
 
-                    while (textPos < input.Length)
-                    {
-                        textPos = ParseParaContent(folderPath, para.Inlines, input, textPos, '\0');
-                    }
+                    ParseParaContent(folderPath, para.Inlines, input, textPos, input.Length, '\0');
                 }
 
                 control.Blocks.Add(para);
             }
         }
-
-        static FontFamily m_monoFont = new FontFamily("Consolas");
 
         static void AddSpacingParagraph(RichTextBlock control)
         {
@@ -99,6 +101,7 @@ namespace OxbowCastle
         static void SetCodeStyle(Paragraph para)
         {
             para.FontFamily = m_monoFont;
+            para.FontSize = m_monoSize;
             para.Margin = new Thickness
             {
                 Left = 20,
@@ -157,84 +160,173 @@ namespace OxbowCastle
             };
         }
 
-        static int ParseParaContent(string folderPath, InlineCollection inlines, string input, int textPos, char endDelim)
+        static void AddPlainText(InlineCollection inlines, string input, int textPos, int endPos)
         {
-            char ch = input[textPos];
-
-            // Is it a link?
-            if (ch == '[')
-            {
-                // We expect something of the form [link](url)
-                // Recursively parse the link part.
-                var link = new Hyperlink();
-                int linkEndPos = ParseParaContent(folderPath, link.Inlines, input, textPos + 1, ']');
-
-                if (linkEndPos + 1 < input.Length && 
-                    input[linkEndPos] == ']' &&
-                    input[linkEndPos + 1] == '(')
-                {
-                    int urlStartPos = linkEndPos + 2;
-                    int urlEndPos = input.IndexOf(')', urlStartPos);
-                    if (urlEndPos > urlStartPos)
-                    {
-                        string url = input.Substring(urlStartPos, urlEndPos - urlStartPos);
-                        link.NavigateUri = new Uri(url);
-                    }
-
-                    inlines.Add(link);
-                    return urlEndPos + 1;
-                }
-            }
-
-            // Not a link. Is it an image?
-            if (ch == '!' && textPos + 1 < input.Length && input[textPos + 1] == '[')
-            {
-                // We expect something of the form: ![alt](url)
-                int altStartPos = textPos + 2;
-                int altEndPos = input.IndexOf(']', altStartPos);
-                if (altEndPos > 0 && altEndPos + 1 < input.Length && input[altEndPos + 1] == '(')
-                {
-                    int urlStartPos = altEndPos + 2;
-                    int urlEndPos = input.IndexOf(')', urlStartPos);
-                    if (urlEndPos > urlStartPos)
-                    {
-                        string url = input.Substring(urlStartPos, urlEndPos - urlStartPos);
-
-                        var path = Path.Combine(folderPath, url);
-
-                        var bitmapImage = new BitmapImage();
-                        bitmapImage.UriSource = new System.Uri(path);
-                        var image = new Microsoft.UI.Xaml.Controls.Image
-                        {
-                            HorizontalAlignment = HorizontalAlignment.Left,
-                            Stretch = Stretch.None,
-                            Source = bitmapImage
-                        };
-
-                        inlines.Add(new InlineUIContainer { Child = image });
-
-                        return urlEndPos + 1;
-                    }
-                }
-            }
-
-            // Scan ahead for end of plain text.
-            int endPos = input.IndexOfAny(
-                new char[] { '[', '!', endDelim },
-                textPos + 1
-                );
-
-            if (endPos < 0)
-            {
-                endPos = input.Length;
-            }
-
-            // Add a run for the plain text.
             if (textPos < endPos)
             {
                 inlines.Add(new Run { Text = input.Substring(textPos, endPos - textPos) });
             }
+        }
 
+        static int ParseParaContent(string folderPath, InlineCollection inlines, string input, int textPos, int endPos, char endDelim)
+        {
+            for (int i = textPos; i < endPos; i++)
+            {
+                char ch = input[i];
+
+                // Stop if we've reached the end delimiter.
+                if (ch == endDelim)
+                {
+                    AddPlainText(inlines, input, textPos, i);
+                    return i;
+                }
+
+                if (ch == '`')
+                {
+                    // Possibly inline code: `run`
+                    int endIndex = input.IndexOf('`', i + 1);
+                    if (endIndex >= 0)
+                    {
+                        // Add preceding text before the inline code.
+                        AddPlainText(inlines, input, textPos, i);
+
+                        // Add the inline code.
+                        // Ignore any markup within the inline code.
+                        inlines.Add(new Run
+                        {
+                            Text = input.Substring(i + 1, endIndex - i - 1),
+                            FontFamily = m_monoFont,
+                            FontSize = m_monoSize
+                        });
+
+                        // Advance past the inline code.
+                        textPos = endIndex + 1;
+                        i = textPos - 1;
+                        continue;
+                    }
+                }
+                else if (ch == '_')
+                {
+                    // Possibly italic text of the form: _ital_
+                    if (i == 0 || !char.IsLetterOrDigit(input[i - 1]))
+                    {
+                        int endIndex = input.IndexOf('_', i + 1);
+                        while (endIndex >= 0 && endIndex < input.Length && char.IsLetterOrDigit(input[endIndex]))
+                        {
+                            endIndex = input.IndexOf('_', endIndex + 1);
+                        }
+                        if (endIndex >= 0)
+                        {
+                            // Recursively parse the italicized content.
+                            var ital = new Italic();
+                            if (ParseParaContent(folderPath, ital.Inlines, input, i + 1, endIndex, endDelim) == endIndex)
+                            {
+                                // Add the italicized text and preceding text.
+                                AddPlainText(inlines, input, textPos, i);
+                                inlines.Add(ital);
+
+                                // Advance past the italicized text.
+                                textPos = endIndex + 1;
+                                i = textPos - 1;
+                                continue;
+                            }
+                        }
+                    }
+                }
+                else if (ch == '*')
+                {
+                    // Possibly bold text of the form: **bold**
+                    if (i + 1 < input.Length && input[i + 1] == '*')
+                    {
+                        int endIndex = input.IndexOf("**", i + 2);
+                        if (endIndex >= 0)
+                        {
+                            // Recursively parse the bold content.
+                            var bold = new Bold();
+                            if (ParseParaContent(folderPath, bold.Inlines, input, i + 2, endIndex, endDelim) == endIndex)
+                            {
+                                // Add the bold text and preceding text.
+                                AddPlainText(inlines, input, textPos, i);
+                                inlines.Add(bold);
+
+                                // Advance past the bold text.
+                                textPos = endIndex + 2;
+                                i = textPos - 1;
+                                continue;
+                            }
+                        }
+                    }
+                }
+                else if (ch == '[')
+                {
+                    // Possibly a link of the form: [content](url)
+                    // Recursively parse the content part.
+                    var link = new Hyperlink();
+                    int linkEndPos = ParseParaContent(folderPath, link.Inlines, input, i + 1, endPos, ']');
+
+                    if (linkEndPos + 1 < input.Length &&
+                        input[linkEndPos] == ']' &&
+                        input[linkEndPos + 1] == '(')
+                    {
+                        int urlStartPos = linkEndPos + 2;
+                        int urlEndPos = input.IndexOf(')', urlStartPos);
+                        if (urlEndPos > urlStartPos)
+                        {
+                            string url = input.Substring(urlStartPos, urlEndPos - urlStartPos);
+                            link.NavigateUri = new Uri(url);
+                        }
+
+                        // Add the link and any preceding text.
+                        AddPlainText(inlines, input, textPos, i);
+                        inlines.Add(link);
+
+                        // Advance past the link.
+                        textPos = urlEndPos + 1;
+                        i = textPos - 1;
+                        continue;
+                    }
+                }
+                else if (ch == '!')
+                {
+                    // Possibly an image of the form: ![alt](href)
+                    if (i + 1 < input.Length && input[i + 1] == '[')
+                    {
+                        int altStartPos = i + 2;
+                        int altEndPos = input.IndexOf(']', altStartPos);
+                        if (altEndPos > 0 && altEndPos + 1 < input.Length && input[altEndPos + 1] == '(')
+                        {
+                            int urlStartPos = altEndPos + 2;
+                            int urlEndPos = input.IndexOf(')', urlStartPos);
+                            if (urlEndPos > urlStartPos)
+                            {
+                                string href = input.Substring(urlStartPos, urlEndPos - urlStartPos);
+                                var path = Path.Combine(folderPath, href);
+
+                                var bitmapImage = new BitmapImage();
+                                bitmapImage.UriSource = new System.Uri(path);
+                                var image = new Image
+                                {
+                                    HorizontalAlignment = HorizontalAlignment.Left,
+                                    Stretch = Stretch.None,
+                                    Source = bitmapImage
+                                };
+
+                                // Add the image and any preceding text.
+                                AddPlainText(inlines, input, textPos, i);
+                                inlines.Add(new InlineUIContainer { Child = image });
+
+                                // Advance past the image.
+                                textPos = urlEndPos + 1;
+                                i = textPos - 1;
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // We've reached the end position without finding any more markup.
+            AddPlainText(inlines, input, textPos, endPos);
             return endPos;
         }
     }

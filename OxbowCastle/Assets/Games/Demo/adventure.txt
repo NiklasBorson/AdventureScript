@@ -1,9 +1,9 @@
 game
 {
-    Message("# Demo Adventure");
-    Message("You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.");
-    Message("# Game Description");
-    Message("The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.");
+    RawMessage("# Demo Adventure");
+    RawMessage("You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.");
+    RawMessage("# Game Description");
+    RawMessage("The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.");
 }
 delegate ItemDelegate($item:Item);
 delegate Item2Delegate($item1:Item, $item2:Item);
@@ -88,7 +88,8 @@ function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
     $item.Adjectives = $adjectives;
     $item.Noun = $noun;
 }
-function Label($item:Item) => $"{$item.Adjectives} {$item.Noun}";
+function Label($item:Item) => $item.Adjectives != null ? $"{$item.Adjectives} {$item.Noun}" : $item.Noun;
+function ItalicLabel($item:Item) => $"_{Label($item)}_";
 function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
 {
     if ($func != null)
@@ -223,6 +224,7 @@ map DoorStateAdj DoorState -> String
 }
 function AddStateQualifier($item:Item, $phrase:String) => $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" : $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}" : $phrase;
 function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
+function ItalicLabelWithState($item:Item) => AddStateQualifier($item, ItalicLabel($item));
 function Inventory()
 {
     var $haveItems = false;
@@ -233,7 +235,7 @@ function Inventory()
             Message("You have the following items:");
             $haveItems = true;
         }
-        Message($"- A {LabelWithState($item)}.");
+        Message($"- A {ItalicLabelWithState($item)}.");
     }
     if (!$haveItems)
     {
@@ -252,7 +254,7 @@ function DescribeCommon($item:Item)
     }
     elseif ($item.Noun != null)
     {
-        Message($"You see a {LabelWithState($item)}.");
+        Message($"You see a {ItalicLabelWithState($item)}.");
     }
     $item.DescribeHealthAction($item);
 }
@@ -508,7 +510,7 @@ function ListContainerContents($container:Item)
             Message($"Inside the {$container.Noun} are the following:");
             $haveItems = true;
         }
-        Message($" - A {LabelWithState($item)}.");
+        Message($" - A {ItalicLabelWithState($item)}.");
     }
     if (!$haveItems)
     {
@@ -596,7 +598,7 @@ function DescribeTable($table:Item)
             Message($"On the {$table.Noun} are the following:");
             $haveItems = true;
         }
-        Message($" - A {LabelWithState($item)}.");
+        Message($" - A {ItalicLabelWithState($item)}.");
     }
 }
 function PutOnTable($item:Item, $table:Item)
@@ -673,7 +675,7 @@ function Look()
         {
             if (!$item.IsHidden && $item.Noun != null)
             {
-                Message($"There is a {LabelWithState($item)} here.");
+                Message($"There is a {ItalicLabelWithState($item)} here.");
             }
         }
     }
@@ -835,7 +837,7 @@ function Go($dir:Direction)
         if (!$source.LeaveAction($source, $dest) && !$dest.EnterAction($source, $dest))
         {
             $lastRoom = player.Location;
-player            .Location = $dest;
+            player.Location = $dest;
             InitializeLighting();
             Look();
         }
@@ -1037,7 +1039,7 @@ function SetArmor($kind:ArmorKind, $item:Item)
 }
 function SetPlayerDamageResistance()
 {
-player    .DamageResistance = ($headArmor.DamageResistance * 30 + $torsoArmor.DamageResistance * 50 + $legArmor.DamageResistance * 20) / 100;
+    player.DamageResistance = ($headArmor.DamageResistance * 30 + $torsoArmor.DamageResistance * 50 + $legArmor.DamageResistance * 20) / 100;
 }
 function TakeArmor($item:Item)
 {
@@ -1154,8 +1156,8 @@ function AttackPlayer($foe:Item)
     else
     {
         Message($"The {Label($foe)} attacks you{$withPhrase}.");
-player        .Health = player.Health - $damage;
-player        .DescribeHealthAction(player);
+        player.Health = player.Health - $damage;
+        player.DescribeHealthAction(player);
         if (player.Health < 0)
         {
             Message("Better luck next time!");
@@ -1176,7 +1178,7 @@ function UseWeapon($item:Item)
             $item.Location = player;
             Message($"The {Label($item)} is now in your inventory.");
         }
-player        .CurrentWeapon = $item;
+        player.CurrentWeapon = $item;
         Message($"The {Label($item)} is now your current weapon.");
     }
 }
@@ -1185,7 +1187,7 @@ function TakeWeapon($item:Item)
     TakePortableItem($item);
     if (player.CurrentWeapon == null)
     {
-player        .CurrentWeapon = $item;
+        player.CurrentWeapon = $item;
         Message($"The {Label($item)} is now your current weapon.");
     }
     else
@@ -1202,7 +1204,7 @@ function DropWeapon($item:Item)
         Message($"You've dropped the {Label($item)}.");
         if (player.CurrentWeapon == $item)
         {
-player            .CurrentWeapon = null;
+            player.CurrentWeapon = null;
             Message("You no longer have a current weapon.");
         }
     }
@@ -1342,7 +1344,7 @@ function NewBed($adjectives:String, $noun:String, $loc:Item) : Item
 }
 function OnExitHouse($from:Item, $to:Item) : Bool
 {
-    Message("Congratulations! You made it out of the house! You win!");
+    Message("**Congratulations!** You made it out of the house! You win!");
     EndGame(true);
 }
 command "list items"
@@ -1509,43 +1511,43 @@ game
     {
         var $_ = front_porch;
         $_.EnterAction = OnExitHouse;
-        $_.Description = "You are on the front porch.";
+        $_.Description = "You are on the **front porch**.";
         $_.LinkN = _door_front_porchentry_way;
     }
     {
         var $_ = entry_way;
-        $_.Description = "You are in the entryway.";
+        $_.Description = "You are in the **entryway**.";
         $_.LinkN = _opening_entry_wayback_hallway;
         $_.LinkS = _door_front_porchentry_way;
         $_.LinkE = _opening_living_roomentry_way;
     }
     {
         var $_ = back_hallway;
-        $_.Description = "You are in the back hallway.";
+        $_.Description = "You are in the **back hallway**.";
         $_.LinkS = _opening_entry_wayback_hallway;
         $_.LinkE = _opening_back_hallwaykitchen;
         $_.LinkW = _door_back_hallwaygarage;
     }
     {
         var $_ = garage;
-        $_.Description = "You are in the garage.";
+        $_.Description = "You are in the **garage**.";
         $_.LinkE = _door_back_hallwaygarage;
     }
     {
         var $_ = kitchen;
-        $_.Description = "You are in the kitchen.";
+        $_.Description = "You are in the **kitchen**.";
         $_.LinkE = _opening_kitchendining_room;
         $_.LinkW = _opening_back_hallwaykitchen;
     }
     {
         var $_ = dining_room;
-        $_.Description = "You are in the dining room.";
+        $_.Description = "You are in the **dining room**.";
         $_.LinkS = _opening_dining_roomliving_room;
         $_.LinkW = _opening_kitchendining_room;
     }
     {
         var $_ = living_room;
-        $_.Description = "You are in the living room.";
+        $_.Description = "You are in the **living room**.";
         $_.LinkN = _opening_dining_roomliving_room;
         $_.LinkW = _opening_living_roomentry_way;
     }

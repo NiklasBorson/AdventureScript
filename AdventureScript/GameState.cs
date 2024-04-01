@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 
 namespace AdventureScript
 {
@@ -158,7 +157,7 @@ namespace AdventureScript
 
             foreach (string message in m_messages)
             {
-                writer.Write("Message(");
+                writer.Write("RawMessage(");
                 writer.Write(StringHelpers.ToStringLiteral(message));
                 writer.Write(");");
                 writer.EndLine();
@@ -333,11 +332,37 @@ namespace AdventureScript
             m_result = isWon ? GameResult.Win : GameResult.Loss;
         }
 
+        void AddNormalizedMessage(string message)
+        {
+            message = StringHelpers.NormalizeSpaces(message);
+            if (message.Length != 0)
+            {
+                m_messages.Add(message);
+            }
+        }
+
         internal void Message(string message)
         {
             if (!IsGameOver)
             {
-                message = StringHelpers.NormalizeSpaces(message);
+                if (message.Contains('\n'))
+                {
+                    foreach (var line in message.Split('\n'))
+                    {
+                        AddNormalizedMessage(line);
+                    }
+                }
+                else
+                {
+                    AddNormalizedMessage(message);
+                }
+            }
+        }
+
+        internal void RawMessage(string message)
+        {
+            if (!IsGameOver)
+            {
                 m_messages.Add(message);
             }
         }

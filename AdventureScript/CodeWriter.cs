@@ -11,7 +11,14 @@
             m_writer = writer;
         }
 
-        public TextWriter TextWriter => m_writer;
+        public TextWriter TextWriter
+        {
+            get
+            {
+                WriteIndent();
+                return m_writer;
+            }
+        }
 
         public void Write(string value)
         {

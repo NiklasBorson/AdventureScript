@@ -81,7 +81,14 @@ namespace AdventureScript
             game.Message(message);
             return 0;
         }
-
+        static int _RawMessage(GameState game, int[] frame)
+        {
+            // Message($message:String)
+            //  - frame[1] -> $message
+            string message = game.Strings[frame[1]];
+            game.RawMessage(message);
+            return 0;
+        }
         static int _Tick(GameState game, int[] frame)
         {
             // Tick()
@@ -121,13 +128,13 @@ namespace AdventureScript
                 // Output an error if we still didn't find the item.
                 if (item == null)
                 {
-                    game.Message($"Undefined item: {name}.");
+                    game.RawMessage($"Undefined item: {name}.");
                     return 0;
                 }
             }
 
             // Output the item name.
-            game.Message($"Item {item.Name}");
+            game.RawMessage($"Item {item.Name}:");
             int id = item.ID;
 
             // Output each non-null property.
@@ -140,15 +147,16 @@ namespace AdventureScript
 
                     var writer = new StringWriter();
                     writer.Write(
-                        "- {0} : {1} = ",
+                        "- `{0} : {1} = ",
                         prop.Name,
                         type.Name
                         );
 
                     type.WriteValue(game, value, writer);
                     writer.Write(';');
+                    writer.Write('`');
 
-                    game.Message(writer.ToString());
+                    game.RawMessage(writer.ToString());
                 }
             }
             return 0;
@@ -161,7 +169,7 @@ namespace AdventureScript
             var itemCount = itemMap.Count;
             for (int id = 1; id < itemCount; id++)
             {
-                game.Message($"- item {itemMap[id].Name};");
+                game.RawMessage($"- `item {itemMap[id].Name};`");
             }
             return 0;
         }
@@ -170,7 +178,7 @@ namespace AdventureScript
         {
             foreach (var prop in game.Properties)
             {
-                game.Message($"- {prop.Name} : {prop.Type.Name};");
+                game.RawMessage($"- `property {prop.Name} : {prop.Type.Name};`");
             }
             return 0;
         }
@@ -182,13 +190,14 @@ namespace AdventureScript
                 if (type.IsUserType)
                 {
                     var writer = new StringWriter();
-                    writer.Write("- ");
+                    writer.Write("- `");
                     type.SaveDefinition(writer);
-                    game.Message(writer.ToString().Trim());
+                    writer.Write('`');
+                    game.RawMessage(writer.ToString());
                 }
                 else
                 {
-                    game.Message($"- {type.Name};");
+                    game.RawMessage($"- `{type.Name};`");
                 }
             }
             return 0;
@@ -201,7 +210,7 @@ namespace AdventureScript
                 var writer = new StringWriter();
 
                 writer.Write(
-                    "- var {0} : {1} = ",
+                    "- `var {0} : {1} = ",
                     varExpr.Name,
                     varExpr.Type.Name
                     );
@@ -210,9 +219,9 @@ namespace AdventureScript
                     varExpr.Value,
                     writer
                     );
-                writer.Write(';');
+                writer.Write(";`");
 
-                game.Message(writer.ToString());
+                game.RawMessage(writer.ToString());
             }
             return 0;
         }
@@ -228,28 +237,10 @@ namespace AdventureScript
                 var funcDef = functionMap[id];
 
                 var b = new StringBuilder();
-                b.Append($"- function {funcDef.Name}(");
-                for (int i = 0; i < funcDef.ParamList.Count; i++)
-                {
-                    var paramDef = funcDef.ParamList[i];
-
-                    if (i != 0)
-                    {
-                        b.Append(", ");
-                    }
-
-                    b.Append($"{paramDef.Name}:{paramDef.Type.Name}");
-                }
-                var type = funcDef.ReturnType;
-                if (type != Types.Void)
-                {
-                    b.Append($") : {type.Name};");
-                }
-                else
-                {
-                    b.Append(");");
-                }
-                game.Message(b.ToString());
+                b.Append("- `");
+                funcDef.GetDeclaration(b);
+                b.Append('`');
+                game.RawMessage(b.ToString());
             }
             return 0;
         }
@@ -286,16 +277,41 @@ namespace AdventureScript
                 // Output an error if we still didn't find the item.
                 if (func == null)
                 {
-                    game.Message($"Undefined function: {name}.");
+                    game.RawMessage($"Undefined function: {name}.");
                     return 0;
                 }
             }
 
-            var s = new StringWriter();
-            func.SaveDefinition(game, new CodeWriter(s));
-            game.Message("```");
-            game.Message(s.ToString().TrimEnd());
-            game.Message("```");
+            // Begin a code block.
+            game.RawMessage("```");
+
+            if (func is IntrinsicFunctionDef)
+            {
+                // Output a comment.
+                game.RawMessage("# Intrinsic function");
+
+                // Output the declaration.
+                var b = new StringBuilder();
+                func.GetDeclaration(b);
+                game.RawMessage(b.ToString());
+            }
+            else
+            {
+                // Save the definition to a StringWriter.
+                var writer = new StringWriter();
+                func.SaveDefinition(game, new CodeWriter(writer));
+
+                // Write each line of the definition.
+                var reader = new StringReader(writer.ToString());
+                string? line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    game.RawMessage(line);
+                }
+            }
+
+            // End the code block.
+            game.RawMessage("```");
             return 0;
         }
 
@@ -303,7 +319,7 @@ namespace AdventureScript
         {
             foreach (var def in game.Commands)
             {
-                game.Message($"- {def.CommandSpec}");
+                game.RawMessage($"- `{def.CommandSpec}`");
             }
             return 0;
         }
@@ -378,6 +394,14 @@ namespace AdventureScript
                 },
                 /*returnType*/ Types.Void,
                 _Message
+                ),
+            new IntrinsicFunctionDef(
+                "RawMessage",
+                new ParamDef[] {
+                    new ParamDef("$message", Types.String)
+                },
+                /*returnType*/ Types.Void,
+                _RawMessage
                 ),
             new IntrinsicFunctionDef(
                 "Tick",

@@ -63,7 +63,11 @@ function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
 The `Label` function gets a short label that can be used to refer to an item.
 
 ```text
-function Label($item:Item) => $"{$item.Adjectives} {$item.Noun}";
+function Label($item:Item) => $item.Adjectives != null ?
+    $"{$item.Adjectives} {$item.Noun}" :
+    $item.Noun;
+
+function ItalicLabel($item:Item) => $"_{Label($item)}_";
 ```
 
 ## Common Delegate Types
@@ -440,6 +444,8 @@ function AddStateQualifier($item:Item, $phrase:String) =>
     $phrase;
 
 function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
+
+function ItalicLabelWithState($item:Item) => AddStateQualifier($item, ItalicLabel($item));
 ```
 
 ## Inventory Function and Command
@@ -458,7 +464,7 @@ function Inventory()
             Message("You have the following items:");
             $haveItems = true;
         }
-        Message($"- A {LabelWithState($item)}.");
+        Message($"- A {ItalicLabelWithState($item)}.");
     }
     if (!$haveItems)
     {
@@ -497,7 +503,7 @@ function DescribeCommon($item:Item)
     }
     elseif ($item.Noun != null)
     {
-        Message($"You see a {LabelWithState($item)}.");
+        Message($"You see a {ItalicLabelWithState($item)}.");
     }
 
     $item.DescribeHealthAction($item);
@@ -848,7 +854,7 @@ function ListContainerContents($container:Item)
             Message($"Inside the {$container.Noun} are the following:");
             $haveItems = true;
         }
-        Message($" - A {LabelWithState($item)}.");
+        Message($" - A {ItalicLabelWithState($item)}.");
     }
     if (!$haveItems)
     {
@@ -967,7 +973,7 @@ function DescribeTable($table:Item)
             Message($"On the {$table.Noun} are the following:");
             $haveItems = true;
         }
-        Message($" - A {LabelWithState($item)}.");
+        Message($" - A {ItalicLabelWithState($item)}.");
     }
 }
 
@@ -1067,7 +1073,7 @@ function Look()
         {
             if (!$item.IsHidden && $item.Noun != null)
             {
-                Message($"There is a {LabelWithState($item)} here.");
+                Message($"There is a {ItalicLabelWithState($item)} here.");
             }
         }
     }
