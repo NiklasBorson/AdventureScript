@@ -332,18 +332,39 @@ namespace AdventureScript
             m_result = isWon ? GameResult.Win : GameResult.Loss;
         }
 
+        void AddNormalizedMessage(string message)
+        {
+            message = StringHelpers.NormalizeSpaces(message);
+            if (message.Length != 0)
+            {
+                m_messages.Add(message);
+            }
+        }
+
         internal void Message(string message)
         {
             if (!IsGameOver)
             {
-                message = StringHelpers.NormalizeSpaces(message);
-                m_messages.Add(message);
+                if (message.Contains('\n'))
+                {
+                    foreach (var line in message.Split('\n'))
+                    {
+                        AddNormalizedMessage(line);
+                    }
+                }
+                else
+                {
+                    AddNormalizedMessage(message);
+                }
             }
         }
 
         internal void RawMessage(string message)
         {
-            m_messages.Add(message);
+            if (!IsGameOver)
+            {
+                m_messages.Add(message);
+            }
         }
         #endregion
     }

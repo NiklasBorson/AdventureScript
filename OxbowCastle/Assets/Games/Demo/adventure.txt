@@ -1,9 +1,9 @@
 game
 {
-    Message("# Demo Adventure");
-    Message("You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.");
-    Message("# Game Description");
-    Message("The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.");
+    RawMessage("# Demo Adventure");
+    RawMessage("You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.");
+    RawMessage("# Game Description");
+    RawMessage("The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.");
 }
 delegate ItemDelegate($item:Item);
 delegate Item2Delegate($item1:Item, $item2:Item);
@@ -835,7 +835,7 @@ function Go($dir:Direction)
         if (!$source.LeaveAction($source, $dest) && !$dest.EnterAction($source, $dest))
         {
             $lastRoom = player.Location;
-player            .Location = $dest;
+            player.Location = $dest;
             InitializeLighting();
             Look();
         }
@@ -1037,7 +1037,7 @@ function SetArmor($kind:ArmorKind, $item:Item)
 }
 function SetPlayerDamageResistance()
 {
-player    .DamageResistance = ($headArmor.DamageResistance * 30 + $torsoArmor.DamageResistance * 50 + $legArmor.DamageResistance * 20) / 100;
+    player.DamageResistance = ($headArmor.DamageResistance * 30 + $torsoArmor.DamageResistance * 50 + $legArmor.DamageResistance * 20) / 100;
 }
 function TakeArmor($item:Item)
 {
@@ -1154,8 +1154,8 @@ function AttackPlayer($foe:Item)
     else
     {
         Message($"The {Label($foe)} attacks you{$withPhrase}.");
-player        .Health = player.Health - $damage;
-player        .DescribeHealthAction(player);
+        player.Health = player.Health - $damage;
+        player.DescribeHealthAction(player);
         if (player.Health < 0)
         {
             Message("Better luck next time!");
@@ -1176,7 +1176,7 @@ function UseWeapon($item:Item)
             $item.Location = player;
             Message($"The {Label($item)} is now in your inventory.");
         }
-player        .CurrentWeapon = $item;
+        player.CurrentWeapon = $item;
         Message($"The {Label($item)} is now your current weapon.");
     }
 }
@@ -1185,7 +1185,7 @@ function TakeWeapon($item:Item)
     TakePortableItem($item);
     if (player.CurrentWeapon == null)
     {
-player        .CurrentWeapon = $item;
+        player.CurrentWeapon = $item;
         Message($"The {Label($item)} is now your current weapon.");
     }
     else
@@ -1202,7 +1202,7 @@ function DropWeapon($item:Item)
         Message($"You've dropped the {Label($item)}.");
         if (player.CurrentWeapon == $item)
         {
-player            .CurrentWeapon = null;
+            player.CurrentWeapon = null;
             Message("You no longer have a current weapon.");
         }
     }

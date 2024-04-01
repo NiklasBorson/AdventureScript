@@ -5,30 +5,30 @@ Oxbow Castle is situated in a sharp bend of the river Oxyl, such that it is surr
 At any time you can type 'help' to see a list of commands you can say.
 > n
 You go North.
-You are at the south end of a large courtyard, which extends to the North, East, and West. At the north end of the courtyard you can see the high walls of the keep.
+You are at the **south** end of a large **courtyard**, which extends to the North, East, and West. At the north end of the courtyard you can see the high walls of the keep.
 There is a open iron gate to the South.
 > n
 You go North.
-You are in the center of a large outer courtyard, which extends to the North, West, and South. East of you is a stone wall with a wooden gate behind which you can see a tall stone church.
+You are in the **center** of a large outer **courtyard**, which extends to the North, West, and South. East of you is a stone wall with a wooden gate behind which you can see a tall stone church.
 There is a closed wooden gate to the East.
 > n
 You go North.
-You are at the north end of a large outer courtyard, which extends to the West, East, and South. Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on either side of an open portcullis.
+You are at the **north** end of a large outer **courtyard**, which extends to the West, East, and South. Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on either side of an open portcullis.
 > n
 You go North.
 You pass through the open portcullis into a dim tunnel. High in the walls on either side are arrow loops through which defenders could rain down fire on an attacker, and in the ceiling above you are murder holes through which boulders could be dropped. However, no one challenges you or raises an alarm.
 At the north end of the tunnel, you pass through another open gate into an inner courtyard. For a moment, the air around you seems to shimmer, but perhaps you are only dazzled by the sun after leaving the dim tunnel.
-You are at the south end of the inner courtyard, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
 There is a silver statue here.
 > w
 You go West.
-You are in the southwest corner of the inner courtyard, which extends to the North and East.
+You are in the **southwest** corner of the **inner courtyard**, which extends to the North and East.
 There is a closed door to the South.
 There is a closed door to the West.
 > s
 You open the door.
 You go South.
-You are in a rectangular stone chamber. There are barred windows high on the north wall.
+You are in a **rectangular stone chamber**. There are barred windows high on the north wall.
 There is a open door to the North.
 There is a opening to the East.
 There is a closed door to the West.
@@ -50,12 +50,12 @@ The small tinderbox is now in your inventory.
 The oil lamp is now in your inventory.
 > n
 You go North.
-You are in the southwest corner of the inner courtyard, which extends to the North and East.
+You are in the **southwest** corner of the **inner courtyard**, which extends to the North and East.
 There is a open door to the South.
 There is a closed door to the West.
 > n
 You go North.
-You are in the northwest corner of the inner courtyard, which extends to the South and East.
+You are in the **northwest** corner of the **inner courtyard**, which extends to the South and East.
 There is a closed door to the North.
 > n
 You open the door.
@@ -68,13 +68,13 @@ You are in the dark.
 > use tinderbox on lamp
 The oil lamp is now lit.
 The oil lamp illuminates the darkness.
-You are at the junction of two hallways leading south and east.
+You are at the **junction of two hallways** leading south and east.
 There is a closed door to the West.
 > w
 You open the door.
 You go West.
 The oil lamp illuminates the darkness.
-You are in a large rectangular room.
+You are in a large **rectangular room**.
 There is a closed door to the North.
 There is a closed door to the South.
 There is a open door to the East.
@@ -107,12 +107,12 @@ You put on the chain leggings.
 > e
 You go East.
 The oil lamp illuminates the darkness.
-You are at the junction of two hallways leading south and east.
+You are at the **junction of two hallways** leading south and east.
 There is a open door to the West.
 > s
 You go South.
 The oil lamp illuminates the darkness.
-You are at one end of a hallway leading north.
+You are at one end of a **hallway leading north**.
 There is a open door to the South.
 There is a closed door to the East.
 There is a closed door to the West.
@@ -128,33 +128,33 @@ You attack the small goblin with the long sword.
 The small goblin is dead!
 > s
 You go South.
-You are in the northwest corner of the inner courtyard, which extends to the South and East.
+You are in the **northwest** corner of the **inner courtyard**, which extends to the South and East.
 There is a open door to the North.
 > e
 You go East.
-You are at the north end of the inner courtyard, which extends to the South, East, and West.
+You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.
 There is a closed door to the North.
 > s
 You go South.
-You are at the south end of the inner courtyard, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
 There is a silver statue here.
 > s
 You go South.
-You are at the north end of the outer courtyard, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.
+You are at the **north** end of the **outer courtyard**, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.
 > s
 You go South.
-You are in a small clearing in the strangely-transformed outer courtyard. Paths lead north, south, and west through the trees. East of you is the church yard wall.
+You are in a small clearing in the strangely-transformed **outer courtyard**. Paths lead north, south, and west through the trees. East of you is the church yard wall.
 There is a closed wooden gate to the East.
 > e
 You open the wooden gate.
 You go East.
-You are in a walled church yard. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.
+You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.
 There is a closed carved wooden door to the East.
 There is a open wooden gate to the West.
 > e
 You open the carved wooden door.
 You go East.
-You are at the west end of the church. A long aisle runs from here to the East, with fluted stone columns on either side. Windows set high in the walls let in light.
+You are at the **west** end of the **church**. A long aisle runs from here to the East, with fluted stone columns on either side. Windows set high in the walls let in light.
 There is a open carved wooden door to the West.
 There is a priest here.
 There is a chamber maid here.
@@ -163,20 +163,20 @@ Recognizing your duty, you promise to help if you can.
 The maid exclaims, 'Oh, thank you sir! It was awful what happened here! I was in Lord Kevin's chambers doing a bit of cleaning when those winged creatures came. Lord Kevin and his men tried to fight them, but they were all killed. I think the townspeople mostly fled. I fled too. I thought to seek sanctuary in the church, and I found the church right enough, but it's here in the middle of this strange forest and we don't know the way out!'
 > w
 You go West.
-You are in a walled church yard. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.
+You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.
 There is a open carved wooden door to the East.
 There is a open wooden gate to the West.
 The priest follows you.
 The chamber maid follows you.
 > w
 You go West.
-You are in a small clearing in the strangely-transformed outer courtyard. Paths lead north, south, and west through the trees. East of you is the church yard wall.
+You are in a small clearing in the strangely-transformed **outer courtyard**. Paths lead north, south, and west through the trees. East of you is the church yard wall.
 There is a open wooden gate to the East.
 The priest follows you.
 The chamber maid follows you.
 > w
 You go West.
-You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
+You are in the strangely-transformed **outer courtyard**. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
 There is a closed door to the West.
 There is a small blue fairy here.
 The fairy says, 'The guests have arrived!'
@@ -186,7 +186,7 @@ The chamber maid follows you.
 The maid says, 'Maybe these words are giving us some important clue, but I don't understand it.'
 > s
 You go South.
-You are in the southwest corner of the strangely-transformed outer courtyard. West and south of you are the castle walls, Paths lead north and east through the trees.
+You are in the **southwest** corner of the strangely-transformed **outer courtyard**. West and south of you are the castle walls, Paths lead north and east through the trees.
 There is a green fairy here.
 The fairy says, 'The guests can't leave until the last cup is poured!'
 The priest follows you.
@@ -194,7 +194,7 @@ The priest scowls and says, 'More riddles!'
 The chamber maid follows you.
 > n
 You go North.
-You are in the strangely-transformed outer courtyard. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
+You are in the strangely-transformed **outer courtyard**. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
 There is a closed door to the West.
 There is a small blue fairy here.
 The fairy says, 'The guests have arrived!'
@@ -203,7 +203,7 @@ The priest scowls and says, 'More riddles!'
 The chamber maid follows you.
 > n
 You go North.
-You are in a clearing in the the northwest corner of the strangely-transformed outer courtyard. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.
+You are in a clearing in the the **northwest** corner of the strangely-transformed **outer courtyard**. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.
 There is a long table here.
 There is a well here.
 The priest follows you.
@@ -219,12 +219,12 @@ The platter of food is now in your inventory.
 The flask of wine is now in your inventory.
 > e
 You go East.
-You are at the north end of the outer courtyard, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.
+You are at the **north** end of the **outer courtyard**, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.
 The priest follows you.
 The chamber maid follows you.
 > n
 You go North.
-You are at the south end of the inner courtyard, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
 There is a silver statue here.
 The priest follows you.
 The chamber maid follows you.
@@ -233,28 +233,28 @@ The maid says, 'Ooh! That statue wasn't here before! It's beautiful!'
 The statue is of bright, untarnished silver and exquisite workmanship. It depicts a young man, or perhaps a fairy for it has delicate wings. Its empty hands are outstretched as if reaching for something.
 > n
 You go North.
-You are at the north end of the inner courtyard, which extends to the South, East, and West.
+You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.
 There is a closed door to the North.
 The priest follows you.
 The chamber maid follows you.
 > n
 You open the door.
 You go North.
-You are at the west end of the great hall.
+You are at the **west** end of the **great hall**.
 There is a open door to the South.
 There is a closed door to the West.
 The priest follows you.
 The chamber maid follows you.
 > e
 You go East.
-You are at the east end of the great hall.
+You are at the **east** end of the **great hall**.
 There is a closed door to the East.
 The priest follows you.
 The chamber maid follows you.
 > e
 You open the door.
 You go East.
-You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds court.
+You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
 There is a closed door to the South.
 There is a open door to the West.
 There is a carved wooden throne here.
@@ -263,7 +263,7 @@ The chamber maid follows you.
 > s
 You open the door.
 You go South.
-You are in a comfortable parlor with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
+You are in a comfortable **parlor** with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
 There is a open door to the North.
 There is a closed door to the South.
 There is a large orc here.
@@ -286,7 +286,7 @@ The large orc is dead!
 > s
 You open the door.
 You go South.
-You are in the lord's bedchamber. Windows in the west wall open onto the inner courtyard.
+You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.
 There is a open door to the North.
 There is a large four-poster bed here.
 There is a closed carved wooden chest here.
@@ -303,7 +303,7 @@ You go to sleep in the large four-poster bed.
 You wake up after eight hours.
 > look
 It is night, but the oil lamp illuminates the darkness.
-You are in the lord's bedchamber. Windows in the west wall open onto the inner courtyard.
+You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.
 There is a open door to the North.
 There is a priest here.
 There is a chamber maid here.
@@ -322,7 +322,7 @@ You cannot go North.
 > use tinderbox on lamp
 The oil lamp is now lit.
 It is night, but the oil lamp illuminates the darkness.
-You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds court.
+You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
 There is a open door to the South.
 There is a open door to the West.
 There is a carved wooden throne here.
@@ -336,7 +336,7 @@ The discrete wooden door is now unlocked.
 You open the discrete wooden door.
 You go North.
 It is night, but the oil lamp illuminates the darkness.
-You are in a library. Windows in the west wall open onto the rear courtyard.
+You are in a **library**. Windows in the west wall open onto the rear courtyard.
 There is a open discrete wooden door to the South.
 There is a silver statue here.
 > look at statue
@@ -347,7 +347,7 @@ The statue of the fairy king comes to life and says, 'The host can't eat until t
 You open the arched oak door.
 You go North.
 The oil lamp illuminates the darkness.
-You are in a large, round stone chamber with a high ceiling.
+You are in a large, **round stone chamber** with a high ceiling.
 There is a open arched oak door to the South.
 There is a spiral stone stair leading upward.
 > put out lamp
@@ -366,7 +366,7 @@ You cannot go Up.
 > use tinderbox on lamp
 The oil lamp is now lit.
 It is night, but the oil lamp illuminates the darkness.
-You are on the top floor of a large, round tower. Above you is a conical, wooden ceiling. The wood-paneled walls have large windows. Sitting at a long table is the fairy king depicted by the statue downstairs along with two other noble-looking fairies. They take no notice of you.
+You are on the **top floor** of a large, round **tower**. Above you is a conical, wooden ceiling. The wood-paneled walls have large windows. Sitting at a long table is the fairy king depicted by the statue downstairs along with two other noble-looking fairies. They take no notice of you.
 There is a spiral stone stair leading downward.
 There is a long wooden table here.
 There is a fairy king here.
@@ -396,13 +396,13 @@ You are in the dark.
 > use tinderbox on lamp
 The oil lamp is now lit.
 It is night, but the oil lamp illuminates the darkness.
-You are in a library. Windows in the west wall open onto the rear courtyard.
+You are in a **library**. Windows in the west wall open onto the rear courtyard.
 There is a open arched oak door to the North.
 There is a open discrete wooden door to the South.
 > s
 You go South.
 It is night, but the oil lamp illuminates the darkness.
-You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds court.
+You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
 There is a open discrete wooden door to the North.
 There is a open door to the South.
 There is a open door to the West.
@@ -410,13 +410,13 @@ There is a carved wooden throne here.
 > s
 You go South.
 It is night, but the oil lamp illuminates the darkness.
-You are in a comfortable parlor with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
+You are in a comfortable **parlor** with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
 There is a open door to the North.
 There is a open door to the South.
 > s
 You go South.
 It is night, but the oil lamp illuminates the darkness.
-You are in the lord's bedchamber. Windows in the west wall open onto the inner courtyard.
+You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.
 There is a open door to the North.
 There is a priest here.
 There is a chamber maid here.
@@ -425,7 +425,7 @@ There is a open carved wooden chest here.
 > n
 You go North.
 It is night, but the oil lamp illuminates the darkness.
-You are in a comfortable parlor with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
+You are in a comfortable **parlor** with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
 There is a open door to the North.
 There is a open door to the South.
 The priest follows you.
@@ -433,7 +433,7 @@ The chamber maid follows you.
 > n
 You go North.
 It is night, but the oil lamp illuminates the darkness.
-You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds court.
+You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
 There is a open discrete wooden door to the North.
 There is a open door to the South.
 There is a open door to the West.
@@ -443,14 +443,14 @@ The chamber maid follows you.
 > w
 You go West.
 It is night, but the oil lamp illuminates the darkness.
-You are at the east end of the great hall.
+You are at the **east** end of the **great hall**.
 There is a open door to the East.
 The priest follows you.
 The chamber maid follows you.
 > w
 You go West.
 It is night, but the oil lamp illuminates the darkness.
-You are at the west end of the great hall.
+You are at the **west** end of the **great hall**.
 There is a open door to the South.
 There is a closed door to the West.
 The priest follows you.
@@ -458,14 +458,14 @@ The chamber maid follows you.
 > s
 You go South.
 It is night, but the oil lamp illuminates the darkness.
-You are at the north end of the inner courtyard, which extends to the South, East, and West.
+You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.
 There is a open door to the North.
 The priest follows you.
 The chamber maid follows you.
 > s
 You go South.
 It is night, but the oil lamp illuminates the darkness.
-You are at the south end of the inner courtyard, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
 There is a silver statue here.
 The priest follows you.
 The chamber maid follows you.

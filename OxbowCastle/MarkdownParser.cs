@@ -325,9 +325,9 @@ namespace OxbowCastle
                 }
             }
 
-            // We've reached the end of the input without finding any more markup.
-            AddPlainText(inlines, input, textPos, input.Length);
-            return input.Length;
+            // We've reached the end position without finding any more markup.
+            AddPlainText(inlines, input, textPos, endPos);
+            return endPos;
         }
     }
 }
