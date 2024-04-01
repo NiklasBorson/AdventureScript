@@ -38,6 +38,7 @@ property IsHidden: Bool;
 property LightState: LightState;
 property IsDark: ItemPredicate;
 property Description: String;
+property Image: String;
 property LinkN: Item;
 property LinkS: Item;
 property LinkE: Item;
@@ -255,6 +256,10 @@ function DescribeCommon($item:Item)
     elseif ($item.Noun != null)
     {
         Message($"You see a {ItalicLabelWithState($item)}.");
+    }
+    if ($item.Image != null)
+    {
+        Message($"![{$item}]({$item.Image})");
     }
     $item.DescribeHealthAction($item);
 }
@@ -1517,6 +1522,7 @@ game
     {
         var $_ = entry_way;
         $_.Description = "You are in the **entryway**.";
+        $_.Image = "entry_way.png";
         $_.LinkN = _opening_entry_wayback_hallway;
         $_.LinkS = _door_front_porchentry_way;
         $_.LinkE = _opening_living_roomentry_way;
@@ -1524,6 +1530,7 @@ game
     {
         var $_ = back_hallway;
         $_.Description = "You are in the **back hallway**.";
+        $_.Image = "back_hallway.png";
         $_.LinkS = _opening_entry_wayback_hallway;
         $_.LinkE = _opening_back_hallwaykitchen;
         $_.LinkW = _door_back_hallwaygarage;
@@ -1531,23 +1538,27 @@ game
     {
         var $_ = garage;
         $_.Description = "You are in the **garage**.";
+        $_.Image = "garage.png";
         $_.LinkE = _door_back_hallwaygarage;
     }
     {
         var $_ = kitchen;
         $_.Description = "You are in the **kitchen**.";
+        $_.Image = "kitchen.png";
         $_.LinkE = _opening_kitchendining_room;
         $_.LinkW = _opening_back_hallwaykitchen;
     }
     {
         var $_ = dining_room;
         $_.Description = "You are in the **dining room**.";
+        $_.Image = "dining_room.png";
         $_.LinkS = _opening_dining_roomliving_room;
         $_.LinkW = _opening_kitchendining_room;
     }
     {
         var $_ = living_room;
         $_.Description = "You are in the **living room**.";
+        $_.Image = "living_room.png";
         $_.LinkN = _opening_dining_roomliving_room;
         $_.LinkW = _opening_living_roomentry_way;
     }

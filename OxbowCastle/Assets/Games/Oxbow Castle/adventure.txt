@@ -39,6 +39,7 @@ property IsHidden: Bool;
 property LightState: LightState;
 property IsDark: ItemPredicate;
 property Description: String;
+property Image: String;
 property LinkN: Item;
 property LinkS: Item;
 property LinkE: Item;
@@ -486,6 +487,10 @@ function DescribeCommon($item:Item)
     elseif ($item.Noun != null)
     {
         Message($"You see a {ItalicLabelWithState($item)}.");
+    }
+    if ($item.Image != null)
+    {
+        Message($"![{$item}]({$item.Image})");
     }
     $item.DescribeHealthAction($item);
 }
@@ -1873,6 +1878,10 @@ command "say {$message:String}"
         library_statue.Location = null;
         tower_NE_door.IsHidden = false;
         Message("The statue of the fairy king comes to life and says, 'The host can't eat until the guests have arrived!' Then it makes an elegant bow and vanishes. In place of the statue, you now see an arched oak door leading north.");
+    }
+    else
+    {
+        Message("Nothing happens.");
     }
 }
 game
