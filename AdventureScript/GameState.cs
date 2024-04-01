@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 
 namespace AdventureScript
 {
@@ -340,6 +339,11 @@ namespace AdventureScript
                 message = StringHelpers.NormalizeSpaces(message);
                 m_messages.Add(message);
             }
+        }
+
+        internal void RawMessage(string message)
+        {
+            m_messages.Add(message);
         }
         #endregion
     }

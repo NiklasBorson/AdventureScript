@@ -19,7 +19,7 @@
             {
                 writer.Write($",{this.ValueNames[i]}");
             }
-            writer.WriteLine(");");
+            writer.Write(");");
         }
         public override void WriteValue(GameState game, int value, TextWriter writer)
         {

@@ -87,7 +87,11 @@ namespace AdventureScript
         {
             foreach (var type in m_map.Values)
             {
-                type.SaveDefinition(writer);
+                if (type.IsUserType)
+                {
+                    type.SaveDefinition(writer);
+                    writer.WriteLine();
+                }
             }
         }
 

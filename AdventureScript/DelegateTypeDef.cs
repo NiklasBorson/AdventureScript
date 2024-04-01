@@ -32,7 +32,7 @@
             writer.Write($"delegate {Name}");
             FunctionDef.WriteParamList(this.ParamList, writer);
             FunctionDef.WriteReturnType(this.ReturnType, writer);
-            writer.WriteLine(';');
+            writer.Write(';');
         }
         public override void WriteValue(GameState game, int value, TextWriter writer)
         {
