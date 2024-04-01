@@ -5,11 +5,13 @@ The goal of this game is to leave the house, but first you have to find the key 
 > e
 You go East.
 You are in the **living room**.
+![living_room](living_room.png)
 There is a opening to the North.
 There is a opening to the West.
 > n
 You go North.
 You are in the **dining room**.
+![dining_room](dining_room.png)
 There is a opening to the South.
 There is a opening to the West.
 There is a _dining room table_ here.
@@ -22,6 +24,7 @@ On the table are the following:
 > w
 You go West.
 You are in the **kitchen**.
+![kitchen](kitchen.png)
 There is a opening to the East.
 There is a opening to the West.
 There is a closed _cutlery drawer_ here.
@@ -35,6 +38,7 @@ The carving knife is now your current weapon.
 > w
 You go West.
 You are in the **back hallway**.
+![back_hallway](back_hallway.png)
 There is a opening to the South.
 There is a opening to the East.
 There is a closed door to the West.
@@ -52,6 +56,7 @@ The hairy goblin is dead!
 You open the door.
 You go West.
 You are in the **garage**.
+![garage](garage.png)
 There is a open door to the East.
 There is a _brass house key_ here.
 > take key
@@ -59,12 +64,14 @@ The brass house key is now in your inventory.
 > e
 You go East.
 You are in the **back hallway**.
+![back_hallway](back_hallway.png)
 There is a opening to the South.
 There is a opening to the East.
 There is a open door to the West.
 > s
 You go South.
 You are in the **entryway**.
+![entry_way](entry_way.png)
 There is a opening to the North.
 There is a closed door to the South.
 There is a opening to the East.
