@@ -4,12 +4,12 @@ You can use this simple game as an example to write your own games in AdventureS
 The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.
 > e
 You go East.
-You are in the living room.
+You are in the **living room**.
 There is a opening to the North.
 There is a opening to the West.
 > n
 You go North.
-You are in the dining room.
+You are in the **dining room**.
 There is a opening to the South.
 There is a opening to the West.
 There is a dining room table here.
@@ -21,7 +21,7 @@ On the table are the following:
 - A fork.
 > w
 You go West.
-You are in the kitchen.
+You are in the **kitchen**.
 There is a opening to the East.
 There is a opening to the West.
 There is a closed cutlery drawer here.
@@ -34,7 +34,7 @@ The carving knife is now in your inventory.
 The carving knife is now your current weapon.
 > w
 You go West.
-You are in the back hallway.
+You are in the **back hallway**.
 There is a opening to the South.
 There is a opening to the East.
 There is a closed door to the West.
@@ -51,20 +51,20 @@ The hairy goblin is dead!
 > w
 You open the door.
 You go West.
-You are in the garage.
+You are in the **garage**.
 There is a open door to the East.
 There is a brass house key here.
 > take key
 The brass house key is now in your inventory.
 > e
 You go East.
-You are in the back hallway.
+You are in the **back hallway**.
 There is a opening to the South.
 There is a opening to the East.
 There is a open door to the West.
 > s
 You go South.
-You are in the entryway.
+You are in the **entryway**.
 There is a opening to the North.
 There is a closed door to the South.
 There is a opening to the East.

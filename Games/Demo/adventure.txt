@@ -43,14 +43,15 @@ game
     #
     # Set the Description property for each room. The description is part of
     # output when the player enters a room or types the "look" command.
+    # You can use markdown-style formatting like **bold** and _italic_.
     #
-    front_porch.Description = "You are on the front porch.";
-    entry_way.Description = "You are in the entryway.";
-    back_hallway.Description = "You are in the back hallway.";
-    garage.Description = "You are in the garage.";
-    kitchen.Description = "You are in the kitchen.";
-    dining_room.Description = "You are in the dining room.";
-    living_room.Description = "You are in the living room.";
+    front_porch.Description = "You are on the **front porch**.";
+    entry_way.Description = "You are in the **entryway**.";
+    back_hallway.Description = "You are in the **back hallway**.";
+    garage.Description = "You are in the **garage**.";
+    kitchen.Description = "You are in the **kitchen**.";
+    dining_room.Description = "You are in the **dining room**.";
+    living_room.Description = "You are in the **living room**.";
 
     #
     # Create a front door key,

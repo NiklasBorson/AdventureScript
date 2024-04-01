@@ -1509,43 +1509,43 @@ game
     {
         var $_ = front_porch;
         $_.EnterAction = OnExitHouse;
-        $_.Description = "You are on the front porch.";
+        $_.Description = "You are on the **front porch**.";
         $_.LinkN = _door_front_porchentry_way;
     }
     {
         var $_ = entry_way;
-        $_.Description = "You are in the entryway.";
+        $_.Description = "You are in the **entryway**.";
         $_.LinkN = _opening_entry_wayback_hallway;
         $_.LinkS = _door_front_porchentry_way;
         $_.LinkE = _opening_living_roomentry_way;
     }
     {
         var $_ = back_hallway;
-        $_.Description = "You are in the back hallway.";
+        $_.Description = "You are in the **back hallway**.";
         $_.LinkS = _opening_entry_wayback_hallway;
         $_.LinkE = _opening_back_hallwaykitchen;
         $_.LinkW = _door_back_hallwaygarage;
     }
     {
         var $_ = garage;
-        $_.Description = "You are in the garage.";
+        $_.Description = "You are in the **garage**.";
         $_.LinkE = _door_back_hallwaygarage;
     }
     {
         var $_ = kitchen;
-        $_.Description = "You are in the kitchen.";
+        $_.Description = "You are in the **kitchen**.";
         $_.LinkE = _opening_kitchendining_room;
         $_.LinkW = _opening_back_hallwaykitchen;
     }
     {
         var $_ = dining_room;
-        $_.Description = "You are in the dining room.";
+        $_.Description = "You are in the **dining room**.";
         $_.LinkS = _opening_dining_roomliving_room;
         $_.LinkW = _opening_kitchendining_room;
     }
     {
         var $_ = living_room;
-        $_.Description = "You are in the living room.";
+        $_.Description = "You are in the **living room**.";
         $_.LinkN = _opening_dining_roomliving_room;
         $_.LinkW = _opening_living_roomentry_way;
     }
