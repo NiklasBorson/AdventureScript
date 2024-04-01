@@ -418,7 +418,7 @@ function OnEnterCouterCourt($from:Item, $to:Item) : Bool
             Message("It's a pity you didn't rescue the survivors...");
         }
 
-        Message("Congratulations! You have won the game!");
+        Message("**Congratulations!** You have won the game!");
         EndGame(true);
     }
 }

@@ -319,7 +319,8 @@ function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
     $item.Adjectives = $adjectives;
     $item.Noun = $noun;
 }
-function Label($item:Item) => $"{$item.Adjectives} {$item.Noun}";
+function Label($item:Item) => $item.Adjectives != null ? $"{$item.Adjectives} {$item.Noun}" : $item.Noun;
+function ItalicLabel($item:Item) => $"_{Label($item)}_";
 function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
 {
     if ($func != null)
@@ -454,6 +455,7 @@ map DoorStateAdj DoorState -> String
 }
 function AddStateQualifier($item:Item, $phrase:String) => $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" : $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}" : $phrase;
 function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
+function ItalicLabelWithState($item:Item) => AddStateQualifier($item, ItalicLabel($item));
 function Inventory()
 {
     var $haveItems = false;
@@ -464,7 +466,7 @@ function Inventory()
             Message("You have the following items:");
             $haveItems = true;
         }
-        Message($"- A {LabelWithState($item)}.");
+        Message($"- A {ItalicLabelWithState($item)}.");
     }
     if (!$haveItems)
     {
@@ -483,7 +485,7 @@ function DescribeCommon($item:Item)
     }
     elseif ($item.Noun != null)
     {
-        Message($"You see a {LabelWithState($item)}.");
+        Message($"You see a {ItalicLabelWithState($item)}.");
     }
     $item.DescribeHealthAction($item);
 }
@@ -739,7 +741,7 @@ function ListContainerContents($container:Item)
             Message($"Inside the {$container.Noun} are the following:");
             $haveItems = true;
         }
-        Message($" - A {LabelWithState($item)}.");
+        Message($" - A {ItalicLabelWithState($item)}.");
     }
     if (!$haveItems)
     {
@@ -827,7 +829,7 @@ function DescribeTable($table:Item)
             Message($"On the {$table.Noun} are the following:");
             $haveItems = true;
         }
-        Message($" - A {LabelWithState($item)}.");
+        Message($" - A {ItalicLabelWithState($item)}.");
     }
 }
 function PutOnTable($item:Item, $table:Item)
@@ -904,7 +906,7 @@ function Look()
         {
             if (!$item.IsHidden && $item.Noun != null)
             {
-                Message($"There is a {LabelWithState($item)} here.");
+                Message($"There is a {ItalicLabelWithState($item)} here.");
             }
         }
     }
@@ -1592,7 +1594,7 @@ function OnEnterCouterCourt($from:Item, $to:Item) : Bool
         {
             Message("It's a pity you didn't rescue the survivors...");
         }
-        Message("Congratulations! You have won the game!");
+        Message("**Congratulations!** You have won the game!");
         EndGame(true);
     }
 }

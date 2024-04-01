@@ -24,7 +24,7 @@ item living_room;
 #
 function OnExitHouse($from:Item, $to:Item) : Bool
 {
-    Message("Congratulations! You made it out of the house! You win!");
+    Message("**Congratulations!** You made it out of the house! You win!");
     EndGame(true);
 }
 

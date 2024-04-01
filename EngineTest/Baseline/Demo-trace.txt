@@ -12,23 +12,23 @@ You go North.
 You are in the **dining room**.
 There is a opening to the South.
 There is a opening to the West.
-There is a dining room table here.
+There is a _dining room table_ here.
 > look at table
-You see a dining room table.
+You see a _dining room table_.
 On the table are the following:
-- A plate.
-- A butter knife.
-- A fork.
+- A _plate_.
+- A _butter knife_.
+- A _fork_.
 > w
 You go West.
 You are in the **kitchen**.
 There is a opening to the East.
 There is a opening to the West.
-There is a closed cutlery drawer here.
+There is a closed _cutlery drawer_ here.
 > open drawer
 The cutlery drawer is now open.
 Inside the drawer are the following:
-- A carving knife.
+- A _carving knife_.
 > take knife
 The carving knife is now in your inventory.
 The carving knife is now your current weapon.
@@ -38,7 +38,7 @@ You are in the **back hallway**.
 There is a opening to the South.
 There is a opening to the East.
 There is a closed door to the West.
-There is a hairy goblin here.
+There is a _hairy goblin_ here.
 The hairy goblin notices you.
 > attack goblin
 You attack the hairy goblin with the carving knife.
@@ -53,7 +53,7 @@ You open the door.
 You go West.
 You are in the **garage**.
 There is a open door to the East.
-There is a brass house key here.
+There is a _brass house key_ here.
 > take key
 The brass house key is now in your inventory.
 > e
@@ -73,4 +73,4 @@ The door is now unlocked.
 > s
 You open the door.
 You go South.
-Congratulations! You made it out of the house! You win!
+**Congratulations!** You made it out of the house! You win!
