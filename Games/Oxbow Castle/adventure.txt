@@ -873,6 +873,10 @@ command "say {$message:String}"
             "In place of the statue, you now see an arched oak door leading north." 
         );
     }
+    else
+    {
+        Message("Nothing happens.");
+    }
 }
 
 #############################################

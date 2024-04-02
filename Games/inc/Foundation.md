@@ -484,6 +484,15 @@ typically begins with "You are in...".
 property Description : String;
 ```
 
+## Image Property
+
+The optional `Image` property is the relative path of an image file to display along
+with the room or other item's description.
+
+```text
+property Image : String;
+```
+
 ## Describe Helpers
 
 This section contains internal helpers used to implement the Describe function.
@@ -504,6 +513,11 @@ function DescribeCommon($item:Item)
     elseif ($item.Noun != null)
     {
         Message($"You see a {ItalicLabelWithState($item)}.");
+    }
+
+    if ($item.Image != null)
+    {
+        Message($"![{$item}]({$item.Image})");
     }
 
     $item.DescribeHealthAction($item);

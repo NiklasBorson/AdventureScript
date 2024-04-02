@@ -54,6 +54,17 @@ game
     living_room.Description = "You are in the **living room**.";
 
     #
+    # A room can also have an Image property, which is the relative path
+    # of the image to display along with the description.
+    #
+    entry_way.Image = "entry_way.png";
+    back_hallway.Image = "back_hallway.png";
+    garage.Image = "garage.png";
+    kitchen.Image = "kitchen.png";
+    dining_room.Image = "dining_room.png";
+    living_room.Image = "living_room.png";
+
+    #
     # Create a front door key,
     #
     var $key = NewKey(

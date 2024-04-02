@@ -23,7 +23,7 @@ namespace OxbowCastle
             control.Blocks.Add(para);
         }
 
-        public static void AddContent(string folderPath, IList<string> inputLines, RichTextBlock control)
+        public static void AddContent(GamePage page, IList<string> inputLines, RichTextBlock control)
         {
             bool inList = false;
             bool inCodeBlock = false;
@@ -80,7 +80,7 @@ namespace OxbowCastle
                         }
                     }
 
-                    ParseParaContent(folderPath, para.Inlines, input, textPos, input.Length, '\0');
+                    ParseParaContent(page, para.Inlines, input, textPos, input.Length, '\0');
                 }
 
                 control.Blocks.Add(para);
@@ -168,7 +168,14 @@ namespace OxbowCastle
             }
         }
 
-        static int ParseParaContent(string folderPath, InlineCollection inlines, string input, int textPos, int endPos, char endDelim)
+        static int ParseParaContent(
+            GamePage page,
+            InlineCollection inlines,
+            string input,
+            int textPos,
+            int endPos,
+            char endDelim
+            )
         {
             for (int i = textPos; i < endPos; i++)
             {
@@ -219,7 +226,7 @@ namespace OxbowCastle
                         {
                             // Recursively parse the italicized content.
                             var ital = new Italic();
-                            if (ParseParaContent(folderPath, ital.Inlines, input, i + 1, endIndex, endDelim) == endIndex)
+                            if (ParseParaContent(page, ital.Inlines, input, i + 1, endIndex, endDelim) == endIndex)
                             {
                                 // Add the italicized text and preceding text.
                                 AddPlainText(inlines, input, textPos, i);
@@ -243,7 +250,7 @@ namespace OxbowCastle
                         {
                             // Recursively parse the bold content.
                             var bold = new Bold();
-                            if (ParseParaContent(folderPath, bold.Inlines, input, i + 2, endIndex, endDelim) == endIndex)
+                            if (ParseParaContent(page, bold.Inlines, input, i + 2, endIndex, endDelim) == endIndex)
                             {
                                 // Add the bold text and preceding text.
                                 AddPlainText(inlines, input, textPos, i);
@@ -262,7 +269,7 @@ namespace OxbowCastle
                     // Possibly a link of the form: [content](url)
                     // Recursively parse the content part.
                     var link = new Hyperlink();
-                    int linkEndPos = ParseParaContent(folderPath, link.Inlines, input, i + 1, endPos, ']');
+                    int linkEndPos = ParseParaContent(page, link.Inlines, input, i + 1, endPos, ']');
 
                     if (linkEndPos + 1 < input.Length &&
                         input[linkEndPos] == ']' &&
@@ -300,16 +307,17 @@ namespace OxbowCastle
                             if (urlEndPos > urlStartPos)
                             {
                                 string href = input.Substring(urlStartPos, urlEndPos - urlStartPos);
-                                var path = Path.Combine(folderPath, href);
+                                var path = Path.Combine(page.FolderPath, href);
 
                                 var bitmapImage = new BitmapImage();
                                 bitmapImage.UriSource = new System.Uri(path);
                                 var image = new Image
                                 {
-                                    HorizontalAlignment = HorizontalAlignment.Left,
                                     Stretch = Stretch.None,
                                     Source = bitmapImage
                                 };
+
+                                image.Loaded += (obj, args) => page.ScrollToEnd();
 
                                 // Add the image and any preceding text.
                                 AddPlainText(inlines, input, textPos, i);

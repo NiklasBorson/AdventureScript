@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Navigation;
 using System.IO;
 using System.Collections.Generic;
 using Windows.System;
+using System;
 
 namespace OxbowCastle
 {
@@ -44,17 +45,25 @@ namespace OxbowCastle
             App.Current.ActiveGame = null;
         }
 
+        public string FolderPath => m_game.FolderPath;
 
         void AddOutput(IList<string> output)
         {
             MarkdownParser.AddContent(
-                m_game.FolderPath,
+                this,
                 output,
                 m_outputControl
                 );
+
+            ScrollToEnd();
+        }
+
+        public void ScrollToEnd()
+        {
             m_outputScrollViewer.Measure(m_outputScrollViewer.RenderSize);
             m_outputScrollViewer.ChangeView(null, m_outputScrollViewer.ScrollableHeight, null);
         }
+
         void InvokeCommand(string input)
         {
             if (input != string.Empty)
