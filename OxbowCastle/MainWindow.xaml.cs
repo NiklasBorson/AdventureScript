@@ -1,3 +1,4 @@
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 
 namespace OxbowCastle
@@ -6,6 +7,8 @@ namespace OxbowCastle
     {
         public MainWindow()
         {
+            this.AppWindow.TitleBar.IconShowOptions = IconShowOptions.HideIconAndSystemMenu;
+
             this.InitializeComponent();
 
             m_frame.Navigate(typeof(StartPage));
