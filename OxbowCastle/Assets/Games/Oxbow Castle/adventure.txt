@@ -1485,7 +1485,7 @@ function DescribePlayerWithArms($item:Item)
 }
 function TryFollowPlayer($monster:Item) : Bool
 {
-    if (!$isNowDark && $monster.Location == $lastRoom)
+    if (!$isNowDark && $monster.Location == $lastRoom && $lastRoom != player.Location)
     {
         $monster.Location = player.Location;
         AddItemWords($monster);
@@ -1621,7 +1621,7 @@ function PutInSilverStatue($item:Item, $target:Item)
 {
     if ($item == silver_cup)
     {
-        Message("As you put the silver cup in the outstretched hands of the statue, the fingers close around the cup, melding with it. The cup is now part of the statue.");
+        Message("As you put the silver cup in the outstretched hands of the statue, its fingers close around the cup, melding with it. The cup is now part of the statue.");
         inner_court_statue.Description = "You see a silver statue of a fairy with its hands wrapped around a silver cup.";
         $item.Location = $target;
         $item.TakeAction = null;
@@ -1707,7 +1707,7 @@ function UpdateFollowingPriest($npc:Item)
     {
         if (!$hasPriestReactedToFairy)
         {
-            Message("The priest says, 'Do not trust these fiends! They speak only in riddles and they do not mean is well, I am sure!'");
+            Message("The priest says, 'Do not trust these fiends! They speak only in riddles and they do not mean us well, I am sure!'");
             $hasPriestReactedToFairy = true;
         }
         else
@@ -1728,7 +1728,7 @@ function UpdateFollowingMaid($npc:Item)
         if ($npc.Location == library_statue.Location && !$hasMaidReactedToLibraryStatue)
         {
             Message("The maid says, 'Ooh! Another of these silver statues! It's strange, though. I've cleaned this room before, and there should be a door right where that statue is. Maybe it will appear if we say the magic words!'");
-            Message("'Hocus pocus!' she says to the statue, but nothing happens.");
+            Message("'Hocus pocus!' she says, but nothing happens.");
             $hasMaidReactedToLibraryStatue = true;
         }
     }
@@ -1794,13 +1794,24 @@ command "i"
 {
     Inventory();
 }
+command "take {$item1:Item} and {$item2:Item} and {$item3:Item}"
+{
+    Take($item1);
+    Take($item2);
+    Take($item3);
+}
+command "take {$item1:Item} and {$item2:Item}"
+{
+    Take($item1);
+    Take($item2);
+}
 command "take {$item:Item}"
 {
     Take($item);
 }
 command "drop {$item:Item}"
 {
-    Take($item);
+    Drop($item);
 }
 command "put {$item:Item} in {$container:Item}"
 {

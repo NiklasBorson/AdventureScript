@@ -181,7 +181,7 @@ There is a closed door to the West.
 There is a _small blue fairy_ here.
 The fairy says, 'The guests have arrived!'
 The priest follows you.
-The priest says, 'Do not trust these fiends! They speak only in riddles and they do not mean is well, I am sure!'
+The priest says, 'Do not trust these fiends! They speak only in riddles and they do not mean us well, I am sure!'
 The chamber maid follows you.
 The maid says, 'Maybe these words are giving us some important clue, but I don't understand it.'
 > s
@@ -470,7 +470,7 @@ There is a _silver statue_ here.
 The priest follows you.
 The chamber maid follows you.
 > put cup in statue
-As you put the silver cup in the outstretched hands of the statue, the fingers close around the cup, melding with it. The cup is now part of the statue.
+As you put the silver cup in the outstretched hands of the statue, its fingers close around the cup, melding with it. The cup is now part of the statue.
 > put wine in cup
 You pour the wine into the silver cup. Suddenly, the statue comes to life. It says, 'The guests can't leave until the last cup is poured!' and drains the cup in one long draft.
 The statue then vanishes with a flash of light. There is a sudden breeze, and a not-unpleasant smell of grass and manure wafts in from the open gate south of you.
