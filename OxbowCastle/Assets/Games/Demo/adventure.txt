@@ -1254,7 +1254,7 @@ function DescribePlayerWithArms($item:Item)
 }
 function TryFollowPlayer($monster:Item) : Bool
 {
-    if (!$isNowDark && $monster.Location == $lastRoom)
+    if (!$isNowDark && $monster.Location == $lastRoom && $lastRoom != player.Location)
     {
         $monster.Location = player.Location;
         AddItemWords($monster);
@@ -1424,13 +1424,24 @@ command "i"
 {
     Inventory();
 }
+command "take {$item1:Item} and {$item2:Item} and {$item3:Item}"
+{
+    Take($item1);
+    Take($item2);
+    Take($item3);
+}
+command "take {$item1:Item} and {$item2:Item}"
+{
+    Take($item1);
+    Take($item2);
+}
 command "take {$item:Item}"
 {
     Take($item);
 }
 command "drop {$item:Item}"
 {
-    Take($item);
+    Drop($item);
 }
 command "put {$item:Item} in {$container:Item}"
 {

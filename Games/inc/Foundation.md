@@ -1400,8 +1400,10 @@ command "up" { Go(Direction.Up); }
 command "down" { Go(Direction.Down); }
 command "inventory" { Inventory(); }
 command "i" { Inventory(); }
+command "take {$item1:Item} and {$item2:Item} and {$item3:Item}" { Take($item1); Take($item2); Take($item3); }
+command "take {$item1:Item} and {$item2:Item}" { Take($item1); Take($item2); }
 command "take {$item:Item}" { Take($item); }
-command "drop {$item:Item}" { Take($item); }
+command "drop {$item:Item}" { Drop($item); }
 command "put {$item:Item} in {$container:Item}" { PutIn($item, $container); }
 command "put {$item:Item} on {$table:Item}" { PutOn($item, $table); }
 command "use {$item:Item} on {$target:Item}" { UseOn($item, $target); }

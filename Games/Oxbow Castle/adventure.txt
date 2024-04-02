@@ -507,7 +507,7 @@ function PutInSilverStatue($item:Item, $target:Item)
     if ($item == silver_cup)
     {
         Message(
-            "As you put the silver cup in the outstretched hands of the statue, the "
+            "As you put the silver cup in the outstretched hands of the statue, its "
             "fingers close around the cup, melding with it. The cup is now part of "
             "the statue."
         );
@@ -1264,7 +1264,7 @@ function UpdateFollowingPriest($npc:Item)
         {
             Message(
                 "The priest says, 'Do not trust these fiends! They speak only in riddles "
-                "and they do not mean is well, I am sure!'"
+                "and they do not mean us well, I am sure!'"
                 );
             $hasPriestReactedToFairy = true;
         }
@@ -1299,7 +1299,7 @@ function UpdateFollowingMaid($npc:Item)
                 "statue is. Maybe it will appear if we say the magic words!'"
             );
             Message(
-                "'Hocus pocus!' she says to the statue, but nothing happens."
+                "'Hocus pocus!' she says, but nothing happens."
             );
             $hasMaidReactedToLibraryStatue = true;
         }

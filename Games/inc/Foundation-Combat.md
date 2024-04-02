@@ -603,7 +603,7 @@ for monsters or NPCs that follow the player.
 ```text
 function TryFollowPlayer($monster:Item) : Bool
 {
-    if (!$isNowDark && $monster.Location == $lastRoom)
+    if (!$isNowDark && $monster.Location == $lastRoom && $lastRoom != player.Location)
     {
         $monster.Location = player.Location;
         AddItemWords($monster);
