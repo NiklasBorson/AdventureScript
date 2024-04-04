@@ -6,10 +6,12 @@ At any time you can type 'help' to see a list of commands you can say.
 > n
 You go North.
 You are at the **south** end of a large **courtyard**, which extends to the North, East, and West. At the north end of the courtyard you can see the high walls of the keep.
+![outer_court_S](#1)
 There is a open iron gate to the South.
 > n
 You go North.
 You are in the **center** of a large outer **courtyard**, which extends to the North, West, and South. East of you is a stone wall with a wooden gate behind which you can see a tall stone church.
+![outer_court_center](#2)
 There is a closed wooden gate to the East.
 > n
 You go North.
@@ -23,14 +25,16 @@ There is a _silver statue_ here.
 > w
 You go West.
 You are in the **southwest** corner of the **inner courtyard**, which extends to the North and East.
+![inner_court_SW](#3)
 There is a closed door to the South.
 There is a closed door to the West.
 > s
 You open the door.
 You go South.
 You are in a **rectangular stone chamber**. There are barred windows high on the north wall.
+![guard_room_W_0](#4)
 There is a open door to the North.
-There is a opening to the East.
+There is a closed door to the East.
 There is a closed door to the West.
 There is a closed _large wooden chest_ here.
 > open chest
@@ -51,11 +55,13 @@ The oil lamp is now in your inventory.
 > n
 You go North.
 You are in the **southwest** corner of the **inner courtyard**, which extends to the North and East.
+![inner_court_SW](#5)
 There is a open door to the South.
 There is a closed door to the West.
 > n
 You go North.
 You are in the **northwest** corner of the **inner courtyard**, which extends to the South and East.
+![inner_court_NW](#6)
 There is a closed door to the North.
 > n
 You open the door.
@@ -69,12 +75,14 @@ You are in the dark.
 The oil lamp is now lit.
 The oil lamp illuminates the darkness.
 You are at the **junction of two hallways** leading south and east.
+![hallway_corner](#7)
 There is a closed door to the West.
 > w
 You open the door.
 You go West.
 The oil lamp illuminates the darkness.
 You are in a large **rectangular room**.
+![armory](#8)
 There is a closed door to the North.
 There is a closed door to the South.
 There is a open door to the East.
@@ -108,11 +116,13 @@ You put on the chain leggings.
 You go East.
 The oil lamp illuminates the darkness.
 You are at the **junction of two hallways** leading south and east.
+![hallway_corner](#9)
 There is a open door to the West.
 > s
 You go South.
 The oil lamp illuminates the darkness.
 You are at one end of a **hallway leading north**.
+![hallway_NS](#10)
 There is a open door to the South.
 There is a closed door to the East.
 There is a closed door to the West.
@@ -129,10 +139,12 @@ The small goblin is dead!
 > s
 You go South.
 You are in the **northwest** corner of the **inner courtyard**, which extends to the South and East.
+![inner_court_NW](#11)
 There is a open door to the North.
 > e
 You go East.
 You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.
+![inner_court_N](#12)
 There is a closed door to the North.
 > s
 You go South.
@@ -144,17 +156,20 @@ You are at the **north** end of the **outer courtyard**, but somehow transformed
 > s
 You go South.
 You are in a small clearing in the strangely-transformed **outer courtyard**. Paths lead north, south, and west through the trees. East of you is the church yard wall.
+![fairyland_center](#13)
 There is a closed wooden gate to the East.
 > e
 You open the wooden gate.
 You go East.
 You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.
+![fairyland_church_yard_W](#14)
 There is a closed carved wooden door to the East.
 There is a open wooden gate to the West.
 > e
 You open the carved wooden door.
 You go East.
 You are at the **west** end of the **church**. A long aisle runs from here to the East, with fluted stone columns on either side. Windows set high in the walls let in light.
+![fairyland_church_W](#15)
 There is a open carved wooden door to the West.
 There is a _priest_ here.
 There is a _chamber maid_ here.
@@ -164,6 +179,7 @@ The maid exclaims, 'Oh, thank you sir! It was awful what happened here! I was in
 > w
 You go West.
 You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.
+![fairyland_church_yard_W](#16)
 There is a open carved wooden door to the East.
 There is a open wooden gate to the West.
 The priest follows you.
@@ -171,12 +187,14 @@ The chamber maid follows you.
 > w
 You go West.
 You are in a small clearing in the strangely-transformed **outer courtyard**. Paths lead north, south, and west through the trees. East of you is the church yard wall.
+![fairyland_center](#17)
 There is a open wooden gate to the East.
 The priest follows you.
 The chamber maid follows you.
 > w
 You go West.
 You are in the strangely-transformed **outer courtyard**. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
+![fairyland_W](#18)
 There is a closed door to the West.
 There is a _small blue fairy_ here.
 The fairy says, 'The guests have arrived!'
@@ -187,6 +205,7 @@ The maid says, 'Maybe these words are giving us some important clue, but I don't
 > s
 You go South.
 You are in the **southwest** corner of the strangely-transformed **outer courtyard**. West and south of you are the castle walls, Paths lead north and east through the trees.
+![fairyland_SW](#19)
 There is a _green fairy_ here.
 The fairy says, 'The guests can't leave until the last cup is poured!'
 The priest follows you.
@@ -195,6 +214,7 @@ The chamber maid follows you.
 > n
 You go North.
 You are in the strangely-transformed **outer courtyard**. There is a wooden stable to your west. Paths lead north, east, and south through the trees.
+![fairyland_W](#20)
 There is a closed door to the West.
 There is a _small blue fairy_ here.
 The fairy says, 'The guests have arrived!'
@@ -204,12 +224,14 @@ The chamber maid follows you.
 > n
 You go North.
 You are in a clearing in the the **northwest** corner of the strangely-transformed **outer courtyard**. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.
+![fairyland_NW](#21)
 There is a _long table_ here.
 There is a _well_ here.
 The priest follows you.
 The chamber maid follows you.
 > look at table
 You see a _long table_.
+![fairyland_table](#22)
 On the table are the following:
 - A _platter of food_.
 - A _flask of wine_.
@@ -231,9 +253,11 @@ The chamber maid follows you.
 The maid says, 'Ooh! That statue wasn't here before! It's beautiful!'
 > look at statue
 The statue is of bright, untarnished silver and exquisite workmanship. It depicts a young man, or perhaps a fairy for it has delicate wings. Its empty hands are outstretched as if reaching for something.
+![inner_court_statue](#23)
 > n
 You go North.
 You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.
+![inner_court_N](#24)
 There is a closed door to the North.
 The priest follows you.
 The chamber maid follows you.
@@ -241,6 +265,7 @@ The chamber maid follows you.
 You open the door.
 You go North.
 You are at the **west** end of the **great hall**.
+![great_hall_W](#25)
 There is a open door to the South.
 There is a closed door to the West.
 The priest follows you.
@@ -248,6 +273,7 @@ The chamber maid follows you.
 > e
 You go East.
 You are at the **east** end of the **great hall**.
+![great_hall_E](#26)
 There is a closed door to the East.
 The priest follows you.
 The chamber maid follows you.
@@ -255,6 +281,7 @@ The chamber maid follows you.
 You open the door.
 You go East.
 You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
+![court](#27)
 There is a closed door to the South.
 There is a open door to the West.
 There is a _carved wooden throne_ here.
@@ -264,6 +291,7 @@ The chamber maid follows you.
 You open the door.
 You go South.
 You are in a comfortable **parlor** with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
+![parlor](#28)
 There is a open door to the North.
 There is a closed door to the South.
 There is a _large orc_ here.
@@ -287,6 +315,7 @@ The large orc is dead!
 You open the door.
 You go South.
 You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.
+![lords_chamber](#29)
 There is a open door to the North.
 There is a _large four-poster bed_ here.
 There is a closed _carved wooden chest_ here.
@@ -304,6 +333,7 @@ You wake up after eight hours.
 > look
 It is night, but the oil lamp illuminates the darkness.
 You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.
+![lords_chamber](#30)
 There is a open door to the North.
 There is a _priest_ here.
 There is a _chamber maid_ here.
@@ -323,6 +353,7 @@ You cannot go North.
 The oil lamp is now lit.
 It is night, but the oil lamp illuminates the darkness.
 You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
+![court](#31)
 There is a open door to the South.
 There is a open door to the West.
 There is a _carved wooden throne_ here.
@@ -337,10 +368,12 @@ You open the discrete wooden door.
 You go North.
 It is night, but the oil lamp illuminates the darkness.
 You are in a **library**. Windows in the west wall open onto the rear courtyard.
+![library](#32)
 There is a open discrete wooden door to the South.
 There is a _silver statue_ here.
 > look at statue
 The statue shows a tall, noble looking fairy with a crown on his head. A fairy king, perhaps. A caption reads, 'The host of the feast.'
+![library_statue](#33)
 > say the guests have arrived
 The statue of the fairy king comes to life and says, 'The host can't eat until the guests have arrived!' Then it makes an elegant bow and vanishes. In place of the statue, you now see an arched oak door leading north.
 > n
@@ -348,6 +381,7 @@ You open the arched oak door.
 You go North.
 The oil lamp illuminates the darkness.
 You are in a large, **round stone chamber** with a high ceiling.
+![tower_NE_0](#34)
 There is a open arched oak door to the South.
 There is a spiral stone stair leading upward.
 > put out lamp
@@ -367,6 +401,7 @@ You cannot go Up.
 The oil lamp is now lit.
 It is night, but the oil lamp illuminates the darkness.
 You are on the **top floor** of a large, round **tower**. Above you is a conical, wooden ceiling. The wood-paneled walls have large windows. Sitting at a long table is the fairy king depicted by the statue downstairs along with two other noble-looking fairies. They take no notice of you.
+![tower_NE_3](#35)
 There is a spiral stone stair leading downward.
 There is a _long wooden table_ here.
 There is a _fairy king_ here.
@@ -397,12 +432,14 @@ You are in the dark.
 The oil lamp is now lit.
 It is night, but the oil lamp illuminates the darkness.
 You are in a **library**. Windows in the west wall open onto the rear courtyard.
+![library](#36)
 There is a open arched oak door to the North.
 There is a open discrete wooden door to the South.
 > s
 You go South.
 It is night, but the oil lamp illuminates the darkness.
 You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
+![court](#37)
 There is a open discrete wooden door to the North.
 There is a open door to the South.
 There is a open door to the West.
@@ -411,12 +448,14 @@ There is a _carved wooden throne_ here.
 You go South.
 It is night, but the oil lamp illuminates the darkness.
 You are in a comfortable **parlor** with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
+![parlor](#38)
 There is a open door to the North.
 There is a open door to the South.
 > s
 You go South.
 It is night, but the oil lamp illuminates the darkness.
 You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.
+![lords_chamber](#39)
 There is a open door to the North.
 There is a _priest_ here.
 There is a _chamber maid_ here.
@@ -426,6 +465,7 @@ There is a open _carved wooden chest_ here.
 You go North.
 It is night, but the oil lamp illuminates the darkness.
 You are in a comfortable **parlor** with tapestries and expensive furnishings. Windows in the west wall open onto the inner courtyard.
+![parlor](#40)
 There is a open door to the North.
 There is a open door to the South.
 The priest follows you.
@@ -434,6 +474,7 @@ The chamber maid follows you.
 You go North.
 It is night, but the oil lamp illuminates the darkness.
 You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.
+![court](#41)
 There is a open discrete wooden door to the North.
 There is a open door to the South.
 There is a open door to the West.
@@ -444,6 +485,7 @@ The chamber maid follows you.
 You go West.
 It is night, but the oil lamp illuminates the darkness.
 You are at the **east** end of the **great hall**.
+![great_hall_E](#42)
 There is a open door to the East.
 The priest follows you.
 The chamber maid follows you.
@@ -451,6 +493,7 @@ The chamber maid follows you.
 You go West.
 It is night, but the oil lamp illuminates the darkness.
 You are at the **west** end of the **great hall**.
+![great_hall_W](#43)
 There is a open door to the South.
 There is a closed door to the West.
 The priest follows you.
@@ -459,6 +502,7 @@ The chamber maid follows you.
 You go South.
 It is night, but the oil lamp illuminates the darkness.
 You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.
+![inner_court_N](#44)
 There is a open door to the North.
 The priest follows you.
 The chamber maid follows you.
