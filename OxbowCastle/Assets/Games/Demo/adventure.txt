@@ -943,6 +943,31 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
             DrawRectangle($left, $height - 17, $right - $left, 17, -1, 0, 0);
         }
     }
+    if ($room.LinkU != null)
+    {
+        var $x = $width / 2 - 40;
+        var $y = $height / 2 - 35;
+        DrawRectangle($x, $y, 35, 70, 0, -16777216, 2);
+        DrawRectangle($x, $y + 10, 35, 2, -16777216, 0, 0);
+        DrawRectangle($x, $y + 20, 35, 2, -16777216, 0, 0);
+        DrawRectangle($x, $y + 30, 35, 2, -16777216, 0, 0);
+        DrawRectangle($x, $y + 40, 35, 2, -16777216, 0, 0);
+        DrawRectangle($x, $y + 50, 35, 2, -16777216, 0, 0);
+        DrawRectangle($x, $y + 60, 35, 2, -16777216, 0, 0);
+    }
+    if ($room.LinkD != null)
+    {
+        var $x = $width / 2 + 5;
+        var $y = $height / 2 - 35;
+        DrawRectangle($x, $y, 35, 70, -16777216, 0, 0);
+        DrawRectangle($x + 4, $y + 2, 27, 8, -1, 0, 0);
+        DrawRectangle($x + 5, $y + 13, 25, 8, -1, 0, 0);
+        DrawRectangle($x + 6, $y + 24, 23, 7, -1, 0, 0);
+        DrawRectangle($x + 7, $y + 34, 21, 7, -1, 0, 0);
+        DrawRectangle($x + 8, $y + 44, 19, 6, -1, 0, 0);
+        DrawRectangle($x + 9, $y + 53, 17, 6, -1, 0, 0);
+        DrawRectangle($x + 10, $y + 62, 15, 5, -1, 0, 0);
+    }
 }
 function DrawRectangularRoom($room:Item, $width:Int, $height:Int) : Int
 {
