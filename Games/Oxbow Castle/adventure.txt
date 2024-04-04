@@ -557,6 +557,33 @@ game
 #
 # South wall and towers
 #
+function DrawRoomU($x:Int)
+{
+    DrawEllipse($x, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+    DrawRectangle($x, 0, 150, 225, 0xff000000, 0, 0);
+    DrawRectangle($x + 15, 15, 120, 210, 0xffffffff, 0, 0);
+}
+
+function DrawGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(150, 300);
+    DrawRoomU(0);
+    DrawDoors($room, 150, 225);
+    return EndDrawing();
+}
+
+function DrawDoubleGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(450, 300);
+    DrawRoomU(0);
+    DrawRoomU(300);
+    DrawRectangle(150, 0, 150, 15, 0xff000000, 0, 0);
+    DrawRectangle(150, 210, 150, 15, 0xff000000, 0, 0);
+    DrawRectangle(130, 15, 190, 195, 0xffffffff, 0, 0);
+    DrawDoors($room, 450, 225);
+    return EndDrawing();
+}
+
 game
 {
     # South wall and tower descriptions.
@@ -659,8 +686,12 @@ game
     tower_NW_1.DrawAction = DrawRoundRoom;
     tower_NW_2.DrawAction = DrawRoundRoom;
     tower_NW_roof.DrawAction = DrawRoundRoom;
-    gate_house_2.DrawAction = DrawRoom_300x150;
-    gate_house_roof.DrawAction = DrawRoom_300x150;
+    gate_house_W_0.DrawAction = DrawGateHouseRoom;
+    gate_house_W_1.DrawAction = DrawGateHouseRoom;
+    gate_house_E_0.DrawAction = DrawGateHouseRoom;
+    gate_house_E_1.DrawAction = DrawGateHouseRoom;
+    gate_house_2.DrawAction = DrawDoubleGateHouseRoom;
+    gate_house_roof.DrawAction = DrawDoubleGateHouseRoom;
     wall_SW.DrawAction = null;
     wall_SE.DrawAction = null;
     wall_W.DrawAction = null;
@@ -685,9 +716,9 @@ game
 
     # Wall and tower westward links.
     NewLockedDoor(tower_SE_0, guard_room_E_0, Direction.West, tower_key);
-    NewOpening(guard_room_E_0, gate_house_E_0, Direction.West);
+    NewClosedDoor(guard_room_E_0, gate_house_E_0, Direction.West);
     NewClosedDoor(tower_SE_1, guard_room_E_1, Direction.West);
-    NewOpening(guard_room_E_1, gate_house_E_1, Direction.West);
+    NewClosedDoor(guard_room_E_1, gate_house_E_1, Direction.West);
     NewClosedDoor(tower_SE_2, wall_SE, Direction.West);
     NewClosedDoor(wall_SE, gate_house_2, Direction.West);
 
