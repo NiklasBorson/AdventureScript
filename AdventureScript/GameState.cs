@@ -23,6 +23,8 @@ namespace AdventureScript
         List<FunctionBody> m_gameBlocks = new List<FunctionBody>();
         List<FunctionBody> m_turnBlocks = new List<FunctionBody>();
         List<string> m_messages = new List<string>();
+        List<Drawing> m_drawings = new List<Drawing>();
+        Drawing? m_currentDrawing = null;
         GameResult m_result = GameResult.None;
         #endregion
 
@@ -61,6 +63,11 @@ namespace AdventureScript
         public IList<string> LastOutput => m_messages;
 
         public bool IsGameOver => m_result != GameResult.None;
+
+        public Drawing? GetDrawing(int id)
+        {
+            return id > 0 && id <= m_drawings.Count ? m_drawings[id - 1] : null;
+        }
 
         internal TypeMap Types => m_typeMap;
         internal PropertyMap Properties => m_propMap;
@@ -364,6 +371,70 @@ namespace AdventureScript
             if (!IsGameOver)
             {
                 m_messages.Add(message);
+            }
+        }
+
+        internal void BeginDrawing(int width, int height)
+        {
+            m_currentDrawing = new Drawing(width, height);
+        }
+
+        internal int EndDrawing()
+        {
+            if (m_currentDrawing == null)
+                return 0;
+
+            m_drawings.Add(m_currentDrawing);
+            m_currentDrawing = null;
+
+            return m_drawings.Count;
+        }
+
+        internal void DrawRectangle(
+            int left,
+            int top,
+            int width,
+            int height,
+            int fillColor,
+            int strokeColor,
+            int strokeThickness
+            )
+        {
+            if (m_currentDrawing != null)
+            {
+                m_currentDrawing.AddShape(new Rectangle(
+                    left,
+                    top,
+                    width,
+                    height,
+                    fillColor,
+                    strokeColor,
+                    strokeThickness
+                    ));
+            }
+        }
+
+        internal void DrawEllipse(
+            int left,
+            int top,
+            int width,
+            int height,
+            int fillColor,
+            int strokeColor,
+            int strokeThickness
+            )
+        {
+            if (m_currentDrawing != null)
+            {
+                m_currentDrawing.AddShape(new Ellipse(
+                    left,
+                    top,
+                    width,
+                    height,
+                    fillColor,
+                    strokeColor,
+                    strokeThickness
+                    ));
             }
         }
         #endregion

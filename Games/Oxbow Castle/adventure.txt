@@ -341,6 +341,11 @@ game
     priest_house.Description =
         "You are in a one-room house, presumably the **priest's residence**.";
 
+    church_W.DrawAction = DrawSquareRoom;
+    church_E.DrawAction = DrawSquareRoom;
+    side_chapel.DrawAction = DrawSquareRoom;
+    priest_house.DrawAction = DrawSquareRoom;
+
     # Church eastward links.
     NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
     NewDoorItem(church_yard_W, church_W, Direction.East, "carved wooden", "door", DoorState.Closed).Key = church_key;

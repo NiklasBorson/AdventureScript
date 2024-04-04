@@ -3,6 +3,7 @@ $var = "String"
 $"Format {$var}" "Literal String" 
 
 # Integers and symbols
+0xf800
 (10 - 2) * (7 + 1)/3
 , || && ! ; : = < > == <= >= != => ->
 

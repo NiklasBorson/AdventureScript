@@ -47,6 +47,8 @@ namespace OxbowCastle
 
         public string FolderPath => m_game.FolderPath;
 
+        public GameState Game => m_game.Game;
+
         void AddOutput(IList<string> output)
         {
             MarkdownParser.AddContent(

@@ -361,6 +361,48 @@ namespace AdventureScript
             return 0;
         }
 
+        static int _BeginDrawing(GameState game, int[] frame)
+        {
+            // BeginDrawing($width:Int, $height:Int)
+            // - frame[1] -> $width
+            // - frame[2] = $height
+            game.BeginDrawing(/*width*/ frame[1], /*height*/ frame[2]);
+            return 0;
+        }
+        static int _EndDrawing(GameState game, int[] frame)
+        {
+            // EndDrawing() : Int
+            return game.EndDrawing();
+        }
+        static int _DrawRectangle(GameState game, int[] frame)
+        {
+            // DrawRectangle($left:Int, $top:Int, $width:Int, $height:Int, $fillColor:Int, $strokeColor:Int, $strokeThickness:Int)
+            game.DrawRectangle(
+                /*left*/frame[1],
+                /*top*/frame[2],
+                /*width*/frame[3],
+                /*height*/frame[4],
+                /*fillColor*/frame[5],
+                /*strokeColor*/frame[6],
+                /*strokeThickness*/frame[7]
+                );
+            return 0;
+        }
+        static int _DrawEllipse(GameState game, int[] frame)
+        {
+            // DrawEllipse($left:Int, $top:Int, $width:Int, $height:Int, $fillColor:Int, $strokeColor:Int, $strokeThickness:Int)
+            game.DrawEllipse(
+                /*left*/frame[1],
+                /*top*/frame[2],
+                /*width*/frame[3],
+                /*height*/frame[4],
+                /*fillColor*/frame[5],
+                /*strokeColor*/frame[6],
+                /*strokeThickness*/frame[7]
+                );
+            return 0;
+        }
+
         public static readonly IntrinsicFunctionDef[] Intrinsics = new IntrinsicFunctionDef[]
         {
             new IntrinsicFunctionDef(
@@ -484,6 +526,49 @@ namespace AdventureScript
                 },
                 /*returnType*/ Types.Void,
                 _AddAdjectives
+                ),
+            new IntrinsicFunctionDef(
+                "BeginDrawing",
+                new ParamDef[] {
+                    new ParamDef("$width", Types.Int),
+                    new ParamDef("$height", Types.Int)
+                },
+                /*returnType*/ Types.Void,
+                _BeginDrawing
+                ),
+            new IntrinsicFunctionDef(
+                "EndDrawing",
+                new ParamDef[0],
+                /*returnType*/ Types.Int,
+                _EndDrawing
+                ),
+            new IntrinsicFunctionDef(
+                "DrawRectangle",
+                new ParamDef[] {
+                    new ParamDef("left", Types.Int),
+                    new ParamDef("$top", Types.Int),
+                    new ParamDef("width", Types.Int),
+                    new ParamDef("$height", Types.Int),
+                    new ParamDef("$fillColor", Types.Int),
+                    new ParamDef("$strokeColor", Types.Int),
+                    new ParamDef("$strokeThickness", Types.Int)
+                },
+                /*returnType*/ Types.Void,
+                _DrawRectangle
+                ),
+            new IntrinsicFunctionDef(
+                "DrawEllipse",
+                new ParamDef[] {
+                    new ParamDef("left", Types.Int),
+                    new ParamDef("$top", Types.Int),
+                    new ParamDef("width", Types.Int),
+                    new ParamDef("$height", Types.Int),
+                    new ParamDef("$fillColor", Types.Int),
+                    new ParamDef("$strokeColor", Types.Int),
+                    new ParamDef("$strokeThickness", Types.Int)
+                },
+                /*returnType*/ Types.Void,
+                _DrawEllipse
                 ),
         };
     }

@@ -11,6 +11,7 @@ delegate ItemPredicate($item:Item) : Bool;
 delegate NavigationAction($from:Item, $to:Item) : Bool;
 enum DoorState(None,Open,Closed,Locked);
 enum LightState(None,Off,On,Unlit,Lit);
+delegate DrawDelegate($item:Item) : Int;
 enum Direction(North,South,East,West,Up,Down);
 enum ArmorKind(None,Head,Torso,Leg);
 property Location: Item;
@@ -39,6 +40,7 @@ property LightState: LightState;
 property IsDark: ItemPredicate;
 property Description: String;
 property Image: String;
+property DrawAction: DrawDelegate;
 property LinkN: Item;
 property LinkS: Item;
 property LinkE: Item;
@@ -260,6 +262,11 @@ function DescribeCommon($item:Item)
     if ($item.Image != null)
     {
         Message($"![{$item}]({$item.Image})");
+    }
+    if ($item.DrawAction != null)
+    {
+        var $id = $item.DrawAction($item);
+        Message($"![{$item}](#{$id})");
     }
     $item.DescribeHealthAction($item);
 }
@@ -881,6 +888,75 @@ function InitializeWordMap()
             }
         }
     }
+}
+function DrawDoors($room:Item, $width:Int, $height:Int)
+{
+    if ($room.LinkW != null)
+    {
+        if ($room.LinkW.DoorState != DoorState.None)
+        {
+            DrawRectangle(0, $height / 2 - 25, 17, 50, -1, -16777216, 2);
+        }
+        else
+        {
+            DrawRectangle(0, 15, 17, $height - 30, -1, -1, 0);
+        }
+    }
+    if ($room.LinkE != null)
+    {
+        if ($room.LinkE.DoorState != DoorState.None)
+        {
+            DrawRectangle($width - 17, $height / 2 - 25, 17, 50, -1, -16777216, 2);
+        }
+        else
+        {
+            DrawRectangle($width - 17, 15, 17, $height - 30, -1, 0, 0);
+        }
+    }
+    if ($room.LinkN != null)
+    {
+        if ($room.LinkN.DoorState != DoorState.None)
+        {
+            DrawRectangle($width / 2 - 25, 0, 50, 17, -1, -16777216, 2);
+        }
+        else
+        {
+            DrawRectangle($width / 2 - 25, 0, 50, 17, -1, 0, 0);
+        }
+    }
+    if ($room.LinkS != null)
+    {
+        if ($room.LinkS.DoorState != DoorState.None)
+        {
+            DrawRectangle($width / 2 - 25, $height - 17, 50, 17, -1, -16777216, 2);
+        }
+        else
+        {
+            DrawRectangle($width / 2 - 25, $height - 17, 50, 17, -1, 0, 0);
+        }
+    }
+}
+function DrawRectangularRoom($room:Item, $width:Int, $height:Int) : Int
+{
+    BeginDrawing($width, $height);
+    DrawRectangle(0, 0, $width, $height, -1, -16777216, 15);
+    DrawDoors($room, $width, $height);
+    return EndDrawing();
+}
+function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
+{
+    BeginDrawing($width, $height);
+    DrawEllipse(0, 0, $width, $height, -1, -16777216, 15);
+    DrawDoors($room, $width, $height);
+    return EndDrawing();
+}
+function DrawSquareRoom($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 200);
+}
+function DrawRoundRoom($room:Item) : Int
+{
+    return DrawEllipticalRoom($room, 200, 200);
 }
 function UpdateItems()
 {
