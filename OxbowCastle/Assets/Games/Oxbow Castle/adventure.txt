@@ -211,9 +211,9 @@ item _door_tower_SW_2wall_W;
 item _door_wall_Wtower_NW_2;
 item _door_tower_SE_2wall_E;
 item _door_tower_SW_0guard_room_W_0;
-item _opening_guard_room_W_0gate_house_W_0;
+item _door_guard_room_W_0gate_house_W_0;
 item _door_tower_SW_1guard_room_W_1;
-item _opening_guard_room_W_1gate_house_W_1;
+item _door_guard_room_W_1gate_house_W_1;
 item _door_tower_SW_2wall_SW;
 item _door_wall_SWgate_house_2;
 item _door_tower_NW_2wall_N;
@@ -1122,6 +1122,8 @@ function InitializeWordMap()
 }
 function DrawDoors($room:Item, $width:Int, $height:Int)
 {
+    var $openW = false;
+    var $openE = false;
     if ($room.LinkW != null)
     {
         if ($room.LinkW.DoorState != DoorState.None)
@@ -1131,6 +1133,7 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         else
         {
             DrawRectangle(0, 15, 17, $height - 30, -1, -1, 0);
+            $openW = true;
         }
     }
     if ($room.LinkE != null)
@@ -1142,6 +1145,7 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         else
         {
             DrawRectangle($width - 17, 15, 17, $height - 30, -1, 0, 0);
+            $openE = true;
         }
     }
     if ($room.LinkN != null)
@@ -1152,7 +1156,9 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         }
         else
         {
-            DrawRectangle($width / 2 - 25, 0, 50, 17, -1, 0, 0);
+            var $left = $openW ? 0 : 15;
+            var $right = $openE ? $width : $width - 15;
+            DrawRectangle($left, 0, $right - $left, 17, -1, 0, 0);
         }
     }
     if ($room.LinkS != null)
@@ -1163,7 +1169,9 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         }
         else
         {
-            DrawRectangle($width / 2 - 25, $height - 17, 50, 17, -1, 0, 0);
+            var $left = $openW ? 0 : 15;
+            var $right = $openE ? $width : $width - 15;
+            DrawRectangle($left, $height - 17, $right - $left, 17, -1, 0, 0);
         }
     }
 }
@@ -1184,6 +1192,18 @@ function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
 function DrawSquareRoom($room:Item) : Int
 {
     return DrawRectangularRoom($room, 200, 200);
+}
+function DrawRoom_200x100($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 100);
+}
+function DrawRoom_100x200($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 100, 200);
+}
+function DrawRoom_300x150($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 300, 150);
 }
 function DrawRoundRoom($room:Item) : Int
 {
@@ -2104,7 +2124,7 @@ game
         var $_ = side_chapel;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **side chapel** with statues of saints. An opening to the South leads to the main part of the church.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawRoom_200x100;
         $_.LinkS = __church_Eside_chapel;
     }
     {
@@ -2143,6 +2163,7 @@ game
         var $_ = inner_court_SW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **southwest** corner of the **inner courtyard**, which extends to the North and East.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkN = __inner_court_SWinner_court_NW;
         $_.LinkS = _door_guard_room_W_0inner_court_SW;
         $_.LinkE = __inner_court_SWinner_court_S;
@@ -2152,6 +2173,7 @@ game
         var $_ = inner_court_SE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **southeast** corner of the **inner courtyard**, which extends to the North and West.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkN = __inner_court_SEinner_court_NE;
         $_.LinkS = _door_guard_room_E_0inner_court_SE;
         $_.LinkW = __inner_court_Sinner_court_SE;
@@ -2160,6 +2182,7 @@ game
         var $_ = inner_court_N;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkN = _door_inner_court_Ngreat_hall_W;
         $_.LinkS = __inner_court_Sinner_court_N;
         $_.LinkE = __inner_court_Ninner_court_NE;
@@ -2169,6 +2192,7 @@ game
         var $_ = inner_court_NW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **northwest** corner of the **inner courtyard**, which extends to the South and East.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkN = _door_inner_court_NWhallway_NS;
         $_.LinkS = __inner_court_SWinner_court_NW;
         $_.LinkE = __inner_court_NWinner_court_N;
@@ -2177,6 +2201,7 @@ game
         var $_ = inner_court_NE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **northeast** corner of the **inner courtyard**, which extends to the South and West.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkS = __inner_court_SEinner_court_NE;
         $_.LinkW = __inner_court_Ninner_court_NE;
     }
@@ -2193,14 +2218,16 @@ game
         var $_ = guard_room_W_0;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **rectangular stone chamber**. There are barred windows high on the north wall.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkN = _door_guard_room_W_0inner_court_SW;
-        $_.LinkE = _opening_guard_room_W_0gate_house_W_0;
+        $_.LinkE = _door_guard_room_W_0gate_house_W_0;
         $_.LinkW = _door_tower_SW_0guard_room_W_0;
     }
     {
         var $_ = guard_room_E_0;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **rectangular stone chamber**. There are barred windows high on the north wall.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkN = _door_guard_room_E_0inner_court_SE;
         $_.LinkE = _door_tower_SE_0guard_room_E_0;
         $_.LinkW = _opening_guard_room_E_0gate_house_E_0;
@@ -2209,13 +2236,15 @@ game
         var $_ = guard_room_W_1;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **rectangular stone chamber**. There are arrow loops in the north wall facing the inner courtyard and in the south wall facing the outer courtyard.";
-        $_.LinkE = _opening_guard_room_W_1gate_house_W_1;
+        $_.DrawAction = DrawSquareRoom;
+        $_.LinkE = _door_guard_room_W_1gate_house_W_1;
         $_.LinkW = _door_tower_SW_1guard_room_W_1;
     }
     {
         var $_ = guard_room_E_1;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **rectangular stone chamber**. There are arrow loops in the north wall facing the inner courtyard and in the south wall facing the outer courtyard.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkE = _door_tower_SE_1guard_room_E_1;
         $_.LinkW = _opening_guard_room_E_1gate_house_E_1;
     }
@@ -2223,6 +2252,7 @@ game
         var $_ = tower_SW_0;
         $_.IsDark = IsDarkAlways;
         $_.Description = "You are on the **ground floor of a round tower**.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkE = _door_tower_SW_0guard_room_W_0;
         $_.LinkU = _stair_tower_SW_0tower_SW_1;
     }
@@ -2230,6 +2260,7 @@ game
         var $_ = tower_SW_1;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **round tower** with arrow loops opening to the outside.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkE = _door_tower_SW_1guard_room_W_1;
         $_.LinkU = _stair_tower_SW_1tower_SW_2;
         $_.LinkD = _stair_tower_SW_0tower_SW_1;
@@ -2238,6 +2269,7 @@ game
         var $_ = tower_SW_2;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **round tower** with arrow loops opening to the outside.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkN = _door_tower_SW_2wall_W;
         $_.LinkE = _door_tower_SW_2wall_SW;
         $_.LinkU = _stair_tower_SW_2tower_SW_roof;
@@ -2247,12 +2279,14 @@ game
         var $_ = tower_SW_roof;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are on the **roof of the southwest corner tower**. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is a long east-west building across the inner courtyard from you. Adjoining it to the west is a lower building. Other lower buildings line the east and west walls of the keep.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkD = _stair_tower_SW_2tower_SW_roof;
     }
     {
         var $_ = tower_SE_0;
         $_.IsDark = IsDarkAlways;
         $_.Description = "You are on the **ground floor of a round tower**.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkW = _door_tower_SE_0guard_room_E_0;
         $_.LinkU = _stair_tower_SE_0tower_SE_1;
     }
@@ -2260,6 +2294,7 @@ game
         var $_ = tower_SE_1;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **round tower** with arrow loops opening to the outside.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkW = _door_tower_SE_1guard_room_E_1;
         $_.LinkU = _stair_tower_SE_1tower_SE_2;
         $_.LinkD = _stair_tower_SE_0tower_SE_1;
@@ -2268,6 +2303,7 @@ game
         var $_ = tower_SE_2;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **round tower** with arrow loops opening to the outside.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkN = _door_tower_SE_2wall_E;
         $_.LinkW = _door_tower_SE_2wall_SE;
         $_.LinkU = _stair_tower_SE_2tower_SE_roof;
@@ -2277,12 +2313,14 @@ game
         var $_ = tower_SE_roof;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are on the **roof of the southeast corner tower**. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is a long east-west building across the inner courtyard from you. Adjoining it to the west is a lower building. Other lower buildings line the east and west walls of the keep.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkD = _stair_tower_SE_2tower_SE_roof;
     }
     {
         var $_ = tower_NW_0;
         $_.IsDark = IsDarkAlways;
         $_.Description = "You are on the **ground floor of a round tower**.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkS = _door_armorytower_NW_0;
         $_.LinkU = _stair_tower_NW_0tower_NW_1;
     }
@@ -2290,6 +2328,7 @@ game
         var $_ = tower_NW_1;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **round tower** with arrow loops opening to the outside.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkU = _stair_tower_NW_1tower_NW_2;
         $_.LinkD = _stair_tower_NW_0tower_NW_1;
     }
@@ -2297,6 +2336,7 @@ game
         var $_ = tower_NW_2;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **round tower** with arrow loops opening to the outside.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkS = _door_wall_Wtower_NW_2;
         $_.LinkE = _door_tower_NW_2wall_N;
         $_.LinkU = _stair_tower_NW_2tower_NW_roof;
@@ -2306,36 +2346,42 @@ game
         var $_ = tower_NW_roof;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are on the **roof of the northwest corner tower**. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is southeast of you beyond some lower buildings. There is a small courtyard between the great hall and the north wall and a larger courtyard between the great hall and the south wall.";
+        $_.DrawAction = DrawRoundRoom;
         $_.LinkD = _stair_tower_NW_2tower_NW_roof;
     }
     {
         var $_ = gate_house_W_0;
         $_.IsDark = IsDarkAlways;
         $_.Description = "You are in a **U-shaped stone chamber**.";
-        $_.LinkW = _opening_guard_room_W_0gate_house_W_0;
+        $_.DrawAction = DrawSquareRoom;
+        $_.LinkW = _door_guard_room_W_0gate_house_W_0;
     }
     {
         var $_ = gate_house_W_1;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **U-shaped stone chamber**. In the east wall are arrow loops looking down on the entrance tunnel between the gatehouse towers.";
-        $_.LinkW = _opening_guard_room_W_1gate_house_W_1;
+        $_.DrawAction = DrawSquareRoom;
+        $_.LinkW = _door_guard_room_W_1gate_house_W_1;
     }
     {
         var $_ = gate_house_E_0;
         $_.IsDark = IsDarkAlways;
         $_.Description = "You are in a **U-shaped stone chamber**.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkE = _opening_guard_room_E_0gate_house_E_0;
     }
     {
         var $_ = gate_house_E_1;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a **U-shaped stone chamber**. In the west wall are arrow loops looking down on the entrance tunnel between the gatehouse towers.";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkE = _opening_guard_room_E_1gate_house_E_1;
     }
     {
         var $_ = gate_house_2;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a large, **rectangular stone chamber**. In the floor are murder holes looking down on the entrance tunnel to the keep. In the south wall are arrow loops facing the outer courtyard.";
+        $_.DrawAction = DrawRoom_300x150;
         $_.LinkE = _door_wall_SEgate_house_2;
         $_.LinkW = _door_wall_SWgate_house_2;
     }
@@ -2343,6 +2389,7 @@ game
         var $_ = gate_house_roof;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are on the **roof of the gatehouse**. From this height you can see the layout of the entire keep. There are round towers at all four corners. The northeast tower is the tallest and has a conical roof. The great hall is a long east-west building across the inner courtyard from you. Adjoining it to the west is a lower building. Other lower buildings line the east and west walls of the keep.";
+        $_.DrawAction = DrawRoom_300x150;
     }
     {
         var $_ = wall_SW;
@@ -3181,8 +3228,11 @@ game
         $_.LinkW = tower_SW_0;
     }
     {
-        var $_ = _opening_guard_room_W_0gate_house_W_0;
-        $_.Noun = "opening";
+        var $_ = _door_guard_room_W_0gate_house_W_0;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
         $_.LinkE = gate_house_W_0;
         $_.LinkW = guard_room_W_0;
     }
@@ -3196,8 +3246,11 @@ game
         $_.LinkW = tower_SW_1;
     }
     {
-        var $_ = _opening_guard_room_W_1gate_house_W_1;
-        $_.Noun = "opening";
+        var $_ = _door_guard_room_W_1gate_house_W_1;
+        $_.Noun = "door";
+        $_.OpenAction = OpenDoor;
+        $_.CloseAction = CloseDoor;
+        $_.DoorState = DoorState.Closed;
         $_.LinkE = gate_house_W_1;
         $_.LinkW = guard_room_W_1;
     }

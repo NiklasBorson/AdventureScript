@@ -1407,6 +1407,9 @@ turn
 ```text
 function DrawDoors($room:Item, $width:Int, $height:Int)
 {
+    var $openW = false;
+    var $openE = false;
+
     if ($room.LinkW != null)
     {
         if ($room.LinkW.DoorState != DoorState.None)
@@ -1418,6 +1421,7 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         {
             # West opening
             DrawRectangle(0, 15, 17, $height - 30, 0xffffffff, 0xffffffff, 0);
+            $openW = true;
         }
     }
     if ($room.LinkE != null)
@@ -1431,6 +1435,7 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         {
             # East opening
             DrawRectangle($width - 17, 15, 17, $height - 30, 0xffffffff, 0, 0);
+            $openE = true;
         }
     }
     if ($room.LinkN != null)
@@ -1443,7 +1448,9 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         else
         {
             # North opening
-            DrawRectangle($width / 2 - 25, 0, 50, 17, 0xffffffff, 0, 0);
+            var $left = $openW ? 0 : 15;
+            var $right = $openE ? $width : $width - 15;
+            DrawRectangle($left, 0, $right - $left, 17, 0xffffffff, 0, 0);
         }
     }
     if ($room.LinkS != null)
@@ -1455,8 +1462,10 @@ function DrawDoors($room:Item, $width:Int, $height:Int)
         }
         else
         {
-            # North opening
-            DrawRectangle($width / 2 - 25, $height - 17, 50, 17, 0xffffffff, 0, 0);
+            # South opening
+            var $left = $openW ? 0 : 15;
+            var $right = $openE ? $width : $width - 15;
+            DrawRectangle($left, $height - 17, $right - $left, 17, 0xffffffff, 0, 0);
         }
     }
 }
@@ -1484,6 +1493,21 @@ function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
 function DrawSquareRoom($room:Item) : Int
 {
     return DrawRectangularRoom($room, 200, 200);
+}
+
+function DrawRoom_200x100($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 100);
+}
+
+function DrawRoom_100x200($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 100, 200);
+}
+
+function DrawRoom_300x150($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 300, 150);
 }
 
 function DrawRoundRoom($room:Item) : Int
