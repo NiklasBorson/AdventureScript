@@ -110,6 +110,7 @@ namespace AdventureScript
         public IList<string> InvokeCommand(string commandLine)
         {
             m_messages.Clear();
+            m_drawings.Clear();
 
             if (this.Commands.InvokeCommandLine(this, commandLine))
             {

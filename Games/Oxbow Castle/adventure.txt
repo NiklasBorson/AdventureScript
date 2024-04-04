@@ -230,11 +230,9 @@ game
 {
     # Set the IsDark predicate for all rooms to IsDarkAtNight.
     # Setting this for non-room items has no effect.
-    # Also set the default draw action for all rooms.
     foreach (var $item)
     {
         $item.IsDark = IsDarkAtNight;
-        $item.DrawAction = DrawSquareRoom;
     }
 
     # Make specific rooms dark always.
@@ -300,8 +298,15 @@ game
         "can see a tall stone church.";
 
     # Outer court drawing actions.
+    outer_court_S.DrawAction = DrawSquareRoom;
+    outer_court_SW.DrawAction = DrawSquareRoom;
+    outer_court_SE.DrawAction = DrawSquareRoom;
     stable.DrawAction = DrawRoom_100x200;
+    outer_court_W.DrawAction = DrawRoom_100x200;
+    outer_court_center.DrawAction = DrawSquareRoom;
+    outer_court_NW.DrawAction = DrawSquareRoom;
     outer_court_N.DrawAction = null;
+    outer_court_NE.DrawAction = DrawSquareRoom;
 
     # Outer court northward links
     NewDoorItem(outside, outer_court_S, Direction.North, "iron", "gate", DoorState.Open);
@@ -348,7 +353,13 @@ game
         "You are in a one-room house, presumably the **priest's residence**.";
 
     # Church draw actions.
+    church_yard_W.DrawAction = DrawSquareRoom;
+    church_yard_S.DrawAction = DrawSquareRoom;
+    church_yard_N.DrawAction = DrawSquareRoom;
+    church_W.DrawAction = DrawSquareRoom;
+    church_E.DrawAction = DrawSquareRoom;
     side_chapel.DrawAction = DrawRoom_200x100;
+    priest_house.DrawAction = DrawSquareRoom;
 
     # Church eastward links.
     NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
@@ -467,6 +478,11 @@ game
 
     # Inner court draw actions.
     inner_court_S.DrawAction = null;
+    inner_court_SW.DrawAction = DrawSquareRoom;
+    inner_court_SE.DrawAction = DrawSquareRoom;
+    inner_court_N.DrawAction = DrawSquareRoom;
+    inner_court_NW.DrawAction = DrawSquareRoom;
+    inner_court_NE.DrawAction = DrawSquareRoom;
     
     # Inner court northward links
     NewLink(inner_court_S, inner_court_N, Direction.North);
@@ -674,6 +690,10 @@ game
         "small courtyard to your south is the great hall.";
 
     # Wall and tower draw actions.
+    guard_room_W_0.DrawAction = DrawSquareRoom;
+    guard_room_E_0.DrawAction = DrawSquareRoom;
+    guard_room_W_1.DrawAction = DrawSquareRoom;
+    guard_room_E_1.DrawAction = DrawSquareRoom;
     tower_SW_0.DrawAction = DrawRoundRoom;
     tower_SW_1.DrawAction = DrawRoundRoom;
     tower_SW_2.DrawAction = DrawRoundRoom;
@@ -784,8 +804,19 @@ game
         "keep's tall northeast tower with its conical roof.";
 
     # West keep draw actions
+    store_room.DrawAction = DrawSquareRoom;
+    stewards_room.DrawAction = DrawSquareRoom;
+    knight_room_1.DrawAction = DrawSquareRoom;
+    knight_room_2.DrawAction = DrawSquareRoom;
+    knight_room_3.DrawAction = DrawSquareRoom;
+    knight_room_4.DrawAction = DrawSquareRoom;
+    knight_room_entry.DrawAction = DrawSquareRoom;
+    armory.DrawAction = DrawSquareRoom;
+    bakehouse.DrawAction = DrawSquareRoom;
     hallway_NS.DrawAction = DrawRoom_100x200;
+    hallway_corner.DrawAction = DrawSquareRoom;
     hallway_EW.DrawAction = DrawRoom_200x100;
+    courtyard_N.DrawAction = DrawSquareRoom;
 
     # West keep room northward links.
     NewClosedDoor(store_room, stewards_room, Direction.North);
@@ -851,6 +882,17 @@ game
         "You are in the **lord's bedchamber**. Windows in the west wall open onto the inner courtyard.";
     library.Description =
         "You are in a **library**. Windows in the west wall open onto the rear courtyard.";
+
+    # East keep draw actions.
+    kitchen.DrawAction = DrawSquareRoom;
+    pantry.DrawAction = DrawSquareRoom;
+    buttery.DrawAction = DrawSquareRoom;
+    great_hall_W.DrawAction = DrawSquareRoom;
+    great_hall_E.DrawAction = DrawSquareRoom;
+    court.DrawAction = DrawSquareRoom;
+    parlor.DrawAction = DrawSquareRoom;
+    lords_chamber.DrawAction = DrawSquareRoom;
+    library.DrawAction = DrawSquareRoom;
 
     # East keep northward links.
     NewClosedDoor(inner_court_N, great_hall_W, Direction.North);
@@ -1067,8 +1109,14 @@ game
 
     # Fairyland draw actions
     fairyland_N.DrawAction = null;
+    fairyland_NW.DrawAction = DrawSquareRoom;
+    fairyland_NE.DrawAction = DrawSquareRoom;
     fairyland_W.DrawAction = DrawRoom_100x200;
     fairyland_stable.DrawAction = DrawRoom_100x200;
+    fairyland_center.DrawAction = DrawSquareRoom;
+    fairyland_SW.DrawAction = DrawSquareRoom;
+    fairyland_S.DrawAction = DrawSquareRoom;
+    fairyland_SE.DrawAction = DrawSquareRoom;
 
     # Fairyland southward links.
     NewLink(inner_court_S, fairyland_N, Direction.South);
@@ -1127,7 +1175,13 @@ game
         "You are in a one-room house, presumably the **priest's residence**.";
 
     # Fairyland church draw actions.
+    fairyland_church_yard_W.DrawAction = DrawSquareRoom;
+    fairyland_church_yard_S.DrawAction = DrawSquareRoom;
+    fairyland_church_yard_N.DrawAction = DrawSquareRoom;
+    fairyland_church_W.DrawAction = DrawSquareRoom;
+    fairyland_church_E.DrawAction = DrawSquareRoom;
     fairyland_side_chapel.DrawAction = DrawRoom_200x100;
+    fairyland_priest_house.DrawAction = DrawSquareRoom;
 
     # Fairyland church eastward links.
     NewDoorItem(fairyland_center, fairyland_church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
