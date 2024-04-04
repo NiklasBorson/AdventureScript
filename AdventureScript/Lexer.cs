@@ -154,6 +154,30 @@ namespace AdventureScript
                     m_tokenType = TokenType.Error;
                 }
             }
+            else if (IsGroupMatch(CaptureIndex.Hex, TokenType.Int))
+            {
+                uint value = 0;
+                var input = GetCapture();
+                for (int i = 2; i < input.Length; i++)
+                {
+                    int digit = 0;
+                    char ch = input[i];
+                    if (ch >= '0' && ch <= '9')
+                    {
+                        digit = ch - '0';
+                    }
+                    else if (ch >= 'a' && ch <= 'f')
+                    {
+                        digit = ch - ('a' - 10);
+                    }
+                    else if (ch >= 'A' && ch <= 'F')
+                    {
+                        digit = ch - ('A' - 10);
+                    }
+                    value = (value << 4) | (uint)digit;
+                }
+                m_intValue = (int)value;
+            }
             else if (IsGroupMatch(CaptureIndex.Name, TokenType.Name))
             {
                 if (m_inputLine[m_matchPos] == '$')
@@ -290,6 +314,7 @@ namespace AdventureScript
             return SymbolId.None;
         }
 
+        const string m_hexPattern = "0x[0-9A-Fa-f]+";
         const string m_intPattern = "[0-9]+";
         const string m_namePattern = "\\$?[A-Za-z_][A-Za-z_0-9]*";
         const string m_stringPattern = "\"";
@@ -299,6 +324,7 @@ namespace AdventureScript
         enum CaptureIndex : int
         {
             Token,
+            Hex,
             Int,
             Name,
             String,
@@ -311,12 +337,13 @@ namespace AdventureScript
         // Each capture group cooresponds to a token type.
         static readonly Regex m_tokenRegex = new Regex(
             " *(?:" +
-            $"({m_intPattern})" +       // 1 -> Int
-            $"|({m_namePattern})" +     // 2 -> Name/Variable
-            $"|({m_stringPattern})" +   // 3 -> String
-            $"|({m_fstringPattern})" +  // 4 -> FormatString
-            $"|({m_symbolPattern})" +   // 5 -> Symbol
-            "|(#|$)" +                  // 6 -> end of input
+            $"({m_hexPattern})" +       // Hex
+            $"|({m_intPattern})" +      // Int
+            $"|({m_namePattern})" +     // Name/Variable
+            $"|({m_stringPattern})" +   // String
+            $"|({m_fstringPattern})" +  // FormatString
+            $"|({m_symbolPattern})" +   // Symbol
+            "|(#|$)" +                  // End
             ")"
             );
 

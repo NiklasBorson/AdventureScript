@@ -230,9 +230,11 @@ game
 {
     # Set the IsDark predicate for all rooms to IsDarkAtNight.
     # Setting this for non-room items has no effect.
+    # Also set the default draw action for all rooms.
     foreach (var $item)
     {
         $item.IsDark = IsDarkAtNight;
+        $item.DrawAction = DrawSquareRoom;
     }
 
     # Make specific rooms dark always.
@@ -297,6 +299,10 @@ game
         "of the keep looms above you to the North. The way south is blocked by a stone wall behind which you "
         "can see a tall stone church.";
 
+    # Outer court drawing actions.
+    stable.DrawAction = DrawRoom_100x200;
+    outer_court_N.DrawAction = null;
+
     # Outer court northward links
     NewDoorItem(outside, outer_court_S, Direction.North, "iron", "gate", DoorState.Open);
     NewLink(outer_court_SW, outer_court_W, Direction.North);
@@ -340,6 +346,9 @@ game
         "main part of the church.";
     priest_house.Description =
         "You are in a one-room house, presumably the **priest's residence**.";
+
+    # Church draw actions.
+    side_chapel.DrawAction = DrawRoom_200x100;
 
     # Church eastward links.
     NewDoorItem(outer_court_center, church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);
@@ -455,6 +464,9 @@ game
     inner_court_NE.Description =
         "You are in the **northeast** corner of the **inner courtyard**, which extends "
         "to the South and West.";
+
+    # Inner court draw actions.
+    inner_court_S.DrawAction = null;
     
     # Inner court northward links
     NewLink(inner_court_S, inner_court_N, Direction.North);
@@ -545,6 +557,33 @@ game
 #
 # South wall and towers
 #
+function DrawRoomU($x:Int)
+{
+    DrawEllipse($x, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+    DrawRectangle($x, 0, 150, 225, 0xff000000, 0, 0);
+    DrawRectangle($x + 15, 15, 120, 210, 0xffffffff, 0, 0);
+}
+
+function DrawGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(150, 300);
+    DrawRoomU(0);
+    DrawDoors($room, 150, 225);
+    return EndDrawing();
+}
+
+function DrawDoubleGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(450, 300);
+    DrawRoomU(0);
+    DrawRoomU(300);
+    DrawRectangle(150, 0, 150, 15, 0xff000000, 0, 0);
+    DrawRectangle(150, 210, 150, 15, 0xff000000, 0, 0);
+    DrawRectangle(130, 15, 190, 195, 0xffffffff, 0, 0);
+    DrawDoors($room, 450, 225);
+    return EndDrawing();
+}
+
 game
 {
     # South wall and tower descriptions.
@@ -634,6 +673,31 @@ game
         "northeast tower. There is no entrance to the northeast tower from here. Across a "
         "small courtyard to your south is the great hall.";
 
+    # Wall and tower draw actions.
+    tower_SW_0.DrawAction = DrawRoundRoom;
+    tower_SW_1.DrawAction = DrawRoundRoom;
+    tower_SW_2.DrawAction = DrawRoundRoom;
+    tower_SW_roof.DrawAction = DrawRoundRoom;
+    tower_SE_0.DrawAction = DrawRoundRoom;
+    tower_SE_1.DrawAction = DrawRoundRoom;
+    tower_SE_2.DrawAction = DrawRoundRoom;
+    tower_SE_roof.DrawAction = DrawRoundRoom;
+    tower_NW_0.DrawAction = DrawRoundRoom;
+    tower_NW_1.DrawAction = DrawRoundRoom;
+    tower_NW_2.DrawAction = DrawRoundRoom;
+    tower_NW_roof.DrawAction = DrawRoundRoom;
+    gate_house_W_0.DrawAction = DrawGateHouseRoom;
+    gate_house_W_1.DrawAction = DrawGateHouseRoom;
+    gate_house_E_0.DrawAction = DrawGateHouseRoom;
+    gate_house_E_1.DrawAction = DrawGateHouseRoom;
+    gate_house_2.DrawAction = DrawDoubleGateHouseRoom;
+    gate_house_roof.DrawAction = DrawDoubleGateHouseRoom;
+    wall_SW.DrawAction = null;
+    wall_SE.DrawAction = null;
+    wall_W.DrawAction = null;
+    wall_E.DrawAction = null;
+    wall_N.DrawAction = null;
+
     # Wall and tower northward links.
     NewClosedDoor(guard_room_W_0, inner_court_SW, Direction.North);
     NewClosedDoor(guard_room_E_0, inner_court_SE, Direction.North);
@@ -643,18 +707,18 @@ game
 
     # Wall and tower eastward links.
     NewLockedDoor(tower_SW_0, guard_room_W_0, Direction.East, tower_key);
-    NewOpening(guard_room_W_0, gate_house_W_0, Direction.East);
+    NewClosedDoor(guard_room_W_0, gate_house_W_0, Direction.East);
     NewClosedDoor(tower_SW_1, guard_room_W_1, Direction.East);
-    NewOpening(guard_room_W_1, gate_house_W_1, Direction.East);
+    NewClosedDoor(guard_room_W_1, gate_house_W_1, Direction.East);
     NewClosedDoor(tower_SW_2, wall_SW, Direction.East);
     NewClosedDoor(wall_SW, gate_house_2, Direction.East);
     NewClosedDoor(tower_NW_2, wall_N, Direction.East);
 
     # Wall and tower westward links.
     NewLockedDoor(tower_SE_0, guard_room_E_0, Direction.West, tower_key);
-    NewOpening(guard_room_E_0, gate_house_E_0, Direction.West);
+    NewClosedDoor(guard_room_E_0, gate_house_E_0, Direction.West);
     NewClosedDoor(tower_SE_1, guard_room_E_1, Direction.West);
-    NewOpening(guard_room_E_1, gate_house_E_1, Direction.West);
+    NewClosedDoor(guard_room_E_1, gate_house_E_1, Direction.West);
     NewClosedDoor(tower_SE_2, wall_SE, Direction.West);
     NewClosedDoor(wall_SE, gate_house_2, Direction.West);
 
@@ -718,6 +782,10 @@ game
         "You are in a **small courtyard** bordered on the north by the keep's wall and on the "
         "south by the great hall. Rising above other buildings to your east is the "
         "keep's tall northeast tower with its conical roof.";
+
+    # West keep draw actions
+    hallway_NS.DrawAction = DrawRoom_100x200;
+    hallway_EW.DrawAction = DrawRoom_200x100;
 
     # West keep room northward links.
     NewClosedDoor(store_room, stewards_room, Direction.North);
@@ -943,6 +1011,12 @@ game
         "depicted by the statue downstairs along with two other noble-looking fairies. They take "
         "no notice of you.";
 
+    # Northeast tower draw actions
+    tower_NE_0.DrawAction = DrawRoundRoom;
+    tower_NE_1.DrawAction = DrawRoundRoom;
+    tower_NE_2.DrawAction = DrawRoundRoom;
+    tower_NE_3.DrawAction = DrawRoundRoom;
+
     # Northeast tower room upward links.
     NewDoorItem(tower_NE_0, tower_NE_1, Direction.Up, "spiral stone", "stair", DoorState.None);
     NewDoorItem(tower_NE_1, tower_NE_2, Direction.Up, "spiral stone", "stair", DoorState.None);
@@ -990,6 +1064,11 @@ game
     fairyland_SE.Description =
         "You are in the **southeast** corner of the strangely-transformed **outer courtyard**. East and south of you "
         "are the castle walls, and north of you is the church yard wall. A path leads west through the trees.";
+
+    # Fairyland draw actions
+    fairyland_N.DrawAction = null;
+    fairyland_W.DrawAction = DrawRoom_100x200;
+    fairyland_stable.DrawAction = DrawRoom_100x200;
 
     # Fairyland southward links.
     NewLink(inner_court_S, fairyland_N, Direction.South);
@@ -1046,6 +1125,9 @@ game
         "main part of the church.";
     fairyland_priest_house.Description =
         "You are in a one-room house, presumably the **priest's residence**.";
+
+    # Fairyland church draw actions.
+    fairyland_side_chapel.DrawAction = DrawRoom_200x100;
 
     # Fairyland church eastward links.
     NewDoorItem(fairyland_center, fairyland_church_yard_W, Direction.East, "wooden", "gate", DoorState.Closed);

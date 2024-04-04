@@ -493,6 +493,16 @@ with the room or other item's description.
 property Image : String;
 ```
 
+## DrawAction Property
+
+The option `DrawAction` property draws an item and returns an integer identifier.
+
+```text
+delegate DrawDelegate($item:Item) : Int;
+
+property DrawAction: DrawDelegate;
+```
+
 ## Describe Helpers
 
 This section contains internal helpers used to implement the Describe function.
@@ -518,6 +528,12 @@ function DescribeCommon($item:Item)
     if ($item.Image != null)
     {
         Message($"![{$item}]({$item.Image})");
+    }
+
+    if ($item.DrawAction != null)
+    {
+        var $id = $item.DrawAction($item);
+        Message($"![{$item}](#{$id})");
     }
 
     $item.DescribeHealthAction($item);
@@ -1383,6 +1399,145 @@ turn
         InitializeLighting();
         InitializeWordMap();
     }
+}
+```
+
+## Drawing Functions
+
+```text
+function DrawDoors($room:Item, $width:Int, $height:Int)
+{
+    var $openW = false;
+    var $openE = false;
+
+    if ($room.LinkW != null)
+    {
+        if ($room.LinkW.DoorState != DoorState.None)
+        {
+            # West door
+            DrawRectangle(0, $height / 2 - 25, 17, 50, 0xffffffff, 0xff000000, 2);
+        }
+        else
+        {
+            # West opening
+            DrawRectangle(0, 15, 17, $height - 30, 0xffffffff, 0xffffffff, 0);
+            $openW = true;
+        }
+    }
+    if ($room.LinkE != null)
+    {
+        if ($room.LinkE.DoorState != DoorState.None)
+        {
+            # East door
+            DrawRectangle($width - 17, $height / 2 - 25, 17, 50, 0xffffffff, 0xff000000, 2);
+        }
+        else
+        {
+            # East opening
+            DrawRectangle($width - 17, 15, 17, $height - 30, 0xffffffff, 0, 0);
+            $openE = true;
+        }
+    }
+    if ($room.LinkN != null)
+    {
+        if ($room.LinkN.DoorState != DoorState.None)
+        {
+            # North door
+            DrawRectangle($width / 2 - 25, 0, 50, 17, 0xffffffff, 0xff000000, 2);
+        }
+        else
+        {
+            # North opening
+            var $left = $openW ? 0 : 15;
+            var $right = $openE ? $width : $width - 15;
+            DrawRectangle($left, 0, $right - $left, 17, 0xffffffff, 0, 0);
+        }
+    }
+    if ($room.LinkS != null)
+    {
+        if ($room.LinkS.DoorState != DoorState.None)
+        {
+            # South door
+            DrawRectangle($width / 2 - 25, $height - 17, 50, 17, 0xffffffff, 0xff000000, 2);
+        }
+        else
+        {
+            # South opening
+            var $left = $openW ? 0 : 15;
+            var $right = $openE ? $width : $width - 15;
+            DrawRectangle($left, $height - 17, $right - $left, 17, 0xffffffff, 0, 0);
+        }
+    }
+    if ($room.LinkU != null)
+    {
+        var $x = $width / 2 - 40;
+        var $y = $height / 2 - 35;
+        DrawRectangle($x, $y, 35, 70, 0, 0xFF000000, 2);
+        DrawRectangle($x, $y + 10, 35, 2, 0xFF000000, 0, 0);
+        DrawRectangle($x, $y + 20, 35, 2, 0xFF000000, 0, 0);
+        DrawRectangle($x, $y + 30, 35, 2, 0xFF000000, 0, 0);
+        DrawRectangle($x, $y + 40, 35, 2, 0xFF000000, 0, 0);
+        DrawRectangle($x, $y + 50, 35, 2, 0xFF000000, 0, 0);
+        DrawRectangle($x, $y + 60, 35, 2, 0xFF000000, 0, 0);
+    }
+    if ($room.LinkD != null)
+    {
+        var $x = $width / 2 + 5;
+        var $y = $height / 2 - 35;
+        DrawRectangle($x, $y, 35, 70, 0xFF000000, 0, 0);
+        DrawRectangle($x + 4, $y + 2, 27, 8, 0xFFFFFFFF, 0, 0);
+        DrawRectangle($x + 5, $y + 13, 25, 8, 0xFFFFFFFF, 0, 0);
+        DrawRectangle($x + 6, $y + 24, 23, 7, 0xFFFFFFFF, 0, 0);
+        DrawRectangle($x + 7, $y + 34, 21, 7, 0xFFFFFFFF, 0, 0);
+        DrawRectangle($x + 8, $y + 44, 19, 6, 0xFFFFFFFF, 0, 0);
+        DrawRectangle($x + 9, $y + 53, 17, 6, 0xFFFFFFFF, 0, 0);
+        DrawRectangle($x + 10, $y + 62, 15, 5, 0xFFFFFFFF, 0, 0);
+    }
+}
+
+function DrawRectangularRoom($room:Item, $width:Int, $height:Int) : Int
+{
+    BeginDrawing($width, $height);
+
+    DrawRectangle(0, 0, $width, $height, 0xffffffff, 0xff000000, 15);
+    DrawDoors($room, $width, $height);
+
+    return EndDrawing();
+}
+
+function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
+{
+    BeginDrawing($width, $height);
+
+    DrawEllipse(0, 0, $width, $height, 0xffffffff, 0xff000000, 15);
+    DrawDoors($room, $width, $height);
+
+    return EndDrawing();
+}
+
+function DrawSquareRoom($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 200);
+}
+
+function DrawRoom_200x100($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 100);
+}
+
+function DrawRoom_100x200($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 100, 200);
+}
+
+function DrawRoom_300x150($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 300, 150);
+}
+
+function DrawRoundRoom($room:Item) : Int
+{
+    return DrawEllipticalRoom($room, 200, 200);
 }
 ```
 

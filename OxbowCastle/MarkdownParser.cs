@@ -307,17 +307,7 @@ namespace OxbowCastle
                             if (urlEndPos > urlStartPos)
                             {
                                 string href = input.Substring(urlStartPos, urlEndPos - urlStartPos);
-                                var path = Path.Combine(page.FolderPath, href);
-
-                                var bitmapImage = new BitmapImage();
-                                bitmapImage.UriSource = new System.Uri(path);
-                                var image = new Image
-                                {
-                                    Stretch = Stretch.None,
-                                    Source = bitmapImage
-                                };
-
-                                image.Loaded += (obj, args) => page.ScrollToEnd();
+                                var image = CreateImage(page, href);
 
                                 // Add the image and any preceding text.
                                 AddPlainText(inlines, input, textPos, i);
@@ -336,6 +326,40 @@ namespace OxbowCastle
             // We've reached the end position without finding any more markup.
             AddPlainText(inlines, input, textPos, endPos);
             return endPos;
+        }
+
+        static UIElement CreateImage(GamePage page, string href)
+        {
+            if (href.StartsWith('#'))
+            {
+                int id;
+                if (int.TryParse(href.AsSpan(1), out id))
+                {
+                    var drawing = page.Game.GetDrawing(id);
+                    if (drawing != null)
+                    {
+                        var sink = new DrawingSink(drawing.Width, drawing.Height);
+                        drawing.Draw(sink);
+                        return sink.Canvas;
+                    }
+                }
+                return new Canvas();
+            }
+            else
+            {
+                var path = Path.Combine(page.FolderPath, href);
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.UriSource = new System.Uri(path);
+                var image = new Microsoft.UI.Xaml.Controls.Image
+                {
+                    Stretch = Stretch.None,
+                    Source = bitmapImage
+                };
+
+                image.Loaded += (obj, args) => page.ScrollToEnd();
+                return image;
+            }
         }
     }
 }
