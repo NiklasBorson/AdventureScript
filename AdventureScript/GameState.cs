@@ -162,6 +162,21 @@ namespace AdventureScript
             writer.Write("game");
             writer.BeginBlock();
 
+            if (m_drawings.Count != 0)
+            {
+                var sink = new GameDrawingSink(writer);
+                foreach (var drawing in m_drawings)
+                {
+                    writer.Write($"BeginDrawing({drawing.Width}, {drawing.Height});");
+                    writer.EndLine();
+
+                    drawing.Draw(sink);
+
+                    writer.Write($"EndDrawing();");
+                    writer.EndLine();
+                }
+            }
+
             foreach (string message in m_messages)
             {
                 writer.Write("RawMessage(");

@@ -139,4 +139,46 @@
                 );
         }
     }
+
+    sealed class GameDrawingSink : IDrawingSink
+    {
+        CodeWriter m_writer;
+
+        public GameDrawingSink(CodeWriter writer)
+        {
+            m_writer = writer;
+        }
+
+        public void DrawRectangle(
+            int left,
+            int top,
+            int width,
+            int height,
+            int fillColor,
+            int strokeColor,
+            int strokeThickness
+            )
+        {
+            m_writer.Write(
+                $"DrawRectangle({left}, {top}, {width}, {height}, {fillColor}, {strokeColor}, {strokeThickness});"
+                );
+            m_writer.EndLine();
+        }
+
+        public void DrawEllipse(
+            int left,
+            int top,
+            int width,
+            int height,
+            int fillColor,
+            int strokeColor,
+            int strokeThickness
+            )
+        {
+            m_writer.Write(
+                $"DrawEllipse({left}, {top}, {width}, {height}, {fillColor}, {strokeColor}, {strokeThickness});"
+                );
+            m_writer.EndLine();
+        }
+    }
 }
