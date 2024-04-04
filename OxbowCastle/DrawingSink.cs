@@ -46,7 +46,7 @@ namespace OxbowCastle
                 Height = height,
                 Fill = GetBrush((uint)fillColor),
                 Stroke = GetBrush((uint)strokeColor),
-                StrokeThickness = 15
+                StrokeThickness = strokeThickness
             };
             rect.SetValue(Canvas.LeftProperty, left);
             rect.SetValue(Canvas.TopProperty, top);
@@ -61,7 +61,7 @@ namespace OxbowCastle
                 Height = height,
                 Fill = GetBrush((uint)fillColor),
                 Stroke = GetBrush((uint)strokeColor),
-                StrokeThickness = 15
+                StrokeThickness = strokeThickness
             };
             ellipse.SetValue(Canvas.LeftProperty, left);
             ellipse.SetValue(Canvas.TopProperty, top);
