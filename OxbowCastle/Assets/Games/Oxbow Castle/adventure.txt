@@ -1739,6 +1739,22 @@ function DrawInnerCourtS($room:Item) : Int
     DrawRectangle(140, 160, 60, 40, -16777216, 0, 0);
     return EndDrawing();
 }
+function DrawCourtRoom($room:Item) : Int
+{
+    BeginDrawing(200, 300);
+    DrawRectangle(0, 0, 200, 300, -1, -16777216, 15);
+    DrawRectangle(15, 15, 170, 80, -875725, 0, 0);
+    DrawRectangle(80, 25, 40, 35, -7864299, 0, 0);
+    DrawRectangle(90, 35, 20, 25, -4621737, 0, 0);
+    DrawRectangle(15, 50, 20, 75, -4621737, 0, 0);
+    DrawRectangle(15, 50, 5, 75, -7864299, 0, 0);
+    DrawRectangle(15, 175, 20, 100, -4621737, 0, 0);
+    DrawRectangle(15, 175, 5, 100, -7864299, 0, 0);
+    DrawRectangle(165, 25, 20, 250, -4621737, 0, 0);
+    DrawRectangle(180, 25, 5, 250, -7864299, 0, 0);
+    DrawDoors($room, 0, 0, 200, 300, -16777216);
+    return EndDrawing();
+}
 function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
 {
     if ($from == outer_court_N && $to == inner_court_S)
@@ -2685,7 +2701,7 @@ game
         var $_ = court;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtRoom;
         $_.LinkN = library_door;
         $_.LinkS = _door_parlorcourt;
         $_.LinkW = _door_great_hall_Ecourt;

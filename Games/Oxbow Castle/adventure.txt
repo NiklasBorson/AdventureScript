@@ -257,6 +257,10 @@ game
     armory.IsDark = IsDarkAlways;
 }
 
+#############################################
+#
+# Special room drawing functions
+#
 function DrawCourtyardRoom($room:Item) : Int
 {
     return DrawRectangularRoom($room, 200, 200, 0xff000000, 0xffc0c0c0);
@@ -301,6 +305,35 @@ function DrawInnerCourtS($room:Item) : Int
     DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
     DrawRectangle(0, 160, 60, 40, 0xff000000, 0, 0);
     DrawRectangle(140, 160, 60, 40, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
+function DrawCourtRoom($room:Item) : Int
+{
+    BeginDrawing(200, 300);
+
+    # Walls and floor
+    DrawRectangle(0, 0, 200, 300, 0xffffffff, 0xff000000, 15);
+
+    # Platform for throne
+    DrawRectangle(15, 15, 170, 80, 0xfff2a333, 0, 0);
+
+    # Throne
+    DrawRectangle(80, 25, 40, 35, 0xff880015, 0, 0);
+    DrawRectangle(90, 35, 20, 25, 0xffb97a57, 0, 0);
+
+    # Left benches
+    DrawRectangle(15, 50, 20, 75, 0xffb97a57, 0, 0);
+    DrawRectangle(15, 50, 5, 75, 0xff880015, 0, 0);
+
+    DrawRectangle(15, 175, 20, 100, 0xffb97a57, 0, 0);
+    DrawRectangle(15, 175, 5, 100, 0xff880015, 0, 0);
+
+    # Right benches
+    DrawRectangle(165, 25, 20, 250, 0xffb97a57, 0, 0);
+    DrawRectangle(180, 25, 5, 250, 0xff880015, 0, 0);
+
+    DrawDoors($room, 0, 0, 200, 300, 0xff000000);
     return EndDrawing();
 }
 
@@ -936,7 +969,7 @@ game
     buttery.DrawAction = DrawSquareRoom;
     great_hall_W.DrawAction = DrawSquareRoom;
     great_hall_E.DrawAction = DrawSquareRoom;
-    court.DrawAction = DrawSquareRoom;
+    court.DrawAction = DrawCourtRoom;
     parlor.DrawAction = DrawSquareRoom;
     lords_chamber.DrawAction = DrawSquareRoom;
     library.DrawAction = DrawSquareRoom;
