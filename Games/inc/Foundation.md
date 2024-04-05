@@ -1404,6 +1404,18 @@ turn
 
 ## Drawing Functions
 
+The following functions can be set as the `DrawAction` property of a room:
+
+- `DrawSquareRoom`
+- `DrawRoom_200x100`
+- `DrawRoom_100x200`
+- `DrawRoom_300x150`
+- `DrawRoundRoom`
+
+The other functions in this section are helper functions that are used to
+implement the above functions or could be used to implement game-specific
+drawing functions.
+
 ```text
 function DrawDoors($room:Item, $width:Int, $height:Int)
 {

@@ -84,7 +84,8 @@ The Demo game creates rooms as follows:
 
 1. Creates rooms using the `item` keyword at global scope.
 2. Sets the `Description` property of each room inside a `game` block.
-3. Links rooms together with doors and openings.
+3. Optionally sets the `DrawAction` or `Image` property of each room.
+4. Links rooms together with doors and openings.
 
 A `game` block is a block of code that is executed once at the beginning
 of the game. There are also `turn` blocks, which are executed each turn.

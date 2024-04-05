@@ -1654,7 +1654,7 @@ game
     {
         var $_ = entry_way;
         $_.Description = "You are in the **entryway**.";
-        $_.Image = "entry_way.png";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkN = _opening_entry_wayback_hallway;
         $_.LinkS = _door_front_porchentry_way;
         $_.LinkE = _opening_living_roomentry_way;
@@ -1662,7 +1662,7 @@ game
     {
         var $_ = back_hallway;
         $_.Description = "You are in the **back hallway**.";
-        $_.Image = "back_hallway.png";
+        $_.DrawAction = DrawSquareRoom;
         $_.LinkS = _opening_entry_wayback_hallway;
         $_.LinkE = _opening_back_hallwaykitchen;
         $_.LinkW = _door_back_hallwaygarage;

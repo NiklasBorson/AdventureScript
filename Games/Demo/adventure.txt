@@ -54,11 +54,19 @@ game
     living_room.Description = "You are in the **living room**.";
 
     #
-    # A room can also have an Image property, which is the relative path
-    # of the image to display along with the description.
+    # A room can also have a visual representation. There are two ways
+    # to do this. First, you can set the DrawAction property to a
+    # function that draws the room. The foundation provides a few of
+    # these functions, one of which is DrawSquareRoom.
     #
-    entry_way.Image = "entry_way.png";
-    back_hallway.Image = "back_hallway.png";
+    entry_way.DrawAction = DrawSquareRoom;
+    back_hallway.DrawAction = DrawSquareRoom;
+
+    #
+    # The other way to provide a visual representation of a room is
+    # to set the Image property to the relative path of an image
+    # file.
+    #
     garage.Image = "garage.png";
     kitchen.Image = "kitchen.png";
     dining_room.Image = "dining_room.png";
