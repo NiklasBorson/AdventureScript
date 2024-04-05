@@ -38,7 +38,7 @@ The carving knife is now your current weapon.
 > w
 You go West.
 You are in the **back hallway**.
-![back_hallway](back_hallway.png)
+![back_hallway](#1)
 There is a opening to the South.
 There is a opening to the East.
 There is a closed door to the West.
@@ -64,14 +64,14 @@ The brass house key is now in your inventory.
 > e
 You go East.
 You are in the **back hallway**.
-![back_hallway](back_hallway.png)
+![back_hallway](#1)
 There is a opening to the South.
 There is a opening to the East.
 There is a open door to the West.
 > s
 You go South.
 You are in the **entryway**.
-![entry_way](entry_way.png)
+![entry_way](#1)
 There is a opening to the North.
 There is a closed door to the South.
 There is a opening to the East.

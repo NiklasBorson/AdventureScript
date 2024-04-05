@@ -139,9 +139,11 @@ function Build-Game([string] $Path, [string] $Destination) {
         return
     }
 
-    if (-not (Test-Path $Destination)) {
-        mkdir $Destination | Out-Null
+    if (Test-Path $Destination) {
+        Remove-Item -Recurse $Destination
     }
+
+    mkdir $Destination | Out-Null
 
     $destFile = Join-Path $Destination 'adventure.txt'
     $exePath = Get-ExePath('TextAdventure')
