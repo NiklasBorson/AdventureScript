@@ -111,8 +111,7 @@ item courtyard_N;
 item kitchen;
 item pantry;
 item buttery;
-item great_hall_W;
-item great_hall_E;
+item great_hall;
 item court;
 item parlor;
 item lords_chamber;
@@ -305,6 +304,22 @@ function DrawInnerCourtS($room:Item) : Int
     DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
     DrawRectangle(0, 160, 60, 40, 0xff000000, 0, 0);
     DrawRectangle(140, 160, 60, 40, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
+function DrawGreatHall($room:Item) : Int
+{
+    BeginDrawing(500, 250);
+
+    # Walls and floor
+    DrawRectangle(0, 0, 500, 250, 0xffffffff, 0xff000000, 15);
+
+    # Tables
+    DrawRectangle(60, 55, 20, 140, 0xffB97A57, 0, 0);
+    DrawRectangle(160, 50, 250, 20, 0xffB97A57, 0, 0);
+    DrawRectangle(160, 180, 250, 20, 0xffB97A57, 0, 0);
+
+    DrawDoors($room, 0, 0, 500, 250, 0xff000000);
     return EndDrawing();
 }
 
@@ -948,10 +963,8 @@ game
         "You are in a **pantry**.";
     buttery.Description =
         "You are in the **buttery**.";
-    great_hall_W.Description =
-        "You are at the **west** end of the **great hall**.";
-    great_hall_E.Description =
-        "You are at the **east** end of the **great hall**.";
+    great_hall.Description =
+        "You are in the **great hall**.";
     court.Description =
         "You are in a large room with benches lining the east and west walls and a raised "
         "throne at the north end. This is presumably where the lord of the castle holds **court**.";
@@ -967,15 +980,14 @@ game
     kitchen.DrawAction = DrawSquareRoom;
     pantry.DrawAction = DrawSquareRoom;
     buttery.DrawAction = DrawSquareRoom;
-    great_hall_W.DrawAction = DrawSquareRoom;
-    great_hall_E.DrawAction = DrawSquareRoom;
+    great_hall.DrawAction = DrawGreatHall;
     court.DrawAction = DrawCourtRoom;
     parlor.DrawAction = DrawSquareRoom;
     lords_chamber.DrawAction = DrawSquareRoom;
     library.DrawAction = DrawSquareRoom;
 
     # East keep northward links.
-    NewClosedDoor(inner_court_N, great_hall_W, Direction.North);
+    NewClosedDoor(inner_court_N, great_hall, Direction.North);
     NewClosedDoor(kitchen, pantry, Direction.North);
     NewClosedDoor(lords_chamber, parlor, Direction.North);
     NewClosedDoor(parlor, court, Direction.North);
@@ -983,10 +995,9 @@ game
 
     # East keep eastward links.
     NewClosedDoor(hallway_NS, kitchen, Direction.East);
-    NewClosedDoor(kitchen, great_hall_W, Direction.East);
+    NewClosedDoor(kitchen, great_hall, Direction.East);
     NewClosedDoor(pantry, buttery, Direction.East);
-    NewLink(great_hall_W, great_hall_E, Direction.East);
-    NewClosedDoor(great_hall_E, court, Direction.East);
+    NewClosedDoor(great_hall, court, Direction.East);
 }
 
 #############################################

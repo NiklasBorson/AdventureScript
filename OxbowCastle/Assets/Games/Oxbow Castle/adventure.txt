@@ -128,8 +128,7 @@ item courtyard_N;
 item kitchen;
 item pantry;
 item buttery;
-item great_hall_W;
-item great_hall_E;
+item great_hall;
 item court;
 item parlor;
 item lords_chamber;
@@ -259,15 +258,14 @@ item _chest_armory;
 item __chest_armory_helmet;
 item __chest_armory_shirt;
 item __chest_armory_leggings;
-item _door_inner_court_Ngreat_hall_W;
+item _door_inner_court_Ngreat_hall;
 item _door_kitchenpantry;
 item _door_lords_chamberparlor;
 item _door_parlorcourt;
 item _door_hallway_NSkitchen;
-item _door_kitchengreat_hall_W;
+item _door_kitchengreat_hall;
 item _door_pantrybuttery;
-item __great_hall_Wgreat_hall_E;
-item _door_great_hall_Ecourt;
+item _door_great_hallcourt;
 item bed_lords_chamber;
 item _chest_lords_chamber;
 item _stair_tower_NE_0tower_NE_1;
@@ -1739,6 +1737,16 @@ function DrawInnerCourtS($room:Item) : Int
     DrawRectangle(140, 160, 60, 40, -16777216, 0, 0);
     return EndDrawing();
 }
+function DrawGreatHall($room:Item) : Int
+{
+    BeginDrawing(500, 250);
+    DrawRectangle(0, 0, 500, 250, -1, -16777216, 15);
+    DrawRectangle(60, 55, 20, 140, -4621737, 0, 0);
+    DrawRectangle(160, 50, 250, 20, -4621737, 0, 0);
+    DrawRectangle(160, 180, 250, 20, -4621737, 0, 0);
+    DrawDoors($room, 0, 0, 500, 250, -16777216);
+    return EndDrawing();
+}
 function DrawCourtRoom($room:Item) : Int
 {
     BeginDrawing(200, 300);
@@ -2301,7 +2309,7 @@ game
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.";
         $_.DrawAction = DrawCourtyardRoom;
-        $_.LinkN = _door_inner_court_Ngreat_hall_W;
+        $_.LinkN = _door_inner_court_Ngreat_hall;
         $_.LinkS = __inner_court_Sinner_court_N;
         $_.LinkE = __inner_court_Ninner_court_NE;
         $_.LinkW = __inner_court_NWinner_court_N;
@@ -2662,7 +2670,7 @@ game
         $_.Description = "You are in a large **kitchen**.";
         $_.DrawAction = DrawSquareRoom;
         $_.LinkN = _door_kitchenpantry;
-        $_.LinkE = _door_kitchengreat_hall_W;
+        $_.LinkE = _door_kitchengreat_hall;
         $_.LinkW = _door_hallway_NSkitchen;
     }
     {
@@ -2681,21 +2689,13 @@ game
         $_.LinkW = _door_pantrybuttery;
     }
     {
-        var $_ = great_hall_W;
+        var $_ = great_hall;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are at the **west** end of the **great hall**.";
-        $_.DrawAction = DrawSquareRoom;
-        $_.LinkS = _door_inner_court_Ngreat_hall_W;
-        $_.LinkE = __great_hall_Wgreat_hall_E;
-        $_.LinkW = _door_kitchengreat_hall_W;
-    }
-    {
-        var $_ = great_hall_E;
-        $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are at the **east** end of the **great hall**.";
-        $_.DrawAction = DrawSquareRoom;
-        $_.LinkE = _door_great_hall_Ecourt;
-        $_.LinkW = __great_hall_Wgreat_hall_E;
+        $_.Description = "You are in the **great hall**.";
+        $_.DrawAction = DrawGreatHall;
+        $_.LinkS = _door_inner_court_Ngreat_hall;
+        $_.LinkE = _door_great_hallcourt;
+        $_.LinkW = _door_kitchengreat_hall;
     }
     {
         var $_ = court;
@@ -2704,7 +2704,7 @@ game
         $_.DrawAction = DrawCourtRoom;
         $_.LinkN = library_door;
         $_.LinkS = _door_parlorcourt;
-        $_.LinkW = _door_great_hall_Ecourt;
+        $_.LinkW = _door_great_hallcourt;
     }
     {
         var $_ = parlor;
@@ -3812,12 +3812,12 @@ game
         $_.ArmorKind = ArmorKind.Leg;
     }
     {
-        var $_ = _door_inner_court_Ngreat_hall_W;
+        var $_ = _door_inner_court_Ngreat_hall;
         $_.Noun = "door";
         $_.OpenAction = OpenDoor;
         $_.CloseAction = CloseDoor;
         $_.DoorState = DoorState.Closed;
-        $_.LinkN = great_hall_W;
+        $_.LinkN = great_hall;
         $_.LinkS = inner_court_N;
     }
     {
@@ -3857,12 +3857,12 @@ game
         $_.LinkW = hallway_NS;
     }
     {
-        var $_ = _door_kitchengreat_hall_W;
+        var $_ = _door_kitchengreat_hall;
         $_.Noun = "door";
         $_.OpenAction = OpenDoor;
         $_.CloseAction = CloseDoor;
         $_.DoorState = DoorState.Closed;
-        $_.LinkE = great_hall_W;
+        $_.LinkE = great_hall;
         $_.LinkW = kitchen;
     }
     {
@@ -3875,18 +3875,13 @@ game
         $_.LinkW = pantry;
     }
     {
-        var $_ = __great_hall_Wgreat_hall_E;
-        $_.LinkE = great_hall_E;
-        $_.LinkW = great_hall_W;
-    }
-    {
-        var $_ = _door_great_hall_Ecourt;
+        var $_ = _door_great_hallcourt;
         $_.Noun = "door";
         $_.OpenAction = OpenDoor;
         $_.CloseAction = CloseDoor;
         $_.DoorState = DoorState.Closed;
         $_.LinkE = court;
-        $_.LinkW = great_hall_E;
+        $_.LinkW = great_hall;
     }
     {
         var $_ = bed_lords_chamber;

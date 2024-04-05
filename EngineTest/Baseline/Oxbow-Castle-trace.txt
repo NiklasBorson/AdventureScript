@@ -268,17 +268,11 @@ The chamber maid follows you.
 > n
 You open the door.
 You go North.
-You are at the **west** end of the **great hall**.
-![great_hall_W](#1)
+You are in the **great hall**.
+![great_hall](#1)
 There is a open door to the South.
-There is a closed door to the West.
-The priest follows you.
-The chamber maid follows you.
-> e
-You go East.
-You are at the **east** end of the **great hall**.
-![great_hall_E](#1)
 There is a closed door to the East.
+There is a closed door to the West.
 The priest follows you.
 The chamber maid follows you.
 > e
@@ -291,6 +285,8 @@ There is a open door to the West.
 There is a _carved wooden throne_ here.
 The priest follows you.
 The chamber maid follows you.
+> e
+You cannot go East.
 > s
 You open the door.
 You go South.
@@ -487,43 +483,41 @@ The chamber maid follows you.
 > w
 You go West.
 It is night, but the oil lamp illuminates the darkness.
-You are at the **east** end of the **great hall**.
-![great_hall_E](#1)
-There is a open door to the East.
-The priest follows you.
-The chamber maid follows you.
-> w
-You go West.
-It is night, but the oil lamp illuminates the darkness.
-You are at the **west** end of the **great hall**.
-![great_hall_W](#1)
+You are in the **great hall**.
+![great_hall](#1)
 There is a open door to the South.
+There is a open door to the East.
 There is a closed door to the West.
 The priest follows you.
 The chamber maid follows you.
-> s
-You go South.
+> w
+You open the door.
+You go West.
 It is night, but the oil lamp illuminates the darkness.
-You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.
-![inner_court_N](#1)
-There is a open door to the North.
+You are in a large **kitchen**.
+![kitchen](#1)
+There is a closed door to the North.
+There is a open door to the East.
+There is a closed door to the West.
+There is a _hairy imp_ here.
 The priest follows you.
 The chamber maid follows you.
+The hairy imp notices you.
 > s
-You go South.
-It is night, but the oil lamp illuminates the darkness.
-You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
-![inner_court_S](#1)
-There is a _silver statue_ here.
-The priest follows you.
-The chamber maid follows you.
+You cannot go South.
+The hairy imp attacks you.
+You are slightly injured.
+> s
+You cannot go South.
+The hairy imp attacks you.
+You are slightly injured.
 > put cup in statue
-As you put the silver cup in the outstretched hands of the statue, its fingers close around the cup, melding with it. The cup is now part of the statue.
+I couldn't find statue.
 > put wine in cup
-You pour the wine into the silver cup. Suddenly, the statue comes to life. It says, 'The guests can't leave until the last cup is poured!' and drains the cup in one long draft.
-The statue then vanishes with a flash of light. There is a sudden breeze, and a not-unpleasant smell of grass and manure wafts in from the open gate south of you.
+You can't put the flask of wine in the silver cup.
+The hairy imp attacks you.
+You are slightly injured.
 > s
-You go South.
-You pass through the gate house tunnel and back into the outer courtyard. It's the real outer couryard, not the forested fairyland with the purple sky! You have broken the enchantment and reconnected the keep with the real world.
-The priest and maid follow you to safety.
-**Congratulations!** You have won the game!
+You cannot go South.
+The hairy imp attacks you.
+You are significantly injured.
