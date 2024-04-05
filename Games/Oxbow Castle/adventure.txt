@@ -257,6 +257,26 @@ game
     armory.IsDark = IsDarkAlways;
 }
 
+function DrawCourtyardRoom($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 200, 0xff000000, 0xffc0c0c0);
+}
+
+function DrawCourtyardRoom_100x200($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xffc0c0c0);
+}
+
+function DrawGrassyRoom($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 200, 0xff000000, 0xff80c080);
+}
+
+function DrawGrassyRoom_100x200($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xff80c080);
+}
+
 #############################################
 #
 # Outer court
@@ -298,15 +318,15 @@ game
         "can see a tall stone church.";
 
     # Outer court drawing actions.
-    outer_court_S.DrawAction = DrawSquareRoom;
-    outer_court_SW.DrawAction = DrawSquareRoom;
-    outer_court_SE.DrawAction = DrawSquareRoom;
-    stable.DrawAction = DrawRoom_100x200;
-    outer_court_W.DrawAction = DrawRoom_100x200;
-    outer_court_center.DrawAction = DrawSquareRoom;
-    outer_court_NW.DrawAction = DrawSquareRoom;
+    outer_court_S.DrawAction = DrawCourtyardRoom;
+    outer_court_SW.DrawAction = DrawCourtyardRoom;
+    outer_court_SE.DrawAction = DrawCourtyardRoom;
+    stable.DrawAction = DrawCourtyardRoom_100x200;
+    outer_court_W.DrawAction = DrawCourtyardRoom_100x200;
+    outer_court_center.DrawAction = DrawCourtyardRoom;
+    outer_court_NW.DrawAction = DrawCourtyardRoom;
     outer_court_N.DrawAction = null;
-    outer_court_NE.DrawAction = DrawSquareRoom;
+    outer_court_NE.DrawAction = DrawCourtyardRoom;
 
     # Outer court northward links
     NewDoorItem(outside, outer_court_S, Direction.North, "iron", "gate", DoorState.Open);
@@ -353,9 +373,9 @@ game
         "You are in a one-room house, presumably the **priest's residence**.";
 
     # Church draw actions.
-    church_yard_W.DrawAction = DrawSquareRoom;
-    church_yard_S.DrawAction = DrawSquareRoom;
-    church_yard_N.DrawAction = DrawSquareRoom;
+    church_yard_W.DrawAction = DrawGrassyRoom;
+    church_yard_S.DrawAction = DrawGrassyRoom;
+    church_yard_N.DrawAction = DrawGrassyRoom;
     church_W.DrawAction = DrawSquareRoom;
     church_E.DrawAction = DrawSquareRoom;
     side_chapel.DrawAction = DrawRoom_200x100;
@@ -478,11 +498,11 @@ game
 
     # Inner court draw actions.
     inner_court_S.DrawAction = null;
-    inner_court_SW.DrawAction = DrawSquareRoom;
-    inner_court_SE.DrawAction = DrawSquareRoom;
-    inner_court_N.DrawAction = DrawSquareRoom;
-    inner_court_NW.DrawAction = DrawSquareRoom;
-    inner_court_NE.DrawAction = DrawSquareRoom;
+    inner_court_SW.DrawAction = DrawCourtyardRoom;
+    inner_court_SE.DrawAction = DrawCourtyardRoom;
+    inner_court_N.DrawAction = DrawCourtyardRoom;
+    inner_court_NW.DrawAction = DrawCourtyardRoom;
+    inner_court_NE.DrawAction = DrawCourtyardRoom;
     
     # Inner court northward links
     NewLink(inner_court_S, inner_court_N, Direction.North);
@@ -1109,14 +1129,14 @@ game
 
     # Fairyland draw actions
     fairyland_N.DrawAction = null;
-    fairyland_NW.DrawAction = DrawSquareRoom;
-    fairyland_NE.DrawAction = DrawSquareRoom;
-    fairyland_W.DrawAction = DrawRoom_100x200;
+    fairyland_NW.DrawAction = DrawGrassyRoom;
+    fairyland_NE.DrawAction = DrawGrassyRoom;
+    fairyland_W.DrawAction = DrawGrassyRoom_100x200;
     fairyland_stable.DrawAction = DrawRoom_100x200;
-    fairyland_center.DrawAction = DrawSquareRoom;
-    fairyland_SW.DrawAction = DrawSquareRoom;
-    fairyland_S.DrawAction = DrawSquareRoom;
-    fairyland_SE.DrawAction = DrawSquareRoom;
+    fairyland_center.DrawAction = DrawGrassyRoom;
+    fairyland_SW.DrawAction = DrawGrassyRoom;
+    fairyland_S.DrawAction = DrawGrassyRoom;
+    fairyland_SE.DrawAction = DrawGrassyRoom;
 
     # Fairyland southward links.
     NewLink(inner_court_S, fairyland_N, Direction.South);
@@ -1175,9 +1195,9 @@ game
         "You are in a one-room house, presumably the **priest's residence**.";
 
     # Fairyland church draw actions.
-    fairyland_church_yard_W.DrawAction = DrawSquareRoom;
-    fairyland_church_yard_S.DrawAction = DrawSquareRoom;
-    fairyland_church_yard_N.DrawAction = DrawSquareRoom;
+    fairyland_church_yard_W.DrawAction = DrawGrassyRoom;
+    fairyland_church_yard_S.DrawAction = DrawGrassyRoom;
+    fairyland_church_yard_N.DrawAction = DrawGrassyRoom;
     fairyland_church_W.DrawAction = DrawSquareRoom;
     fairyland_church_E.DrawAction = DrawSquareRoom;
     fairyland_side_chapel.DrawAction = DrawRoom_200x100;

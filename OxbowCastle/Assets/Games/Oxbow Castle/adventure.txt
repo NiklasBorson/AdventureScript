@@ -1699,6 +1699,22 @@ function NewBed($adjectives:String, $noun:String, $loc:Item) : Item
     $return = NewItem($"{$noun}_{$loc}");
     InitializeBed($return, $adjectives, $noun, $loc);
 }
+function DrawCourtyardRoom($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 200, -16777216, -4144960);
+}
+function DrawCourtyardRoom_100x200($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 100, 200, -16777216, -4144960);
+}
+function DrawGrassyRoom($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 200, 200, -16777216, -8339328);
+}
+function DrawGrassyRoom_100x200($room:Item) : Int
+{
+    return DrawRectangularRoom($room, 100, 200, -16777216, -8339328);
+}
 function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
 {
     if ($from == outer_court_N && $to == inner_court_S)
@@ -2064,7 +2080,7 @@ game
         var $_ = outer_court_SW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **southwest** corner of a large outer **courtyard**, which extends to the North and East. The south and west walls meet in a small round tower, which is open to the inside. There is nothing in the tower.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkN = __outer_court_SWouter_court_W;
         $_.LinkE = __outer_court_SWouter_court_S;
     }
@@ -2072,7 +2088,7 @@ game
         var $_ = outer_court_S;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **south** end of a large **courtyard**, which extends to the North, East, and West. At the north end of the courtyard you can see the high walls of the keep.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkN = __outer_court_Souter_court_center;
         $_.LinkS = _gate_outsideouter_court_S;
         $_.LinkE = __outer_court_Souter_court_SE;
@@ -2082,21 +2098,21 @@ game
         var $_ = outer_court_SE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **southeast** corner of a large outer **courtyard**, which extends to the West. The way north is blocked by a stone wall behind which you can see a tall stone church. The south and east walls meet in a small round tower, which is open to the inside. There is nothing in the tower.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkW = __outer_court_Souter_court_SE;
     }
     {
         var $_ = stable;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a large wooden **stable** with room for many horses. Neither hay nor horses are to be found here now, only their lingering smell.";
-        $_.DrawAction = DrawRoom_100x200;
+        $_.DrawAction = DrawCourtyardRoom_100x200;
         $_.LinkE = _door_stableouter_court_W;
     }
     {
         var $_ = outer_court_W;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **west** side of a large outer **courtyard**, which extends to the North, South, and East. Against the wall to your west is a wooden stable.";
-        $_.DrawAction = DrawRoom_100x200;
+        $_.DrawAction = DrawCourtyardRoom_100x200;
         $_.LinkN = __outer_court_Wouter_court_NW;
         $_.LinkS = __outer_court_SWouter_court_W;
         $_.LinkE = __outer_court_Wouter_court_center;
@@ -2106,7 +2122,7 @@ game
         var $_ = outer_court_center;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **center** of a large outer **courtyard**, which extends to the North, West, and South. East of you is a stone wall with a wooden gate behind which you can see a tall stone church.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkN = __outer_court_centerouter_court_N;
         $_.LinkS = __outer_court_Souter_court_center;
         $_.LinkE = _gate_outer_court_centerchurch_yard_W;
@@ -2116,7 +2132,7 @@ game
         var $_ = outer_court_NW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **northwest** corner of a large outer **courtyard**, which extends to the South and East. The high wall of the keep looms above you to the North.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkS = __outer_court_Wouter_court_NW;
         $_.LinkE = __outer_court_NWouter_court_N;
     }
@@ -2135,14 +2151,14 @@ game
         var $_ = outer_court_NE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **northeast** corner of a large outer **courtyard**, which extends to the West. The high wall of the keep looms above you to the North. The way south is blocked by a stone wall behind which you can see a tall stone church.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkW = __outer_court_Nouter_court_NE;
     }
     {
         var $_ = church_yard_W;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkN = __church_yard_Wchurch_yard_N;
         $_.LinkS = __church_yard_Schurch_yard_W;
         $_.LinkE = _door_church_yard_Wchurch_W;
@@ -2152,7 +2168,7 @@ game
         var $_ = church_yard_S;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a walled **church yard** south of the church. The church yard wraps around the church to the North. East of you is a smaller stone building adjoining the church.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkN = __church_yard_Schurch_yard_W;
         $_.LinkE = _door_church_yard_Spriest_house;
     }
@@ -2160,7 +2176,7 @@ game
         var $_ = church_yard_N;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a walled **church yard** north of the church. The church yard wraps around the church to the South. There are graves here.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkS = __church_yard_Wchurch_yard_N;
     }
     {
@@ -2223,7 +2239,7 @@ game
         var $_ = inner_court_SW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **southwest** corner of the **inner courtyard**, which extends to the North and East.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkN = __inner_court_SWinner_court_NW;
         $_.LinkS = _door_guard_room_W_0inner_court_SW;
         $_.LinkE = __inner_court_SWinner_court_S;
@@ -2233,7 +2249,7 @@ game
         var $_ = inner_court_SE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **southeast** corner of the **inner courtyard**, which extends to the North and West.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkN = __inner_court_SEinner_court_NE;
         $_.LinkS = _door_guard_room_E_0inner_court_SE;
         $_.LinkW = __inner_court_Sinner_court_SE;
@@ -2242,7 +2258,7 @@ game
         var $_ = inner_court_N;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkN = _door_inner_court_Ngreat_hall_W;
         $_.LinkS = __inner_court_Sinner_court_N;
         $_.LinkE = __inner_court_Ninner_court_NE;
@@ -2252,7 +2268,7 @@ game
         var $_ = inner_court_NW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **northwest** corner of the **inner courtyard**, which extends to the South and East.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkN = _door_inner_court_NWhallway_NS;
         $_.LinkS = __inner_court_SWinner_court_NW;
         $_.LinkE = __inner_court_NWinner_court_N;
@@ -2261,7 +2277,7 @@ game
         var $_ = inner_court_NE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **northeast** corner of the **inner courtyard**, which extends to the South and West.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtyardRoom;
         $_.LinkS = __inner_court_SEinner_court_NE;
         $_.LinkW = __inner_court_Ninner_court_NE;
     }
@@ -2812,7 +2828,7 @@ game
         var $_ = fairyland_NW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a clearing in the the **northwest** corner of the strangely-transformed **outer courtyard**. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkS = __fairyland_NWfairyland_W;
         $_.LinkE = __fairyland_NWfairyland_N;
     }
@@ -2829,7 +2845,7 @@ game
         var $_ = fairyland_NE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **northeast** corner of the strangely-transformed **outer courtyard**. The high wall of the keep looms above you to the north. To the east is the outer wall and to the south is the wall of the church yard. There is a path leading west.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkW = __fairyland_Nfairyland_NE;
     }
     {
@@ -2843,7 +2859,7 @@ game
         var $_ = fairyland_W;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the strangely-transformed **outer courtyard**. There is a wooden stable to your west. Paths lead north, east, and south through the trees.";
-        $_.DrawAction = DrawRoom_100x200;
+        $_.DrawAction = DrawGrassyRoom_100x200;
         $_.LinkN = __fairyland_NWfairyland_W;
         $_.LinkS = __fairyland_Wfairyland_SW;
         $_.LinkE = __fairyland_Wfairyland_center;
@@ -2853,7 +2869,7 @@ game
         var $_ = fairyland_center;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a small clearing in the strangely-transformed **outer courtyard**. Paths lead north, south, and west through the trees. East of you is the church yard wall.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkN = __fairyland_Nfairyland_center;
         $_.LinkS = __fairyland_centerfairyland_S;
         $_.LinkE = _gate_fairyland_centerfairyland_church_yard_W;
@@ -2863,7 +2879,7 @@ game
         var $_ = fairyland_SW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **southwest** corner of the strangely-transformed **outer courtyard**. West and south of you are the castle walls, Paths lead north and east through the trees.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkN = __fairyland_Wfairyland_SW;
         $_.LinkE = __fairyland_SWfairyland_S;
     }
@@ -2871,7 +2887,7 @@ game
         var $_ = fairyland_S;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **south** end of the strangely-transformed **outer courtyard**. South of you is the town gate, which is shut tight. Paths lead north, east, and west.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkN = __fairyland_centerfairyland_S;
         $_.LinkE = __fairyland_Sfairyland_SE;
         $_.LinkW = __fairyland_SWfairyland_S;
@@ -2880,7 +2896,7 @@ game
         var $_ = fairyland_SE;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in the **southeast** corner of the strangely-transformed **outer courtyard**. East and south of you are the castle walls, and north of you is the church yard wall. A path leads west through the trees.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkW = __fairyland_Sfairyland_SE;
     }
     {
@@ -2989,7 +3005,7 @@ game
         var $_ = fairyland_church_yard_W;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a walled **church yard**. East of you is the arched doorway of a beautiful stone church. The church yard wraps around the church to the North and South.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkN = __fairyland_church_yard_Wfairyland_church_yard_N;
         $_.LinkS = __fairyland_church_yard_Sfairyland_church_yard_W;
         $_.LinkE = _door_fairyland_church_yard_Wfairyland_church_W;
@@ -2999,7 +3015,7 @@ game
         var $_ = fairyland_church_yard_S;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a walled **church yard** south of the church. The church yard wraps around the church to the North. East of you is a smaller stone building adjoining the church.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkN = __fairyland_church_yard_Sfairyland_church_yard_W;
         $_.LinkE = _door_fairyland_church_yard_Sfairyland_priest_house;
     }
@@ -3007,7 +3023,7 @@ game
         var $_ = fairyland_church_yard_N;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a walled **church yard** north of the church. The church yard wraps around the church to the South. There are graves here.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawGrassyRoom;
         $_.LinkS = __fairyland_church_yard_Wfairyland_church_yard_N;
     }
     {
