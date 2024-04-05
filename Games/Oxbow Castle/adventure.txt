@@ -584,7 +584,7 @@ function DrawGateHouseRoom($room:Item) : Int
 {
     BeginDrawing(150, 300);
     DrawRoomU(0);
-    DrawDoors($room, 150, 225);
+    DrawDoors($room, 0, 0, 150, 225, 0xffffffff);
     return EndDrawing();
 }
 
@@ -596,7 +596,7 @@ function DrawDoubleGateHouseRoom($room:Item) : Int
     DrawRectangle(150, 0, 150, 15, 0xff000000, 0, 0);
     DrawRectangle(150, 210, 150, 15, 0xff000000, 0, 0);
     DrawRectangle(130, 15, 190, 195, 0xffffffff, 0, 0);
-    DrawDoors($room, 450, 225);
+    DrawDoors($room, 0, 0, 450, 225, 0xffffffff);
     return EndDrawing();
 }
 

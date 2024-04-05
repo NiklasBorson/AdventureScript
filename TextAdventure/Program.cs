@@ -27,9 +27,16 @@ namespace TextAdventure
 
         static void Compile(string inputFileName, string outputFileName)
         {
-            var game = new GameState();
-            var output = game.LoadGame(inputFileName);
-            game.Save(outputFileName);
+            try
+            {
+                var game = new GameState();
+                var output = game.LoadGame(inputFileName);
+                game.Save(outputFileName);
+            }
+            catch (ParseException e)
+            {
+                Console.Error.WriteLine($"Error: {e.Message}");
+            }
         }
 
         const string Usage =
