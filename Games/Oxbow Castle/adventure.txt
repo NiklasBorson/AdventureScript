@@ -277,6 +277,33 @@ function DrawGrassyRoom_100x200($room:Item) : Int
     return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xff80c080);
 }
 
+function DrawOuterCourtN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, 0xff000000, 0, 0);
+    DrawEllipse(140, -100, 200, 200, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
+function DrawFairylandN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, 0xff80c080, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, 0xff000000, 0, 0);
+    DrawEllipse(140, -100, 200, 200, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
+function DrawInnerCourtS($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
+    DrawRectangle(0, 160, 60, 40, 0xff000000, 0, 0);
+    DrawRectangle(140, 160, 60, 40, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
 #############################################
 #
 # Outer court
@@ -325,7 +352,7 @@ game
     outer_court_W.DrawAction = DrawCourtyardRoom_100x200;
     outer_court_center.DrawAction = DrawCourtyardRoom;
     outer_court_NW.DrawAction = DrawCourtyardRoom;
-    outer_court_N.DrawAction = null;
+    outer_court_N.DrawAction = DrawOuterCourtN;
     outer_court_NE.DrawAction = DrawCourtyardRoom;
 
     # Outer court northward links
@@ -497,7 +524,7 @@ game
         "to the South and West.";
 
     # Inner court draw actions.
-    inner_court_S.DrawAction = null;
+    inner_court_S.DrawAction = DrawInnerCourtS;
     inner_court_SW.DrawAction = DrawCourtyardRoom;
     inner_court_SE.DrawAction = DrawCourtyardRoom;
     inner_court_N.DrawAction = DrawCourtyardRoom;
@@ -1128,7 +1155,7 @@ game
         "are the castle walls, and north of you is the church yard wall. A path leads west through the trees.";
 
     # Fairyland draw actions
-    fairyland_N.DrawAction = null;
+    fairyland_N.DrawAction = DrawFairylandN;
     fairyland_NW.DrawAction = DrawGrassyRoom;
     fairyland_NE.DrawAction = DrawGrassyRoom;
     fairyland_W.DrawAction = DrawGrassyRoom_100x200;

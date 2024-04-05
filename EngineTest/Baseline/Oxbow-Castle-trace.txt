@@ -16,11 +16,13 @@ There is a closed wooden gate to the East.
 > n
 You go North.
 You are at the **north** end of a large outer **courtyard**, which extends to the West, East, and South. Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on either side of an open portcullis.
+![outer_court_N](#1)
 > n
 You go North.
 You pass through the open portcullis into a dim tunnel. High in the walls on either side are arrow loops through which defenders could rain down fire on an attacker, and in the ceiling above you are murder holes through which boulders could be dropped. However, no one challenges you or raises an alarm.
 At the north end of the tunnel, you pass through another open gate into an inner courtyard. For a moment, the air around you seems to shimmer, but perhaps you are only dazzled by the sun after leaving the dim tunnel.
 You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+![inner_court_S](#1)
 There is a _silver statue_ here.
 > w
 You go West.
@@ -149,10 +151,12 @@ There is a closed door to the North.
 > s
 You go South.
 You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+![inner_court_S](#1)
 There is a _silver statue_ here.
 > s
 You go South.
 You are at the **north** end of the **outer courtyard**, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.
+![fairyland_N](#1)
 > s
 You go South.
 You are in a small clearing in the strangely-transformed **outer courtyard**. Paths lead north, south, and west through the trees. East of you is the church yard wall.
@@ -241,11 +245,13 @@ The flask of wine is now in your inventory.
 > e
 You go East.
 You are at the **north** end of the **outer courtyard**, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.
+![fairyland_N](#1)
 The priest follows you.
 The chamber maid follows you.
 > n
 You go North.
 You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+![inner_court_S](#1)
 There is a _silver statue_ here.
 The priest follows you.
 The chamber maid follows you.
@@ -507,6 +513,7 @@ The chamber maid follows you.
 You go South.
 It is night, but the oil lamp illuminates the darkness.
 You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.
+![inner_court_S](#1)
 There is a _silver statue_ here.
 The priest follows you.
 The chamber maid follows you.

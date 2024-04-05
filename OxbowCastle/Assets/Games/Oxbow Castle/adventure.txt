@@ -1715,6 +1715,30 @@ function DrawGrassyRoom_100x200($room:Item) : Int
 {
     return DrawRectangularRoom($room, 100, 200, -16777216, -8339328);
 }
+function DrawOuterCourtN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -4144960, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, -16777216, 0, 0);
+    DrawEllipse(140, -100, 200, 200, -16777216, 0, 0);
+    return EndDrawing();
+}
+function DrawFairylandN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -8339328, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, -16777216, 0, 0);
+    DrawEllipse(140, -100, 200, 200, -16777216, 0, 0);
+    return EndDrawing();
+}
+function DrawInnerCourtS($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -4144960, 0, 0);
+    DrawRectangle(0, 160, 60, 40, -16777216, 0, 0);
+    DrawRectangle(140, 160, 60, 40, -16777216, 0, 0);
+    return EndDrawing();
+}
 function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
 {
     if ($from == outer_court_N && $to == inner_court_S)
@@ -2142,6 +2166,7 @@ game
         $_.EnterAction = OnEnterCouterCourt;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of a large outer **courtyard**, which extends to the West, East, and South. Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on either side of an open portcullis.";
+        $_.DrawAction = DrawOuterCourtN;
         $_.LinkN = inner_gate;
         $_.LinkS = __outer_court_centerouter_court_N;
         $_.LinkE = __outer_court_Nouter_court_NE;
@@ -2230,6 +2255,7 @@ game
         var $_ = inner_court_S;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.";
+        $_.DrawAction = DrawInnerCourtS;
         $_.LinkN = __inner_court_Sinner_court_N;
         $_.LinkS = __inner_court_Sfairyland_N;
         $_.LinkE = __inner_court_Sinner_court_SE;
@@ -2836,6 +2862,7 @@ game
         var $_ = fairyland_N;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of the **outer courtyard**, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.";
+        $_.DrawAction = DrawFairylandN;
         $_.LinkN = __inner_court_Sfairyland_N;
         $_.LinkS = __fairyland_Nfairyland_center;
         $_.LinkE = __fairyland_Nfairyland_NE;
