@@ -26,8 +26,8 @@ This repo contains the following subdirectories:
 ## Contributions
 
 Contributions are welcome. In particular, it is hoped that this project inspires people to
-create their own games. Please see <CONTRIBUTING.md> for guidance on how to contribute to
-this project.
+create their own games. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidance on how
+to contribute to this project.
 
 ## Building the Project
 
@@ -55,7 +55,7 @@ module:
 4. Type `Invoke-Game <Name>` to play a game.
 5. Type `q` to quit.
 
-For more information about the Adventure-Helpers module, see <CONTRIBUTING.md>.
+For more information about the Adventure-Helpers module, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Running the Oxbow Castle Application
 
