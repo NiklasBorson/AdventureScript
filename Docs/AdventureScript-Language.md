@@ -147,7 +147,7 @@ The `var` keyword at global scope creates a global variable.
 var $playerScore : Int;
 ```
 
-Variable names must begin with a dollar sign. The above examlpe creates a global variable
+Variable names must begin with a dollar sign. The above example creates a global variable
 named `$playerScore` of type `Int`. Its initial value is the default value for type Int,
 which is zero.
 
@@ -162,6 +162,20 @@ var $playerScore = 0;
 
 The initializer must be a constant expression. It cannot include function calls or
 refer to other variables.
+
+### Global Constant Definition
+
+The `const` keyword at global scope creates a named constant.
+
+```text
+# Global constant example
+const $colorBlack = 0xff000000; # argb
+```
+
+Global constants resemble global variables except that they cannot be assigned to.
+Therefore, an initial value _must_ be specified. References to global constants are
+converted to literal values at parse time, so there is no performance penalty to
+using named constants rather than hard-coded values.
 
 ### Function Definition
 

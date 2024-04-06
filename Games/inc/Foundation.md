@@ -341,11 +341,15 @@ use the current time to determine if there is daylight.
 ```text
 var $currentTime = 11*60; # default initial time is 11am
 
-function IsNight() => $currentTime < 8*60 || $currentTime >= 20*60;
+const $dawnTime = 8 * 60;   # 8:00 AM
+const $duskTime = 20 * 60;  # 8:00 PM
+const $minutesPerDay = 24 * 60;
+
+function IsNight() => $currentTime < $dawnTime || $currentTime >= $duskTime;
 
 function IncrementTime()
 {
-    $currentTime = $currentTime < (23*60) + 59 ? $currentTime + 1 : 0;
+    $currentTime = ($currentTime + 1) % $minutesPerDay;
 }
 
 turn
@@ -1417,6 +1421,9 @@ implement the above functions or could be used to implement game-specific
 drawing functions.
 
 ```text
+const $colorWhite = 0xffffffff; # argb
+const $colorBlack = 0xff000000; # argb
+
 function DrawDoors(
     $room:Item,
     $left:Int,
@@ -1434,7 +1441,7 @@ function DrawDoors(
         if ($room.LinkW.DoorState != DoorState.None)
         {
             # West door
-            DrawRectangle($left, $top + $height / 2 - 25, 17, 50, 0xffffffff, 0xff000000, 2);
+            DrawRectangle($left, $top + $height / 2 - 25, 17, 50, $colorWhite, $colorBlack, 2);
         }
         else
         {
@@ -1448,7 +1455,7 @@ function DrawDoors(
         if ($room.LinkE.DoorState != DoorState.None)
         {
             # East door
-            DrawRectangle($left + $width - 17, $top + $height / 2 - 25, 17, 50, 0xffffffff, 0xff000000, 2);
+            DrawRectangle($left + $width - 17, $top + $height / 2 - 25, 17, 50, $colorWhite, $colorBlack, 2);
         }
         else
         {
@@ -1462,7 +1469,7 @@ function DrawDoors(
         if ($room.LinkN.DoorState != DoorState.None)
         {
             # North door
-            DrawRectangle($left + $width / 2 - 25, $top, 50, 17, 0xffffffff, 0xff000000, 2);
+            DrawRectangle($left + $width / 2 - 25, $top, 50, 17, $colorWhite, $colorBlack, 2);
         }
         else
         {
@@ -1477,7 +1484,7 @@ function DrawDoors(
         if ($room.LinkS.DoorState != DoorState.None)
         {
             # South door
-            DrawRectangle($left + $width / 2 - 25, $top + $height - 17, 50, 17, 0xffffffff, 0xff000000, 2);
+            DrawRectangle($left + $width / 2 - 25, $top + $height - 17, 50, 17, $colorWhite, $colorBlack, 2);
         }
         else
         {
@@ -1538,30 +1545,30 @@ function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
 {
     BeginDrawing($width, $height);
 
-    DrawEllipse(0, 0, $width, $height, 0xffffffff, 0xff000000, 15);
-    DrawDoors($room, 0, 0, $width, $height, 0xffffffff);
+    DrawEllipse(0, 0, $width, $height, $colorWhite, $colorBlack, 15);
+    DrawDoors($room, 0, 0, $width, $height, $colorWhite);
 
     return EndDrawing();
 }
 
 function DrawSquareRoom($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 200, 200, 0xff000000, 0xffffffff);
+    return DrawRectangularRoom($room, 200, 200, $colorBlack, $colorWhite);
 }
 
 function DrawRoom_200x100($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 200, 100, 0xff000000, 0xffffffff);
+    return DrawRectangularRoom($room, 200, 100, $colorBlack, $colorWhite);
 }
 
 function DrawRoom_100x200($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xffffffff);
+    return DrawRectangularRoom($room, 100, 200, $colorBlack, $colorWhite);
 }
 
 function DrawRoom_300x150($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 300, 150, 0xff000000, 0xffffffff);
+    return DrawRectangularRoom($room, 300, 150, $colorBlack, $colorWhite);
 }
 
 function DrawRoundRoom($room:Item) : Int

@@ -75,7 +75,7 @@
 
         GlobalVariableExpr AddVar(GlobalVarMap varMap, string varName, TypeDef type)
         {
-            var varExpr = varMap.TryAdd(varName, type);
+            var varExpr = varMap.TryAdd(varName, type, /*isConst*/ false);
             if (varExpr == null)
             {
                 throw new InvalidOperationException();

@@ -178,7 +178,7 @@ function IsAccessible($item:Item) : Bool
 function IsNight() => $currentTime < 480 || $currentTime >= 1200;
 function IncrementTime()
 {
-    $currentTime = $currentTime < 1439 ? $currentTime + 1 : 0;
+    $currentTime = ($currentTime + 1) % 1440;
 }
 function IsDarkAtNight($item:Item) => IsNight();
 function IsDarkAlways($item:Item) => true;
