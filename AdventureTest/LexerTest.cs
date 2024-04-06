@@ -1,6 +1,6 @@
 ﻿using AdventureScript;
 
-namespace EngineTest
+namespace AdventureTest
 {
     static class LexerTest
     {

@@ -64,11 +64,27 @@ you already have git installed and have cloned the AdventureScript repo.
 
 6. Navigate to the repo on github.com and create a pull request for your branch.
 
+## Using the Adventure-Helpers PowerShell Module
+
+The Adventure-Helpers module includes commands for running tests, running games,
+and so on. You can load the module as follows:
+
+1. Start a PowerShell prompt and import the Adventure-Helpers module.
+2. Type `Import-Module .\Adventure-Helpers.psm1`
+
+If you get an error saying the module is not digitally signed, you can change your
+PowerShell execution policy to allow unsigned scripts to be run as follows:
+
+`Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+Once the module is loaded, you can type `Get-AdventureHelp` to see a list of functions
+exported by the module. And as with any PowerShell command, you can get help for a
+specific function by typing `GetHelp <FunctionName>`.
+
 ## Running Tests
 
-1. Start a PowerShell prompt and navigate to the repo root.
-2. Type `Import-Module .\Adventure-Helpers.psm1`
-3. Type `Invoke-Tests`
+1. Start PowerShell and import the Adventure Helpers module.
+2. Type `Invoke-Tests`
 
 ## Adding Game Regression Tests
 
@@ -77,15 +93,14 @@ don't inadvertently break existing games.
 
 Adding a regression test for a game is easy:
 
-1. Start a PowerShell prompt and navigate to the repo root.
-2. Type `Import-Module .\Adventure-Helpers.psm1`
-3. Type `Build-GameTrace <YourGame>`
-4. Play through the game
+1. Start PowerShell and import the Adventure Helpers module.
+2. Type `Build-GameTrace <YourGame>`
+3. Play through the game
 
 The above commands generate two files:
 
-- `EngineTest\TestFiles\<YourGame>-input.txt`
-- `EngineTest\Baseline\<YourGame>-trace.txt`
+- `AdventureTest\TestFiles\<YourGame>-input.txt`
+- `AdventureTest\Baseline\<YourGame>-trace.txt`
 
 The input file contains all the commands you entered while playing the game. The trace
 file contains both the commands and the resulting game output. The regression test

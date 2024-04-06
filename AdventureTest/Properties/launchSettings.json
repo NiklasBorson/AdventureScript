@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "AdventureTest": {
+      "commandName": "Project",
+      "commandLineArgs": "-testfiles AdventureTest/TestFiles -baseline AdventureTest/Baseline -games Games -output AdventureTest/bin/Debug/net8.0/Output",
+      "workingDirectory": "C:\\Users\\nebor\\source\\repos\\AdventureScript"
+    }
+  }
+}
