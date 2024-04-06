@@ -1713,6 +1713,14 @@ function DrawGrassyRoom_100x200($room:Item) : Int
 {
     return DrawRectangularRoom($room, 100, 200, -16777216, -8339328);
 }
+function DrawGrassyRoomWithTable($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -8339328, -16777216, 15);
+    DrawDoors($room, 0, 0, 200, 200, -8339328);
+    DrawRectangle(70, 90, 80, 25, -4621737, 0, 0);
+    return EndDrawing();
+}
 function DrawOuterCourtN($room:Item) : Int
 {
     BeginDrawing(200, 200);
@@ -2868,7 +2876,7 @@ game
         var $_ = fairyland_NW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a clearing in the the **northwest** corner of the strangely-transformed **outer courtyard**. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.";
-        $_.DrawAction = DrawGrassyRoom;
+        $_.DrawAction = DrawGrassyRoomWithTable;
         $_.LinkS = __fairyland_NWfairyland_W;
         $_.LinkE = __fairyland_NWfairyland_N;
     }

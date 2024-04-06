@@ -280,6 +280,19 @@ function DrawGrassyRoom_100x200($room:Item) : Int
     return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xff80c080);
 }
 
+function DrawGrassyRoomWithTable($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+
+    DrawRectangle(0, 0, 200, 200, 0xff80c080, 0xff000000, 15);
+    DrawDoors($room, 0, 0, 200, 200, 0xff80c080);
+
+    # Draw the table
+    DrawRectangle(70, 90, 80, 25, 0xffB97A57, 0, 0);
+
+    return EndDrawing();
+}
+
 function DrawOuterCourtN($room:Item) : Int
 {
     BeginDrawing(200, 200);
@@ -1205,7 +1218,7 @@ game
 
     # Fairyland draw actions
     fairyland_N.DrawAction = DrawFairylandN;
-    fairyland_NW.DrawAction = DrawGrassyRoom;
+    fairyland_NW.DrawAction = DrawGrassyRoomWithTable;
     fairyland_NE.DrawAction = DrawGrassyRoom;
     fairyland_W.DrawAction = DrawGrassyRoom_100x200;
     fairyland_stable.DrawAction = DrawRoom_100x200;
