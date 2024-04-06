@@ -69,7 +69,7 @@ you already have git installed and have cloned the AdventureScript repo.
 The Adventure-Helpers module includes commands for running tests, running games,
 and so on. You can load the module as follows:
 
-1. Start a PowerShell prompt and import the Adventure-Helpers module.
+1. Start a PowerShell prompt navigate to the repo root.
 2. Type `Import-Module .\Adventure-Helpers.psm1`
 
 If you get an error saying the module is not digitally signed, you can change your
