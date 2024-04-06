@@ -91,7 +91,7 @@ Runs the specified game.
 Runs the specified by by launching the TextAdventure console application.
 
 .PARAMETER Name
-Name of the game, as returened by Get-Games.
+Name of the game, as returned by Get-Games.
 
 .EXAMPLE
 Invoke-Game Demo
