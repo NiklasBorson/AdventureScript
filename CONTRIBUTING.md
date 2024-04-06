@@ -30,39 +30,7 @@ Be sure to run tests before creating a pull request if your change involves any 
 changes -- including changes to AdventureScript code. When adding a game, you should
 add a regression test for the game.
 
-## Running Tests
-
-1. Start a PowerShell prompt and navigate to the repo root.
-2. Type `Import-Module .\Adventure-Helpers.psm1`
-3. Type `Invoke-Tests`
-
-## Game Regression Tests
-
-Regression tests ensure that future changes to the game engine or shared libraries
-don't inadvertently break existing games.
-
-Adding a regression test for a game is easy:
-
-1. Start a PowerShell prompt and navigate to the repo root.
-2. Type `Import-Module .\Adventure-Helpers.psm1`
-3. Type `Build-GameTrace <YourGame>`
-4. Play through the game
-
-The above commands generate two files:
-
-- `EngineTest\TestFiles\<YourGame>-input.txt`
-- `EngineTest\Baseline\<YourGame>-trace.txt`
-
-The input file contains all the commands you entered while playing the game. The trace
-file contains both the commands and the resulting game output. The regression test
-"plays" the game by re-entering your commands and captures a new trace. It then
-compares the new trace with the baseline trace.
-
-Note that a test failure just means something changed, which may or may not be a bug.
-If a change is intentional, you can either recapture a trace or just updated the
-baseline file by typing `Update-Baselines`.
-
-## Creating a Git Pull Request
+## Git Workflow
 
 The basic workflow for contributing to the project is as follows. This assumes
 you already have git installed and have cloned the AdventureScript repo.
@@ -78,8 +46,8 @@ you already have git installed and have cloned the AdventureScript repo.
 
 2. Make changes in your local working tree.
 
-   - Edit or add whatever files are necessary, e.g., adding a game
-   - Run tests or add tests as appopriate
+   - Edit or add whatever files are necessary, e.g., adding a game.
+   - Run tests or add tests as described in the following sections.
 
 3. Commit changes to your topic branch.
 
@@ -95,3 +63,76 @@ you already have git installed and have cloned the AdventureScript repo.
      command from the `git push` error message.
 
 6. Navigate to the repo on github.com and create a pull request for your branch.
+
+## Using the Adventure-Helpers PowerShell Module
+
+The Adventure-Helpers module includes commands for running tests, running games,
+and so on. You can load the module as follows:
+
+1. Start a PowerShell prompt and import the Adventure-Helpers module.
+2. Type `Import-Module .\Adventure-Helpers.psm1`
+
+If you get an error saying the module is not digitally signed, you can change your
+PowerShell execution policy to allow unsigned scripts to be run as follows:
+
+`Set-ExecutionPolicy RemoteSigned -Scope CurrentUser`
+
+Once the module is loaded, you can type `Get-AdventureHelp` to see a list of functions
+exported by the module. And as with any PowerShell command, you can get help for a
+specific function by typing `GetHelp <FunctionName>`.
+
+## Running Tests
+
+1. Start PowerShell and import the Adventure Helpers module.
+2. Type `Invoke-Tests`
+
+## Adding Game Regression Tests
+
+Regression tests ensure that future changes to the game engine or shared libraries
+don't inadvertently break existing games.
+
+Adding a regression test for a game is easy:
+
+1. Start PowerShell and import the Adventure Helpers module.
+2. Type `Build-GameTrace <YourGame>`
+3. Play through the game
+
+The above commands generate two files:
+
+- `AdventureTest\TestFiles\<YourGame>-input.txt`
+- `AdventureTest\Baseline\<YourGame>-trace.txt`
+
+The input file contains all the commands you entered while playing the game. The trace
+file contains both the commands and the resulting game output. The regression test
+"plays" the game by re-entering your commands and captures a new trace. It then
+compares the new trace with the baseline trace.
+
+Note that a test failure just means something changed, which may or may not be a bug.
+If a change is intentional, you can either recapture a trace or just update the
+baseline file as described in the next section.
+
+## Updating Game Regression Tests
+
+If you make changes to a game, this might cause tests to break because the game output
+no longer matches the baseline. When you run tests using the `Invoke-Tests` command,
+you will see an error message of the form:
+
+`Error: <NameOfGame>-trace.txt(2): Output differs from baseline.`
+
+You can fix the test in two ways. The simplest way is to just update the baselines
+as follows:
+
+1. Type `Update-Baselines` (after running the tests).
+2. Look at the Git changes to verify the changes are what you expect.
+3. Type `Invoke-Tests` to make sure the tests now pass.
+
+Step 2 is important because the test output may reveal _unintended_ consequences of
+your change. In other words, the test may reveal a regression in behavior, which is
+why it's called a _regression test_. In this case, you can fix your code, rerun the
+tests, and update baselines again.
+
+If you make a more sigificant change that affects how the change is played then
+updating the baselines may not be enough. That's because the input to the test
+(the sequence of commands) is not changed. In this case, you can regenerate the
+regression test by using the `Build-GameTrace` command as described in the previous
+section.

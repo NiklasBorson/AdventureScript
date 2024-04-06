@@ -2,7 +2,7 @@
   "profiles": {
     "ParseFoundation": {
       "commandName": "Project",
-      "commandLineArgs": "-parse .\\Games\\inc\\Foundation.md .\\EngineTest\\TestFiles\\ParserTest-Include.txt",
+      "commandLineArgs": "-parse .\\Games\\inc\\Foundation.md .\\AdventureTest\\TestFiles\\ParserTest-Include.txt",
       "workingDirectory": "$(SolutionDir)"
     },
     "Oxbow": {

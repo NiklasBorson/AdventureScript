@@ -1,7 +1,7 @@
 ﻿using AdventureScript;
 using System.Runtime.CompilerServices;
 
-namespace EngineTest
+namespace AdventureTest
 {
     static class StringTests
     {

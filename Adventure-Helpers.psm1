@@ -1,9 +1,9 @@
 $IsRelease = $false
 
-$TestFilesDir = "$PSScriptRoot/EngineTest/TestFiles"
-$BaselineDir = "$PSScriptRoot/EngineTest/Baseline"
+$TestFilesDir = "$PSScriptRoot/AdventureTest/TestFiles"
+$BaselineDir = "$PSScriptRoot/AdventureTest/Baseline"
 $GamesDir = "$PSScriptRoot/Games"
-$TestOutputDir = "$PSScriptRoot/EngineTest/bin/Output"
+$TestOutputDir = "$PSScriptRoot/AdventureTest/bin/Output"
 
 function Get-ExePath([string] $BaseName) {
     $buildType = $IsRelease ? 'Release' : 'Debug'
@@ -52,17 +52,17 @@ function Invoke-Tests {
     }
 
     # Run the test
-    $exePath = Get-ExePath('EngineTest')
+    $exePath = Get-ExePath('AdventureTest')
     Write-Output "$exePath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir"
     & $exePath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir
 }
 
 <#
 .SYNOPSIS
-Updates baseline files used by EngineTest.
+Updates baseline files used by AdventureTest.
 
 .DESCRIPTION
-If EngineTest reports comparison failures, and the differences are expected, run this
+If AdventureTest reports comparison failures, and the differences are expected, run this
 command to copy the test output files to the baseline directory.
 #>
 function Update-Baselines {
@@ -91,7 +91,7 @@ Runs the specified game.
 Runs the specified by by launching the TextAdventure console application.
 
 .PARAMETER Name
-Name of the game, as returened by Get-Games.
+Name of the game, as returned by Get-Games.
 
 .EXAMPLE
 Invoke-Game Demo
@@ -182,7 +182,7 @@ Captures a trace of the specified game for testing.
 
 .DESCRIPTION
 Prompts the user to play through the specified game and captures a trace of the
-commands and game output. The captured trace is used by EngineTest to detect if
+commands and game output. The captured trace is used by AdventureTest to detect if
 the game behavior changes unexpectedly.
 
 .PARAMETER Name
@@ -202,8 +202,8 @@ function Build-GameTrace([string] $Name) {
 
     # Paths of the output files
     $Name = $Name.Replace(' ', '-');
-    $traceFilePath = Join-Path $PSScriptRoot 'EngineTest' 'Baseline' "$Name-trace.txt"
-    $commandFilePath = Join-Path $PSScriptRoot 'EngineTest' 'TestFiles' "$Name-input.txt"
+    $traceFilePath = Join-Path $PSScriptRoot 'AdventureTest' 'Baseline' "$Name-trace.txt"
+    $commandFilePath = Join-Path $PSScriptRoot 'AdventureTest' 'TestFiles' "$Name-input.txt"
 
     # Play the game, capturing a trace
     & $exePath -trace $gameFilePath $traceFilePath
@@ -224,6 +224,9 @@ function Get-AdventureHelp {
         Where-Object { $_.CommandType -eq 'Function' } | 
         ForEach-Object { Write-Output $_.Name }
 }
+
+Write-Host "Adventure Helpers module loaded."
+Write-Host "Type Get-AdventureHelp to see a list of exported functions."
 
 Export-ModuleMember -Function Set-Config
 Export-ModuleMember -Function Invoke-Tests

@@ -1,4 +1,4 @@
-﻿namespace EngineTest
+﻿namespace AdventureTest
 {
     class TestConfig
     {

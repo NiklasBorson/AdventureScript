@@ -2,7 +2,7 @@
 using System.Net.Http.Headers;
 using System.Xml.Linq;
 
-namespace EngineTest
+namespace AdventureTest
 {
     static class GameTests
     {
