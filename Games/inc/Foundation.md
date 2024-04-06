@@ -1429,7 +1429,7 @@ function DrawDoors(
     var $openW = false;
     var $openE = false;
 
-    if ($room.LinkW != null)
+    if ($room.LinkW != null && !$room.LinkW.IsHidden)
     {
         if ($room.LinkW.DoorState != DoorState.None)
         {
@@ -1443,7 +1443,7 @@ function DrawDoors(
             $openW = true;
         }
     }
-    if ($room.LinkE != null)
+    if ($room.LinkE != null && !$room.LinkE.IsHidden)
     {
         if ($room.LinkE.DoorState != DoorState.None)
         {
@@ -1457,7 +1457,7 @@ function DrawDoors(
             $openE = true;
         }
     }
-    if ($room.LinkN != null)
+    if ($room.LinkN != null && !$room.LinkN.IsHidden)
     {
         if ($room.LinkN.DoorState != DoorState.None)
         {
@@ -1472,7 +1472,7 @@ function DrawDoors(
             DrawRectangle($left + $x1, $top, $x2 - $x1, 17, $backColor, 0, 0);
         }
     }
-    if ($room.LinkS != null)
+    if ($room.LinkS != null && !$room.LinkS.IsHidden)
     {
         if ($room.LinkS.DoorState != DoorState.None)
         {
@@ -1489,7 +1489,7 @@ function DrawDoors(
     }
 
     # Draw stairs up if present
-    if ($room.LinkU != null)
+    if ($room.LinkU != null && !$room.LinkU.IsHidden)
     {
         var $x = $left + $width / 2 - 40;
         var $y = $top + $height / 2 - 35;
@@ -1503,7 +1503,7 @@ function DrawDoors(
     }
 
     # Draw stairs down if present
-    if ($room.LinkD != null)
+    if ($room.LinkD != null && !$room.LinkD.IsHidden)
     {
         var $x = $left + $width / 2 + 5;
         var $y = $top + $height / 2 - 35;

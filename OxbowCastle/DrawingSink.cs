@@ -16,7 +16,11 @@ namespace OxbowCastle
             m_canvas = new Canvas
             {
                 Width = width,
-                Height = height
+                Height = height,
+                Clip = new RectangleGeometry
+                {
+                    Rect = new Windows.Foundation.Rect(0, 0, width, height)
+                }
             };
         }
 

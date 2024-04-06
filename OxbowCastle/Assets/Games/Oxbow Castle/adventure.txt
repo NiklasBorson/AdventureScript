@@ -128,8 +128,7 @@ item courtyard_N;
 item kitchen;
 item pantry;
 item buttery;
-item great_hall_W;
-item great_hall_E;
+item great_hall;
 item court;
 item parlor;
 item lords_chamber;
@@ -259,15 +258,14 @@ item _chest_armory;
 item __chest_armory_helmet;
 item __chest_armory_shirt;
 item __chest_armory_leggings;
-item _door_inner_court_Ngreat_hall_W;
+item _door_inner_court_Ngreat_hall;
 item _door_kitchenpantry;
 item _door_lords_chamberparlor;
 item _door_parlorcourt;
 item _door_hallway_NSkitchen;
-item _door_kitchengreat_hall_W;
+item _door_kitchengreat_hall;
 item _door_pantrybuttery;
-item __great_hall_Wgreat_hall_E;
-item _door_great_hall_Ecourt;
+item _door_great_hallcourt;
 item bed_lords_chamber;
 item _chest_lords_chamber;
 item _stair_tower_NE_0tower_NE_1;
@@ -1124,7 +1122,7 @@ function DrawDoors($room:Item, $left:Int, $top:Int, $width:Int, $height:Int, $ba
 {
     var $openW = false;
     var $openE = false;
-    if ($room.LinkW != null)
+    if ($room.LinkW != null && !$room.LinkW.IsHidden)
     {
         if ($room.LinkW.DoorState != DoorState.None)
         {
@@ -1136,7 +1134,7 @@ function DrawDoors($room:Item, $left:Int, $top:Int, $width:Int, $height:Int, $ba
             $openW = true;
         }
     }
-    if ($room.LinkE != null)
+    if ($room.LinkE != null && !$room.LinkE.IsHidden)
     {
         if ($room.LinkE.DoorState != DoorState.None)
         {
@@ -1148,7 +1146,7 @@ function DrawDoors($room:Item, $left:Int, $top:Int, $width:Int, $height:Int, $ba
             $openE = true;
         }
     }
-    if ($room.LinkN != null)
+    if ($room.LinkN != null && !$room.LinkN.IsHidden)
     {
         if ($room.LinkN.DoorState != DoorState.None)
         {
@@ -1161,7 +1159,7 @@ function DrawDoors($room:Item, $left:Int, $top:Int, $width:Int, $height:Int, $ba
             DrawRectangle($left + $x1, $top, $x2 - $x1, 17, $backColor, 0, 0);
         }
     }
-    if ($room.LinkS != null)
+    if ($room.LinkS != null && !$room.LinkS.IsHidden)
     {
         if ($room.LinkS.DoorState != DoorState.None)
         {
@@ -1174,7 +1172,7 @@ function DrawDoors($room:Item, $left:Int, $top:Int, $width:Int, $height:Int, $ba
             DrawRectangle($left + $x1, $top + $height - 17, $x2 - $x1, 17, $backColor, 0, 0);
         }
     }
-    if ($room.LinkU != null)
+    if ($room.LinkU != null && !$room.LinkU.IsHidden)
     {
         var $x = $left + $width / 2 - 40;
         var $y = $top + $height / 2 - 35;
@@ -1186,7 +1184,7 @@ function DrawDoors($room:Item, $left:Int, $top:Int, $width:Int, $height:Int, $ba
         DrawRectangle($x, $y + 50, 35, 2, -16777216, 0, 0);
         DrawRectangle($x, $y + 60, 35, 2, -16777216, 0, 0);
     }
-    if ($room.LinkD != null)
+    if ($room.LinkD != null && !$room.LinkD.IsHidden)
     {
         var $x = $left + $width / 2 + 5;
         var $y = $top + $height / 2 - 35;
@@ -1715,6 +1713,86 @@ function DrawGrassyRoom_100x200($room:Item) : Int
 {
     return DrawRectangularRoom($room, 100, 200, -16777216, -8339328);
 }
+function DrawGrassyRoomWithTable($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -8339328, -16777216, 15);
+    DrawDoors($room, 0, 0, 200, 200, -8339328);
+    DrawRectangle(70, 90, 80, 25, -4621737, 0, 0);
+    return EndDrawing();
+}
+function DrawOuterCourtN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -4144960, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, -16777216, 0, 0);
+    DrawEllipse(140, -100, 200, 200, -16777216, 0, 0);
+    return EndDrawing();
+}
+function DrawFairylandN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -8339328, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, -16777216, 0, 0);
+    DrawEllipse(140, -100, 200, 200, -16777216, 0, 0);
+    return EndDrawing();
+}
+function DrawInnerCourtS($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, -4144960, 0, 0);
+    DrawRectangle(0, 160, 60, 40, -16777216, 0, 0);
+    DrawRectangle(140, 160, 60, 40, -16777216, 0, 0);
+    return EndDrawing();
+}
+function DrawGreatHall($room:Item) : Int
+{
+    BeginDrawing(500, 250);
+    DrawRectangle(0, 0, 500, 250, -1, -16777216, 15);
+    DrawRectangle(60, 55, 20, 140, -4621737, 0, 0);
+    DrawRectangle(160, 50, 250, 20, -4621737, 0, 0);
+    DrawRectangle(160, 180, 250, 20, -4621737, 0, 0);
+    DrawDoors($room, 0, 0, 500, 250, -16777216);
+    return EndDrawing();
+}
+function DrawCourtRoom($room:Item) : Int
+{
+    BeginDrawing(200, 300);
+    DrawRectangle(0, 0, 200, 300, -1, -16777216, 15);
+    DrawRectangle(15, 15, 170, 80, -875725, 0, 0);
+    DrawRectangle(80, 25, 40, 35, -7864299, 0, 0);
+    DrawRectangle(90, 35, 20, 25, -4621737, 0, 0);
+    DrawRectangle(15, 50, 20, 75, -4621737, 0, 0);
+    DrawRectangle(15, 50, 5, 75, -7864299, 0, 0);
+    DrawRectangle(15, 175, 20, 100, -4621737, 0, 0);
+    DrawRectangle(15, 175, 5, 100, -7864299, 0, 0);
+    DrawRectangle(165, 25, 20, 250, -4621737, 0, 0);
+    DrawRectangle(180, 25, 5, 250, -7864299, 0, 0);
+    DrawDoors($room, 0, 0, 200, 300, -16777216);
+    return EndDrawing();
+}
+function DrawGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(150, 300);
+    DrawEllipse(0, 150, 150, 150, -1, -16777216, 15);
+    DrawRectangle(0, 0, 150, 225, -16777216, 0, 0);
+    DrawRectangle(15, 15, 120, 210, -1, 0, 0);
+    DrawDoors($room, 0, 0, 150, 225, -1);
+    return EndDrawing();
+}
+function DrawDoubleGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(450, 300);
+    DrawEllipse(0, 150, 150, 150, -1, -16777216, 15);
+    DrawEllipse(300, 150, 150, 150, -1, -16777216, 15);
+    DrawRectangle(0, 0, 450, 224, -1, 0, 0);
+    DrawRectangle(0, 0, 450, 15, -16777216, 0, 0);
+    DrawRectangle(135, 210, 180, 15, -16777216, 0, 0);
+    DrawRectangle(0, 0, 15, 225, -16777216, 0, 0);
+    DrawRectangle(435, 0, 15, 225, -16777216, 0, 0);
+    DrawDoors($room, 0, 0, 450, 225, -1);
+    return EndDrawing();
+}
 function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
 {
     if ($from == outer_court_N && $to == inner_court_S)
@@ -1768,30 +1846,6 @@ function PutInSilverStatue($item:Item, $target:Item)
     {
         Message($"You can't put the {Label($item)} in the {Label($target)}.");
     }
-}
-function DrawRoomU($x:Int)
-{
-    DrawEllipse($x, 150, 150, 150, -1, -16777216, 15);
-    DrawRectangle($x, 0, 150, 225, -16777216, 0, 0);
-    DrawRectangle($x + 15, 15, 120, 210, -1, 0, 0);
-}
-function DrawGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(150, 300);
-    DrawRoomU(0);
-    DrawDoors($room, 0, 0, 150, 225, -1);
-    return EndDrawing();
-}
-function DrawDoubleGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(450, 300);
-    DrawRoomU(0);
-    DrawRoomU(300);
-    DrawRectangle(150, 0, 150, 15, -16777216, 0, 0);
-    DrawRectangle(150, 210, 150, 15, -16777216, 0, 0);
-    DrawRectangle(130, 15, 190, 195, -1, 0, 0);
-    DrawDoors($room, 0, 0, 450, 225, -1);
-    return EndDrawing();
 }
 function DescribeThrone($item:Item)
 {
@@ -2142,6 +2196,7 @@ game
         $_.EnterAction = OnEnterCouterCourt;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of a large outer **courtyard**, which extends to the West, East, and South. Looming above you to the north is the keep's gatehouse. Its large, round stone towers jut out on either side of an open portcullis.";
+        $_.DrawAction = DrawOuterCourtN;
         $_.LinkN = inner_gate;
         $_.LinkS = __outer_court_centerouter_court_N;
         $_.LinkE = __outer_court_Nouter_court_NE;
@@ -2230,6 +2285,7 @@ game
         var $_ = inner_court_S;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **south** end of the **inner courtyard**, which extends to the North, East, and West. South of you is the main gatehouse of the keep with its inner gate open. Across the courtyard to the North is the great hall. Other buildings surround the courtyard on all sides.";
+        $_.DrawAction = DrawInnerCourtS;
         $_.LinkN = __inner_court_Sinner_court_N;
         $_.LinkS = __inner_court_Sfairyland_N;
         $_.LinkE = __inner_court_Sinner_court_SE;
@@ -2259,7 +2315,7 @@ game
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of the **inner courtyard**, which extends to the South, East, and West.";
         $_.DrawAction = DrawCourtyardRoom;
-        $_.LinkN = _door_inner_court_Ngreat_hall_W;
+        $_.LinkN = _door_inner_court_Ngreat_hall;
         $_.LinkS = __inner_court_Sinner_court_N;
         $_.LinkE = __inner_court_Ninner_court_NE;
         $_.LinkW = __inner_court_NWinner_court_N;
@@ -2620,7 +2676,7 @@ game
         $_.Description = "You are in a large **kitchen**.";
         $_.DrawAction = DrawSquareRoom;
         $_.LinkN = _door_kitchenpantry;
-        $_.LinkE = _door_kitchengreat_hall_W;
+        $_.LinkE = _door_kitchengreat_hall;
         $_.LinkW = _door_hallway_NSkitchen;
     }
     {
@@ -2639,30 +2695,22 @@ game
         $_.LinkW = _door_pantrybuttery;
     }
     {
-        var $_ = great_hall_W;
+        var $_ = great_hall;
         $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are at the **west** end of the **great hall**.";
-        $_.DrawAction = DrawSquareRoom;
-        $_.LinkS = _door_inner_court_Ngreat_hall_W;
-        $_.LinkE = __great_hall_Wgreat_hall_E;
-        $_.LinkW = _door_kitchengreat_hall_W;
-    }
-    {
-        var $_ = great_hall_E;
-        $_.IsDark = IsDarkAtNight;
-        $_.Description = "You are at the **east** end of the **great hall**.";
-        $_.DrawAction = DrawSquareRoom;
-        $_.LinkE = _door_great_hall_Ecourt;
-        $_.LinkW = __great_hall_Wgreat_hall_E;
+        $_.Description = "You are in the **great hall**.";
+        $_.DrawAction = DrawGreatHall;
+        $_.LinkS = _door_inner_court_Ngreat_hall;
+        $_.LinkE = _door_great_hallcourt;
+        $_.LinkW = _door_kitchengreat_hall;
     }
     {
         var $_ = court;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a large room with benches lining the east and west walls and a raised throne at the north end. This is presumably where the lord of the castle holds **court**.";
-        $_.DrawAction = DrawSquareRoom;
+        $_.DrawAction = DrawCourtRoom;
         $_.LinkN = library_door;
         $_.LinkS = _door_parlorcourt;
-        $_.LinkW = _door_great_hall_Ecourt;
+        $_.LinkW = _door_great_hallcourt;
     }
     {
         var $_ = parlor;
@@ -2828,7 +2876,7 @@ game
         var $_ = fairyland_NW;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are in a clearing in the the **northwest** corner of the strangely-transformed **outer courtyard**. The high wall of the keep looms above you to the north, and the outer wall is to the west. Paths lead east and south through the trees.";
-        $_.DrawAction = DrawGrassyRoom;
+        $_.DrawAction = DrawGrassyRoomWithTable;
         $_.LinkS = __fairyland_NWfairyland_W;
         $_.LinkE = __fairyland_NWfairyland_N;
     }
@@ -2836,6 +2884,7 @@ game
         var $_ = fairyland_N;
         $_.IsDark = IsDarkAtNight;
         $_.Description = "You are at the **north** end of the **outer courtyard**, but somehow transformed into an alien place. There are ancient-looking trees everwhere, and the sky is a strange purplish hue. North of you is the keep's gatehouse with its open portcullis. Paths lead east, west, and south through the trees.";
+        $_.DrawAction = DrawFairylandN;
         $_.LinkN = __inner_court_Sfairyland_N;
         $_.LinkS = __fairyland_Nfairyland_center;
         $_.LinkE = __fairyland_Nfairyland_NE;
@@ -3769,12 +3818,12 @@ game
         $_.ArmorKind = ArmorKind.Leg;
     }
     {
-        var $_ = _door_inner_court_Ngreat_hall_W;
+        var $_ = _door_inner_court_Ngreat_hall;
         $_.Noun = "door";
         $_.OpenAction = OpenDoor;
         $_.CloseAction = CloseDoor;
         $_.DoorState = DoorState.Closed;
-        $_.LinkN = great_hall_W;
+        $_.LinkN = great_hall;
         $_.LinkS = inner_court_N;
     }
     {
@@ -3814,12 +3863,12 @@ game
         $_.LinkW = hallway_NS;
     }
     {
-        var $_ = _door_kitchengreat_hall_W;
+        var $_ = _door_kitchengreat_hall;
         $_.Noun = "door";
         $_.OpenAction = OpenDoor;
         $_.CloseAction = CloseDoor;
         $_.DoorState = DoorState.Closed;
-        $_.LinkE = great_hall_W;
+        $_.LinkE = great_hall;
         $_.LinkW = kitchen;
     }
     {
@@ -3832,18 +3881,13 @@ game
         $_.LinkW = pantry;
     }
     {
-        var $_ = __great_hall_Wgreat_hall_E;
-        $_.LinkE = great_hall_E;
-        $_.LinkW = great_hall_W;
-    }
-    {
-        var $_ = _door_great_hall_Ecourt;
+        var $_ = _door_great_hallcourt;
         $_.Noun = "door";
         $_.OpenAction = OpenDoor;
         $_.CloseAction = CloseDoor;
         $_.DoorState = DoorState.Closed;
         $_.LinkE = court;
-        $_.LinkW = great_hall_E;
+        $_.LinkW = great_hall;
     }
     {
         var $_ = bed_lords_chamber;

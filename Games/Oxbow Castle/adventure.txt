@@ -111,8 +111,7 @@ item courtyard_N;
 item kitchen;
 item pantry;
 item buttery;
-item great_hall_W;
-item great_hall_E;
+item great_hall;
 item court;
 item parlor;
 item lords_chamber;
@@ -257,6 +256,10 @@ game
     armory.IsDark = IsDarkAlways;
 }
 
+#############################################
+#
+# Special room drawing functions
+#
 function DrawCourtyardRoom($room:Item) : Int
 {
     return DrawRectangularRoom($room, 200, 200, 0xff000000, 0xffc0c0c0);
@@ -275,6 +278,123 @@ function DrawGrassyRoom($room:Item) : Int
 function DrawGrassyRoom_100x200($room:Item) : Int
 {
     return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xff80c080);
+}
+
+function DrawGrassyRoomWithTable($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+
+    DrawRectangle(0, 0, 200, 200, 0xff80c080, 0xff000000, 15);
+    DrawDoors($room, 0, 0, 200, 200, 0xff80c080);
+
+    # Draw the table
+    DrawRectangle(70, 90, 80, 25, 0xffB97A57, 0, 0);
+
+    return EndDrawing();
+}
+
+function DrawOuterCourtN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, 0xff000000, 0, 0);
+    DrawEllipse(140, -100, 200, 200, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
+function DrawFairylandN($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, 0xff80c080, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, 0xff000000, 0, 0);
+    DrawEllipse(140, -100, 200, 200, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
+function DrawInnerCourtS($room:Item) : Int
+{
+    BeginDrawing(200, 200);
+    DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
+    DrawRectangle(0, 160, 60, 40, 0xff000000, 0, 0);
+    DrawRectangle(140, 160, 60, 40, 0xff000000, 0, 0);
+    return EndDrawing();
+}
+
+function DrawGreatHall($room:Item) : Int
+{
+    BeginDrawing(500, 250);
+
+    # Walls and floor
+    DrawRectangle(0, 0, 500, 250, 0xffffffff, 0xff000000, 15);
+
+    # Tables
+    DrawRectangle(60, 55, 20, 140, 0xffB97A57, 0, 0);
+    DrawRectangle(160, 50, 250, 20, 0xffB97A57, 0, 0);
+    DrawRectangle(160, 180, 250, 20, 0xffB97A57, 0, 0);
+
+    DrawDoors($room, 0, 0, 500, 250, 0xff000000);
+    return EndDrawing();
+}
+
+function DrawCourtRoom($room:Item) : Int
+{
+    BeginDrawing(200, 300);
+
+    # Walls and floor
+    DrawRectangle(0, 0, 200, 300, 0xffffffff, 0xff000000, 15);
+
+    # Platform for throne
+    DrawRectangle(15, 15, 170, 80, 0xfff2a333, 0, 0);
+
+    # Throne
+    DrawRectangle(80, 25, 40, 35, 0xff880015, 0, 0);
+    DrawRectangle(90, 35, 20, 25, 0xffb97a57, 0, 0);
+
+    # Left benches
+    DrawRectangle(15, 50, 20, 75, 0xffb97a57, 0, 0);
+    DrawRectangle(15, 50, 5, 75, 0xff880015, 0, 0);
+
+    DrawRectangle(15, 175, 20, 100, 0xffb97a57, 0, 0);
+    DrawRectangle(15, 175, 5, 100, 0xff880015, 0, 0);
+
+    # Right benches
+    DrawRectangle(165, 25, 20, 250, 0xffb97a57, 0, 0);
+    DrawRectangle(180, 25, 5, 250, 0xff880015, 0, 0);
+
+    DrawDoors($room, 0, 0, 200, 300, 0xff000000);
+    return EndDrawing();
+}
+
+function DrawGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(150, 300);
+    DrawEllipse(0, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+    DrawRectangle(0, 0, 150, 225, 0xff000000, 0, 0);
+    DrawRectangle(15, 15, 120, 210, 0xffffffff, 0, 0);
+    DrawDoors($room, 0, 0, 150, 225, 0xffffffff);
+    return EndDrawing();
+}
+
+function DrawDoubleGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(450, 300);
+
+    DrawEllipse(0, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+    DrawEllipse(300, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+
+    # White background
+    DrawRectangle(0, 0, 450, 224, 0xffffffff, 0, 0);
+
+    # North and south walls
+    DrawRectangle(0, 0, 450, 15, 0xff000000, 0, 0);
+    DrawRectangle(135, 210, 180, 15, 0xff000000, 0, 0);
+
+    # West and east walls
+    DrawRectangle(0, 0, 15, 225, 0xff000000, 0, 0);
+    DrawRectangle(435, 0, 15, 225, 0xff000000, 0, 0);
+
+    DrawDoors($room, 0, 0, 450, 225, 0xffffffff);
+    return EndDrawing();
 }
 
 #############################################
@@ -325,7 +445,7 @@ game
     outer_court_W.DrawAction = DrawCourtyardRoom_100x200;
     outer_court_center.DrawAction = DrawCourtyardRoom;
     outer_court_NW.DrawAction = DrawCourtyardRoom;
-    outer_court_N.DrawAction = null;
+    outer_court_N.DrawAction = DrawOuterCourtN;
     outer_court_NE.DrawAction = DrawCourtyardRoom;
 
     # Outer court northward links
@@ -497,7 +617,7 @@ game
         "to the South and West.";
 
     # Inner court draw actions.
-    inner_court_S.DrawAction = null;
+    inner_court_S.DrawAction = DrawInnerCourtS;
     inner_court_SW.DrawAction = DrawCourtyardRoom;
     inner_court_SE.DrawAction = DrawCourtyardRoom;
     inner_court_N.DrawAction = DrawCourtyardRoom;
@@ -593,33 +713,6 @@ game
 #
 # South wall and towers
 #
-function DrawRoomU($x:Int)
-{
-    DrawEllipse($x, 150, 150, 150, 0xffffffff, 0xff000000, 15);
-    DrawRectangle($x, 0, 150, 225, 0xff000000, 0, 0);
-    DrawRectangle($x + 15, 15, 120, 210, 0xffffffff, 0, 0);
-}
-
-function DrawGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(150, 300);
-    DrawRoomU(0);
-    DrawDoors($room, 0, 0, 150, 225, 0xffffffff);
-    return EndDrawing();
-}
-
-function DrawDoubleGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(450, 300);
-    DrawRoomU(0);
-    DrawRoomU(300);
-    DrawRectangle(150, 0, 150, 15, 0xff000000, 0, 0);
-    DrawRectangle(150, 210, 150, 15, 0xff000000, 0, 0);
-    DrawRectangle(130, 15, 190, 195, 0xffffffff, 0, 0);
-    DrawDoors($room, 0, 0, 450, 225, 0xffffffff);
-    return EndDrawing();
-}
-
 game
 {
     # South wall and tower descriptions.
@@ -888,10 +981,8 @@ game
         "You are in a **pantry**.";
     buttery.Description =
         "You are in the **buttery**.";
-    great_hall_W.Description =
-        "You are at the **west** end of the **great hall**.";
-    great_hall_E.Description =
-        "You are at the **east** end of the **great hall**.";
+    great_hall.Description =
+        "You are in the **great hall**.";
     court.Description =
         "You are in a large room with benches lining the east and west walls and a raised "
         "throne at the north end. This is presumably where the lord of the castle holds **court**.";
@@ -907,15 +998,14 @@ game
     kitchen.DrawAction = DrawSquareRoom;
     pantry.DrawAction = DrawSquareRoom;
     buttery.DrawAction = DrawSquareRoom;
-    great_hall_W.DrawAction = DrawSquareRoom;
-    great_hall_E.DrawAction = DrawSquareRoom;
-    court.DrawAction = DrawSquareRoom;
+    great_hall.DrawAction = DrawGreatHall;
+    court.DrawAction = DrawCourtRoom;
     parlor.DrawAction = DrawSquareRoom;
     lords_chamber.DrawAction = DrawSquareRoom;
     library.DrawAction = DrawSquareRoom;
 
     # East keep northward links.
-    NewClosedDoor(inner_court_N, great_hall_W, Direction.North);
+    NewClosedDoor(inner_court_N, great_hall, Direction.North);
     NewClosedDoor(kitchen, pantry, Direction.North);
     NewClosedDoor(lords_chamber, parlor, Direction.North);
     NewClosedDoor(parlor, court, Direction.North);
@@ -923,10 +1013,9 @@ game
 
     # East keep eastward links.
     NewClosedDoor(hallway_NS, kitchen, Direction.East);
-    NewClosedDoor(kitchen, great_hall_W, Direction.East);
+    NewClosedDoor(kitchen, great_hall, Direction.East);
     NewClosedDoor(pantry, buttery, Direction.East);
-    NewLink(great_hall_W, great_hall_E, Direction.East);
-    NewClosedDoor(great_hall_E, court, Direction.East);
+    NewClosedDoor(great_hall, court, Direction.East);
 }
 
 #############################################
@@ -1128,8 +1217,8 @@ game
         "are the castle walls, and north of you is the church yard wall. A path leads west through the trees.";
 
     # Fairyland draw actions
-    fairyland_N.DrawAction = null;
-    fairyland_NW.DrawAction = DrawGrassyRoom;
+    fairyland_N.DrawAction = DrawFairylandN;
+    fairyland_NW.DrawAction = DrawGrassyRoomWithTable;
     fairyland_NE.DrawAction = DrawGrassyRoom;
     fairyland_W.DrawAction = DrawGrassyRoom_100x200;
     fairyland_stable.DrawAction = DrawRoom_100x200;
