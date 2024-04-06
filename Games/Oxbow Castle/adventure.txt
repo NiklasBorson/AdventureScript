@@ -352,6 +352,38 @@ function DrawCourtRoom($room:Item) : Int
     return EndDrawing();
 }
 
+function DrawGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(150, 300);
+    DrawEllipse(0, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+    DrawRectangle(0, 0, 150, 225, 0xff000000, 0, 0);
+    DrawRectangle(15, 15, 120, 210, 0xffffffff, 0, 0);
+    DrawDoors($room, 0, 0, 150, 225, 0xffffffff);
+    return EndDrawing();
+}
+
+function DrawDoubleGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(450, 300);
+
+    DrawEllipse(0, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+    DrawEllipse(300, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+
+    # White background
+    DrawRectangle(0, 0, 450, 224, 0xffffffff, 0, 0);
+
+    # North and south walls
+    DrawRectangle(0, 0, 450, 15, 0xff000000, 0, 0);
+    DrawRectangle(135, 210, 180, 15, 0xff000000, 0, 0);
+
+    # West and east walls
+    DrawRectangle(0, 0, 15, 225, 0xff000000, 0, 0);
+    DrawRectangle(435, 0, 15, 225, 0xff000000, 0, 0);
+
+    DrawDoors($room, 0, 0, 450, 225, 0xffffffff);
+    return EndDrawing();
+}
+
 #############################################
 #
 # Outer court
@@ -668,33 +700,6 @@ game
 #
 # South wall and towers
 #
-function DrawRoomU($x:Int)
-{
-    DrawEllipse($x, 150, 150, 150, 0xffffffff, 0xff000000, 15);
-    DrawRectangle($x, 0, 150, 225, 0xff000000, 0, 0);
-    DrawRectangle($x + 15, 15, 120, 210, 0xffffffff, 0, 0);
-}
-
-function DrawGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(150, 300);
-    DrawRoomU(0);
-    DrawDoors($room, 0, 0, 150, 225, 0xffffffff);
-    return EndDrawing();
-}
-
-function DrawDoubleGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(450, 300);
-    DrawRoomU(0);
-    DrawRoomU(300);
-    DrawRectangle(150, 0, 150, 15, 0xff000000, 0, 0);
-    DrawRectangle(150, 210, 150, 15, 0xff000000, 0, 0);
-    DrawRectangle(130, 15, 190, 195, 0xffffffff, 0, 0);
-    DrawDoors($room, 0, 0, 450, 225, 0xffffffff);
-    return EndDrawing();
-}
-
 game
 {
     # South wall and tower descriptions.

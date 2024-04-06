@@ -1763,6 +1763,28 @@ function DrawCourtRoom($room:Item) : Int
     DrawDoors($room, 0, 0, 200, 300, -16777216);
     return EndDrawing();
 }
+function DrawGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(150, 300);
+    DrawEllipse(0, 150, 150, 150, -1, -16777216, 15);
+    DrawRectangle(0, 0, 150, 225, -16777216, 0, 0);
+    DrawRectangle(15, 15, 120, 210, -1, 0, 0);
+    DrawDoors($room, 0, 0, 150, 225, -1);
+    return EndDrawing();
+}
+function DrawDoubleGateHouseRoom($room:Item) : Int
+{
+    BeginDrawing(450, 300);
+    DrawEllipse(0, 150, 150, 150, -1, -16777216, 15);
+    DrawEllipse(300, 150, 150, 150, -1, -16777216, 15);
+    DrawRectangle(0, 0, 450, 224, -1, 0, 0);
+    DrawRectangle(0, 0, 450, 15, -16777216, 0, 0);
+    DrawRectangle(135, 210, 180, 15, -16777216, 0, 0);
+    DrawRectangle(0, 0, 15, 225, -16777216, 0, 0);
+    DrawRectangle(435, 0, 15, 225, -16777216, 0, 0);
+    DrawDoors($room, 0, 0, 450, 225, -1);
+    return EndDrawing();
+}
 function OnLeaveOuterCourt($from:Item, $to:Item) : Bool
 {
     if ($from == outer_court_N && $to == inner_court_S)
@@ -1816,30 +1838,6 @@ function PutInSilverStatue($item:Item, $target:Item)
     {
         Message($"You can't put the {Label($item)} in the {Label($target)}.");
     }
-}
-function DrawRoomU($x:Int)
-{
-    DrawEllipse($x, 150, 150, 150, -1, -16777216, 15);
-    DrawRectangle($x, 0, 150, 225, -16777216, 0, 0);
-    DrawRectangle($x + 15, 15, 120, 210, -1, 0, 0);
-}
-function DrawGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(150, 300);
-    DrawRoomU(0);
-    DrawDoors($room, 0, 0, 150, 225, -1);
-    return EndDrawing();
-}
-function DrawDoubleGateHouseRoom($room:Item) : Int
-{
-    BeginDrawing(450, 300);
-    DrawRoomU(0);
-    DrawRoomU(300);
-    DrawRectangle(150, 0, 150, 15, -16777216, 0, 0);
-    DrawRectangle(150, 210, 150, 15, -16777216, 0, 0);
-    DrawRectangle(130, 15, 190, 195, -1, 0, 0);
-    DrawDoors($room, 0, 0, 450, 225, -1);
-    return EndDrawing();
 }
 function DescribeThrone($item:Item)
 {
