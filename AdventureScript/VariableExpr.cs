@@ -20,9 +20,10 @@
         }
         public override sealed bool HasSideEffects => false;
 
-        public override sealed bool CanSetValue => true;
+        public override bool CanSetValue => true;
 
-        public override sealed bool IsConstant => false;
+        public override bool IsConstant => false;
+
         public override sealed Precedence Precedence => Precedence.Atomic;
 
         public override sealed void WriteExpr(GameState game, CodeWriter writer)

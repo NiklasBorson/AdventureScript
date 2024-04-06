@@ -17,9 +17,9 @@ namespace AdventureScript
 
         public IntrinsicVars Intrinsics => m_intrinsics;
 
-        public GlobalVariableExpr? TryAdd(string varName, TypeDef type)
+        public GlobalVariableExpr? TryAdd(string varName, TypeDef type, bool isConst)
         {
-            var expr = new GlobalVariableExpr(varName, type);
+            var expr = new GlobalVariableExpr(varName, type, isConst);
             if (m_map.TryAdd(varName, expr))
             {
                 m_vars.Add(expr);
@@ -43,20 +43,25 @@ namespace AdventureScript
         {
             for (int i = m_intrinsicCount; i < m_vars.Count; i++)
             {
+                // Don't write constants because references to constants are converted
+                // to literal values at parse time anyway.
                 var expr = m_vars[i];
-                writer.Write("var ");
-                writer.Write(expr.Name);
-                if (expr.Value == 0)
+                if (!expr.IsConstant)
                 {
-                    writer.Write($" : {expr.Type.Name}");
+                    writer.Write("var ");
+                    writer.Write(expr.Name);
+                    if (expr.Value == 0)
+                    {
+                        writer.Write($" : {expr.Type.Name}");
+                    }
+                    else
+                    {
+                        writer.Write(" = ");
+                        expr.Type.WriteValue(game, expr.Value, writer.TextWriter);
+                    }
+                    writer.Write(";");
+                    writer.EndLine();
                 }
-                else
-                {
-                    writer.Write(" = ");
-                    expr.Type.WriteValue(game, expr.Value, writer.TextWriter);
-                }
-                writer.Write(";");
-                writer.EndLine();
             }
         }
 

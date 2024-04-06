@@ -260,35 +260,40 @@ game
 #
 # Special room drawing functions
 #
+const $colorGray = 0xffc0c0c0;
+const $colorGreen = 0xff80c080;
+const $colorLightBrown = 0xffb97a57;
+const $colorDarkBrown = 0xff880015;
+
 function DrawCourtyardRoom($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 200, 200, 0xff000000, 0xffc0c0c0);
+    return DrawRectangularRoom($room, 200, 200, $colorBlack, $colorGray);
 }
 
 function DrawCourtyardRoom_100x200($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xffc0c0c0);
+    return DrawRectangularRoom($room, 100, 200, $colorBlack, $colorGray);
 }
 
 function DrawGrassyRoom($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 200, 200, 0xff000000, 0xff80c080);
+    return DrawRectangularRoom($room, 200, 200, $colorBlack, $colorGreen);
 }
 
 function DrawGrassyRoom_100x200($room:Item) : Int
 {
-    return DrawRectangularRoom($room, 100, 200, 0xff000000, 0xff80c080);
+    return DrawRectangularRoom($room, 100, 200, $colorBlack, $colorGreen);
 }
 
 function DrawGrassyRoomWithTable($room:Item) : Int
 {
     BeginDrawing(200, 200);
 
-    DrawRectangle(0, 0, 200, 200, 0xff80c080, 0xff000000, 15);
-    DrawDoors($room, 0, 0, 200, 200, 0xff80c080);
+    DrawRectangle(0, 0, 200, 200, $colorGreen, $colorBlack, 15);
+    DrawDoors($room, 0, 0, 200, 200, $colorGreen);
 
     # Draw the table
-    DrawRectangle(70, 90, 80, 25, 0xffB97A57, 0, 0);
+    DrawRectangle(70, 90, 80, 25, $colorLightBrown, 0, 0);
 
     return EndDrawing();
 }
@@ -296,27 +301,27 @@ function DrawGrassyRoomWithTable($room:Item) : Int
 function DrawOuterCourtN($room:Item) : Int
 {
     BeginDrawing(200, 200);
-    DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
-    DrawEllipse(-140, -100, 200, 200, 0xff000000, 0, 0);
-    DrawEllipse(140, -100, 200, 200, 0xff000000, 0, 0);
+    DrawRectangle(0, 0, 200, 200, $colorGray, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, $colorBlack, 0, 0);
+    DrawEllipse(140, -100, 200, 200, $colorBlack, 0, 0);
     return EndDrawing();
 }
 
 function DrawFairylandN($room:Item) : Int
 {
     BeginDrawing(200, 200);
-    DrawRectangle(0, 0, 200, 200, 0xff80c080, 0, 0);
-    DrawEllipse(-140, -100, 200, 200, 0xff000000, 0, 0);
-    DrawEllipse(140, -100, 200, 200, 0xff000000, 0, 0);
+    DrawRectangle(0, 0, 200, 200, $colorGreen, 0, 0);
+    DrawEllipse(-140, -100, 200, 200, $colorBlack, 0, 0);
+    DrawEllipse(140, -100, 200, 200, $colorBlack, 0, 0);
     return EndDrawing();
 }
 
 function DrawInnerCourtS($room:Item) : Int
 {
     BeginDrawing(200, 200);
-    DrawRectangle(0, 0, 200, 200, 0xffc0c0c0, 0, 0);
-    DrawRectangle(0, 160, 60, 40, 0xff000000, 0, 0);
-    DrawRectangle(140, 160, 60, 40, 0xff000000, 0, 0);
+    DrawRectangle(0, 0, 200, 200, $colorGray, 0, 0);
+    DrawRectangle(0, 160, 60, 40, $colorBlack, 0, 0);
+    DrawRectangle(140, 160, 60, 40, $colorBlack, 0, 0);
     return EndDrawing();
 }
 
@@ -325,14 +330,14 @@ function DrawGreatHall($room:Item) : Int
     BeginDrawing(500, 250);
 
     # Walls and floor
-    DrawRectangle(0, 0, 500, 250, 0xffffffff, 0xff000000, 15);
+    DrawRectangle(0, 0, 500, 250, $colorWhite, $colorBlack, 15);
 
     # Tables
-    DrawRectangle(60, 55, 20, 140, 0xffB97A57, 0, 0);
-    DrawRectangle(160, 50, 250, 20, 0xffB97A57, 0, 0);
-    DrawRectangle(160, 180, 250, 20, 0xffB97A57, 0, 0);
+    DrawRectangle(60, 55, 20, 140, $colorLightBrown, 0, 0);
+    DrawRectangle(160, 50, 250, 20, $colorLightBrown, 0, 0);
+    DrawRectangle(160, 180, 250, 20, $colorLightBrown, 0, 0);
 
-    DrawDoors($room, 0, 0, 500, 250, 0xff000000);
+    DrawDoors($room, 0, 0, 500, 250, $colorBlack);
     return EndDrawing();
 }
 
@@ -341,37 +346,37 @@ function DrawCourtRoom($room:Item) : Int
     BeginDrawing(200, 300);
 
     # Walls and floor
-    DrawRectangle(0, 0, 200, 300, 0xffffffff, 0xff000000, 15);
+    DrawRectangle(0, 0, 200, 300, $colorWhite, $colorBlack, 15);
 
     # Platform for throne
     DrawRectangle(15, 15, 170, 80, 0xfff2a333, 0, 0);
 
     # Throne
-    DrawRectangle(80, 25, 40, 35, 0xff880015, 0, 0);
-    DrawRectangle(90, 35, 20, 25, 0xffb97a57, 0, 0);
+    DrawRectangle(80, 25, 40, 35, $colorDarkBrown, 0, 0);
+    DrawRectangle(90, 35, 20, 25, $colorLightBrown, 0, 0);
 
     # Left benches
-    DrawRectangle(15, 50, 20, 75, 0xffb97a57, 0, 0);
-    DrawRectangle(15, 50, 5, 75, 0xff880015, 0, 0);
+    DrawRectangle(15, 50, 20, 75, $colorLightBrown, 0, 0);
+    DrawRectangle(15, 50, 5, 75, $colorDarkBrown, 0, 0);
 
-    DrawRectangle(15, 175, 20, 100, 0xffb97a57, 0, 0);
-    DrawRectangle(15, 175, 5, 100, 0xff880015, 0, 0);
+    DrawRectangle(15, 175, 20, 100, $colorLightBrown, 0, 0);
+    DrawRectangle(15, 175, 5, 100, $colorDarkBrown, 0, 0);
 
-    # Right benches
-    DrawRectangle(165, 25, 20, 250, 0xffb97a57, 0, 0);
-    DrawRectangle(180, 25, 5, 250, 0xff880015, 0, 0);
+    # Right bench
+    DrawRectangle(165, 50, 20, 225, $colorLightBrown, 0, 0);
+    DrawRectangle(180, 50, 5, 225, $colorDarkBrown, 0, 0);
 
-    DrawDoors($room, 0, 0, 200, 300, 0xff000000);
+    DrawDoors($room, 0, 0, 200, 300, $colorBlack);
     return EndDrawing();
 }
 
 function DrawGateHouseRoom($room:Item) : Int
 {
     BeginDrawing(150, 300);
-    DrawEllipse(0, 150, 150, 150, 0xffffffff, 0xff000000, 15);
-    DrawRectangle(0, 0, 150, 225, 0xff000000, 0, 0);
-    DrawRectangle(15, 15, 120, 210, 0xffffffff, 0, 0);
-    DrawDoors($room, 0, 0, 150, 225, 0xffffffff);
+    DrawEllipse(0, 150, 150, 150, $colorWhite, $colorBlack, 15);
+    DrawRectangle(0, 0, 150, 225, $colorBlack, 0, 0);
+    DrawRectangle(15, 15, 120, 210, $colorWhite, 0, 0);
+    DrawDoors($room, 0, 0, 150, 225, $colorWhite);
     return EndDrawing();
 }
 
@@ -379,21 +384,21 @@ function DrawDoubleGateHouseRoom($room:Item) : Int
 {
     BeginDrawing(450, 300);
 
-    DrawEllipse(0, 150, 150, 150, 0xffffffff, 0xff000000, 15);
-    DrawEllipse(300, 150, 150, 150, 0xffffffff, 0xff000000, 15);
+    DrawEllipse(0, 150, 150, 150, $colorWhite, $colorBlack, 15);
+    DrawEllipse(300, 150, 150, 150, $colorWhite, $colorBlack, 15);
 
     # White background
-    DrawRectangle(0, 0, 450, 224, 0xffffffff, 0, 0);
+    DrawRectangle(0, 0, 450, 224, $colorWhite, 0, 0);
 
     # North and south walls
-    DrawRectangle(0, 0, 450, 15, 0xff000000, 0, 0);
-    DrawRectangle(135, 210, 180, 15, 0xff000000, 0, 0);
+    DrawRectangle(0, 0, 450, 15, $colorBlack, 0, 0);
+    DrawRectangle(135, 210, 180, 15, $colorBlack, 0, 0);
 
     # West and east walls
-    DrawRectangle(0, 0, 15, 225, 0xff000000, 0, 0);
-    DrawRectangle(435, 0, 15, 225, 0xff000000, 0, 0);
+    DrawRectangle(0, 0, 15, 225, $colorBlack, 0, 0);
+    DrawRectangle(435, 0, 15, 225, $colorBlack, 0, 0);
 
-    DrawDoors($room, 0, 0, 450, 225, 0xffffffff);
+    DrawDoors($room, 0, 0, 450, 225, $colorWhite);
     return EndDrawing();
 }
 

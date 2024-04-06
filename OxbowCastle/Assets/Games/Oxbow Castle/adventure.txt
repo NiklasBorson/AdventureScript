@@ -407,7 +407,7 @@ function IsAccessible($item:Item) : Bool
 function IsNight() => $currentTime < 480 || $currentTime >= 1200;
 function IncrementTime()
 {
-    $currentTime = $currentTime < 1439 ? $currentTime + 1 : 0;
+    $currentTime = ($currentTime + 1) % 1440;
 }
 function IsDarkAtNight($item:Item) => IsNight();
 function IsDarkAlways($item:Item) => true;
@@ -1766,8 +1766,8 @@ function DrawCourtRoom($room:Item) : Int
     DrawRectangle(15, 50, 5, 75, -7864299, 0, 0);
     DrawRectangle(15, 175, 20, 100, -4621737, 0, 0);
     DrawRectangle(15, 175, 5, 100, -7864299, 0, 0);
-    DrawRectangle(165, 25, 20, 250, -4621737, 0, 0);
-    DrawRectangle(180, 25, 5, 250, -7864299, 0, 0);
+    DrawRectangle(165, 50, 20, 225, -4621737, 0, 0);
+    DrawRectangle(180, 50, 5, 225, -7864299, 0, 0);
     DrawDoors($room, 0, 0, 200, 300, -16777216);
     return EndDrawing();
 }

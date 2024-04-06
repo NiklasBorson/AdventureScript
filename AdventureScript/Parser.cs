@@ -62,7 +62,11 @@ namespace AdventureScript
                 }
                 else if (MatchName("var"))
                 {
-                    ParseGlobalVarDefinition();
+                    ParseGlobalVarDefinition(/*isConst*/ false);
+                }
+                else if (MatchName("const"))
+                {
+                    ParseGlobalVarDefinition(/*isConst*/ true);
                 }
                 else if (MatchName("function"))
                 {
@@ -229,7 +233,7 @@ namespace AdventureScript
 
             ReadSymbol(SymbolId.Semicolon);
         }
-        void ParseGlobalVarDefinition()
+        void ParseGlobalVarDefinition(bool isConst)
         {
             // Advance past "var" <varName> "="
             Advance();
@@ -259,13 +263,17 @@ namespace AdventureScript
                     new int[frame.FrameSize]
                     );
             }
+            else if (isConst)
+            {
+                Fail($"No initializer for constant {varName}.");
+            }
             else if (type == Types.Void)
             {
                 Fail($"No type specified for variable {varName}.");
             }
 
             // Try adding the variable.
-            var newVar = this.Game.GlobalVars.TryAdd(varName, type);
+            var newVar = this.Game.GlobalVars.TryAdd(varName, type, isConst);
             if (newVar == null)
             {
                 Fail($"The variable {varName} is already defined.");
@@ -1235,6 +1243,12 @@ namespace AdventureScript
             if (expr == null)
             {
                 Fail($"Undefined variable: {varName}.");
+            }
+
+            if (expr.IsConstant)
+            {
+                int value = expr.EvaluateConst(this.Game);
+                return new LiteralExpr(expr.Type, value);
             }
 
             return expr;

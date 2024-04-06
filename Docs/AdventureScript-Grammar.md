@@ -90,6 +90,7 @@ Definition = "include" String ";"
            | "property" NameList TypeDecl? ";"
            | "item" ( Name | String )
            | "var" VarName TypeDecl? ( = Expr )? ";"
+           | "const" VarName TypeDecl? = Expr ";"
            | "function" Name ParamList TypeDecl? StatementBLock
            | "function" Name ParamList "=>" Expression ";"
            | "map" Name Name -> Name "{" MapEntry ( "," MapEntry )* "}"
