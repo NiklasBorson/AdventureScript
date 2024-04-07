@@ -225,6 +225,20 @@ function Get-AdventureHelp {
         ForEach-Object { Write-Output $_.Name }
 }
 
+function Build-AdventureScript {
+    if ($IsWindows) {
+        # Build the entire solution on Windows
+        dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln')
+    }
+    else {
+        # Build selected directories on other platforms
+        'AdventureScript', 'AdventureTest', 'TextAdventure' | Foreach-Object {
+            dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj")
+        }
+    }
+}
+Set-Alias build Build-AdventureScript
+
 Write-Host "Adventure Helpers module loaded."
 Write-Host "Type Get-AdventureHelp to see a list of exported functions."
 
@@ -237,3 +251,4 @@ Export-ModuleMember -Function Build-Game
 Export-ModuleMember -Function Build-AllGames
 Export-ModuleMember -Function Build-GameTrace
 Export-ModuleMember -Function Get-AdventureHelp
+Export-ModuleMember -Function Build-AdventureScript -Alias build
