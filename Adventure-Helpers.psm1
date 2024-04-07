@@ -1,4 +1,5 @@
 $IsRelease = $false
+$ConfigName = 'Debug'
 
 $TestFilesDir = Join-Path $PSScriptRoot 'AdventureTest' 'TestFiles'
 $BaselineDir = Join-Path $PSScriptRoot 'AdventureTest' 'Baseline'
@@ -6,8 +7,15 @@ $GamesDir = Join-Path $PSScriptRoot 'Games'
 $TestOutputDir = Join-Path $PSScriptRoot 'AdventureTest' 'bin' 'Output'
 
 function Get-DllPath([string] $BaseName) {
-    $buildType = $IsRelease ? 'Release' : 'Debug'
-    Join-Path $PSScriptRoot $BaseName 'bin' $buildType 'net8.0' "$BaseName.dll"
+    Join-Path $PSScriptRoot $BaseName 'bin' $ConfigName 'net8.0' "$BaseName.dll"
+}
+
+<#
+.SYNOPSIS
+Gets the current configuration.
+#>
+function Get-Config {
+    Write-Output "Current configuration is $ConfigName. Use Set-Config to change."
 }
 
 <#
@@ -31,12 +39,14 @@ Set-Config -Release
 function Set-Config([switch] $Release, [switch] $Debug) {
     if ($Release -and (-not $Debug)) {
         $script:IsRelease = $true
+        $script:ConfigName = 'Release'
     }
     elseif ($Debug -and (-not $Release)) {
         $script:IsRelease = $false
+        $script:ConfigName = 'Debug'
     }
     else {
-        Write-Error "Error: Must specify -release or -debug."
+        Write-Error "Error: Must specify either -Release or -Debug."
     }
 }
 
@@ -215,33 +225,47 @@ function Build-GameTrace([string] $Name) {
         Set-Content $commandFilePath
 }
 
-<#
-.SYNOPSIS
-Get a list of functions exported by the Adventure-Helpers module.
-#>
-function Get-AdventureHelp {
-    (Get-Module 'Adventure-Helpers').ExportedCommands.Values | 
-        Where-Object { $_.CommandType -eq 'Function' } | 
-        ForEach-Object { Write-Output $_.Name }
-}
-
 function Build-AdventureScript {
     if ($IsWindows) {
         # Build the entire solution on Windows
-        dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln')
+        dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln') --configuration $ConfigName
     }
     else {
         # Build selected directories on other platforms
         'AdventureScript', 'AdventureTest', 'TextAdventure' | Foreach-Object {
-            dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj")
+            dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj") --configuration $ConfigName
         }
     }
 }
 Set-Alias build Build-AdventureScript
 
-Write-Host "Adventure Helpers module loaded."
-Write-Host "Type Get-AdventureHelp to see a list of exported functions."
+<#
+.SYNOPSIS
+Get a list of functions exported by the Adventure-Helpers module.
+#>
+function Get-AdventureHelp {
+    'Adventure helper commands:'
+    (Get-Module 'Adventure-Helpers').ExportedCommands.Values | 
+        Where-Object { $_.CommandType -eq 'Function' } | 
+        ForEach-Object { '- ' + $_.Name }
 
+    ''
+    'Aliases:'
+    (Get-Module 'Adventure-Helpers').ExportedCommands.Values | 
+        Where-Object { $_.CommandType -eq 'Alias' } | 
+        ForEach-Object { '- ' + $_.DisplayName }
+
+    ''
+    'Type Get-Help <name> -Detailed for help on a specific command'
+    ''
+}
+
+Write-Host "Adventure Helpers module loaded."
+Get-Config | Out-Host
+Write-Host "Type Get-AdventureHelp to see a list of exported functions."
+Write-Host
+
+Export-ModuleMember -Function Get-Config
 Export-ModuleMember -Function Set-Config
 Export-ModuleMember -Function Invoke-Tests
 Export-ModuleMember -Function Update-Baselines
@@ -250,5 +274,5 @@ Export-ModuleMember -Function Invoke-Game
 Export-ModuleMember -Function Build-Game
 Export-ModuleMember -Function Build-AllGames
 Export-ModuleMember -Function Build-GameTrace
-Export-ModuleMember -Function Get-AdventureHelp
 Export-ModuleMember -Function Build-AdventureScript -Alias build
+Export-ModuleMember -Function Get-AdventureHelp
