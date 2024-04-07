@@ -31,8 +31,23 @@ to contribute to this project.
 
 ## Building the Project
 
-To build the project, open `AdventureScript.sln` in Visual Studio and choose "Build Solution"
-from the "Build" menu (or press CTRL+SHIFT+B).
+You can build the project either from Visual Studio or from the command prompt.
+To build from Visual Studio:
+
+1. Open `AdventureScript.sln` in Visual Studio.
+2. Chose "Build Solution" from the "Build" menu (or press CTRL+SHIFT+B).
+
+To build from the command prompt, you do not need to have Visual Studio installed but
+do need to have PowerShell and the .NET SDK installed. These are available for Linux
+and Macintosh. The following instructions have been tested on Windows and Linux:
+
+1. Start a PowerShell prompt and navigate to the repo root.
+2. Type `Import-Module .\Adventure-Helpers.psm1`.
+3. Type `build`
+
+For more information about the Adventure-Helpers module, see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Note: The Windows-specific OxbowCastle project is only built on Windows.
 
 ## Playing Games
 
@@ -49,7 +64,7 @@ images.
 The easiest way to run the TextAdventure game is using the Adventure-Helpers PowerShell
 module:
 
-1. Start a PowerShell prompt navigate to the repo root.
+1. Start a PowerShell prompt and navigate to the repo root.
 2. Type `Import-Module .\Adventure-Helpers.psm1`.
 3. Type `Get-Games` to see a list of available games.
 4. Type `Invoke-Game <Name>` to play a game.
