@@ -1,13 +1,13 @@
 $IsRelease = $false
 
-$TestFilesDir = "$PSScriptRoot/AdventureTest/TestFiles"
-$BaselineDir = "$PSScriptRoot/AdventureTest/Baseline"
-$GamesDir = "$PSScriptRoot/Games"
-$TestOutputDir = "$PSScriptRoot/AdventureTest/bin/Output"
+$TestFilesDir = Join-Path $PSScriptRoot 'AdventureTest' 'TestFiles'
+$BaselineDir = Join-Path $PSScriptRoot 'AdventureTest' 'Baseline'
+$GamesDir = Join-Path $PSScriptRoot 'Games'
+$TestOutputDir = Join-Path $PSScriptRoot 'AdventureTest' 'bin' 'Output'
 
-function Get-ExePath([string] $BaseName) {
+function Get-DllPath([string] $BaseName) {
     $buildType = $IsRelease ? 'Release' : 'Debug'
-    "$PSScriptRoot/$BaseName/bin/$buildType/net8.0/$BaseName.exe"
+    Join-Path $PSScriptRoot $BaseName 'bin' $buildType 'net8.0' "$BaseName.dll"
 }
 
 <#
@@ -52,9 +52,9 @@ function Invoke-Tests {
     }
 
     # Run the test
-    $exePath = Get-ExePath('AdventureTest')
-    Write-Output "$exePath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir"
-    & $exePath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir
+    $dllPath = Get-DllPath('AdventureTest')
+    Write-Output "dotnet $dllPath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir"
+    & dotnet $dllPath -testfiles $testFilesDir -baseline $baselineDir -games $gamesDir -output $TestOutputDir
 }
 
 <#
@@ -99,9 +99,9 @@ Invoke-Game Demo
 function Invoke-Game([string] $Name) {
     $FilePath = Join-Path $GamesDir $Name 'adventure.txt'
     if (Test-Path $FilePath) {
-        $exePath = Get-ExePath('TextAdventure')
-        Write-Output "$exePath $FilePath"
-        & $exePath $FilePath
+        $dllPath = Get-DllPath('TextAdventure')
+        Write-Output "dotnet $dllPath $FilePath"
+        & dotnet $dllPath $FilePath
     }
     else {
         Write-Error "Error: $FilePath does not exist."        
@@ -146,11 +146,11 @@ function Build-Game([string] $Path, [string] $Destination) {
     mkdir $Destination | Out-Null
 
     $destFile = Join-Path $Destination 'adventure.txt'
-    $exePath = Get-ExePath('TextAdventure')
+    $dllPath = Get-DllPath('TextAdventure')
 
     # Compile adventure.txt.
-    Write-Host "$exePath -compile $sourceFile $destFile"
-    & $exePath -compile $sourceFile $destFile
+    Write-Host "dotnet $dllPath -compile $sourceFile $destFile"
+    & dotnet $dllPath -compile $sourceFile $destFile
 
     # Copy other files except .txt and .md files.
     Get-ChildItem (Join-Path $Path '*') -File -Exclude '*.txt','*.md' | ForEach-Object {
@@ -195,7 +195,7 @@ Build-GameTrace Demo
 function Build-GameTrace([string] $Name) {
 
     # Path of TextAdventure.exe
-    $exePath = Get-ExePath('TextAdventure')
+    $dllPath = Get-DllPath('TextAdventure')
 
     # Path of the adventure.txt file
     $gameFilePath = Join-Path $PSScriptRoot 'Games' $Name 'adventure.txt'
@@ -206,7 +206,7 @@ function Build-GameTrace([string] $Name) {
     $commandFilePath = Join-Path $PSScriptRoot 'AdventureTest' 'TestFiles' "$Name-input.txt"
 
     # Play the game, capturing a trace
-    & $exePath -trace $gameFilePath $traceFilePath
+    & dotnet $dllPath -trace $gameFilePath $traceFilePath
 
     # Extract the commands from the trace and save as a test input file
     Get-Content $traceFilePath |
@@ -225,6 +225,20 @@ function Get-AdventureHelp {
         ForEach-Object { Write-Output $_.Name }
 }
 
+function Build-AdventureScript {
+    if ($IsWindows) {
+        # Build the entire solution on Windows
+        dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln')
+    }
+    else {
+        # Build selected directories on other platforms
+        'AdventureScript', 'AdventureTest', 'TextAdventure' | Foreach-Object {
+            dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj")
+        }
+    }
+}
+Set-Alias build Build-AdventureScript
+
 Write-Host "Adventure Helpers module loaded."
 Write-Host "Type Get-AdventureHelp to see a list of exported functions."
 
@@ -237,3 +251,4 @@ Export-ModuleMember -Function Build-Game
 Export-ModuleMember -Function Build-AllGames
 Export-ModuleMember -Function Build-GameTrace
 Export-ModuleMember -Function Get-AdventureHelp
+Export-ModuleMember -Function Build-AdventureScript -Alias build
