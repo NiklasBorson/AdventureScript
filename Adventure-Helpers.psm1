@@ -1,10 +1,11 @@
-$IsRelease = $false
+# Current configuration ('Debug' or 'Release')
 $ConfigName = 'Debug'
 
+# Well-known directories
 $TestFilesDir = Join-Path $PSScriptRoot 'AdventureTest' 'TestFiles'
 $BaselineDir = Join-Path $PSScriptRoot 'AdventureTest' 'Baseline'
-$GamesDir = Join-Path $PSScriptRoot 'Games'
 $TestOutputDir = Join-Path $PSScriptRoot 'AdventureTest' 'bin' 'Output'
+$GamesDir = Join-Path $PSScriptRoot 'Games'
 
 function Get-DllPath([string] $BaseName) {
     Join-Path $PSScriptRoot $BaseName 'bin' $ConfigName 'net8.0' "$BaseName.dll"
@@ -38,11 +39,9 @@ Set-Config -Release
 #>
 function Set-Config([switch] $Release, [switch] $Debug) {
     if ($Release -and (-not $Debug)) {
-        $script:IsRelease = $true
         $script:ConfigName = 'Release'
     }
     elseif ($Debug -and (-not $Release)) {
-        $script:IsRelease = $false
         $script:ConfigName = 'Debug'
     }
     else {
@@ -81,7 +80,7 @@ function Update-Baselines {
     }
     else {
         Write-Error "Error: $TestOutputDirectory does not exist."
-        Write-Error "       Try running Invoke-Test."
+        Write-Error "       Try running Invoke-Tests."
     }
 }
 
