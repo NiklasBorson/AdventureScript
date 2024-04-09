@@ -8,16 +8,14 @@ namespace AdventureScript
     {
         Lexer m_lexer;
         Stack<string> m_fileStack = new Stack<string>();
-        IParserSink? m_sink;
 
-        public static void Parse(string filePath, GameState game, IParserSink? sink)
+        public static void Parse(string filePath, GameState game)
         {
             using (var lexer = new FileLexer(filePath))
             {
                 var parser = new Parser(game, lexer);
                 try
                 {
-                    parser.m_sink = sink;
                     parser.Parse();
                 }
                 catch (Exception e)
@@ -153,7 +151,8 @@ namespace AdventureScript
 
         void ParseEnumDefinition()
         {
-            m_sink?.BeginDefinition(m_lexer);
+            var docComments = m_lexer.DocComments;
+            var sourcePos = m_lexer.SourcePos;
 
             // Advance past the enum keyword.
             Advance();
@@ -171,13 +170,15 @@ namespace AdventureScript
             ReadSymbol(SymbolId.Semicolon);
 
             // Add the new type.
-            var def = this.Game.Types.AddEnumType(name, valueNames);
-            m_sink?.AddEnum(def);
+            var def = new EnumTypeDef(sourcePos, docComments, name, valueNames);
+
+            this.Game.Types.Add(def);
         }
 
         void ParseDelegateDefinition()
         {
-            m_sink?.BeginDefinition(m_lexer);
+            var docComments = m_lexer.DocComments;
+            var sourcePos = m_lexer.SourcePos;
 
             // Advance past the delegate keyword.
             Advance();
@@ -197,13 +198,13 @@ namespace AdventureScript
             ReadSymbol(SymbolId.Semicolon);
 
             // Add the delegate.
-            var def = this.Game.Types.AddDelegateType(name, paramList, returnType);
-            m_sink?.AddDelegate(def);
+            this.Game.Types.AddDelegateType(sourcePos, docComments, name, paramList, returnType);
         }
 
         void ParsePropertyDefinition()
         {
-            m_sink?.BeginDefinition(m_lexer);
+            var docComments = m_lexer.DocComments;
+            var sourcePos = m_lexer.SourcePos;
 
             // Advance past the property keyword.
             Advance();
@@ -215,20 +216,17 @@ namespace AdventureScript
 
             foreach (var name in names)
             {
-                if (!this.Game.Properties.TryAdd(name, typeDef))
+                if (!this.Game.Properties.TryAdd(sourcePos, docComments, name, typeDef))
                 {
                     Fail($"Property {name} is already defined.");
                 }
-
-                m_sink?.AddProperty(name, typeDef);
             }
 
             ReadSymbol(SymbolId.Semicolon);
         }
+
         void ParseItemDefinition()
         {
-            m_sink?.BeginDefinition(m_lexer);
-
             // Advance past item keyword.
             Advance();
 
@@ -236,13 +234,11 @@ namespace AdventureScript
             {
                 string name = ReadName();
                 AddItem(name);
-                m_sink?.AddItem(name);
             }
             else if (this.IsStringToken)
             {
                 string name = ReadString();
                 AddItem(name);
-                m_sink?.AddItem(name);
             }
             else
             {
@@ -253,7 +249,8 @@ namespace AdventureScript
         }
         void ParseGlobalVarDefinition(bool isConst)
         {
-            m_sink?.BeginDefinition(m_lexer);
+            var docComments = m_lexer.DocComments;
+            var sourcePos = m_lexer.SourcePos;
 
             // Advance past "var" <varName> "="
             Advance();
@@ -293,7 +290,7 @@ namespace AdventureScript
             }
 
             // Try adding the variable.
-            var newVar = this.Game.GlobalVars.TryAdd(varName, type, isConst);
+            var newVar = this.Game.GlobalVars.TryAdd(sourcePos, docComments, varName, type, isConst);
             if (newVar == null)
             {
                 Fail($"The variable {varName} is already defined.");
@@ -303,8 +300,6 @@ namespace AdventureScript
 
             // Read the final semicolon.
             ReadSymbol(SymbolId.Semicolon);
-
-            m_sink?.AddVariable(varName, type, isConst);
         }
 
         void AddItem(string name)
@@ -322,7 +317,8 @@ namespace AdventureScript
 
         void ParseFunctionDefinition()
         {
-            m_sink?.BeginDefinition(m_lexer);
+            var docComments = m_lexer.DocComments;
+            var sourcePos = m_lexer.SourcePos;
 
             // Advance past the "function" keyword.
             Advance();
@@ -385,7 +381,9 @@ namespace AdventureScript
             }
 
             this.Game.Functions.Add(functionDef);
-            m_sink?.AddFunction(functionDef);
+
+            functionDef.SourcePos = sourcePos;
+            functionDef.DocComments = docComments;
         }
 
         TypeDef ParseOptionalTypeDeclaration()
@@ -502,7 +500,8 @@ namespace AdventureScript
 
         void ParseMapDefinition()
         {
-            m_sink?.BeginDefinition(m_lexer);
+            var docComments = m_lexer.DocComments;
+            var sourcePos = m_lexer.SourcePos;
 
             // "map" <name> <fromType> "-> <toType>
             Advance();
@@ -563,7 +562,8 @@ namespace AdventureScript
 
             this.Game.Functions.Add(functionDef);
 
-            m_sink?.AddFunction(functionDef);
+            functionDef.SourcePos = sourcePos;
+            functionDef.DocComments = docComments;
         }
 
         KeyValuePair<int, int> ParseMapEntry(TypeDef fromType, TypeDef toType)

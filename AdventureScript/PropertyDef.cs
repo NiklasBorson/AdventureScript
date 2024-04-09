@@ -5,11 +5,21 @@
         // Array of values indexed by object ID.
         int[] m_values = new int[8];
 
-        public PropertyDef(string name, TypeDef typeDef)
+        public PropertyDef(
+            SourcePos sourcePos,
+            string[] docComments,
+            string name, 
+            TypeDef typeDef
+            )
         {
+            this.SourcePos = sourcePos;
+            this.DocComments = docComments;
             this.Name = name;
             this.Type = typeDef;
         }
+
+        public SourcePos SourcePos { get; }
+        public string[] DocComments { get; }
 
         public string Name { get; }
 

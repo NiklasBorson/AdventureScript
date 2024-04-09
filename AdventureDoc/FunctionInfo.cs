@@ -9,7 +9,7 @@ namespace AdventureDoc
         KeyValuePair<string, string>[]? m_params;
         string m_returnValue = string.Empty;
 
-        public FunctionInfo(Definition def, string name, IList<ParamDef> paramList, TypeDef returnType)
+        public FunctionInfo(Doc def, string name, IList<ParamDef> paramList, TypeDef returnType)
         {
             m_description = def.Description;
 

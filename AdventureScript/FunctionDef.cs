@@ -17,7 +17,11 @@ namespace AdventureScript
             this.Name = name;
             this.ParamList = paramList;
             this.ReturnType = returnType;
+            this.DocComments = new string[0];
         }
+
+        public SourcePos SourcePos { get; set; }
+        public string[] DocComments { get; set; }
 
         public abstract int Invoke(GameState game, int[] frame);
 

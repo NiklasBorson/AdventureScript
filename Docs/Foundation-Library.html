@@ -24,9 +24,6 @@
         <a href="#Properties">Properties</a>
       </li>
       <li>
-        <a href="#Items">Items</a>
-      </li>
-      <li>
         <a href="#Functions">Functions</a>
       </li>
     </ul>
@@ -150,6 +147,9 @@ delegate NavigationAction(
       <a name="Variables" />Variables</h2>
     <ul>
       <li>
+        <a href="#_AmbiguousItemFormatString">$AmbiguousItemFormatString</a>
+      </li>
+      <li>
         <a href="#_currentLightSource">$currentLightSource</a>
       </li>
       <li>
@@ -157,6 +157,18 @@ delegate NavigationAction(
       </li>
       <li>
         <a href="#_headArmor">$headArmor</a>
+      </li>
+      <li>
+        <a href="#_IgnoreWords">$IgnoreWords</a>
+      </li>
+      <li>
+        <a href="#_InvalidArgFormatString">$InvalidArgFormatString</a>
+      </li>
+      <li>
+        <a href="#_InvalidCommandString">$InvalidCommandString</a>
+      </li>
+      <li>
+        <a href="#_IsNounFirst">$IsNounFirst</a>
       </li>
       <li>
         <a href="#_isNowDark">$isNowDark</a>
@@ -171,9 +183,16 @@ delegate NavigationAction(
         <a href="#_legArmor">$legArmor</a>
       </li>
       <li>
+        <a href="#_NoItemFormatString">$NoItemFormatString</a>
+      </li>
+      <li>
         <a href="#_torsoArmor">$torsoArmor</a>
       </li>
     </ul>
+    <h3>
+      <a name="_AmbiguousItemFormatString" />$AmbiguousItemFormatString</h3>
+    <p>Error message format if a command argument could match multiple items. E.g., "I don't know which {0} you mean. It could be:"</p>
+    <pre>var $AmbiguousItemFormatString : String;</pre>
     <h3>
       <a name="_currentLightSource" />$currentLightSource</h3>
     <pre>include "Foundation.md";
@@ -189,6 +208,22 @@ var $currentTime : Int;</pre>
     <pre>include "Foundation-Combat.md";
 
 var $headArmor : Item;</pre>
+    <h3>
+      <a name="_IgnoreWords" />$IgnoreWords</h3>
+    <p>Space-separated list of words to remove from user input. E.g., "a an the".</p>
+    <pre>var $IgnoreWords : String;</pre>
+    <h3>
+      <a name="_InvalidArgFormatString" />$InvalidArgFormatString</h3>
+    <p>Error message format if a command has an invalid argument. E.g., "I don't understand {0}."</p>
+    <pre>var $InvalidArgFormatString : String;</pre>
+    <h3>
+      <a name="_InvalidCommandString" />$InvalidCommandString</h3>
+    <p>Error message if the user input does not match a command. E.g., "I don't understand that."</p>
+    <pre>var $InvalidCommandString : String;</pre>
+    <h3>
+      <a name="_IsNounFirst" />$IsNounFirst</h3>
+    <p>Specifies whether nouns precede adjectives in the game's language.  False if adjectives precede nouns, as in English (e.g., cold water). True if nouns precede adjectives, as in Spanish (e.g., agua fria).</p>
+    <pre>var $IsNounFirst : Bool;</pre>
     <h3>
       <a name="_isNowDark" />$isNowDark</h3>
     <pre>include "Foundation.md";
@@ -209,6 +244,10 @@ var $lastRoom : Item;</pre>
     <pre>include "Foundation-Combat.md";
 
 var $legArmor : Item;</pre>
+    <h3>
+      <a name="_NoItemFormatString" />$NoItemFormatString</h3>
+    <p>Error message format if a command argument doesn't match an item. E.g., "I couldn't find {0}."</p>
+    <pre>var $NoItemFormatString : String;</pre>
     <h3>
       <a name="_torsoArmor" />$torsoArmor</h3>
     <pre>include "Foundation-Combat.md";
@@ -614,23 +653,16 @@ property UseAction : ItemDelegate;</pre>
 
 property UseOnAction : Item2Delegate;</pre>
     <h2>
-      <a name="Items" />Items</h2>
-    <ul>
-      <li>
-        <a href="#player">player</a>
-      </li>
-    </ul>
-    <h3>
-      <a name="player" />player</h3>
-    <p>The player item represents the player.</p>
-    <pre>include "Foundation.md";
-
-item player;</pre>
-    <h2>
       <a name="Functions" />Functions</h2>
     <ul>
       <li>
+        <a href="#AddAdjectives">AddAdjectives</a>
+      </li>
+      <li>
         <a href="#AddItemWords">AddItemWords</a>
+      </li>
+      <li>
+        <a href="#AddNoun">AddNoun</a>
       </li>
       <li>
         <a href="#AddStateQualifier">AddStateQualifier</a>
@@ -640,6 +672,9 @@ item player;</pre>
       </li>
       <li>
         <a href="#AttackPlayer">AttackPlayer</a>
+      </li>
+      <li>
+        <a href="#BeginDrawing">BeginDrawing</a>
       </li>
       <li>
         <a href="#Close">Close</a>
@@ -687,7 +722,13 @@ item player;</pre>
         <a href="#DrawDoors">DrawDoors</a>
       </li>
       <li>
+        <a href="#DrawEllipse">DrawEllipse</a>
+      </li>
+      <li>
         <a href="#DrawEllipticalRoom">DrawEllipticalRoom</a>
+      </li>
+      <li>
+        <a href="#DrawRectangle">DrawRectangle</a>
       </li>
       <li>
         <a href="#DrawRectangularRoom">DrawRectangularRoom</a>
@@ -720,7 +761,16 @@ item player;</pre>
         <a href="#DropWeapon">DropWeapon</a>
       </li>
       <li>
+        <a href="#EndDrawing">EndDrawing</a>
+      </li>
+      <li>
+        <a href="#EndGame">EndGame</a>
+      </li>
+      <li>
         <a href="#GetArmor">GetArmor</a>
+      </li>
+      <li>
+        <a href="#GetItem">GetItem</a>
       </li>
       <li>
         <a href="#GetLink">GetLink</a>
@@ -855,10 +905,40 @@ item player;</pre>
         <a href="#LinkRoomsOneWay">LinkRoomsOneWay</a>
       </li>
       <li>
+        <a href="#ListCommands">ListCommands</a>
+      </li>
+      <li>
         <a href="#ListContainerContents">ListContainerContents</a>
       </li>
       <li>
+        <a href="#ListFunction">ListFunction</a>
+      </li>
+      <li>
+        <a href="#ListFunctions">ListFunctions</a>
+      </li>
+      <li>
+        <a href="#ListItem">ListItem</a>
+      </li>
+      <li>
+        <a href="#ListItems">ListItems</a>
+      </li>
+      <li>
+        <a href="#ListProperties">ListProperties</a>
+      </li>
+      <li>
+        <a href="#ListTypes">ListTypes</a>
+      </li>
+      <li>
+        <a href="#ListVariables">ListVariables</a>
+      </li>
+      <li>
+        <a href="#ListWords">ListWords</a>
+      </li>
+      <li>
         <a href="#Look">Look</a>
+      </li>
+      <li>
+        <a href="#Message">Message</a>
       </li>
       <li>
         <a href="#NewArmor">NewArmor</a>
@@ -877,6 +957,9 @@ item player;</pre>
       </li>
       <li>
         <a href="#NewDoorItem">NewDoorItem</a>
+      </li>
+      <li>
+        <a href="#NewItem">NewItem</a>
       </li>
       <li>
         <a href="#NewKey">NewKey</a>
@@ -948,6 +1031,9 @@ item player;</pre>
         <a href="#PutOutCandle">PutOutCandle</a>
       </li>
       <li>
+        <a href="#RawMessage">RawMessage</a>
+      </li>
+      <li>
         <a href="#SetArmor">SetArmor</a>
       </li>
       <li>
@@ -976,6 +1062,9 @@ item player;</pre>
       </li>
       <li>
         <a href="#TakeWeapon">TakeWeapon</a>
+      </li>
+      <li>
+        <a href="#Tick">Tick</a>
       </li>
       <li>
         <a href="#TryFollowPlayer">TryFollowPlayer</a>
@@ -1030,12 +1119,36 @@ item player;</pre>
       </li>
     </ul>
     <h3>
+      <a name="AddAdjectives" />AddAdjectives</h3>
+    <p>Adds adjectives for a currently-accessible item.</p>
+    <pre>function AddAdjectives(
+    $words : String,
+    $item : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$words</p>
+    <p class="def">Space-separated list of adjectives.</p>
+    <p class="term">$item</p>
+    <p class="def">Item the adjectives refer to.</p>
+    <h3>
       <a name="AddItemWords" />AddItemWords</h3>
     <pre>include "Foundation.md";
 
 function AddItemWords(
     $item : Item
     );</pre>
+    <h3>
+      <a name="AddNoun" />AddNoun</h3>
+    <p>Adds a noun for a currently-accessible item.</p>
+    <pre>function AddNoun(
+    $word : String,
+    $item : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$word</p>
+    <p class="def">Noun used to refer to the item.</p>
+    <p class="term">$item</p>
+    <p class="def">Item the noun refers to.</p>
     <h3>
       <a name="AddStateQualifier" />AddStateQualifier</h3>
     <pre>include "Foundation.md";
@@ -1059,6 +1172,18 @@ function AttackItemWith(
 function AttackPlayer(
     $foe : Item
     );</pre>
+    <h3>
+      <a name="BeginDrawing" />BeginDrawing</h3>
+    <p>Begins a vector drawing. All units are in px (1/96 inch).</p>
+    <pre>function BeginDrawing(
+    $width : Int,
+    $height : Int
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$width</p>
+    <p class="def">Width of the canvas.</p>
+    <p class="term">$height</p>
+    <p class="def">Height of the canvas.</p>
     <h3>
       <a name="Close" />Close</h3>
     <pre>include "Foundation.md";
@@ -1171,6 +1296,33 @@ function DrawDoors(
     $backColor : Int
     );</pre>
     <h3>
+      <a name="DrawEllipse" />DrawEllipse</h3>
+    <p>Called after BeginDrawing to draw an ellipse.</p>
+    <pre>function DrawEllipse(
+    $left : Int,
+    $top : Int,
+    $width : Int,
+    $height : Int,
+    $fillColor : Int,
+    $strokeColor : Int,
+    $strokeThickness : Int
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$left</p>
+    <p class="def">Left coordinate of the ellipse.</p>
+    <p class="term">$top</p>
+    <p class="def">Top coordinate of the ellipse.</p>
+    <p class="term">$width</p>
+    <p class="def">Width of the ellipse.</p>
+    <p class="term">$height</p>
+    <p class="def">Height of the ellipse.</p>
+    <p class="term">$fillColor</p>
+    <p class="def">ARGB fill color.</p>
+    <p class="term">$strokeColor</p>
+    <p class="def">ARGB border color.</p>
+    <p class="term">$strokeThickness</p>
+    <p class="def">Border thickness.</p>
+    <h3>
       <a name="DrawEllipticalRoom" />DrawEllipticalRoom</h3>
     <pre>include "Foundation.md";
 
@@ -1179,6 +1331,33 @@ function DrawEllipticalRoom(
     $width : Int,
     $height : Int
     ) : Int;</pre>
+    <h3>
+      <a name="DrawRectangle" />DrawRectangle</h3>
+    <p>Called after BeginDrawing to draw a rectangle.</p>
+    <pre>function DrawRectangle(
+    $left : Int,
+    $top : Int,
+    $width : Int,
+    $height : Int,
+    $fillColor : Int,
+    $strokeColor : Int,
+    $strokeThickness : Int
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$left</p>
+    <p class="def">Left coordinate of the rectangle.</p>
+    <p class="term">$top</p>
+    <p class="def">Top coordinate of the rectangle.</p>
+    <p class="term">$width</p>
+    <p class="def">Width of the rectangle.</p>
+    <p class="term">$height</p>
+    <p class="def">Height of the rectangle.</p>
+    <p class="term">$fillColor</p>
+    <p class="def">ARGB fill color.</p>
+    <p class="term">$strokeColor</p>
+    <p class="def">ARGB border color.</p>
+    <p class="term">$strokeThickness</p>
+    <p class="def">Border thickness.</p>
     <h3>
       <a name="DrawRectangularRoom" />DrawRectangularRoom</h3>
     <pre>include "Foundation.md";
@@ -1258,12 +1437,38 @@ function DropWeapon(
     $item : Item
     );</pre>
     <h3>
+      <a name="EndDrawing" />EndDrawing</h3>
+    <p>Ends a vector drawing and returns a drawing ID.</p>
+    <pre>function EndDrawing() : Int;</pre>
+    <h4>Return value</h4>
+    <p>Returns a unique identifier that can be used to refer to the drawing within the current turn.</p>
+    <h3>
+      <a name="EndGame" />EndGame</h3>
+    <p>Ends the game.</p>
+    <pre>function EndGame(
+    $isWon : Bool
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$isWon</p>
+    <p class="def">True if the game is won, false if it is lost.</p>
+    <h3>
       <a name="GetArmor" />GetArmor</h3>
     <pre>include "Foundation-Combat.md";
 
 function GetArmor(
     $kind : ArmorKind
     ) : Item;</pre>
+    <h3>
+      <a name="GetItem" />GetItem</h3>
+    <p>Gets the specified item.</p>
+    <pre>function GetItem(
+    $name : String
+    ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$name</p>
+    <p class="def">Name of the item to get.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created item.</p>
     <h3>
       <a name="GetLink" />GetLink</h3>
     <pre>include "Foundation.md";
@@ -1669,6 +1874,10 @@ function LinkRoomsOneWay(
     $dir : Direction
     );</pre>
     <h3>
+      <a name="ListCommands" />ListCommands</h3>
+    <p>Lists all commands in the game.</p>
+    <pre>function ListCommands();</pre>
+    <h3>
       <a name="ListContainerContents" />ListContainerContents</h3>
     <pre>include "Foundation.md";
 
@@ -1676,10 +1885,61 @@ function ListContainerContents(
     $container : Item
     );</pre>
     <h3>
+      <a name="ListFunction" />ListFunction</h3>
+    <p>Lists a specific function.</p>
+    <pre>function ListFunction(
+    $name : String
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$name</p>
+    <p class="def">Name of the function to list.</p>
+    <h3>
+      <a name="ListFunctions" />ListFunctions</h3>
+    <p>Lists all functions in the game.</p>
+    <pre>function ListFunctions();</pre>
+    <h3>
+      <a name="ListItem" />ListItem</h3>
+    <p>Lists the properties of a specified item.</p>
+    <pre>function ListItem(
+    $name : String
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$name</p>
+    <p class="def">Item to list.</p>
+    <h3>
+      <a name="ListItems" />ListItems</h3>
+    <p>Lists all items in the game.</p>
+    <pre>function ListItems();</pre>
+    <h3>
+      <a name="ListProperties" />ListProperties</h3>
+    <p>Lists all properties in the game.</p>
+    <pre>function ListProperties();</pre>
+    <h3>
+      <a name="ListTypes" />ListTypes</h3>
+    <p>Lists all types in the game.</p>
+    <pre>function ListTypes();</pre>
+    <h3>
+      <a name="ListVariables" />ListVariables</h3>
+    <p>Lists all global variables in the game.</p>
+    <pre>function ListVariables();</pre>
+    <h3>
+      <a name="ListWords" />ListWords</h3>
+    <p>Lists words (adjectives and nouns) for currently-accessible items.</p>
+    <pre>function ListWords();</pre>
+    <h3>
       <a name="Look" />Look</h3>
     <pre>include "Foundation.md";
 
 function Look();</pre>
+    <h3>
+      <a name="Message" />Message</h3>
+    <p>Outputs a message, normalizing white space.</p>
+    <pre>function Message(
+    $message : String
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$message</p>
+    <p class="def">Output string.</p>
     <h3>
       <a name="NewArmor" />NewArmor</h3>
     <pre>include "Foundation-Combat.md";
@@ -1740,6 +2000,17 @@ function NewDoorItem(
     $noun : String,
     $state : DoorState
     ) : Item;</pre>
+    <h3>
+      <a name="NewItem" />NewItem</h3>
+    <p>Adds a new item.</p>
+    <pre>function NewItem(
+    $namePrefix : String
+    ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$namePrefix</p>
+    <p class="def">Prefix used to generate a unique name for the item.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created item.</p>
     <h3>
       <a name="NewKey" />NewKey</h3>
     <pre>include "Foundation.md";
@@ -1941,6 +2212,15 @@ function PutOutCandle(
     $item : Item
     );</pre>
     <h3>
+      <a name="RawMessage" />RawMessage</h3>
+    <p>Outputs a message without normalizing white space.</p>
+    <pre>function RawMessage(
+    $message : String
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$message</p>
+    <p class="def">Output string.</p>
+    <h3>
       <a name="SetArmor" />SetArmor</h3>
     <pre>include "Foundation-Combat.md";
 
@@ -2026,6 +2306,10 @@ function TakePortableItem(
 function TakeWeapon(
     $item : Item
     );</pre>
+    <h3>
+      <a name="Tick" />Tick</h3>
+    <p>Causes a turn to pass.</p>
+    <pre>function Tick();</pre>
     <h3>
       <a name="TryFollowPlayer" />TryFollowPlayer</h3>
     <pre>include "Foundation-Combat.md";

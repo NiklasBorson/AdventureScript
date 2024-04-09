@@ -1,60 +1,53 @@
 ﻿using AdventureScript;
-using System.Xml;
 
 namespace AdventureDoc
 {
-    internal class ParserSink : IParserSink
+    internal class ApiSet : IApiSink
     {
-        Definition m_def = new Definition();
-
         List<RefPage> m_enums = new List<RefPage>();
         List<RefPage> m_delegates = new List<RefPage>();
         List<RefPage> m_variables = new List<RefPage>();
         List<RefPage> m_constants = new List<RefPage>();
         List<RefPage> m_properties = new List<RefPage>();
-        List<RefPage> m_items = new List<RefPage>();
         List<RefPage> m_functions = new List<RefPage>();
-
-        public void BeginDefinition(Lexer lexer)
-        {
-            m_def = new Definition(lexer);
-        }
 
         public void AddEnum(EnumTypeDef def)
         {
-            m_enums.Add(new EnumPage(m_def, def));
+            var doc = new Doc(def.SourcePos, def.DocComments);
+
+            m_enums.Add(new EnumPage(doc, def));
         }
 
         public void AddDelegate(DelegateTypeDef def)
         {
-            m_delegates.Add(new DelegatePage(m_def, def));
+            var doc = new Doc(def.SourcePos, def.DocComments);
+
+            m_delegates.Add(new DelegatePage(doc, def));
         }
 
         public void AddFunction(FunctionDef def)
         {
-            m_functions.Add(new FunctionPage(m_def, def));
+            var doc = new Doc(def.SourcePos, def.DocComments);
+
+            m_functions.Add(new FunctionPage(doc, def));
         }
 
-        public void AddItem(string name)
+        public void AddProperty(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
         {
-            m_items.Add(new ItemPage(m_def, name));
+            var doc = new Doc(sourcePos, docComments);
+            m_properties.Add(new PropertyPage(doc, name, typeDef));
         }
 
-        public void AddProperty(string name, TypeDef typeDef)
+        public void AddVariable(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
         {
-            m_properties.Add(new PropertyPage(m_def, name, typeDef));
+            var doc = new Doc(sourcePos, docComments);
+            m_variables.Add(new VariablePage(doc, name, typeDef));
         }
 
-        public void AddVariable(string name, TypeDef typeDef, bool isConst)
+        public void AddConstant(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
         {
-            if (isConst)
-            {
-                m_constants.Add(new ConstantPage(m_def, name, typeDef));
-            }
-            else
-            {
-                m_variables.Add(new VariablePage(m_def, name, typeDef));
-            }
+            var doc = new Doc(sourcePos, docComments);
+            m_constants.Add(new ConstantPage(doc, name, typeDef));
         }
 
         public void Write(string fileName)
@@ -66,7 +59,6 @@ namespace AdventureDoc
                 new Section("Variables", m_variables),
                 new Section("Constants", m_constants),
                 new Section("Properties", m_properties),
-                new Section("Items", m_items),
                 new Section("Functions", m_functions)
             };
 

@@ -2,11 +2,22 @@
 {
     public class DelegateTypeDef : TypeDef
     {
-        public DelegateTypeDef(string name, IList<ParamDef> paramDefs, TypeDef returnType) : base(name)
+        public DelegateTypeDef(
+            SourcePos sourcePos,
+            string[] docComments,
+            string name, 
+            IList<ParamDef> paramDefs, 
+            TypeDef returnType
+            ) : base(name)
         {
+            this.SourcePos = sourcePos;
+            this.DocComments = docComments;
             this.ParamList = paramDefs;
             this.ReturnType = returnType;
         }
+        public SourcePos SourcePos { get; }
+        public string[] DocComments { get; }
+
         public IList<ParamDef> ParamList { get; }
         public TypeDef ReturnType { get; }
 

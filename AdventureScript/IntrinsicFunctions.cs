@@ -8,9 +8,10 @@ namespace AdventureScript
 
         Func m_func;
 
-        public IntrinsicFunctionDef(string name, IList<ParamDef> paramList, TypeDef returnType, Func func) :
+        public IntrinsicFunctionDef(string[] docComments, string name, IList<ParamDef> paramList, TypeDef returnType, Func func) :
             base(name, paramList, returnType)
         {
+            base.DocComments = docComments;
             m_func = func;
         }
 
@@ -285,11 +286,13 @@ namespace AdventureScript
             // Begin a code block.
             game.RawMessage("```");
 
+            foreach (var line in func.DocComments)
+            {
+                game.RawMessage(line);
+            }
+
             if (func is IntrinsicFunctionDef)
             {
-                // Output a comment.
-                game.RawMessage("# Intrinsic function");
-
                 // Output the declaration.
                 var b = new StringBuilder();
                 func.GetDeclaration(b);
@@ -406,6 +409,12 @@ namespace AdventureScript
         public static readonly IntrinsicFunctionDef[] Intrinsics = new IntrinsicFunctionDef[]
         {
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Adds a new item.",
+                    "## $namePrefix: Prefix used to generate a unique name for the item.",
+                    "## $return: Returns the newly-created item."
+                },
                 "NewItem",
                 new ParamDef[] {
                     new ParamDef("$namePrefix", Types.String)
@@ -414,6 +423,12 @@ namespace AdventureScript
                 _NewItem
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Gets the specified item.",
+                    "## $name: Name of the item to get.",
+                    "## $return: Returns the newly-created item."
+                },
                 "GetItem",
                 new ParamDef[] {
                     new ParamDef("$name", Types.String)
@@ -422,6 +437,11 @@ namespace AdventureScript
                 _GetItem
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Ends the game.",
+                    "## $isWon: True if the game is won, false if it is lost."
+                },
                 "EndGame",
                 new ParamDef[] {
                     new ParamDef("$isWon", Types.Bool)
@@ -430,6 +450,11 @@ namespace AdventureScript
                 _EndGame
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Outputs a message, normalizing white space.",
+                    "## $message: Output string."
+                },
                 "Message",
                 new ParamDef[] {
                     new ParamDef("$message", Types.String)
@@ -438,6 +463,11 @@ namespace AdventureScript
                 _Message
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Outputs a message without normalizing white space.",
+                    "## $message: Output string."
+                },
                 "RawMessage",
                 new ParamDef[] {
                     new ParamDef("$message", Types.String)
@@ -446,18 +476,31 @@ namespace AdventureScript
                 _RawMessage
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Causes a turn to pass."
+                },
                 "Tick",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _Tick
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists all items in the game."
+                },
                 "ListItems",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListItems
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists the properties of a specified item.",
+                    "## $name: Item to list."
+                },
                 "ListItem",
                 new ParamDef[] {
                     new ParamDef("$name", Types.String)
@@ -466,30 +509,51 @@ namespace AdventureScript
                 _ListItem
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists all properties in the game."
+                },
                 "ListProperties",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListProperties
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists all types in the game."
+                },
                 "ListTypes",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListTypes
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists all global variables in the game."
+                },
                 "ListVariables",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListVariables
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists all functions in the game."
+                },
                 "ListFunctions",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListFunctions
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists a specific function.",
+                    "## $name: Name of the function to list."
+                },
                 "ListFunction",
                 new ParamDef[] {
                     new ParamDef("$name", Types.String)
@@ -498,18 +562,32 @@ namespace AdventureScript
                 _ListFunction
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists all commands in the game."
+                },
                 "ListCommands",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListCommands
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Lists words (adjectives and nouns) for currently-accessible items."
+                },
                 "ListWords",
                 new ParamDef[0],
                 /*returnType*/ Types.Void,
                 _ListWords
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Adds a noun for a currently-accessible item.",
+                    "## $word: Noun used to refer to the item.",
+                    "## $item: Item the noun refers to."
+                },
                 "AddNoun",
                 new ParamDef[] {
                     new ParamDef("$word", Types.String),
@@ -519,6 +597,12 @@ namespace AdventureScript
                 _AddNoun
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Adds adjectives for a currently-accessible item.",
+                    "## $words: Space-separated list of adjectives.",
+                    "## $item: Item the adjectives refer to."
+                },
                 "AddAdjectives",
                 new ParamDef[] {
                     new ParamDef("$words", Types.String),
@@ -528,6 +612,12 @@ namespace AdventureScript
                 _AddAdjectives
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Begins a vector drawing. All units are in px (1/96 inch).",
+                    "## $width: Width of the canvas.",
+                    "## $height: Height of the canvas."
+                },
                 "BeginDrawing",
                 new ParamDef[] {
                     new ParamDef("$width", Types.Int),
@@ -537,17 +627,33 @@ namespace AdventureScript
                 _BeginDrawing
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Ends a vector drawing and returns a drawing ID.",
+                    "## $return: Returns a unique identifier that can be used to refer to the drawing within the current turn."
+                },
                 "EndDrawing",
                 new ParamDef[0],
                 /*returnType*/ Types.Int,
                 _EndDrawing
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Called after BeginDrawing to draw a rectangle.",
+                    "## $left: Left coordinate of the rectangle.",
+                    "## $top: Top coordinate of the rectangle.",
+                    "## $width: Width of the rectangle.",
+                    "## $height: Height of the rectangle.",
+                    "## $fillColor: ARGB fill color.",
+                    "## $strokeColor: ARGB border color.",
+                    "## $strokeThickness: Border thickness."
+                },
                 "DrawRectangle",
                 new ParamDef[] {
-                    new ParamDef("left", Types.Int),
+                    new ParamDef("$left", Types.Int),
                     new ParamDef("$top", Types.Int),
-                    new ParamDef("width", Types.Int),
+                    new ParamDef("$width", Types.Int),
                     new ParamDef("$height", Types.Int),
                     new ParamDef("$fillColor", Types.Int),
                     new ParamDef("$strokeColor", Types.Int),
@@ -557,11 +663,22 @@ namespace AdventureScript
                 _DrawRectangle
                 ),
             new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Called after BeginDrawing to draw an ellipse.",
+                    "## $left: Left coordinate of the ellipse.",
+                    "## $top: Top coordinate of the ellipse.",
+                    "## $width: Width of the ellipse.",
+                    "## $height: Height of the ellipse.",
+                    "## $fillColor: ARGB fill color.",
+                    "## $strokeColor: ARGB border color.",
+                    "## $strokeThickness: Border thickness."
+                },
                 "DrawEllipse",
                 new ParamDef[] {
-                    new ParamDef("left", Types.Int),
+                    new ParamDef("$left", Types.Int),
                     new ParamDef("$top", Types.Int),
-                    new ParamDef("width", Types.Int),
+                    new ParamDef("$width", Types.Int),
                     new ParamDef("$height", Types.Int),
                     new ParamDef("$fillColor", Types.Int),
                     new ParamDef("$strokeColor", Types.Int),

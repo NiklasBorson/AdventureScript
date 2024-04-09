@@ -9,6 +9,16 @@ namespace AdventureScript
         Loss
     }
 
+    public interface IApiSink
+    {
+        void AddEnum(EnumTypeDef def);
+        void AddDelegate(DelegateTypeDef def);
+        void AddFunction(FunctionDef def);
+        void AddProperty(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef);
+        void AddVariable(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef);
+        void AddConstant(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef);
+    }
+
     public class GameState
     {
         #region Fields
@@ -36,12 +46,7 @@ namespace AdventureScript
 
         public IList<string> LoadGame(string filePath)
         {
-            return LoadGame(filePath, null);
-        }
-
-        public IList<string> LoadGame(string filePath, IParserSink? sink)
-        {
-            Parser.Parse(filePath, this, sink);
+            Parser.Parse(filePath, this);
 
             foreach (var block in this.GameBlocks)
             {
@@ -72,6 +77,48 @@ namespace AdventureScript
         public Drawing? GetDrawing(int id)
         {
             return id > 0 && id <= m_drawings.Count ? m_drawings[id - 1] : null;
+        }
+
+        public void GetApis(IApiSink sink)
+        {
+            foreach (var def in Types)
+            {
+                var enumDef = def as EnumTypeDef;
+                if (enumDef != null)
+                {
+                    sink.AddEnum(enumDef);
+                }
+                else
+                {
+                    var delegateDef = def as DelegateTypeDef;
+                    if (delegateDef != null)
+                    {
+                        sink.AddDelegate(delegateDef);
+                    }
+                }
+            }
+
+            for (int i = 1; i < m_funcMap.Count; i++)
+            {
+                sink.AddFunction(m_funcMap[i]);
+            }
+
+            foreach (var def in m_propMap)
+            {
+                sink.AddProperty(def.SourcePos, def.DocComments, def.Name, def.Type);
+            }
+
+            foreach (var def in m_varMap)
+            {
+                if (def.IsConstant)
+                {
+                    sink.AddConstant(def.SourcePos, def.DocComments, def.Name, def.Type);
+                }
+                else
+                {
+                    sink.AddVariable(def.SourcePos, def.DocComments, def.Name, def.Type);
+                }
+            }
         }
 
         internal TypeMap Types => m_typeMap;

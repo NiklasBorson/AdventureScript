@@ -89,7 +89,7 @@ namespace AdventureScript
         public int IntValue => m_intValue;
         public ReadOnlySpan<char> NameValue => GetCapture();
         public string StringValue => m_stringValue;
-        public IList<string> DocComments => m_docComments;
+        public string[] DocComments => m_docComments.ToArray();
 
         protected abstract string? ReadLine();
 

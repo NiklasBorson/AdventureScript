@@ -16,13 +16,6 @@ namespace AdventureScript
             }
         }
 
-        public EnumTypeDef AddEnumType(string name, IList<string> valueNames)
-        {
-            var newType = new EnumTypeDef(name, valueNames);
-            Add(newType);
-            return newType;
-        }
-
         public DelegateTypeDef? FindDelegateType(IList<ParamDef> paramDefs, TypeDef returnType)
         {
             foreach (var existingType in m_delegateTypes)
@@ -35,7 +28,13 @@ namespace AdventureScript
             return null;
         }
 
-        public DelegateTypeDef AddDelegateType(string name, IList<ParamDef> paramDefs, TypeDef returnType)
+        public DelegateTypeDef AddDelegateType(
+            SourcePos sourcePos,
+            string[] docComments,
+            string name, 
+            IList<ParamDef> paramDefs, 
+            TypeDef returnType
+            )
         {
             // Look for an existing type that matches the parameters.
             var existingType = FindDelegateType(paramDefs, returnType);
@@ -48,7 +47,7 @@ namespace AdventureScript
             else
             {
                 // This is a distinct delegate type.
-                var newType = new DelegateTypeDef(name, paramDefs, returnType);
+                var newType = new DelegateTypeDef(sourcePos, docComments, name, paramDefs, returnType);
 
                 // Add the new type to the map and the delegate list.
                 Add(newType);
@@ -57,7 +56,7 @@ namespace AdventureScript
             }
         }
 
-        void Add(TypeDef def)
+        public void Add(TypeDef def)
         {
             m_map.Add(def.Name, def);
         }

@@ -1,23 +1,21 @@
 ﻿using AdventureScript;
-using System.Text;
-using System.Xml;
 
 namespace AdventureDoc
 {
     abstract class RefPage : IComparable<RefPage>
     {
-        string m_fileName;
+        string? m_fileName;
         string m_description;
         string m_name;
 
-        public RefPage(Definition def, string name)
+        public RefPage(Doc doc, string name)
         {
-            m_fileName = Path.GetFileName(def.SourcePos.FileName);
-            m_description = def.Description;
+            m_fileName = Path.GetFileName(doc.SourcePos.FileName);
+            m_description = doc.Description;
             m_name = name;
         }
 
-        public string FileName => m_fileName;
+        public string? FileName => m_fileName;
         public string Description => m_description;
         public string Name => m_name;
 
@@ -35,18 +33,18 @@ namespace AdventureDoc
 
     sealed class FunctionPage : RefPage
     {
-        FunctionDef m_funcDef;
+        FunctionDef m_def;
         FunctionInfo m_funcInfo;
 
-        public FunctionPage(Definition def, FunctionDef funcDef) : base(def, funcDef.Name)
+        public FunctionPage(Doc doc, FunctionDef def) : base(doc, def.Name)
         {
-            m_funcDef = funcDef;
-            m_funcInfo = new FunctionInfo(def, funcDef.Name, funcDef.ParamList, funcDef.ReturnType);
+            m_def = def;
+            m_funcInfo = new FunctionInfo(doc, def.Name, def.ParamList, def.ReturnType);
         }
 
         public override string GetSyntax()
         {
-            return FunctionInfo.GetSyntax("function", Name, m_funcDef.ParamList, m_funcDef.ReturnType);
+            return FunctionInfo.GetSyntax("function", Name, m_def.ParamList, m_def.ReturnType);
         }
 
         public override void WriteMembers(HtmlWriter writer)
@@ -57,18 +55,18 @@ namespace AdventureDoc
 
     sealed class DelegatePage : RefPage
     {
-        DelegateTypeDef m_typeDef;
+        DelegateTypeDef m_def;
         FunctionInfo m_funcInfo;
 
-        public DelegatePage(Definition def, DelegateTypeDef typeDef) : base(def, typeDef.Name)
+        public DelegatePage(Doc doc, DelegateTypeDef def) : base(doc, def.Name)
         {
-            m_typeDef = typeDef;
-            m_funcInfo = new FunctionInfo(def, typeDef.Name, typeDef.ParamList, typeDef.ReturnType);
+            m_def = def;
+            m_funcInfo = new FunctionInfo(doc, def.Name, def.ParamList, def.ReturnType);
         }
 
         public override string GetSyntax()
         {
-            return FunctionInfo.GetSyntax("delegate", Name, m_typeDef.ParamList, m_typeDef.ReturnType);
+            return FunctionInfo.GetSyntax("delegate", Name, m_def.ParamList, m_def.ReturnType);
         }
 
         public override void WriteMembers(HtmlWriter writer)
@@ -79,15 +77,15 @@ namespace AdventureDoc
 
     internal class EnumPage : RefPage
     {
-        EnumTypeDef m_typeDef;
+        EnumTypeDef m_def;
         KeyValuePair<string, string>[]? m_members;
 
-        public EnumPage(Definition def, EnumTypeDef typeDef) : base(def, typeDef.Name)
+        public EnumPage(Doc doc, EnumTypeDef def) : base(doc, def.Name)
         {
-            m_typeDef = typeDef;
+            m_def = def;
 
-            var members = def.Members;
-            var valueNames = typeDef.ValueNames;
+            var members = doc.Members;
+            var valueNames = def.ValueNames;
 
             if (members.Count == valueNames.Count)
             {
@@ -102,7 +100,7 @@ namespace AdventureDoc
                     else
                     {
                         m_members[i] = new KeyValuePair<string, string>(valueNames[i], string.Empty);
-                        def.WriteWarning($"{members[i].Key} does not match {typeDef.Name} member {i}.");
+                        doc.WriteWarning($"{members[i].Key} does not match {def.Name} member {i}.");
                     }
                 }
             }
@@ -110,7 +108,7 @@ namespace AdventureDoc
             {
                 if (members.Count != 0)
                 {
-                    def.WriteWarning($"Doc comments do mot match member count for {typeDef.Name}.");
+                    doc.WriteWarning($"Doc comments do mot match member count for {def.Name}.");
                 }
             }
         }
@@ -118,7 +116,7 @@ namespace AdventureDoc
         public override string GetSyntax()
         {
             var b = new StringWriter();
-            m_typeDef.SaveDefinition(b);
+            m_def.SaveDefinition(b);
             return b.ToString();
         }
 
@@ -135,20 +133,11 @@ namespace AdventureDoc
         }
     }
 
-    internal class ItemPage : RefPage
-    {
-        public ItemPage(Definition def, string name) : base(def, name)
-        {
-        }
-
-        public override string GetSyntax() => $"item {Name};";
-    }
-
     internal class PropertyPage : RefPage
     {
         TypeDef m_typeDef;
 
-        public PropertyPage(Definition def, string name, TypeDef typeDef) : base(def, name)
+        public PropertyPage(Doc doc, string name, TypeDef typeDef) : base(doc, name)
         {
             m_typeDef = typeDef;
         }
@@ -160,7 +149,7 @@ namespace AdventureDoc
     {
         TypeDef m_typeDef;
 
-        public VariablePage(Definition def, string name, TypeDef typeDef) : base(def, name)
+        public VariablePage(Doc def, string name, TypeDef typeDef) : base(def, name)
         {
             m_typeDef = typeDef;
         }
@@ -172,7 +161,7 @@ namespace AdventureDoc
     {
         TypeDef m_typeDef;
 
-        public ConstantPage(Definition def, string name, TypeDef typeDef) : base(def, name)
+        public ConstantPage(Doc doc, string name, TypeDef typeDef) : base(doc, name)
         {
             m_typeDef = typeDef;
         }

@@ -67,7 +67,10 @@ namespace AdventureDoc
                     WriteParagraph(page.Description);
 
                     BeginElement("pre");
-                    WriteString($"include \"{page.FileName}\";\n\n");
+                    if (page.FileName != null)
+                    {
+                        WriteString($"include \"{page.FileName}\";\n\n");
+                    }
                     WriteString(page.GetSyntax());
                     EndElement(); // </pre>
 

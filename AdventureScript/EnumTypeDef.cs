@@ -2,13 +2,24 @@
 {
     public sealed class EnumTypeDef : TypeDef
     {
-        public EnumTypeDef(string name, IList<string> valueNames) : base(name, valueNames)
+        public EnumTypeDef(
+            SourcePos sourcePos,
+            string[] docComments,
+            string name, 
+            IList<string> valueNames
+            ) : base(name, valueNames)
         {
             if (valueNames.Count == 0)
             {
                 throw new ArgumentException("An enum type must have at least one value name.");
             }
+
+            this.SourcePos = sourcePos;
+            this.DocComments = docComments;
         }
+
+        public SourcePos SourcePos { get; }
+        public string[] DocComments { get; }
 
         public override bool IsUserType => true;
 

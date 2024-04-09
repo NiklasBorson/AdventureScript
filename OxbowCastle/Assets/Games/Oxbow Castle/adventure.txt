@@ -388,13 +388,12 @@ function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
     InitializePortableItem($return, $adjectives, $noun, $loc);
 }
 function IsPortable($item:Item) => $item.TakeAction != null;
-function IsCurrentRoomOrInventory($loc:Item) => $loc == player.Location || $loc == player;
 function IsAccessible($item:Item) : Bool
 {
     if (!$item.IsHidden && $item.Noun != null)
     {
         var $loc = $item.Location;
-        if (IsCurrentRoomOrInventory($loc))
+        if ($loc == player.Location || $loc == player)
         {
             return true;
         }

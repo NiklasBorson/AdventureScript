@@ -18,13 +18,16 @@ namespace AdventureDoc
                 string inputFile = args[0];
                 string outputFile = args[1];
 
-                // Parse the input.
-                var sink = new ParserSink();
+                // Load the game.
                 var game = new GameState();
-                game.LoadGame(inputFile, sink);
+                game.LoadGame(inputFile);
+
+                // Get APIs.
+                var apiSet = new ApiSet();
+                game.GetApis(apiSet);
 
                 // Write the output.
-                sink.Write(outputFile);
+                apiSet.Write(outputFile);
             }
             catch (Exception e)
             {

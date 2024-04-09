@@ -3,23 +3,23 @@ using System.Text;
 
 namespace AdventureDoc
 {
-    internal class Definition
+    internal class Doc
     {
         SourcePos m_sourcePos;
         string m_description = string.Empty;
         List<KeyValuePair<string, string>> m_members = new List<KeyValuePair<string, string>>();
 
-        public Definition()
+        public Doc()
         {
         }
 
-        public Definition(Lexer lexer)
+        public Doc(SourcePos sourcePos, string[] docComments)
         {
-            m_sourcePos = lexer.SourcePos;
+            m_sourcePos = sourcePos;
 
             var description = new StringBuilder();
 
-            foreach (var line in lexer.DocComments)
+            foreach (var line in docComments)
             {
                 int i = line.IndexOf(": ");
                 if (i > 0)
