@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Text;
+using System.Xml;
 
 namespace AdventureDoc
 {
@@ -54,18 +55,23 @@ namespace AdventureDoc
                 foreach (var page in section.Pages)
                 {
                     BeginElement("li");
-                    WriteLink(page.Heading);
+                    WriteLink(page.Name);
                     EndElement(); // </li>
                 }
                 EndElement(); // </ul>
 
                 foreach (var page in section.Pages)
                 {
-                    WriteHeading("h3", page.Heading);
+                    WriteHeading("h3", page.Name);
 
                     WriteParagraph(page.Description);
 
-                    page.Write(this);
+                    BeginElement("pre");
+                    WriteString($"include \"{page.FileName}\";\n\n");
+                    WriteString(page.GetSyntax());
+                    EndElement(); // </pre>
+
+                    page.WriteMembers(this);
                 }
             }
 
@@ -103,7 +109,24 @@ namespace AdventureDoc
             }
         }
 
-        public static string GetAnchor(string headingText) => headingText.Replace(' ', '_');
+        public void WriteTermDefList(IList<KeyValuePair<string, string>> list)
+        {
+            foreach (var item in list)
+            {
+                BeginElement("p");
+                WriteAttribute("class", "term");
+                WriteString(item.Key);
+                EndElement();
+
+                BeginElement("p");
+                WriteAttribute("class", "def");
+                WriteString(item.Value);
+                EndElement();
+            }
+        }
+
+        public static string GetAnchor(string headingText) => 
+            headingText.Replace(' ', '_').Replace('$', '_');
 
         public void WriteHeading(string tag, string text)
         {

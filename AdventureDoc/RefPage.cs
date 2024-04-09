@@ -1,4 +1,5 @@
 ﻿using AdventureScript;
+using System.Text;
 using System.Xml;
 
 namespace AdventureDoc
@@ -24,53 +25,62 @@ namespace AdventureDoc
         {
             return string.Compare(this.Name, other?.Name, StringComparison.OrdinalIgnoreCase);
         }
-        public abstract string Heading { get; }
 
-        public abstract void Write(HtmlWriter writer);
+        public abstract string GetSyntax();
+
+        public virtual void WriteMembers(HtmlWriter writer)
+        {
+        }
     }
 
     sealed class FunctionPage : RefPage
     {
         FunctionDef m_funcDef;
-        FunctionDescription m_func;
+        FunctionInfo m_funcInfo;
 
         public FunctionPage(Definition def, FunctionDef funcDef) : base(def, funcDef.Name)
         {
             m_funcDef = funcDef;
-            m_func = new FunctionDescription(def, funcDef.Name, funcDef.ParamList, funcDef.ReturnType);
+            m_funcInfo = new FunctionInfo(def, funcDef.Name, funcDef.ParamList, funcDef.ReturnType);
         }
 
-        public override string Heading => $"{Name} Function";
-
-        public override void Write(HtmlWriter writer)
+        public override string GetSyntax()
         {
-            // TODO
+            return FunctionInfo.GetSyntax("function", Name, m_funcDef.ParamList, m_funcDef.ReturnType);
         }
 
+        public override void WriteMembers(HtmlWriter writer)
+        {
+            m_funcInfo.Write(writer);
+        }
     }
 
     sealed class DelegatePage : RefPage
     {
         DelegateTypeDef m_typeDef;
-        FunctionDescription m_func;
+        FunctionInfo m_funcInfo;
 
         public DelegatePage(Definition def, DelegateTypeDef typeDef) : base(def, typeDef.Name)
         {
             m_typeDef = typeDef;
-            m_func = new FunctionDescription(def, typeDef.Name, typeDef.ParamList, typeDef.ReturnType);
+            m_funcInfo = new FunctionInfo(def, typeDef.Name, typeDef.ParamList, typeDef.ReturnType);
         }
-        public override string Heading => $"{Name} Delegate";
 
-        public override void Write(HtmlWriter writer)
+        public override string GetSyntax()
         {
-            // TODO
+            return FunctionInfo.GetSyntax("delegate", Name, m_typeDef.ParamList, m_typeDef.ReturnType);
+        }
+
+        public override void WriteMembers(HtmlWriter writer)
+        {
+            m_funcInfo.Write(writer);
         }
     }
 
     internal class EnumPage : RefPage
     {
         EnumTypeDef m_typeDef;
-        KeyValuePair<string, string>[] m_members;
+        KeyValuePair<string, string>[]? m_members;
 
         public EnumPage(Definition def, EnumTypeDef typeDef) : base(def, typeDef.Name)
         {
@@ -98,19 +108,30 @@ namespace AdventureDoc
             }
             else
             {
-                m_members = new KeyValuePair<string, string>[0];
-
                 if (members.Count != 0)
                 {
                     def.WriteWarning($"Doc comments do mot match member count for {typeDef.Name}.");
                 }
             }
         }
-        public override string Heading => $"{Name} Enum";
 
-        public override void Write(HtmlWriter writer)
+        public override string GetSyntax()
         {
-            // TODO
+            var b = new StringWriter();
+            m_typeDef.SaveDefinition(b);
+            return b.ToString();
+        }
+
+        public override void WriteMembers(HtmlWriter writer)
+        {
+            if (m_members != null)
+            {
+                writer.BeginElement("h4");
+                writer.WriteString("Values");
+                writer.EndElement();
+
+                writer.WriteTermDefList(m_members);
+            }
         }
     }
 
@@ -119,12 +140,8 @@ namespace AdventureDoc
         public ItemPage(Definition def, string name) : base(def, name)
         {
         }
-        public override string Heading => $"{Name} Item";
 
-        public override void Write(HtmlWriter writer)
-        {
-            // TODO
-        }
+        public override string GetSyntax() => $"item {Name};";
     }
 
     internal class PropertyPage : RefPage
@@ -135,12 +152,8 @@ namespace AdventureDoc
         {
             m_typeDef = typeDef;
         }
-        public override string Heading => $"{Name} Property";
 
-        public override void Write(HtmlWriter writer)
-        {
-            // TODO
-        }
+        public override string GetSyntax() => $"property {Name} : {m_typeDef.Name};";
     }
 
     internal class VariablePage : RefPage
@@ -152,12 +165,7 @@ namespace AdventureDoc
             m_typeDef = typeDef;
         }
 
-        public override string Heading => $"{Name.Substring(1)} Variable";
-
-        public override void Write(HtmlWriter writer)
-        {
-            // TODO
-        }
+        public override string GetSyntax() => $"var {Name} : {m_typeDef.Name};";
     }
 
     internal class ConstantPage : RefPage
@@ -169,11 +177,6 @@ namespace AdventureDoc
             m_typeDef = typeDef;
         }
 
-        public override string Heading => $"{Name.Substring(1)} Constant";
-
-        public override void Write(HtmlWriter writer)
-        {
-            // TODO
-        }
+        public override string GetSyntax() => $"const {Name} : {m_typeDef.Name};";
     }
 }

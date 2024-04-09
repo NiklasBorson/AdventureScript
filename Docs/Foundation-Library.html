@@ -34,1050 +34,2079 @@
       <a name="Enums" />Enums</h2>
     <ul>
       <li>
-        <a href="#ArmorKind_Enum">ArmorKind Enum</a>
+        <a href="#ArmorKind">ArmorKind</a>
       </li>
       <li>
-        <a href="#Direction_Enum">Direction Enum</a>
+        <a href="#Direction">Direction</a>
       </li>
       <li>
-        <a href="#DoorState_Enum">DoorState Enum</a>
+        <a href="#DoorState">DoorState</a>
       </li>
       <li>
-        <a href="#LightState_Enum">LightState Enum</a>
+        <a href="#LightState">LightState</a>
       </li>
     </ul>
     <h3>
-      <a name="ArmorKind_Enum" />ArmorKind Enum</h3>
+      <a name="ArmorKind" />ArmorKind</h3>
+    <pre>include "Foundation-Combat.md";
+
+enum ArmorKind(None,Head,Torso,Leg);</pre>
     <h3>
-      <a name="Direction_Enum" />Direction Enum</h3>
+      <a name="Direction" />Direction</h3>
+    <pre>include "Foundation.md";
+
+enum Direction(North,South,East,West,Up,Down);</pre>
     <h3>
-      <a name="DoorState_Enum" />DoorState Enum</h3>
+      <a name="DoorState" />DoorState</h3>
     <p>Represents the state of a door or container. The default None value applies to non-door items.</p>
+    <pre>include "Foundation.md";
+
+enum DoorState(None,Open,Closed,Locked);</pre>
     <h3>
-      <a name="LightState_Enum" />LightState Enum</h3>
+      <a name="LightState" />LightState</h3>
+    <pre>include "Foundation.md";
+
+enum LightState(None,Off,On,Unlit,Lit);</pre>
     <h2>
       <a name="Delegates" />Delegates</h2>
     <ul>
       <li>
-        <a href="#DrawDelegate_Delegate">DrawDelegate Delegate</a>
+        <a href="#DrawDelegate">DrawDelegate</a>
       </li>
       <li>
-        <a href="#Item2Delegate_Delegate">Item2Delegate Delegate</a>
+        <a href="#Item2Delegate">Item2Delegate</a>
       </li>
       <li>
-        <a href="#ItemDelegate_Delegate">ItemDelegate Delegate</a>
+        <a href="#ItemDelegate">ItemDelegate</a>
       </li>
       <li>
-        <a href="#ItemPredicate_Delegate">ItemPredicate Delegate</a>
+        <a href="#ItemPredicate">ItemPredicate</a>
       </li>
       <li>
-        <a href="#NavigationAction_Delegate">NavigationAction Delegate</a>
+        <a href="#NavigationAction">NavigationAction</a>
       </li>
     </ul>
     <h3>
-      <a name="DrawDelegate_Delegate" />DrawDelegate Delegate</h3>
+      <a name="DrawDelegate" />DrawDelegate</h3>
+    <pre>include "Foundation.md";
+
+delegate DrawDelegate(
+    $item : Item
+    ) : Int;</pre>
     <h3>
-      <a name="Item2Delegate_Delegate" />Item2Delegate Delegate</h3>
+      <a name="Item2Delegate" />Item2Delegate</h3>
     <p>Reference to a function that takes two Item parameters.</p>
+    <pre>include "Foundation.md";
+
+delegate Item2Delegate(
+    $item1 : Item,
+    $item2 : Item
+    );</pre>
     <h3>
-      <a name="ItemDelegate_Delegate" />ItemDelegate Delegate</h3>
+      <a name="ItemDelegate" />ItemDelegate</h3>
     <p>Reference to a function that takes an Item parameter.</p>
+    <pre>include "Foundation.md";
+
+delegate ItemDelegate(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="ItemPredicate_Delegate" />ItemPredicate Delegate</h3>
+      <a name="ItemPredicate" />ItemPredicate</h3>
     <p>Reference to a function that takes an Item parameter and returns a Bool.</p>
+    <pre>include "Foundation.md";
+
+delegate ItemPredicate(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="NavigationAction_Delegate" />NavigationAction Delegate</h3>
+      <a name="NavigationAction" />NavigationAction</h3>
     <p>Delegate type for the LeaveAction and EnterAction properties.</p>
+    <pre>include "Foundation.md";
+
+delegate NavigationAction(
+    $from : Item,
+    $to : Item
+    ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Room being left.</p>
+    <p class="term">$to</p>
+    <p class="def">Room being entered.</p>
+    <h4>Return value</h4>
+    <p>Return true to cancel navigation, or false to allow it.</p>
     <h2>
       <a name="Variables" />Variables</h2>
     <ul>
       <li>
-        <a href="#colorBlack_Variable">colorBlack Variable</a>
+        <a href="#_currentLightSource">$currentLightSource</a>
       </li>
       <li>
-        <a href="#colorWhite_Variable">colorWhite Variable</a>
+        <a href="#_currentTime">$currentTime</a>
       </li>
       <li>
-        <a href="#dawnTime_Variable">dawnTime Variable</a>
+        <a href="#_headArmor">$headArmor</a>
       </li>
       <li>
-        <a href="#duskTime_Variable">duskTime Variable</a>
+        <a href="#_isNowDark">$isNowDark</a>
       </li>
       <li>
-        <a href="#minutesPerDay_Variable">minutesPerDay Variable</a>
+        <a href="#_isSleeping">$isSleeping</a>
+      </li>
+      <li>
+        <a href="#_lastRoom">$lastRoom</a>
+      </li>
+      <li>
+        <a href="#_legArmor">$legArmor</a>
+      </li>
+      <li>
+        <a href="#_torsoArmor">$torsoArmor</a>
       </li>
     </ul>
     <h3>
-      <a name="colorBlack_Variable" />colorBlack Variable</h3>
+      <a name="_currentLightSource" />$currentLightSource</h3>
+    <pre>include "Foundation.md";
+
+var $currentLightSource : Item;</pre>
     <h3>
-      <a name="colorWhite_Variable" />colorWhite Variable</h3>
+      <a name="_currentTime" />$currentTime</h3>
+    <pre>include "Foundation.md";
+
+var $currentTime : Int;</pre>
     <h3>
-      <a name="dawnTime_Variable" />dawnTime Variable</h3>
+      <a name="_headArmor" />$headArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+var $headArmor : Item;</pre>
     <h3>
-      <a name="duskTime_Variable" />duskTime Variable</h3>
+      <a name="_isNowDark" />$isNowDark</h3>
+    <pre>include "Foundation.md";
+
+var $isNowDark : Bool;</pre>
     <h3>
-      <a name="minutesPerDay_Variable" />minutesPerDay Variable</h3>
+      <a name="_isSleeping" />$isSleeping</h3>
+    <pre>include "Foundation-Combat.md";
+
+var $isSleeping : Bool;</pre>
+    <h3>
+      <a name="_lastRoom" />$lastRoom</h3>
+    <pre>include "Foundation.md";
+
+var $lastRoom : Item;</pre>
+    <h3>
+      <a name="_legArmor" />$legArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+var $legArmor : Item;</pre>
+    <h3>
+      <a name="_torsoArmor" />$torsoArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+var $torsoArmor : Item;</pre>
     <h2>
       <a name="Constants" />Constants</h2>
     <ul>
       <li>
-        <a href="#currentLightSource_Constant">currentLightSource Constant</a>
+        <a href="#_colorBlack">$colorBlack</a>
       </li>
       <li>
-        <a href="#currentTime_Constant">currentTime Constant</a>
+        <a href="#_colorWhite">$colorWhite</a>
       </li>
       <li>
-        <a href="#headArmor_Constant">headArmor Constant</a>
+        <a href="#_dawnTime">$dawnTime</a>
       </li>
       <li>
-        <a href="#isNowDark_Constant">isNowDark Constant</a>
+        <a href="#_duskTime">$duskTime</a>
       </li>
       <li>
-        <a href="#isSleeping_Constant">isSleeping Constant</a>
-      </li>
-      <li>
-        <a href="#lastRoom_Constant">lastRoom Constant</a>
-      </li>
-      <li>
-        <a href="#legArmor_Constant">legArmor Constant</a>
-      </li>
-      <li>
-        <a href="#torsoArmor_Constant">torsoArmor Constant</a>
+        <a href="#_minutesPerDay">$minutesPerDay</a>
       </li>
     </ul>
     <h3>
-      <a name="currentLightSource_Constant" />currentLightSource Constant</h3>
+      <a name="_colorBlack" />$colorBlack</h3>
+    <pre>include "Foundation.md";
+
+const $colorBlack : Int;</pre>
     <h3>
-      <a name="currentTime_Constant" />currentTime Constant</h3>
+      <a name="_colorWhite" />$colorWhite</h3>
+    <pre>include "Foundation.md";
+
+const $colorWhite : Int;</pre>
     <h3>
-      <a name="headArmor_Constant" />headArmor Constant</h3>
+      <a name="_dawnTime" />$dawnTime</h3>
+    <pre>include "Foundation.md";
+
+const $dawnTime : Int;</pre>
     <h3>
-      <a name="isNowDark_Constant" />isNowDark Constant</h3>
+      <a name="_duskTime" />$duskTime</h3>
+    <pre>include "Foundation.md";
+
+const $duskTime : Int;</pre>
     <h3>
-      <a name="isSleeping_Constant" />isSleeping Constant</h3>
-    <h3>
-      <a name="lastRoom_Constant" />lastRoom Constant</h3>
-    <h3>
-      <a name="legArmor_Constant" />legArmor Constant</h3>
-    <h3>
-      <a name="torsoArmor_Constant" />torsoArmor Constant</h3>
+      <a name="_minutesPerDay" />$minutesPerDay</h3>
+    <pre>include "Foundation.md";
+
+const $minutesPerDay : Int;</pre>
     <h2>
       <a name="Properties" />Properties</h2>
     <ul>
       <li>
-        <a href="#Adjectives_Property">Adjectives Property</a>
+        <a href="#Adjectives">Adjectives</a>
       </li>
       <li>
-        <a href="#ArmorKind_Property">ArmorKind Property</a>
+        <a href="#ArmorKind">ArmorKind</a>
       </li>
       <li>
-        <a href="#AttackDamage_Property">AttackDamage Property</a>
+        <a href="#AttackDamage">AttackDamage</a>
       </li>
       <li>
-        <a href="#CloseAction_Property">CloseAction Property</a>
+        <a href="#CloseAction">CloseAction</a>
       </li>
       <li>
-        <a href="#CurrentWeapon_Property">CurrentWeapon Property</a>
+        <a href="#CurrentWeapon">CurrentWeapon</a>
       </li>
       <li>
-        <a href="#DamageResistance_Property">DamageResistance Property</a>
+        <a href="#DamageResistance">DamageResistance</a>
       </li>
       <li>
-        <a href="#DescribeAction_Property">DescribeAction Property</a>
+        <a href="#DescribeAction">DescribeAction</a>
       </li>
       <li>
-        <a href="#DescribeHealthAction_Property">DescribeHealthAction Property</a>
+        <a href="#DescribeHealthAction">DescribeHealthAction</a>
       </li>
       <li>
-        <a href="#Description_Property">Description Property</a>
+        <a href="#Description">Description</a>
       </li>
       <li>
-        <a href="#DoorState_Property">DoorState Property</a>
+        <a href="#DoorState">DoorState</a>
       </li>
       <li>
-        <a href="#DrawAction_Property">DrawAction Property</a>
+        <a href="#DrawAction">DrawAction</a>
       </li>
       <li>
-        <a href="#DropAction_Property">DropAction Property</a>
+        <a href="#DropAction">DropAction</a>
       </li>
       <li>
-        <a href="#EnterAction_Property">EnterAction Property</a>
+        <a href="#EnterAction">EnterAction</a>
       </li>
       <li>
-        <a href="#Health_Property">Health Property</a>
+        <a href="#Health">Health</a>
       </li>
       <li>
-        <a href="#IgniteAction_Property">IgniteAction Property</a>
+        <a href="#IgniteAction">IgniteAction</a>
       </li>
       <li>
-        <a href="#Image_Property">Image Property</a>
+        <a href="#Image">Image</a>
       </li>
       <li>
-        <a href="#IsDark_Property">IsDark Property</a>
+        <a href="#IsDark">IsDark</a>
       </li>
       <li>
-        <a href="#IsHidden_Property">IsHidden Property</a>
+        <a href="#IsHidden">IsHidden</a>
       </li>
       <li>
-        <a href="#Key_Property">Key Property</a>
+        <a href="#Key">Key</a>
       </li>
       <li>
-        <a href="#LeaveAction_Property">LeaveAction Property</a>
+        <a href="#LeaveAction">LeaveAction</a>
       </li>
       <li>
-        <a href="#LightState_Property">LightState Property</a>
+        <a href="#LightState">LightState</a>
       </li>
       <li>
-        <a href="#LinkD_Property">LinkD Property</a>
+        <a href="#LinkD">LinkD</a>
       </li>
       <li>
-        <a href="#LinkE_Property">LinkE Property</a>
+        <a href="#LinkE">LinkE</a>
       </li>
       <li>
-        <a href="#LinkN_Property">LinkN Property</a>
+        <a href="#LinkN">LinkN</a>
       </li>
       <li>
-        <a href="#LinkS_Property">LinkS Property</a>
+        <a href="#LinkS">LinkS</a>
       </li>
       <li>
-        <a href="#LinkU_Property">LinkU Property</a>
+        <a href="#LinkU">LinkU</a>
       </li>
       <li>
-        <a href="#LinkW_Property">LinkW Property</a>
+        <a href="#LinkW">LinkW</a>
       </li>
       <li>
-        <a href="#Location_Property">Location Property</a>
+        <a href="#Location">Location</a>
       </li>
       <li>
-        <a href="#MaxHealth_Property">MaxHealth Property</a>
+        <a href="#MaxHealth">MaxHealth</a>
       </li>
       <li>
-        <a href="#Noun_Property">Noun Property</a>
+        <a href="#Noun">Noun</a>
       </li>
       <li>
-        <a href="#OnAttackedAction_Property">OnAttackedAction Property</a>
+        <a href="#OnAttackedAction">OnAttackedAction</a>
       </li>
       <li>
-        <a href="#OpenAction_Property">OpenAction Property</a>
+        <a href="#OpenAction">OpenAction</a>
       </li>
       <li>
-        <a href="#PutInAction_Property">PutInAction Property</a>
+        <a href="#PutInAction">PutInAction</a>
       </li>
       <li>
-        <a href="#PutOnAction_Property">PutOnAction Property</a>
+        <a href="#PutOnAction">PutOnAction</a>
       </li>
       <li>
-        <a href="#PutOutAction_Property">PutOutAction Property</a>
+        <a href="#PutOutAction">PutOutAction</a>
       </li>
       <li>
-        <a href="#TakeAction_Property">TakeAction Property</a>
+        <a href="#TakeAction">TakeAction</a>
       </li>
       <li>
-        <a href="#TurnOffAction_Property">TurnOffAction Property</a>
+        <a href="#TurnOffAction">TurnOffAction</a>
       </li>
       <li>
-        <a href="#TurnOnAction_Property">TurnOnAction Property</a>
+        <a href="#TurnOnAction">TurnOnAction</a>
       </li>
       <li>
-        <a href="#UpdateAction_Property">UpdateAction Property</a>
+        <a href="#UpdateAction">UpdateAction</a>
       </li>
       <li>
-        <a href="#UseAction_Property">UseAction Property</a>
+        <a href="#UseAction">UseAction</a>
       </li>
       <li>
-        <a href="#UseOnAction_Property">UseOnAction Property</a>
+        <a href="#UseOnAction">UseOnAction</a>
       </li>
     </ul>
     <h3>
-      <a name="Adjectives_Property" />Adjectives Property</h3>
+      <a name="Adjectives" />Adjectives</h3>
     <p>Space-separated adjectives that may be used to refer to an item along with its Noun.</p>
+    <pre>include "Foundation.md";
+
+property Adjectives : String;</pre>
     <h3>
-      <a name="ArmorKind_Property" />ArmorKind Property</h3>
+      <a name="ArmorKind" />ArmorKind</h3>
+    <pre>include "Foundation-Combat.md";
+
+property ArmorKind : ArmorKind;</pre>
     <h3>
-      <a name="AttackDamage_Property" />AttackDamage Property</h3>
+      <a name="AttackDamage" />AttackDamage</h3>
+    <pre>include "Foundation-Combat.md";
+
+property AttackDamage : Int;</pre>
     <h3>
-      <a name="CloseAction_Property" />CloseAction Property</h3>
+      <a name="CloseAction" />CloseAction</h3>
     <p>Delgate invoked by "close" command.</p>
+    <pre>include "Foundation.md";
+
+property CloseAction : ItemDelegate;</pre>
     <h3>
-      <a name="CurrentWeapon_Property" />CurrentWeapon Property</h3>
+      <a name="CurrentWeapon" />CurrentWeapon</h3>
+    <pre>include "Foundation-Combat.md";
+
+property CurrentWeapon : Item;</pre>
     <h3>
-      <a name="DamageResistance_Property" />DamageResistance Property</h3>
+      <a name="DamageResistance" />DamageResistance</h3>
+    <pre>include "Foundation-Combat.md";
+
+property DamageResistance : Int;</pre>
     <h3>
-      <a name="DescribeAction_Property" />DescribeAction Property</h3>
+      <a name="DescribeAction" />DescribeAction</h3>
     <p>Delegate invoked by the Describe function.</p>
+    <pre>include "Foundation.md";
+
+property DescribeAction : ItemDelegate;</pre>
     <h3>
-      <a name="DescribeHealthAction_Property" />DescribeHealthAction Property</h3>
+      <a name="DescribeHealthAction" />DescribeHealthAction</h3>
     <p>Delegate invoked to describe the health of an item.</p>
+    <pre>include "Foundation.md";
+
+property DescribeHealthAction : ItemDelegate;</pre>
     <h3>
-      <a name="Description_Property" />Description Property</h3>
+      <a name="Description" />Description</h3>
+    <pre>include "Foundation.md";
+
+property Description : String;</pre>
     <h3>
-      <a name="DoorState_Property" />DoorState Property</h3>
+      <a name="DoorState" />DoorState</h3>
+    <pre>include "Foundation.md";
+
+property DoorState : DoorState;</pre>
     <h3>
-      <a name="DrawAction_Property" />DrawAction Property</h3>
+      <a name="DrawAction" />DrawAction</h3>
+    <pre>include "Foundation.md";
+
+property DrawAction : DrawDelegate;</pre>
     <h3>
-      <a name="DropAction_Property" />DropAction Property</h3>
+      <a name="DropAction" />DropAction</h3>
     <p>Delegate invoked by "drop" command.</p>
+    <pre>include "Foundation.md";
+
+property DropAction : ItemDelegate;</pre>
     <h3>
-      <a name="EnterAction_Property" />EnterAction Property</h3>
+      <a name="EnterAction" />EnterAction</h3>
     <p>Delegate invoked when entering a room.</p>
+    <pre>include "Foundation.md";
+
+property EnterAction : NavigationAction;</pre>
     <h3>
-      <a name="Health_Property" />Health Property</h3>
+      <a name="Health" />Health</h3>
+    <pre>include "Foundation-Combat.md";
+
+property Health : Int;</pre>
     <h3>
-      <a name="IgniteAction_Property" />IgniteAction Property</h3>
+      <a name="IgniteAction" />IgniteAction</h3>
     <p>Delegate invoked by the UseLighterOn function.</p>
+    <pre>include "Foundation.md";
+
+property IgniteAction : ItemDelegate;</pre>
     <h3>
-      <a name="Image_Property" />Image Property</h3>
+      <a name="Image" />Image</h3>
+    <pre>include "Foundation.md";
+
+property Image : String;</pre>
     <h3>
-      <a name="IsDark_Property" />IsDark Property</h3>
+      <a name="IsDark" />IsDark</h3>
+    <pre>include "Foundation.md";
+
+property IsDark : ItemPredicate;</pre>
     <h3>
-      <a name="IsHidden_Property" />IsHidden Property</h3>
+      <a name="IsHidden" />IsHidden</h3>
+    <pre>include "Foundation.md";
+
+property IsHidden : Bool;</pre>
     <h3>
-      <a name="Key_Property" />Key Property</h3>
+      <a name="Key" />Key</h3>
+    <pre>include "Foundation.md";
+
+property Key : Item;</pre>
     <h3>
-      <a name="LeaveAction_Property" />LeaveAction Property</h3>
+      <a name="LeaveAction" />LeaveAction</h3>
     <p>Delegate invoked when leaving a room.</p>
+    <pre>include "Foundation.md";
+
+property LeaveAction : NavigationAction;</pre>
     <h3>
-      <a name="LightState_Property" />LightState Property</h3>
+      <a name="LightState" />LightState</h3>
+    <pre>include "Foundation.md";
+
+property LightState : LightState;</pre>
     <h3>
-      <a name="LinkD_Property" />LinkD Property</h3>
+      <a name="LinkD" />LinkD</h3>
+    <pre>include "Foundation.md";
+
+property LinkD : Item;</pre>
     <h3>
-      <a name="LinkE_Property" />LinkE Property</h3>
+      <a name="LinkE" />LinkE</h3>
+    <pre>include "Foundation.md";
+
+property LinkE : Item;</pre>
     <h3>
-      <a name="LinkN_Property" />LinkN Property</h3>
+      <a name="LinkN" />LinkN</h3>
+    <pre>include "Foundation.md";
+
+property LinkN : Item;</pre>
     <h3>
-      <a name="LinkS_Property" />LinkS Property</h3>
+      <a name="LinkS" />LinkS</h3>
+    <pre>include "Foundation.md";
+
+property LinkS : Item;</pre>
     <h3>
-      <a name="LinkU_Property" />LinkU Property</h3>
+      <a name="LinkU" />LinkU</h3>
+    <pre>include "Foundation.md";
+
+property LinkU : Item;</pre>
     <h3>
-      <a name="LinkW_Property" />LinkW Property</h3>
+      <a name="LinkW" />LinkW</h3>
+    <pre>include "Foundation.md";
+
+property LinkW : Item;</pre>
     <h3>
-      <a name="Location_Property" />Location Property</h3>
+      <a name="Location" />Location</h3>
     <p>Location of an item, such as a room or a container.</p>
+    <pre>include "Foundation.md";
+
+property Location : Item;</pre>
     <h3>
-      <a name="MaxHealth_Property" />MaxHealth Property</h3>
+      <a name="MaxHealth" />MaxHealth</h3>
+    <pre>include "Foundation-Combat.md";
+
+property MaxHealth : Int;</pre>
     <h3>
-      <a name="Noun_Property" />Noun Property</h3>
+      <a name="Noun" />Noun</h3>
     <p>Name that may be used to refer to an item.</p>
+    <pre>include "Foundation.md";
+
+property Noun : String;</pre>
     <h3>
-      <a name="OnAttackedAction_Property" />OnAttackedAction Property</h3>
+      <a name="OnAttackedAction" />OnAttackedAction</h3>
+    <pre>include "Foundation-Combat.md";
+
+property OnAttackedAction : ItemDelegate;</pre>
     <h3>
-      <a name="OpenAction_Property" />OpenAction Property</h3>
+      <a name="OpenAction" />OpenAction</h3>
     <p>Delegate invoked by "open" command.</p>
+    <pre>include "Foundation.md";
+
+property OpenAction : ItemDelegate;</pre>
     <h3>
-      <a name="PutInAction_Property" />PutInAction Property</h3>
+      <a name="PutInAction" />PutInAction</h3>
     <p>Delegate invoked by the "put...in" command. The property applies to the container.</p>
+    <pre>include "Foundation.md";
+
+property PutInAction : Item2Delegate;</pre>
     <h3>
-      <a name="PutOnAction_Property" />PutOnAction Property</h3>
+      <a name="PutOnAction" />PutOnAction</h3>
     <p>Delegate invoked by the "put..on" command. The property applies to the table.</p>
+    <pre>include "Foundation.md";
+
+property PutOnAction : Item2Delegate;</pre>
     <h3>
-      <a name="PutOutAction_Property" />PutOutAction Property</h3>
+      <a name="PutOutAction" />PutOutAction</h3>
     <p>Delegate invoked by the "put out" command.</p>
+    <pre>include "Foundation.md";
+
+property PutOutAction : ItemDelegate;</pre>
     <h3>
-      <a name="TakeAction_Property" />TakeAction Property</h3>
+      <a name="TakeAction" />TakeAction</h3>
     <p>Delegate invoked by "take" command.</p>
+    <pre>include "Foundation.md";
+
+property TakeAction : ItemDelegate;</pre>
     <h3>
-      <a name="TurnOffAction_Property" />TurnOffAction Property</h3>
+      <a name="TurnOffAction" />TurnOffAction</h3>
     <p>Delegate invoked by the "turn off" command.</p>
+    <pre>include "Foundation.md";
+
+property TurnOffAction : ItemDelegate;</pre>
     <h3>
-      <a name="TurnOnAction_Property" />TurnOnAction Property</h3>
+      <a name="TurnOnAction" />TurnOnAction</h3>
     <p>Delegate invoked by the "turn on" command.</p>
+    <pre>include "Foundation.md";
+
+property TurnOnAction : ItemDelegate;</pre>
     <h3>
-      <a name="UpdateAction_Property" />UpdateAction Property</h3>
+      <a name="UpdateAction" />UpdateAction</h3>
+    <pre>include "Foundation-Combat.md";
+
+property UpdateAction : ItemDelegate;</pre>
     <h3>
-      <a name="UseAction_Property" />UseAction Property</h3>
+      <a name="UseAction" />UseAction</h3>
     <p>Delegate invoked by "use" command.</p>
+    <pre>include "Foundation.md";
+
+property UseAction : ItemDelegate;</pre>
     <h3>
-      <a name="UseOnAction_Property" />UseOnAction Property</h3>
+      <a name="UseOnAction" />UseOnAction</h3>
     <p>Delegate invoked by "use...on" command. The property applies to the item being used.</p>
+    <pre>include "Foundation.md";
+
+property UseOnAction : Item2Delegate;</pre>
     <h2>
       <a name="Items" />Items</h2>
     <ul>
       <li>
-        <a href="#player_Item">player Item</a>
+        <a href="#player">player</a>
       </li>
     </ul>
     <h3>
-      <a name="player_Item" />player Item</h3>
+      <a name="player" />player</h3>
     <p>The player item represents the player.</p>
+    <pre>include "Foundation.md";
+
+item player;</pre>
     <h2>
       <a name="Functions" />Functions</h2>
     <ul>
       <li>
-        <a href="#AddItemWords_Function">AddItemWords Function</a>
+        <a href="#AddItemWords">AddItemWords</a>
       </li>
       <li>
-        <a href="#AddStateQualifier_Function">AddStateQualifier Function</a>
+        <a href="#AddStateQualifier">AddStateQualifier</a>
       </li>
       <li>
-        <a href="#AttackItemWith_Function">AttackItemWith Function</a>
+        <a href="#AttackItemWith">AttackItemWith</a>
       </li>
       <li>
-        <a href="#AttackPlayer_Function">AttackPlayer Function</a>
+        <a href="#AttackPlayer">AttackPlayer</a>
       </li>
       <li>
-        <a href="#Close_Function">Close Function</a>
+        <a href="#Close">Close</a>
       </li>
       <li>
-        <a href="#CloseDoor_Function">CloseDoor Function</a>
+        <a href="#CloseDoor">CloseDoor</a>
       </li>
       <li>
-        <a href="#ComputeDamage_Function">ComputeDamage Function</a>
+        <a href="#ComputeDamage">ComputeDamage</a>
       </li>
       <li>
-        <a href="#Describe_Function">Describe Function</a>
+        <a href="#Describe">Describe</a>
       </li>
       <li>
-        <a href="#DescribeCommon_Function">DescribeCommon Function</a>
+        <a href="#DescribeCommon">DescribeCommon</a>
       </li>
       <li>
-        <a href="#DescribeContainer_Function">DescribeContainer Function</a>
+        <a href="#DescribeContainer">DescribeContainer</a>
       </li>
       <li>
-        <a href="#DescribeCreatureHealth_Function">DescribeCreatureHealth Function</a>
+        <a href="#DescribeCreatureHealth">DescribeCreatureHealth</a>
       </li>
       <li>
-        <a href="#DescribeItemHealth_Function">DescribeItemHealth Function</a>
+        <a href="#DescribeItemHealth">DescribeItemHealth</a>
       </li>
       <li>
-        <a href="#DescribePlayerHealth_Function">DescribePlayerHealth Function</a>
+        <a href="#DescribePlayerHealth">DescribePlayerHealth</a>
       </li>
       <li>
-        <a href="#DescribePlayerWithArms_Function">DescribePlayerWithArms Function</a>
+        <a href="#DescribePlayerWithArms">DescribePlayerWithArms</a>
       </li>
       <li>
-        <a href="#DescribeTable_Function">DescribeTable Function</a>
+        <a href="#DescribeTable">DescribeTable</a>
       </li>
       <li>
-        <a href="#DestroyItem_Function">DestroyItem Function</a>
+        <a href="#DestroyItem">DestroyItem</a>
       </li>
       <li>
-        <a href="#DirectionPhrase_Function">DirectionPhrase Function</a>
+        <a href="#DirectionPhrase">DirectionPhrase</a>
       </li>
       <li>
-        <a href="#DoorStateAdj_Function">DoorStateAdj Function</a>
+        <a href="#DoorStateAdj">DoorStateAdj</a>
       </li>
       <li>
-        <a href="#DrawDoors_Function">DrawDoors Function</a>
+        <a href="#DrawDoors">DrawDoors</a>
       </li>
       <li>
-        <a href="#DrawEllipticalRoom_Function">DrawEllipticalRoom Function</a>
+        <a href="#DrawEllipticalRoom">DrawEllipticalRoom</a>
       </li>
       <li>
-        <a href="#DrawRectangularRoom_Function">DrawRectangularRoom Function</a>
+        <a href="#DrawRectangularRoom">DrawRectangularRoom</a>
       </li>
       <li>
-        <a href="#DrawRoom_100x200_Function">DrawRoom_100x200 Function</a>
+        <a href="#DrawRoom_100x200">DrawRoom_100x200</a>
       </li>
       <li>
-        <a href="#DrawRoom_200x100_Function">DrawRoom_200x100 Function</a>
+        <a href="#DrawRoom_200x100">DrawRoom_200x100</a>
       </li>
       <li>
-        <a href="#DrawRoom_300x150_Function">DrawRoom_300x150 Function</a>
+        <a href="#DrawRoom_300x150">DrawRoom_300x150</a>
       </li>
       <li>
-        <a href="#DrawRoundRoom_Function">DrawRoundRoom Function</a>
+        <a href="#DrawRoundRoom">DrawRoundRoom</a>
       </li>
       <li>
-        <a href="#DrawSquareRoom_Function">DrawSquareRoom Function</a>
+        <a href="#DrawSquareRoom">DrawSquareRoom</a>
       </li>
       <li>
-        <a href="#Drop_Function">Drop Function</a>
+        <a href="#Drop">Drop</a>
       </li>
       <li>
-        <a href="#DropArmor_Function">DropArmor Function</a>
+        <a href="#DropArmor">DropArmor</a>
       </li>
       <li>
-        <a href="#DropPortableItem_Function">DropPortableItem Function</a>
+        <a href="#DropPortableItem">DropPortableItem</a>
       </li>
       <li>
-        <a href="#DropWeapon_Function">DropWeapon Function</a>
+        <a href="#DropWeapon">DropWeapon</a>
       </li>
       <li>
-        <a href="#GetArmor_Function">GetArmor Function</a>
+        <a href="#GetArmor">GetArmor</a>
       </li>
       <li>
-        <a href="#GetLink_Function">GetLink Function</a>
+        <a href="#GetLink">GetLink</a>
       </li>
       <li>
-        <a href="#Go_Function">Go Function</a>
+        <a href="#Go">Go</a>
       </li>
       <li>
-        <a href="#IgniteCandle_Function">IgniteCandle Function</a>
+        <a href="#IgniteCandle">IgniteCandle</a>
       </li>
       <li>
-        <a href="#IncrementTime_Function">IncrementTime Function</a>
+        <a href="#IncrementTime">IncrementTime</a>
       </li>
       <li>
-        <a href="#InitializeArmor_Function">InitializeArmor Function</a>
+        <a href="#InitializeArmor">InitializeArmor</a>
       </li>
       <li>
-        <a href="#InitializeBed_Function">InitializeBed Function</a>
+        <a href="#InitializeBed">InitializeBed</a>
       </li>
       <li>
-        <a href="#InitializeCandle_Function">InitializeCandle Function</a>
+        <a href="#InitializeCandle">InitializeCandle</a>
       </li>
       <li>
-        <a href="#InitializeContainer_Function">InitializeContainer Function</a>
+        <a href="#InitializeContainer">InitializeContainer</a>
       </li>
       <li>
-        <a href="#InitializeDoor_Function">InitializeDoor Function</a>
+        <a href="#InitializeDoor">InitializeDoor</a>
       </li>
       <li>
-        <a href="#InitializeKey_Function">InitializeKey Function</a>
+        <a href="#InitializeKey">InitializeKey</a>
       </li>
       <li>
-        <a href="#InitializeLight_Function">InitializeLight Function</a>
+        <a href="#InitializeLight">InitializeLight</a>
       </li>
       <li>
-        <a href="#InitializeLighter_Function">InitializeLighter Function</a>
+        <a href="#InitializeLighter">InitializeLighter</a>
       </li>
       <li>
-        <a href="#InitializeLighting_Function">InitializeLighting Function</a>
+        <a href="#InitializeLighting">InitializeLighting</a>
       </li>
       <li>
-        <a href="#InitializeMonster_Function">InitializeMonster Function</a>
+        <a href="#InitializeMonster">InitializeMonster</a>
       </li>
       <li>
-        <a href="#InitializePortableItem_Function">InitializePortableItem Function</a>
+        <a href="#InitializePortableItem">InitializePortableItem</a>
       </li>
       <li>
-        <a href="#InitializeTable_Function">InitializeTable Function</a>
+        <a href="#InitializeTable">InitializeTable</a>
       </li>
       <li>
-        <a href="#InitializeWeapon_Function">InitializeWeapon Function</a>
+        <a href="#InitializeWeapon">InitializeWeapon</a>
       </li>
       <li>
-        <a href="#InitializeWordMap_Function">InitializeWordMap Function</a>
+        <a href="#InitializeWordMap">InitializeWordMap</a>
       </li>
       <li>
-        <a href="#Inventory_Function">Inventory Function</a>
+        <a href="#Inventory">Inventory</a>
       </li>
       <li>
-        <a href="#InvokeItemAction_Function">InvokeItemAction Function</a>
+        <a href="#InvokeItemAction">InvokeItemAction</a>
       </li>
       <li>
-        <a href="#InvokeItemActionWithFallback_Function">InvokeItemActionWithFallback Function</a>
+        <a href="#InvokeItemActionWithFallback">InvokeItemActionWithFallback</a>
       </li>
       <li>
-        <a href="#IsAccessible_Function">IsAccessible Function</a>
+        <a href="#IsAccessible">IsAccessible</a>
       </li>
       <li>
-        <a href="#IsActiveLightState_Function">IsActiveLightState Function</a>
+        <a href="#IsActiveLightState">IsActiveLightState</a>
       </li>
       <li>
-        <a href="#IsCandle_Function">IsCandle Function</a>
+        <a href="#IsCandle">IsCandle</a>
       </li>
       <li>
-        <a href="#IsClosedOrLocked_Function">IsClosedOrLocked Function</a>
+        <a href="#IsClosedOrLocked">IsClosedOrLocked</a>
       </li>
       <li>
-        <a href="#IsContainer_Function">IsContainer Function</a>
+        <a href="#IsContainer">IsContainer</a>
       </li>
       <li>
-        <a href="#IsCurrentRoomOrInventory_Function">IsCurrentRoomOrInventory Function</a>
+        <a href="#IsCurrentRoomOrInventory">IsCurrentRoomOrInventory</a>
       </li>
       <li>
-        <a href="#IsDarkAlways_Function">IsDarkAlways Function</a>
+        <a href="#IsDarkAlways">IsDarkAlways</a>
       </li>
       <li>
-        <a href="#IsDarkAtNight_Function">IsDarkAtNight Function</a>
+        <a href="#IsDarkAtNight">IsDarkAtNight</a>
       </li>
       <li>
-        <a href="#IsKey_Function">IsKey Function</a>
+        <a href="#IsKey">IsKey</a>
       </li>
       <li>
-        <a href="#IsLight_Function">IsLight Function</a>
+        <a href="#IsLight">IsLight</a>
       </li>
       <li>
-        <a href="#IsLighter_Function">IsLighter Function</a>
+        <a href="#IsLighter">IsLighter</a>
       </li>
       <li>
-        <a href="#IsNight_Function">IsNight Function</a>
+        <a href="#IsNight">IsNight</a>
       </li>
       <li>
-        <a href="#IsOpenable_Function">IsOpenable Function</a>
+        <a href="#IsOpenable">IsOpenable</a>
       </li>
       <li>
-        <a href="#IsOpenContainer_Function">IsOpenContainer Function</a>
+        <a href="#IsOpenContainer">IsOpenContainer</a>
       </li>
       <li>
-        <a href="#IsPortable_Function">IsPortable Function</a>
+        <a href="#IsPortable">IsPortable</a>
       </li>
       <li>
-        <a href="#IsTable_Function">IsTable Function</a>
+        <a href="#IsTable">IsTable</a>
       </li>
       <li>
-        <a href="#ItalicLabel_Function">ItalicLabel Function</a>
+        <a href="#ItalicLabel">ItalicLabel</a>
       </li>
       <li>
-        <a href="#ItalicLabelWithState_Function">ItalicLabelWithState Function</a>
+        <a href="#ItalicLabelWithState">ItalicLabelWithState</a>
       </li>
       <li>
-        <a href="#Label_Function">Label Function</a>
+        <a href="#Label">Label</a>
       </li>
       <li>
-        <a href="#LabelWithState_Function">LabelWithState Function</a>
+        <a href="#LabelWithState">LabelWithState</a>
       </li>
       <li>
-        <a href="#LightStateAdj_Function">LightStateAdj Function</a>
+        <a href="#LightStateAdj">LightStateAdj</a>
       </li>
       <li>
-        <a href="#LightWith_Function">LightWith Function</a>
+        <a href="#LightWith">LightWith</a>
       </li>
       <li>
-        <a href="#LinkRooms_Function">LinkRooms Function</a>
+        <a href="#LinkRooms">LinkRooms</a>
       </li>
       <li>
-        <a href="#LinkRoomsOneWay_Function">LinkRoomsOneWay Function</a>
+        <a href="#LinkRoomsOneWay">LinkRoomsOneWay</a>
       </li>
       <li>
-        <a href="#ListContainerContents_Function">ListContainerContents Function</a>
+        <a href="#ListContainerContents">ListContainerContents</a>
       </li>
       <li>
-        <a href="#Look_Function">Look Function</a>
+        <a href="#Look">Look</a>
       </li>
       <li>
-        <a href="#NewArmor_Function">NewArmor Function</a>
+        <a href="#NewArmor">NewArmor</a>
       </li>
       <li>
-        <a href="#NewBed_Function">NewBed Function</a>
+        <a href="#NewBed">NewBed</a>
       </li>
       <li>
-        <a href="#NewCandle_Function">NewCandle Function</a>
+        <a href="#NewCandle">NewCandle</a>
       </li>
       <li>
-        <a href="#NewClosedDoor_Function">NewClosedDoor Function</a>
+        <a href="#NewClosedDoor">NewClosedDoor</a>
       </li>
       <li>
-        <a href="#NewContainer_Function">NewContainer Function</a>
+        <a href="#NewContainer">NewContainer</a>
       </li>
       <li>
-        <a href="#NewDoorItem_Function">NewDoorItem Function</a>
+        <a href="#NewDoorItem">NewDoorItem</a>
       </li>
       <li>
-        <a href="#NewKey_Function">NewKey Function</a>
+        <a href="#NewKey">NewKey</a>
       </li>
       <li>
-        <a href="#NewLight_Function">NewLight Function</a>
+        <a href="#NewLight">NewLight</a>
       </li>
       <li>
-        <a href="#NewLighter_Function">NewLighter Function</a>
+        <a href="#NewLighter">NewLighter</a>
       </li>
       <li>
-        <a href="#NewLink_Function">NewLink Function</a>
+        <a href="#NewLink">NewLink</a>
       </li>
       <li>
-        <a href="#NewLockedDoor_Function">NewLockedDoor Function</a>
+        <a href="#NewLockedDoor">NewLockedDoor</a>
       </li>
       <li>
-        <a href="#NewMonster_Function">NewMonster Function</a>
+        <a href="#NewMonster">NewMonster</a>
       </li>
       <li>
-        <a href="#NewOpening_Function">NewOpening Function</a>
+        <a href="#NewOpening">NewOpening</a>
       </li>
       <li>
-        <a href="#NewPortableItem_Function">NewPortableItem Function</a>
+        <a href="#NewPortableItem">NewPortableItem</a>
       </li>
       <li>
-        <a href="#NewTable_Function">NewTable Function</a>
+        <a href="#NewTable">NewTable</a>
       </li>
       <li>
-        <a href="#NewWeapon_Function">NewWeapon Function</a>
+        <a href="#NewWeapon">NewWeapon</a>
       </li>
       <li>
-        <a href="#OnLightActivated_Function">OnLightActivated Function</a>
+        <a href="#OnLightActivated">OnLightActivated</a>
       </li>
       <li>
-        <a href="#OnMonsterAttacked_Function">OnMonsterAttacked Function</a>
+        <a href="#OnMonsterAttacked">OnMonsterAttacked</a>
       </li>
       <li>
-        <a href="#OnPlayerAttacked_Function">OnPlayerAttacked Function</a>
+        <a href="#OnPlayerAttacked">OnPlayerAttacked</a>
       </li>
       <li>
-        <a href="#Open_Function">Open Function</a>
+        <a href="#Open">Open</a>
       </li>
       <li>
-        <a href="#OpenContainer_Function">OpenContainer Function</a>
+        <a href="#OpenContainer">OpenContainer</a>
       </li>
       <li>
-        <a href="#OpenDoor_Function">OpenDoor Function</a>
+        <a href="#OpenDoor">OpenDoor</a>
       </li>
       <li>
-        <a href="#Opposite_Function">Opposite Function</a>
+        <a href="#Opposite">Opposite</a>
       </li>
       <li>
-        <a href="#PutIn_Function">PutIn Function</a>
+        <a href="#PutIn">PutIn</a>
       </li>
       <li>
-        <a href="#PutInContainer_Function">PutInContainer Function</a>
+        <a href="#PutInContainer">PutInContainer</a>
       </li>
       <li>
-        <a href="#PutOn_Function">PutOn Function</a>
+        <a href="#PutOn">PutOn</a>
       </li>
       <li>
-        <a href="#PutOnTable_Function">PutOnTable Function</a>
+        <a href="#PutOnTable">PutOnTable</a>
       </li>
       <li>
-        <a href="#PutOut_Function">PutOut Function</a>
+        <a href="#PutOut">PutOut</a>
       </li>
       <li>
-        <a href="#PutOutCandle_Function">PutOutCandle Function</a>
+        <a href="#PutOutCandle">PutOutCandle</a>
       </li>
       <li>
-        <a href="#SetArmor_Function">SetArmor Function</a>
+        <a href="#SetArmor">SetArmor</a>
       </li>
       <li>
-        <a href="#SetItemHealth_Function">SetItemHealth Function</a>
+        <a href="#SetItemHealth">SetItemHealth</a>
       </li>
       <li>
-        <a href="#SetLabelProperties_Function">SetLabelProperties Function</a>
+        <a href="#SetLabelProperties">SetLabelProperties</a>
       </li>
       <li>
-        <a href="#SetLink_Function">SetLink Function</a>
+        <a href="#SetLink">SetLink</a>
       </li>
       <li>
-        <a href="#SetPlayerDamageResistance_Function">SetPlayerDamageResistance Function</a>
+        <a href="#SetPlayerDamageResistance">SetPlayerDamageResistance</a>
       </li>
       <li>
-        <a href="#Sleep_Function">Sleep Function</a>
+        <a href="#Sleep">Sleep</a>
       </li>
       <li>
-        <a href="#Take_Function">Take Function</a>
+        <a href="#Take">Take</a>
       </li>
       <li>
-        <a href="#TakeArmor_Function">TakeArmor Function</a>
+        <a href="#TakeArmor">TakeArmor</a>
       </li>
       <li>
-        <a href="#TakePortableItem_Function">TakePortableItem Function</a>
+        <a href="#TakePortableItem">TakePortableItem</a>
       </li>
       <li>
-        <a href="#TakeWeapon_Function">TakeWeapon Function</a>
+        <a href="#TakeWeapon">TakeWeapon</a>
       </li>
       <li>
-        <a href="#TryFollowPlayer_Function">TryFollowPlayer Function</a>
+        <a href="#TryFollowPlayer">TryFollowPlayer</a>
       </li>
       <li>
-        <a href="#TurnOff_Function">TurnOff Function</a>
+        <a href="#TurnOff">TurnOff</a>
       </li>
       <li>
-        <a href="#TurnOffLight_Function">TurnOffLight Function</a>
+        <a href="#TurnOffLight">TurnOffLight</a>
       </li>
       <li>
-        <a href="#TurnOn_Function">TurnOn Function</a>
+        <a href="#TurnOn">TurnOn</a>
       </li>
       <li>
-        <a href="#TurnOnCandle_Function">TurnOnCandle Function</a>
+        <a href="#TurnOnCandle">TurnOnCandle</a>
       </li>
       <li>
-        <a href="#TurnOnLight_Function">TurnOnLight Function</a>
+        <a href="#TurnOnLight">TurnOnLight</a>
       </li>
       <li>
-        <a href="#UpdateFriendlyMonster_Function">UpdateFriendlyMonster Function</a>
+        <a href="#UpdateFriendlyMonster">UpdateFriendlyMonster</a>
       </li>
       <li>
-        <a href="#UpdateHostileMonster_Function">UpdateHostileMonster Function</a>
+        <a href="#UpdateHostileMonster">UpdateHostileMonster</a>
       </li>
       <li>
-        <a href="#UpdateItems_Function">UpdateItems Function</a>
+        <a href="#UpdateItems">UpdateItems</a>
       </li>
       <li>
-        <a href="#UpdatePlayer_Function">UpdatePlayer Function</a>
+        <a href="#UpdatePlayer">UpdatePlayer</a>
       </li>
       <li>
-        <a href="#UpdateSurprisedMonster_Function">UpdateSurprisedMonster Function</a>
+        <a href="#UpdateSurprisedMonster">UpdateSurprisedMonster</a>
       </li>
       <li>
-        <a href="#Use_Function">Use Function</a>
+        <a href="#Use">Use</a>
       </li>
       <li>
-        <a href="#UseBed_Function">UseBed Function</a>
+        <a href="#UseBed">UseBed</a>
       </li>
       <li>
-        <a href="#UseKeyOn_Function">UseKeyOn Function</a>
+        <a href="#UseKeyOn">UseKeyOn</a>
       </li>
       <li>
-        <a href="#UseLighterOn_Function">UseLighterOn Function</a>
+        <a href="#UseLighterOn">UseLighterOn</a>
       </li>
       <li>
-        <a href="#UseOn_Function">UseOn Function</a>
+        <a href="#UseOn">UseOn</a>
       </li>
       <li>
-        <a href="#UseWeapon_Function">UseWeapon Function</a>
+        <a href="#UseWeapon">UseWeapon</a>
       </li>
     </ul>
     <h3>
-      <a name="AddItemWords_Function" />AddItemWords Function</h3>
+      <a name="AddItemWords" />AddItemWords</h3>
+    <pre>include "Foundation.md";
+
+function AddItemWords(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="AddStateQualifier_Function" />AddStateQualifier Function</h3>
+      <a name="AddStateQualifier" />AddStateQualifier</h3>
+    <pre>include "Foundation.md";
+
+function AddStateQualifier(
+    $item : Item,
+    $phrase : String
+    ) : String;</pre>
     <h3>
-      <a name="AttackItemWith_Function" />AttackItemWith Function</h3>
+      <a name="AttackItemWith" />AttackItemWith</h3>
+    <pre>include "Foundation-Combat.md";
+
+function AttackItemWith(
+    $target : Item,
+    $weapon : Item
+    );</pre>
     <h3>
-      <a name="AttackPlayer_Function" />AttackPlayer Function</h3>
+      <a name="AttackPlayer" />AttackPlayer</h3>
+    <pre>include "Foundation-Combat.md";
+
+function AttackPlayer(
+    $foe : Item
+    );</pre>
     <h3>
-      <a name="Close_Function" />Close Function</h3>
+      <a name="Close" />Close</h3>
+    <pre>include "Foundation.md";
+
+function Close(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="CloseDoor_Function" />CloseDoor Function</h3>
+      <a name="CloseDoor" />CloseDoor</h3>
+    <pre>include "Foundation.md";
+
+function CloseDoor(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="ComputeDamage_Function" />ComputeDamage Function</h3>
+      <a name="ComputeDamage" />ComputeDamage</h3>
+    <pre>include "Foundation-Combat.md";
+
+function ComputeDamage(
+    $attackDamage : Int,
+    $DamageResistance : Int
+    ) : Int;</pre>
     <h3>
-      <a name="Describe_Function" />Describe Function</h3>
+      <a name="Describe" />Describe</h3>
+    <pre>include "Foundation.md";
+
+function Describe(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DescribeCommon_Function" />DescribeCommon Function</h3>
+      <a name="DescribeCommon" />DescribeCommon</h3>
+    <pre>include "Foundation.md";
+
+function DescribeCommon(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DescribeContainer_Function" />DescribeContainer Function</h3>
+      <a name="DescribeContainer" />DescribeContainer</h3>
+    <pre>include "Foundation.md";
+
+function DescribeContainer(
+    $container : Item
+    );</pre>
     <h3>
-      <a name="DescribeCreatureHealth_Function" />DescribeCreatureHealth Function</h3>
+      <a name="DescribeCreatureHealth" />DescribeCreatureHealth</h3>
+    <pre>include "Foundation-Combat.md";
+
+function DescribeCreatureHealth(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DescribeItemHealth_Function" />DescribeItemHealth Function</h3>
+      <a name="DescribeItemHealth" />DescribeItemHealth</h3>
+    <pre>include "Foundation-Combat.md";
+
+function DescribeItemHealth(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DescribePlayerHealth_Function" />DescribePlayerHealth Function</h3>
+      <a name="DescribePlayerHealth" />DescribePlayerHealth</h3>
+    <pre>include "Foundation-Combat.md";
+
+function DescribePlayerHealth(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DescribePlayerWithArms_Function" />DescribePlayerWithArms Function</h3>
+      <a name="DescribePlayerWithArms" />DescribePlayerWithArms</h3>
+    <pre>include "Foundation-Combat.md";
+
+function DescribePlayerWithArms(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DescribeTable_Function" />DescribeTable Function</h3>
+      <a name="DescribeTable" />DescribeTable</h3>
+    <pre>include "Foundation.md";
+
+function DescribeTable(
+    $table : Item
+    );</pre>
     <h3>
-      <a name="DestroyItem_Function" />DestroyItem Function</h3>
+      <a name="DestroyItem" />DestroyItem</h3>
+    <pre>include "Foundation-Combat.md";
+
+function DestroyItem(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DirectionPhrase_Function" />DirectionPhrase Function</h3>
+      <a name="DirectionPhrase" />DirectionPhrase</h3>
+    <pre>include "Foundation.md";
+
+function DirectionPhrase(
+    $fromValue : Direction
+    ) : String;</pre>
     <h3>
-      <a name="DoorStateAdj_Function" />DoorStateAdj Function</h3>
+      <a name="DoorStateAdj" />DoorStateAdj</h3>
+    <pre>include "Foundation.md";
+
+function DoorStateAdj(
+    $fromValue : DoorState
+    ) : String;</pre>
     <h3>
-      <a name="DrawDoors_Function" />DrawDoors Function</h3>
+      <a name="DrawDoors" />DrawDoors</h3>
+    <pre>include "Foundation.md";
+
+function DrawDoors(
+    $room : Item,
+    $left : Int,
+    $top : Int,
+    $width : Int,
+    $height : Int,
+    $backColor : Int
+    );</pre>
     <h3>
-      <a name="DrawEllipticalRoom_Function" />DrawEllipticalRoom Function</h3>
+      <a name="DrawEllipticalRoom" />DrawEllipticalRoom</h3>
+    <pre>include "Foundation.md";
+
+function DrawEllipticalRoom(
+    $room : Item,
+    $width : Int,
+    $height : Int
+    ) : Int;</pre>
     <h3>
-      <a name="DrawRectangularRoom_Function" />DrawRectangularRoom Function</h3>
+      <a name="DrawRectangularRoom" />DrawRectangularRoom</h3>
+    <pre>include "Foundation.md";
+
+function DrawRectangularRoom(
+    $room : Item,
+    $width : Int,
+    $height : Int,
+    $wallColor : Int,
+    $backColor : Int
+    ) : Int;</pre>
     <h3>
-      <a name="DrawRoom_100x200_Function" />DrawRoom_100x200 Function</h3>
+      <a name="DrawRoom_100x200" />DrawRoom_100x200</h3>
+    <pre>include "Foundation.md";
+
+function DrawRoom_100x200(
+    $room : Item
+    ) : Int;</pre>
     <h3>
-      <a name="DrawRoom_200x100_Function" />DrawRoom_200x100 Function</h3>
+      <a name="DrawRoom_200x100" />DrawRoom_200x100</h3>
+    <pre>include "Foundation.md";
+
+function DrawRoom_200x100(
+    $room : Item
+    ) : Int;</pre>
     <h3>
-      <a name="DrawRoom_300x150_Function" />DrawRoom_300x150 Function</h3>
+      <a name="DrawRoom_300x150" />DrawRoom_300x150</h3>
+    <pre>include "Foundation.md";
+
+function DrawRoom_300x150(
+    $room : Item
+    ) : Int;</pre>
     <h3>
-      <a name="DrawRoundRoom_Function" />DrawRoundRoom Function</h3>
+      <a name="DrawRoundRoom" />DrawRoundRoom</h3>
+    <pre>include "Foundation.md";
+
+function DrawRoundRoom(
+    $room : Item
+    ) : Int;</pre>
     <h3>
-      <a name="DrawSquareRoom_Function" />DrawSquareRoom Function</h3>
+      <a name="DrawSquareRoom" />DrawSquareRoom</h3>
+    <pre>include "Foundation.md";
+
+function DrawSquareRoom(
+    $room : Item
+    ) : Int;</pre>
     <h3>
-      <a name="Drop_Function" />Drop Function</h3>
+      <a name="Drop" />Drop</h3>
+    <pre>include "Foundation.md";
+
+function Drop(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DropArmor_Function" />DropArmor Function</h3>
+      <a name="DropArmor" />DropArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+function DropArmor(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DropPortableItem_Function" />DropPortableItem Function</h3>
+      <a name="DropPortableItem" />DropPortableItem</h3>
+    <pre>include "Foundation.md";
+
+function DropPortableItem(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="DropWeapon_Function" />DropWeapon Function</h3>
+      <a name="DropWeapon" />DropWeapon</h3>
+    <pre>include "Foundation-Combat.md";
+
+function DropWeapon(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="GetArmor_Function" />GetArmor Function</h3>
+      <a name="GetArmor" />GetArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+function GetArmor(
+    $kind : ArmorKind
+    ) : Item;</pre>
     <h3>
-      <a name="GetLink_Function" />GetLink Function</h3>
+      <a name="GetLink" />GetLink</h3>
+    <pre>include "Foundation.md";
+
+function GetLink(
+    $item : Item,
+    $dir : Direction
+    ) : Item;</pre>
     <h3>
-      <a name="Go_Function" />Go Function</h3>
+      <a name="Go" />Go</h3>
+    <pre>include "Foundation.md";
+
+function Go(
+    $dir : Direction
+    );</pre>
     <h3>
-      <a name="IgniteCandle_Function" />IgniteCandle Function</h3>
+      <a name="IgniteCandle" />IgniteCandle</h3>
+    <pre>include "Foundation.md";
+
+function IgniteCandle(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="IncrementTime_Function" />IncrementTime Function</h3>
+      <a name="IncrementTime" />IncrementTime</h3>
+    <pre>include "Foundation.md";
+
+function IncrementTime();</pre>
     <h3>
-      <a name="InitializeArmor_Function" />InitializeArmor Function</h3>
+      <a name="InitializeArmor" />InitializeArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+function InitializeArmor(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $kind : ArmorKind,
+    $DamageResistance : Int,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeBed_Function" />InitializeBed Function</h3>
+      <a name="InitializeBed" />InitializeBed</h3>
+    <pre>include "Foundation-Combat.md";
+
+function InitializeBed(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeCandle_Function" />InitializeCandle Function</h3>
+      <a name="InitializeCandle" />InitializeCandle</h3>
+    <pre>include "Foundation.md";
+
+function InitializeCandle(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeContainer_Function" />InitializeContainer Function</h3>
+      <a name="InitializeContainer" />InitializeContainer</h3>
+    <pre>include "Foundation.md";
+
+function InitializeContainer(
+    $container : Item,
+    $adjectives : String,
+    $noun : String,
+    $state : DoorState,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeDoor_Function" />InitializeDoor Function</h3>
+      <a name="InitializeDoor" />InitializeDoor</h3>
+    <pre>include "Foundation.md";
+
+function InitializeDoor(
+    $door : Item,
+    $from : Item,
+    $to : Item,
+    $dir : Direction,
+    $adjectives : String,
+    $noun : String,
+    $state : DoorState
+    );</pre>
     <h3>
-      <a name="InitializeKey_Function" />InitializeKey Function</h3>
+      <a name="InitializeKey" />InitializeKey</h3>
+    <pre>include "Foundation.md";
+
+function InitializeKey(
+    $key : Item,
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeLight_Function" />InitializeLight Function</h3>
+      <a name="InitializeLight" />InitializeLight</h3>
+    <pre>include "Foundation.md";
+
+function InitializeLight(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeLighter_Function" />InitializeLighter Function</h3>
+      <a name="InitializeLighter" />InitializeLighter</h3>
+    <pre>include "Foundation.md";
+
+function InitializeLighter(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeLighting_Function" />InitializeLighting Function</h3>
+      <a name="InitializeLighting" />InitializeLighting</h3>
+    <pre>include "Foundation.md";
+
+function InitializeLighting();</pre>
     <h3>
-      <a name="InitializeMonster_Function" />InitializeMonster Function</h3>
+      <a name="InitializeMonster" />InitializeMonster</h3>
+    <pre>include "Foundation-Combat.md";
+
+function InitializeMonster(
+    $monster : Item,
+    $adjectives : String,
+    $noun : String,
+    $health : Int,
+    $damageResistance : Int,
+    $attackDamage : Int,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializePortableItem_Function" />InitializePortableItem Function</h3>
+      <a name="InitializePortableItem" />InitializePortableItem</h3>
+    <pre>include "Foundation.md";
+
+function InitializePortableItem(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeTable_Function" />InitializeTable Function</h3>
+      <a name="InitializeTable" />InitializeTable</h3>
+    <pre>include "Foundation.md";
+
+function InitializeTable(
+    $table : Item,
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeWeapon_Function" />InitializeWeapon Function</h3>
+      <a name="InitializeWeapon" />InitializeWeapon</h3>
+    <pre>include "Foundation-Combat.md";
+
+function InitializeWeapon(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $damage : Int,
+    $loc : Item
+    );</pre>
     <h3>
-      <a name="InitializeWordMap_Function" />InitializeWordMap Function</h3>
+      <a name="InitializeWordMap" />InitializeWordMap</h3>
+    <pre>include "Foundation.md";
+
+function InitializeWordMap();</pre>
     <h3>
-      <a name="Inventory_Function" />Inventory Function</h3>
+      <a name="Inventory" />Inventory</h3>
+    <pre>include "Foundation.md";
+
+function Inventory();</pre>
     <h3>
-      <a name="InvokeItemAction_Function" />InvokeItemAction Function</h3>
+      <a name="InvokeItemAction" />InvokeItemAction</h3>
     <p>Invokes an ItemAction delegate or displays an error message.</p>
+    <pre>include "Foundation.md";
+
+function InvokeItemAction(
+    $func : ItemDelegate,
+    $item : Item,
+    $verb : String
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$func</p>
+    <p class="def">Delegate to invoke, which is typically a property of $item.</p>
+    <p class="term">$item</p>
+    <p class="def">Item passed as a parameter to the delegate.</p>
+    <p class="term">$verb</p>
+    <p class="def">Verb used in an error message if the delegate is null.</p>
     <h3>
-      <a name="InvokeItemActionWithFallback_Function" />InvokeItemActionWithFallback Function</h3>
+      <a name="InvokeItemActionWithFallback" />InvokeItemActionWithFallback</h3>
     <p>Invokes an ItemAction delegate or invokes a fallback action.</p>
+    <pre>include "Foundation.md";
+
+function InvokeItemActionWithFallback(
+    $func : ItemDelegate,
+    $item : Item,
+    $fallback : ItemDelegate
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$func</p>
+    <p class="def">Delegate to invoke, which is typically a property of $item.</p>
+    <p class="term">$item</p>
+    <p class="def">Item passed as a parameter to the delegate.</p>
+    <p class="term">$fallback</p>
+    <p class="def">Alternative delegate to invoke if $func is null.</p>
     <h3>
-      <a name="IsAccessible_Function" />IsAccessible Function</h3>
+      <a name="IsAccessible" />IsAccessible</h3>
+    <pre>include "Foundation.md";
+
+function IsAccessible(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsActiveLightState_Function" />IsActiveLightState Function</h3>
+      <a name="IsActiveLightState" />IsActiveLightState</h3>
+    <pre>include "Foundation.md";
+
+function IsActiveLightState(
+    $fromValue : LightState
+    ) : Bool;</pre>
     <h3>
-      <a name="IsCandle_Function" />IsCandle Function</h3>
+      <a name="IsCandle" />IsCandle</h3>
+    <pre>include "Foundation.md";
+
+function IsCandle(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsClosedOrLocked_Function" />IsClosedOrLocked Function</h3>
+      <a name="IsClosedOrLocked" />IsClosedOrLocked</h3>
     <p>Returns true if the specified door state is either closed or locked.</p>
+    <pre>include "Foundation.md";
+
+function IsClosedOrLocked(
+    $fromValue : DoorState
+    ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$fromValue</p>
+    <p class="def">DoorState value.</p>
+    <h4>Return value</h4>
+    <p>Returns true for Closed or Locked.</p>
     <h3>
-      <a name="IsContainer_Function" />IsContainer Function</h3>
+      <a name="IsContainer" />IsContainer</h3>
+    <pre>include "Foundation.md";
+
+function IsContainer(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsCurrentRoomOrInventory_Function" />IsCurrentRoomOrInventory Function</h3>
+      <a name="IsCurrentRoomOrInventory" />IsCurrentRoomOrInventory</h3>
+    <pre>include "Foundation.md";
+
+function IsCurrentRoomOrInventory(
+    $loc : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsDarkAlways_Function" />IsDarkAlways Function</h3>
+      <a name="IsDarkAlways" />IsDarkAlways</h3>
+    <pre>include "Foundation.md";
+
+function IsDarkAlways(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsDarkAtNight_Function" />IsDarkAtNight Function</h3>
+      <a name="IsDarkAtNight" />IsDarkAtNight</h3>
+    <pre>include "Foundation.md";
+
+function IsDarkAtNight(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsKey_Function" />IsKey Function</h3>
+      <a name="IsKey" />IsKey</h3>
+    <pre>include "Foundation.md";
+
+function IsKey(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsLight_Function" />IsLight Function</h3>
+      <a name="IsLight" />IsLight</h3>
+    <pre>include "Foundation.md";
+
+function IsLight(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsLighter_Function" />IsLighter Function</h3>
+      <a name="IsLighter" />IsLighter</h3>
+    <pre>include "Foundation.md";
+
+function IsLighter(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsNight_Function" />IsNight Function</h3>
+      <a name="IsNight" />IsNight</h3>
+    <pre>include "Foundation.md";
+
+function IsNight() : Bool;</pre>
     <h3>
-      <a name="IsOpenable_Function" />IsOpenable Function</h3>
+      <a name="IsOpenable" />IsOpenable</h3>
+    <pre>include "Foundation.md";
+
+function IsOpenable(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsOpenContainer_Function" />IsOpenContainer Function</h3>
+      <a name="IsOpenContainer" />IsOpenContainer</h3>
+    <pre>include "Foundation.md";
+
+function IsOpenContainer(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsPortable_Function" />IsPortable Function</h3>
+      <a name="IsPortable" />IsPortable</h3>
+    <pre>include "Foundation.md";
+
+function IsPortable(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="IsTable_Function" />IsTable Function</h3>
+      <a name="IsTable" />IsTable</h3>
+    <pre>include "Foundation.md";
+
+function IsTable(
+    $item : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="ItalicLabel_Function" />ItalicLabel Function</h3>
+      <a name="ItalicLabel" />ItalicLabel</h3>
     <p>Gets an item's label with Markdown italic formatting.</p>
+    <pre>include "Foundation.md";
+
+function ItalicLabel(
+    $item : Item
+    ) : String;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to get the label of.</p>
+    <h4>Return value</h4>
+    <p>Returns the item label.</p>
     <h3>
-      <a name="ItalicLabelWithState_Function" />ItalicLabelWithState Function</h3>
+      <a name="ItalicLabelWithState" />ItalicLabelWithState</h3>
+    <pre>include "Foundation.md";
+
+function ItalicLabelWithState(
+    $item : Item
+    ) : String;</pre>
     <h3>
-      <a name="Label_Function" />Label Function</h3>
+      <a name="Label" />Label</h3>
     <p>Gets an item's label, which is a string that can be used to refer to the item.</p>
+    <pre>include "Foundation.md";
+
+function Label(
+    $item : Item
+    ) : String;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to get the label of.</p>
+    <h4>Return value</h4>
+    <p>Returns the item label.</p>
     <h3>
-      <a name="LabelWithState_Function" />LabelWithState Function</h3>
+      <a name="LabelWithState" />LabelWithState</h3>
+    <pre>include "Foundation.md";
+
+function LabelWithState(
+    $item : Item
+    ) : String;</pre>
     <h3>
-      <a name="LightStateAdj_Function" />LightStateAdj Function</h3>
+      <a name="LightStateAdj" />LightStateAdj</h3>
+    <pre>include "Foundation.md";
+
+function LightStateAdj(
+    $fromValue : LightState
+    ) : String;</pre>
     <h3>
-      <a name="LightWith_Function" />LightWith Function</h3>
+      <a name="LightWith" />LightWith</h3>
+    <pre>include "Foundation.md";
+
+function LightWith(
+    $target : Item,
+    $lighter : Item
+    );</pre>
     <h3>
-      <a name="LinkRooms_Function" />LinkRooms Function</h3>
+      <a name="LinkRooms" />LinkRooms</h3>
+    <pre>include "Foundation.md";
+
+function LinkRooms(
+    $from : Item,
+    $to : Item,
+    $via : Item,
+    $dir : Direction
+    );</pre>
     <h3>
-      <a name="LinkRoomsOneWay_Function" />LinkRoomsOneWay Function</h3>
+      <a name="LinkRoomsOneWay" />LinkRoomsOneWay</h3>
+    <pre>include "Foundation.md";
+
+function LinkRoomsOneWay(
+    $from : Item,
+    $to : Item,
+    $via : Item,
+    $dir : Direction
+    );</pre>
     <h3>
-      <a name="ListContainerContents_Function" />ListContainerContents Function</h3>
+      <a name="ListContainerContents" />ListContainerContents</h3>
+    <pre>include "Foundation.md";
+
+function ListContainerContents(
+    $container : Item
+    );</pre>
     <h3>
-      <a name="Look_Function" />Look Function</h3>
+      <a name="Look" />Look</h3>
+    <pre>include "Foundation.md";
+
+function Look();</pre>
     <h3>
-      <a name="NewArmor_Function" />NewArmor Function</h3>
+      <a name="NewArmor" />NewArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+function NewArmor(
+    $adjectives : String,
+    $noun : String,
+    $kind : ArmorKind,
+    $DamageResistance : Int,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewBed_Function" />NewBed Function</h3>
+      <a name="NewBed" />NewBed</h3>
+    <pre>include "Foundation-Combat.md";
+
+function NewBed(
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewCandle_Function" />NewCandle Function</h3>
+      <a name="NewCandle" />NewCandle</h3>
+    <pre>include "Foundation.md";
+
+function NewCandle(
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewClosedDoor_Function" />NewClosedDoor Function</h3>
+      <a name="NewClosedDoor" />NewClosedDoor</h3>
+    <pre>include "Foundation.md";
+
+function NewClosedDoor(
+    $from : Item,
+    $to : Item,
+    $dir : Direction
+    ) : Item;</pre>
     <h3>
-      <a name="NewContainer_Function" />NewContainer Function</h3>
+      <a name="NewContainer" />NewContainer</h3>
+    <pre>include "Foundation.md";
+
+function NewContainer(
+    $adjectives : String,
+    $noun : String,
+    $state : DoorState,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewDoorItem_Function" />NewDoorItem Function</h3>
+      <a name="NewDoorItem" />NewDoorItem</h3>
+    <pre>include "Foundation.md";
+
+function NewDoorItem(
+    $from : Item,
+    $to : Item,
+    $dir : Direction,
+    $adjectives : String,
+    $noun : String,
+    $state : DoorState
+    ) : Item;</pre>
     <h3>
-      <a name="NewKey_Function" />NewKey Function</h3>
+      <a name="NewKey" />NewKey</h3>
+    <pre>include "Foundation.md";
+
+function NewKey(
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewLight_Function" />NewLight Function</h3>
+      <a name="NewLight" />NewLight</h3>
+    <pre>include "Foundation.md";
+
+function NewLight(
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewLighter_Function" />NewLighter Function</h3>
+      <a name="NewLighter" />NewLighter</h3>
+    <pre>include "Foundation.md";
+
+function NewLighter(
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewLink_Function" />NewLink Function</h3>
+      <a name="NewLink" />NewLink</h3>
+    <pre>include "Foundation.md";
+
+function NewLink(
+    $from : Item,
+    $to : Item,
+    $dir : Direction
+    ) : Item;</pre>
     <h3>
-      <a name="NewLockedDoor_Function" />NewLockedDoor Function</h3>
+      <a name="NewLockedDoor" />NewLockedDoor</h3>
+    <pre>include "Foundation.md";
+
+function NewLockedDoor(
+    $from : Item,
+    $to : Item,
+    $dir : Direction,
+    $key : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewMonster_Function" />NewMonster Function</h3>
+      <a name="NewMonster" />NewMonster</h3>
+    <pre>include "Foundation-Combat.md";
+
+function NewMonster(
+    $adjectives : String,
+    $noun : String,
+    $health : Int,
+    $damageResistance : Int,
+    $attackDamage : Int,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewOpening_Function" />NewOpening Function</h3>
+      <a name="NewOpening" />NewOpening</h3>
+    <pre>include "Foundation.md";
+
+function NewOpening(
+    $from : Item,
+    $to : Item,
+    $dir : Direction
+    ) : Item;</pre>
     <h3>
-      <a name="NewPortableItem_Function" />NewPortableItem Function</h3>
+      <a name="NewPortableItem" />NewPortableItem</h3>
+    <pre>include "Foundation.md";
+
+function NewPortableItem(
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewTable_Function" />NewTable Function</h3>
+      <a name="NewTable" />NewTable</h3>
+    <pre>include "Foundation.md";
+
+function NewTable(
+    $adjectives : String,
+    $noun : String,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="NewWeapon_Function" />NewWeapon Function</h3>
+      <a name="NewWeapon" />NewWeapon</h3>
+    <pre>include "Foundation-Combat.md";
+
+function NewWeapon(
+    $adjectives : String,
+    $noun : String,
+    $damage : Int,
+    $loc : Item
+    ) : Item;</pre>
     <h3>
-      <a name="OnLightActivated_Function" />OnLightActivated Function</h3>
+      <a name="OnLightActivated" />OnLightActivated</h3>
+    <pre>include "Foundation.md";
+
+function OnLightActivated(
+    $lightSource : Item
+    );</pre>
     <h3>
-      <a name="OnMonsterAttacked_Function" />OnMonsterAttacked Function</h3>
+      <a name="OnMonsterAttacked" />OnMonsterAttacked</h3>
+    <pre>include "Foundation-Combat.md";
+
+function OnMonsterAttacked(
+    $monster : Item
+    );</pre>
     <h3>
-      <a name="OnPlayerAttacked_Function" />OnPlayerAttacked Function</h3>
+      <a name="OnPlayerAttacked" />OnPlayerAttacked</h3>
+    <pre>include "Foundation-Combat.md";
+
+function OnPlayerAttacked(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="Open_Function" />Open Function</h3>
+      <a name="Open" />Open</h3>
+    <pre>include "Foundation.md";
+
+function Open(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="OpenContainer_Function" />OpenContainer Function</h3>
+      <a name="OpenContainer" />OpenContainer</h3>
+    <pre>include "Foundation.md";
+
+function OpenContainer(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="OpenDoor_Function" />OpenDoor Function</h3>
+      <a name="OpenDoor" />OpenDoor</h3>
+    <pre>include "Foundation.md";
+
+function OpenDoor(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="Opposite_Function" />Opposite Function</h3>
+      <a name="Opposite" />Opposite</h3>
+    <pre>include "Foundation.md";
+
+function Opposite(
+    $fromValue : Direction
+    ) : Direction;</pre>
     <h3>
-      <a name="PutIn_Function" />PutIn Function</h3>
+      <a name="PutIn" />PutIn</h3>
+    <pre>include "Foundation.md";
+
+function PutIn(
+    $item : Item,
+    $target : Item
+    );</pre>
     <h3>
-      <a name="PutInContainer_Function" />PutInContainer Function</h3>
+      <a name="PutInContainer" />PutInContainer</h3>
+    <pre>include "Foundation.md";
+
+function PutInContainer(
+    $item : Item,
+    $container : Item
+    );</pre>
     <h3>
-      <a name="PutOn_Function" />PutOn Function</h3>
+      <a name="PutOn" />PutOn</h3>
+    <pre>include "Foundation.md";
+
+function PutOn(
+    $item : Item,
+    $target : Item
+    );</pre>
     <h3>
-      <a name="PutOnTable_Function" />PutOnTable Function</h3>
+      <a name="PutOnTable" />PutOnTable</h3>
+    <pre>include "Foundation.md";
+
+function PutOnTable(
+    $item : Item,
+    $table : Item
+    );</pre>
     <h3>
-      <a name="PutOut_Function" />PutOut Function</h3>
+      <a name="PutOut" />PutOut</h3>
+    <pre>include "Foundation.md";
+
+function PutOut(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="PutOutCandle_Function" />PutOutCandle Function</h3>
+      <a name="PutOutCandle" />PutOutCandle</h3>
+    <pre>include "Foundation.md";
+
+function PutOutCandle(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="SetArmor_Function" />SetArmor Function</h3>
+      <a name="SetArmor" />SetArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+function SetArmor(
+    $kind : ArmorKind,
+    $item : Item
+    );</pre>
     <h3>
-      <a name="SetItemHealth_Function" />SetItemHealth Function</h3>
+      <a name="SetItemHealth" />SetItemHealth</h3>
+    <pre>include "Foundation-Combat.md";
+
+function SetItemHealth(
+    $item : Item,
+    $health : Int
+    );</pre>
     <h3>
-      <a name="SetLabelProperties_Function" />SetLabelProperties Function</h3>
+      <a name="SetLabelProperties" />SetLabelProperties</h3>
     <p>Sets the adjectives and noun for an item, which together comprise its label.</p>
+    <pre>include "Foundation.md";
+
+function SetLabelProperties(
+    $item : Item,
+    $adjectives : String,
+    $noun : String
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to set properties of.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">New value of the Adjectives property.</p>
+    <p class="term">$noun</p>
+    <p class="def">New value of the Noun property.</p>
     <h3>
-      <a name="SetLink_Function" />SetLink Function</h3>
+      <a name="SetLink" />SetLink</h3>
+    <pre>include "Foundation.md";
+
+function SetLink(
+    $from : Item,
+    $to : Item,
+    $dir : Direction
+    );</pre>
     <h3>
-      <a name="SetPlayerDamageResistance_Function" />SetPlayerDamageResistance Function</h3>
+      <a name="SetPlayerDamageResistance" />SetPlayerDamageResistance</h3>
+    <pre>include "Foundation-Combat.md";
+
+function SetPlayerDamageResistance();</pre>
     <h3>
-      <a name="Sleep_Function" />Sleep Function</h3>
+      <a name="Sleep" />Sleep</h3>
+    <pre>include "Foundation-Combat.md";
+
+function Sleep(
+    $minutes : Int
+    ) : Bool;</pre>
     <h3>
-      <a name="Take_Function" />Take Function</h3>
+      <a name="Take" />Take</h3>
+    <pre>include "Foundation.md";
+
+function Take(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TakeArmor_Function" />TakeArmor Function</h3>
+      <a name="TakeArmor" />TakeArmor</h3>
+    <pre>include "Foundation-Combat.md";
+
+function TakeArmor(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TakePortableItem_Function" />TakePortableItem Function</h3>
+      <a name="TakePortableItem" />TakePortableItem</h3>
+    <pre>include "Foundation.md";
+
+function TakePortableItem(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TakeWeapon_Function" />TakeWeapon Function</h3>
+      <a name="TakeWeapon" />TakeWeapon</h3>
+    <pre>include "Foundation-Combat.md";
+
+function TakeWeapon(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TryFollowPlayer_Function" />TryFollowPlayer Function</h3>
+      <a name="TryFollowPlayer" />TryFollowPlayer</h3>
+    <pre>include "Foundation-Combat.md";
+
+function TryFollowPlayer(
+    $monster : Item
+    ) : Bool;</pre>
     <h3>
-      <a name="TurnOff_Function" />TurnOff Function</h3>
+      <a name="TurnOff" />TurnOff</h3>
+    <pre>include "Foundation.md";
+
+function TurnOff(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TurnOffLight_Function" />TurnOffLight Function</h3>
+      <a name="TurnOffLight" />TurnOffLight</h3>
+    <pre>include "Foundation.md";
+
+function TurnOffLight(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TurnOn_Function" />TurnOn Function</h3>
+      <a name="TurnOn" />TurnOn</h3>
+    <pre>include "Foundation.md";
+
+function TurnOn(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TurnOnCandle_Function" />TurnOnCandle Function</h3>
+      <a name="TurnOnCandle" />TurnOnCandle</h3>
+    <pre>include "Foundation.md";
+
+function TurnOnCandle(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="TurnOnLight_Function" />TurnOnLight Function</h3>
+      <a name="TurnOnLight" />TurnOnLight</h3>
+    <pre>include "Foundation.md";
+
+function TurnOnLight(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="UpdateFriendlyMonster_Function" />UpdateFriendlyMonster Function</h3>
+      <a name="UpdateFriendlyMonster" />UpdateFriendlyMonster</h3>
+    <pre>include "Foundation-Combat.md";
+
+function UpdateFriendlyMonster(
+    $monster : Item
+    );</pre>
     <h3>
-      <a name="UpdateHostileMonster_Function" />UpdateHostileMonster Function</h3>
+      <a name="UpdateHostileMonster" />UpdateHostileMonster</h3>
+    <pre>include "Foundation-Combat.md";
+
+function UpdateHostileMonster(
+    $monster : Item
+    );</pre>
     <h3>
-      <a name="UpdateItems_Function" />UpdateItems Function</h3>
+      <a name="UpdateItems" />UpdateItems</h3>
+    <pre>include "Foundation-Combat.md";
+
+function UpdateItems();</pre>
     <h3>
-      <a name="UpdatePlayer_Function" />UpdatePlayer Function</h3>
+      <a name="UpdatePlayer" />UpdatePlayer</h3>
+    <pre>include "Foundation-Combat.md";
+
+function UpdatePlayer(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="UpdateSurprisedMonster_Function" />UpdateSurprisedMonster Function</h3>
+      <a name="UpdateSurprisedMonster" />UpdateSurprisedMonster</h3>
+    <pre>include "Foundation-Combat.md";
+
+function UpdateSurprisedMonster(
+    $monster : Item
+    );</pre>
     <h3>
-      <a name="Use_Function" />Use Function</h3>
+      <a name="Use" />Use</h3>
+    <pre>include "Foundation.md";
+
+function Use(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="UseBed_Function" />UseBed Function</h3>
+      <a name="UseBed" />UseBed</h3>
+    <pre>include "Foundation-Combat.md";
+
+function UseBed(
+    $item : Item
+    );</pre>
     <h3>
-      <a name="UseKeyOn_Function" />UseKeyOn Function</h3>
+      <a name="UseKeyOn" />UseKeyOn</h3>
+    <pre>include "Foundation.md";
+
+function UseKeyOn(
+    $key : Item,
+    $target : Item
+    );</pre>
     <h3>
-      <a name="UseLighterOn_Function" />UseLighterOn Function</h3>
+      <a name="UseLighterOn" />UseLighterOn</h3>
+    <pre>include "Foundation.md";
+
+function UseLighterOn(
+    $item : Item,
+    $target : Item
+    );</pre>
     <h3>
-      <a name="UseOn_Function" />UseOn Function</h3>
+      <a name="UseOn" />UseOn</h3>
+    <pre>include "Foundation.md";
+
+function UseOn(
+    $item : Item,
+    $target : Item
+    );</pre>
     <h3>
-      <a name="UseWeapon_Function" />UseWeapon Function</h3>
+      <a name="UseWeapon" />UseWeapon</h3>
+    <pre>include "Foundation-Combat.md";
+
+function UseWeapon(
+    $item : Item
+    );</pre>
   </body>
 </html>

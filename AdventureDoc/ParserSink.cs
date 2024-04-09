@@ -49,11 +49,11 @@ namespace AdventureDoc
         {
             if (isConst)
             {
-                m_variables.Add(new VariablePage(m_def, name, typeDef));
+                m_constants.Add(new ConstantPage(m_def, name, typeDef));
             }
             else
             {
-                m_constants.Add(new ConstantPage(m_def, name, typeDef));
+                m_variables.Add(new VariablePage(m_def, name, typeDef));
             }
         }
 
