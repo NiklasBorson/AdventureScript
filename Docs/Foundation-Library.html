@@ -64,9 +64,21 @@ enum Direction(North,South,East,West,Up,Down);</pre>
 enum DoorState(None,Open,Closed,Locked);</pre>
     <h3>
       <a name="LightState" />LightState</h3>
+    <p>Represents the state of a light source. Some states apply only to light sources that behave like electric lights. Other states apply only to light sources that behave like candles.</p>
     <pre>include "Foundation.md";
 
 enum LightState(None,Off,On,Unlit,Lit);</pre>
+    <h4>Values</h4>
+    <p class="term">None</p>
+    <p class="def">The item is not a light source.</p>
+    <p class="term">Off</p>
+    <p class="def">The light is off.</p>
+    <p class="term">On</p>
+    <p class="def">The light is on.</p>
+    <p class="term">Unlit</p>
+    <p class="def">The candle is unlit.</p>
+    <p class="term">Lit</p>
+    <p class="def">The candle is lit.</p>
     <h2>
       <a name="Delegates" />Delegates</h2>
     <ul>
@@ -424,6 +436,7 @@ property DescribeHealthAction : ItemDelegate;</pre>
 property Description : String;</pre>
     <h3>
       <a name="DoorState" />DoorState</h3>
+    <p>Represents the state of a door or container. The default None value applies to non-door items.</p>
     <pre>include "Foundation.md";
 
 property DoorState : DoorState;</pre>
@@ -467,11 +480,13 @@ property Image : String;</pre>
 property IsDark : ItemPredicate;</pre>
     <h3>
       <a name="IsHidden" />IsHidden</h3>
+    <p>Specifies whether this item is hidden.</p>
     <pre>include "Foundation.md";
 
 property IsHidden : Bool;</pre>
     <h3>
       <a name="Key" />Key</h3>
+    <p>Specifies the item that can be used to unlock this item.</p>
     <pre>include "Foundation.md";
 
 property Key : Item;</pre>
@@ -483,6 +498,7 @@ property Key : Item;</pre>
 property LeaveAction : NavigationAction;</pre>
     <h3>
       <a name="LightState" />LightState</h3>
+    <p>Represents the state ofa  light source.</p>
     <pre>include "Foundation.md";
 
 property LightState : LightState;</pre>
@@ -783,9 +799,6 @@ item player;</pre>
       </li>
       <li>
         <a href="#IsContainer">IsContainer</a>
-      </li>
-      <li>
-        <a href="#IsCurrentRoomOrInventory">IsCurrentRoomOrInventory</a>
       </li>
       <li>
         <a href="#IsDarkAlways">IsDarkAlways</a>
@@ -1228,11 +1241,15 @@ function DropArmor(
     );</pre>
     <h3>
       <a name="DropPortableItem" />DropPortableItem</h3>
+    <p>DropAction implementation for portable items.</p>
     <pre>include "Foundation.md";
 
 function DropPortableItem(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action applies to.</p>
     <h3>
       <a name="DropWeapon" />DropWeapon</h3>
     <pre>include "Foundation-Combat.md";
@@ -1380,6 +1397,7 @@ function InitializeMonster(
     );</pre>
     <h3>
       <a name="InitializePortableItem" />InitializePortableItem</h3>
+    <p>Sets the properties of a portable item.</p>
     <pre>include "Foundation.md";
 
 function InitializePortableItem(
@@ -1388,6 +1406,15 @@ function InitializePortableItem(
     $noun : String,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to set the properties of.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">Noun used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
     <h3>
       <a name="InitializeTable" />InitializeTable</h3>
     <pre>include "Foundation.md";
@@ -1455,6 +1482,7 @@ function InvokeItemActionWithFallback(
     <p class="def">Alternative delegate to invoke if $func is null.</p>
     <h3>
       <a name="IsAccessible" />IsAccessible</h3>
+    <p>Determines whether an item is accessible to the player.</p>
     <pre>include "Foundation.md";
 
 function IsAccessible(
@@ -1493,13 +1521,6 @@ function IsClosedOrLocked(
 
 function IsContainer(
     $item : Item
-    ) : Bool;</pre>
-    <h3>
-      <a name="IsCurrentRoomOrInventory" />IsCurrentRoomOrInventory</h3>
-    <pre>include "Foundation.md";
-
-function IsCurrentRoomOrInventory(
-    $loc : Item
     ) : Bool;</pre>
     <h3>
       <a name="IsDarkAlways" />IsDarkAlways</h3>
@@ -1557,11 +1578,14 @@ function IsOpenContainer(
     ) : Bool;</pre>
     <h3>
       <a name="IsPortable" />IsPortable</h3>
+    <p>Determines whether an item is portable.</p>
     <pre>include "Foundation.md";
 
 function IsPortable(
     $item : Item
     ) : Bool;</pre>
+    <h4>Return value</h4>
+    <p>Returns true if the item's TakeAction is not null.</p>
     <h3>
       <a name="IsTable" />IsTable</h3>
     <pre>include "Foundation.md";
@@ -1785,6 +1809,7 @@ function NewOpening(
     ) : Item;</pre>
     <h3>
       <a name="NewPortableItem" />NewPortableItem</h3>
+    <p>Creates and initializes a portable item.</p>
     <pre>include "Foundation.md";
 
 function NewPortableItem(
@@ -1792,6 +1817,15 @@ function NewPortableItem(
     $noun : String,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">Noun used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created item.</p>
     <h3>
       <a name="NewTable" />NewTable</h3>
     <pre>include "Foundation.md";
@@ -1976,11 +2010,15 @@ function TakeArmor(
     );</pre>
     <h3>
       <a name="TakePortableItem" />TakePortableItem</h3>
+    <p>TakeAction implementation for portable items.</p>
     <pre>include "Foundation.md";
 
 function TakePortableItem(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action applies to.</p>
     <h3>
       <a name="TakeWeapon" />TakeWeapon</h3>
     <pre>include "Foundation-Combat.md";

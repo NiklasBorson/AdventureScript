@@ -249,6 +249,9 @@ item is not a door. Other possible values are `Open`, `Closed`, and `Locked`.
 ## Represents the state of a door or container. The default None value
 ## applies to non-door items.
 enum DoorState(None,Open,Closed,Locked);
+
+## Represents the state of a door or container. The default None value
+## applies to non-door items.
 property DoorState : DoorState;
 ```
 
@@ -280,6 +283,7 @@ The value must be a key item created using the `NewKey` function or initialized 
 the `InitializeKey` function.
 
 ```text
+## Specifies the item that can be used to unlock this item.
 property Key : Item;
 ```
 
@@ -292,7 +296,8 @@ The `InitializePortableItem` sets the properties of a portable item.
 The `NewPortableItem` function creates and initializes a portable item.
 
 ```text
-# TakeAction implementation for portable items
+## TakeAction implementation for portable items.
+## $item: Item the action applies to.
 function TakePortableItem($item:Item)
 {
     if ($item.Location != player)
@@ -305,7 +310,9 @@ function TakePortableItem($item:Item)
         Message($"The {Label($item)} is already in your inventory.");
     }
 }
-# DropAction implementation for portable items
+
+## DropAction implementation for portable items.
+## $item: Item the action applies to.
 function DropPortableItem($item:Item)
 {
     if ($item.Location == player)
@@ -319,6 +326,11 @@ function DropPortableItem($item:Item)
     }
 }
 
+## Sets the properties of a portable item.
+## $item: Item to set the properties of.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
 function InitializePortableItem($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
     SetLabelProperties($item, $adjectives, $noun);
@@ -327,12 +339,19 @@ function InitializePortableItem($item:Item, $adjectives:String, $noun:String, $l
     $item.Location = $loc;
 }
 
+## Creates and initializes a portable item.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
+## $return: Returns the newly-created item.
 function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
 {
     $return = NewItem($"_{$noun}{$loc}");
     InitializePortableItem($return, $adjectives, $noun, $loc);
 }
 
+## Determines whether an item is portable.
+## $return: Returns true if the item's TakeAction is not null.
 function IsPortable($item:Item) => $item.TakeAction != null;
 ```
 
@@ -342,6 +361,7 @@ The `IsHidden` property can be used to implement secret doors and similar items 
 must be unhidden before the player can see or interact with them.
 
 ```text
+## Specifies whether this item is hidden.
 property IsHidden : Bool;
 ```
 
@@ -351,16 +371,13 @@ The `IsAccessible` function tests whether an item is in the current room, in an 
 container in the current room, on a table in the current room, or in the inventory.
 
 ```text
-function IsCurrentRoomOrInventory($loc:Item) =>
-    $loc == player.Location ||
-    $loc == player;
-
+## Determines whether an item is accessible to the player.
 function IsAccessible($item:Item) : Bool
 {
     if (!$item.IsHidden && $item.Noun != null)
     {
         var $loc = $item.Location;
-        if (IsCurrentRoomOrInventory($loc))
+        if ($loc == player.Location || $loc == player)
         {
             # Item is in the current room or player inventory.
             return true;
@@ -401,7 +418,17 @@ The "turn off" and "put out" actions are interchangeable for light sources but m
 mean different things for other kinds of items.
 
 ```text
+## Represents the state of a light source. Some states apply only to light sources
+## that behave like electric lights. Other states apply only to light sources that
+## behave like candles.
+## None: The item is not a light source.
+## Off: The light is off.
+## On: The light is on.
+## Unlit: The candle is unlit.
+## Lit: The candle is lit.
 enum LightState(None, Off, On, Unlit, Lit);
+
+## Represents the state ofa  light source.
 property LightState : LightState;
 ```
 
