@@ -2,7 +2,7 @@
 
 namespace AdventureScript
 {
-    static class Types
+    public static class Types
     {
         // A "real" types is added to to the TypeMap and can be specified as the
         // type of a property, variable, or parameter.

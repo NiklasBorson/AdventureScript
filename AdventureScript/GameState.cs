@@ -36,7 +36,12 @@ namespace AdventureScript
 
         public IList<string> LoadGame(string filePath)
         {
-            Parser.Parse(filePath, this);
+            return LoadGame(filePath, null);
+        }
+
+        public IList<string> LoadGame(string filePath, IParserSink? sink)
+        {
+            Parser.Parse(filePath, this, sink);
 
             foreach (var block in this.GameBlocks)
             {

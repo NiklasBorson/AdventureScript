@@ -21,7 +21,10 @@ The `player` item can also be the location of items the player has picked up usi
 "take" command.
 
 ```text
+## Location of an item, such as a room or a container.
 property Location : Item;
+
+## The player item represents the player.
 item player;
 
 turn
@@ -42,7 +45,11 @@ an item). The `Noun` must be a single word. The `Adjectives` property can be zer
 words separated by spaces.
 
 ```text
-property Noun,Adjectives : String;
+## Name that may be used to refer to an item.
+property Noun : String;
+
+## Space-separated adjectives that may be used to refer to an item along with its Noun.
+property Adjectives : String;
 ```
 
 ## SetLabelProperties Function
@@ -51,6 +58,10 @@ The `SetLabelProperties` function sets the adjectives and noun for an item. Thes
 words are used by the player to refer to the item and also comprise the item's label.
 
 ```text
+## Sets the adjectives and noun for an item, which together comprise its label.
+## $item: Item to set properties of.
+## $adjectives: New value of the Adjectives property.
+## $noun: New value of the Noun property.
 function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
 {
     $item.Adjectives = $adjectives;
@@ -63,10 +74,16 @@ function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
 The `Label` function gets a short label that can be used to refer to an item.
 
 ```text
+## Gets an item's label, which is a string that can be used to refer to the item.
+## $item: Item to get the label of.
+## $return: Returns the item label.
 function Label($item:Item) => $item.Adjectives != null ?
     $"{$item.Adjectives} {$item.Noun}" :
     $item.Noun;
 
+## Gets an item's label with Markdown italic formatting.
+## $item: Item to get the label of.
+## $return: Returns the item label.
 function ItalicLabel($item:Item) => $"_{Label($item)}_";
 ```
 
@@ -82,8 +99,13 @@ used to implement _action properties_ (see below).
 `ItemPredicate` is a delegate type that takes an `Item` parameter and returns a `Bool`.
 
 ```text
+## Reference to a function that takes an Item parameter.
 delegate ItemDelegate($item:Item);
+
+## Reference to a function that takes two Item parameters.
 delegate Item2Delegate($item1:Item, $item2:Item);
+
+## Reference to a function that takes an Item parameter and returns a Bool.
 delegate ItemPredicate($item:Item) : Bool;
 ```
 
@@ -92,6 +114,10 @@ delegate ItemPredicate($item:Item) : Bool;
 The functions in this section are used to invoke action delegates.
 
 ```text
+## Invokes an ItemAction delegate or displays an error message.
+## $func: Delegate to invoke, which is typically a property of $item.
+## $item: Item passed as a parameter to the delegate.
+## $verb: Verb used in an error message if the delegate is null.
 function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
 {
     if ($func != null)
@@ -104,6 +130,10 @@ function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
     }
 }
 
+## Invokes an ItemAction delegate or invokes a fallback action.
+## $func: Delegate to invoke, which is typically a property of $item.
+## $item: Item passed as a parameter to the delegate.
+## $fallback: Alternative delegate to invoke if $func is null.
 function InvokeItemActionWithFallback($func:ItemDelegate, $item:Item, $fallback:ItemDelegate)
 {
     if ($func != null)
@@ -142,19 +172,49 @@ action.
 | `PutOnAction`             | `PutOn`           | "put (item) on (table)"       |
 
 ```text
+## Delegate invoked by "take" command.
 property TakeAction : ItemDelegate;
+
+## Delegate invoked by "drop" command.
 property DropAction : ItemDelegate;
+
+## Delegate invoked by "use" command.
 property UseAction : ItemDelegate;
-property UseOnAction : Item2Delegate;   # applies to item being used
+
+## Delegate invoked by "use...on" command. The property
+## applies to the item being used.
+property UseOnAction : Item2Delegate;
+
+## Delegate invoked by "open" command.
 property OpenAction : ItemDelegate;
+
+## Delgate invoked by "close" command.
 property CloseAction : ItemDelegate;
+
+## Delegate invoked by the Describe function.
 property DescribeAction : ItemDelegate;
+
+## Delegate invoked to describe the health of an item.
 property DescribeHealthAction : ItemDelegate;
+
+## Delegate invoked by the "turn on" command.
 property TurnOnAction : ItemDelegate;
+
+## Delegate invoked by the "turn off" command.
 property TurnOffAction : ItemDelegate;
+
+## Delegate invoked by the UseLighterOn function.
 property IgniteAction : ItemDelegate;
+
+## Delegate invoked by the "put out" command.
 property PutOutAction : ItemDelegate;
-property PutInAction : Item2Delegate;   # applies to container
+
+## Delegate invoked by the "put...in" command. The property
+## applies to the container.
+property PutInAction : Item2Delegate;
+
+## Delegate invoked by the "put..on" command. The property
+## applies to the table.
 property PutOnAction : Item2Delegate;   # applies to table
 ```
 
@@ -166,8 +226,16 @@ room being left, and the `EnterAction` is invoked on the room being entered. If
 either function returns true then navigation is cancelled.
 
 ```text
+## Delegate type for the LeaveAction and EnterAction properties.
+## $from: Room being left.
+## $to: Room being entered.
+## $return: Return true to cancel navigation, or false to allow it.
 delegate NavigationAction($from:Item, $to:Item) : Bool;
+
+## Delegate invoked when leaving a room.
 property LeaveAction : NavigationAction;
+
+## Delegate invoked when entering a room.
 property EnterAction : NavigationAction;
 ```
 
@@ -178,6 +246,8 @@ This could be a door or an openable container. The default value is `None`, mean
 item is not a door. Other possible values are `Open`, `Closed`, and `Locked`.
 
 ```text
+## Represents the state of a door or container. The default None value
+## applies to non-door items.
 enum DoorState(None,Open,Closed,Locked);
 property DoorState : DoorState;
 ```
@@ -187,6 +257,9 @@ property DoorState : DoorState;
 Returns true if a `DoorState` value is either closed or locked.
 
 ```text
+## Returns true if the specified door state is either closed or locked.
+## $fromValue: DoorState value.
+## $return: Returns true for Closed or Locked.
 map IsClosedOrLocked DoorState -> Bool {
     None -> false,
     Open -> false,

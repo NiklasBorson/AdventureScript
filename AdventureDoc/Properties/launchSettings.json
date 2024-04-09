@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "AdventureDoc": {
+      "commandName": "Project",
+      "commandLineArgs": ".\\Games\\Inc\\all.txt .\\Docs\\Foundation-Library.html",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}

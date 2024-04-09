@@ -8,14 +8,16 @@ namespace AdventureScript
     {
         Lexer m_lexer;
         Stack<string> m_fileStack = new Stack<string>();
+        IParserSink? m_sink;
 
-        public static void Parse(string filePath, GameState game)
+        public static void Parse(string filePath, GameState game, IParserSink? sink)
         {
             using (var lexer = new FileLexer(filePath))
             {
                 var parser = new Parser(game, lexer);
                 try
                 {
+                    parser.m_sink = sink;
                     parser.Parse();
                 }
                 catch (Exception e)
@@ -151,6 +153,8 @@ namespace AdventureScript
 
         void ParseEnumDefinition()
         {
+            m_sink?.BeginDefinition(m_lexer);
+
             // Advance past the enum keyword.
             Advance();
 
@@ -167,11 +171,14 @@ namespace AdventureScript
             ReadSymbol(SymbolId.Semicolon);
 
             // Add the new type.
-            this.Game.Types.AddEnumType(name, valueNames);
+            var def = this.Game.Types.AddEnumType(name, valueNames);
+            m_sink?.AddEnum(def);
         }
 
         void ParseDelegateDefinition()
         {
+            m_sink?.BeginDefinition(m_lexer);
+
             // Advance past the delegate keyword.
             Advance();
 
@@ -190,11 +197,14 @@ namespace AdventureScript
             ReadSymbol(SymbolId.Semicolon);
 
             // Add the delegate.
-            this.Game.Types.AddDelegateType(name, paramList, returnType);
+            var def = this.Game.Types.AddDelegateType(name, paramList, returnType);
+            m_sink?.AddDelegate(def);
         }
 
         void ParsePropertyDefinition()
         {
+            m_sink?.BeginDefinition(m_lexer);
+
             // Advance past the property keyword.
             Advance();
 
@@ -209,22 +219,30 @@ namespace AdventureScript
                 {
                     Fail($"Property {name} is already defined.");
                 }
+
+                m_sink?.AddProperty(name, typeDef);
             }
 
             ReadSymbol(SymbolId.Semicolon);
         }
         void ParseItemDefinition()
         {
+            m_sink?.BeginDefinition(m_lexer);
+
             // Advance past item keyword.
             Advance();
 
             if (this.IsNameToken)
             {
-                AddItem(ReadName());
+                string name = ReadName();
+                AddItem(name);
+                m_sink?.AddItem(name);
             }
             else if (this.IsStringToken)
             {
-                AddItem(ReadString());
+                string name = ReadString();
+                AddItem(name);
+                m_sink?.AddItem(name);
             }
             else
             {
@@ -235,6 +253,8 @@ namespace AdventureScript
         }
         void ParseGlobalVarDefinition(bool isConst)
         {
+            m_sink?.BeginDefinition(m_lexer);
+
             // Advance past "var" <varName> "="
             Advance();
             string varName = ReadVariableName();
@@ -283,6 +303,8 @@ namespace AdventureScript
 
             // Read the final semicolon.
             ReadSymbol(SymbolId.Semicolon);
+
+            m_sink?.AddVariable(varName, type, isConst);
         }
 
         void AddItem(string name)
@@ -300,6 +322,8 @@ namespace AdventureScript
 
         void ParseFunctionDefinition()
         {
+            m_sink?.BeginDefinition(m_lexer);
+
             // Advance past the "function" keyword.
             Advance();
 
@@ -310,6 +334,8 @@ namespace AdventureScript
             // Parse the parameter list and return type.
             var paramList = ParseParamList();
             var returnType = ParseOptionalTypeDeclaration();
+
+            FunctionDef functionDef;
 
             if (MatchSymbol(SymbolId.Lambda))
             {
@@ -328,13 +354,12 @@ namespace AdventureScript
                 returnType = DeriveAssignedTypeAllowVoid(returnType, expr);
 
                 // Create the function.
-                var functionDef = new LambdaFunctionDef(
+                functionDef = new LambdaFunctionDef(
                     functionName,
                     paramList,
                     frame.FrameSize,
                     expr
                     );
-                this.Game.Functions.Add(functionDef);
 
                 // Advance past the terminating semicolon.
                 ReadSymbol(SymbolId.Semicolon);
@@ -351,14 +376,16 @@ namespace AdventureScript
                 ParseStatementBlock(builder);
 
                 // Create the function.
-                var functionDef = new UserFunctionDef(
+                functionDef = new UserFunctionDef(
                     functionName,
                     paramList,
                     returnType,
                     builder.CreateFunctionBody()
                     );
-                this.Game.Functions.Add(functionDef);
             }
+
+            this.Game.Functions.Add(functionDef);
+            m_sink?.AddFunction(functionDef);
         }
 
         TypeDef ParseOptionalTypeDeclaration()
@@ -475,6 +502,8 @@ namespace AdventureScript
 
         void ParseMapDefinition()
         {
+            m_sink?.BeginDefinition(m_lexer);
+
             // "map" <name> <fromType> "-> <toType>
             Advance();
             var name = ReadName();
@@ -533,6 +562,8 @@ namespace AdventureScript
                 );
 
             this.Game.Functions.Add(functionDef);
+
+            m_sink?.AddFunction(functionDef);
         }
 
         KeyValuePair<int, int> ParseMapEntry(TypeDef fromType, TypeDef toType)

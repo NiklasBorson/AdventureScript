@@ -224,15 +224,24 @@ function Build-GameTrace([string] $Name) {
         Set-Content $commandFilePath
 }
 
+function Build-Docs {
+    $dllPath = Get-DllPath('AdventureDoc')
+    $inputPath = Join-Path $GamesDir 'inc' 'all.txt'
+    $outputPath = Join-Path $PSScriptRoot 'Docs' 'Foundation-Library.html'
+
+    Write-Host "dotnet $dllPath $inputPath $outputPath"
+    & dotnet $dllPath $inputPath $outputPath
+}
+
 function Build-AdventureScript {
     if ($IsWindows) {
         # Build the entire solution on Windows
-        dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln') --configuration $ConfigName
+        & dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln') --configuration $ConfigName
     }
     else {
         # Build selected directories on other platforms
         'AdventureScript', 'AdventureTest', 'TextAdventure' | Foreach-Object {
-            dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj") --configuration $ConfigName
+            & dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj") --configuration $ConfigName
         }
     }
 }
@@ -273,5 +282,6 @@ Export-ModuleMember -Function Invoke-Game
 Export-ModuleMember -Function Build-Game
 Export-ModuleMember -Function Build-AllGames
 Export-ModuleMember -Function Build-GameTrace
+Export-ModuleMember -Function Build-Docs
 Export-ModuleMember -Function Build-AdventureScript -Alias build
 Export-ModuleMember -Function Get-AdventureHelp

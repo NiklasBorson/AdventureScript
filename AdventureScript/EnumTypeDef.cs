@@ -1,6 +1,6 @@
 ﻿namespace AdventureScript
 {
-    sealed class EnumTypeDef : TypeDef
+    public sealed class EnumTypeDef : TypeDef
     {
         public EnumTypeDef(string name, IList<string> valueNames) : base(name, valueNames)
         {

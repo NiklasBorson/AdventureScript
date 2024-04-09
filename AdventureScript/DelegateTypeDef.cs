@@ -1,6 +1,6 @@
 ﻿namespace AdventureScript
 {
-    class DelegateTypeDef : TypeDef
+    public class DelegateTypeDef : TypeDef
     {
         public DelegateTypeDef(string name, IList<ParamDef> paramDefs, TypeDef returnType) : base(name)
         {

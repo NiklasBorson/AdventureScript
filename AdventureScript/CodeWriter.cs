@@ -1,6 +1,6 @@
 ﻿namespace AdventureScript
 {
-    class CodeWriter
+    public class CodeWriter
     {
         TextWriter m_writer;
         int m_indent = 0;

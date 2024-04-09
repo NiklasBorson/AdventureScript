@@ -67,6 +67,8 @@ namespace AdventureScript
         int m_intValue = 0;
         string m_stringValue = string.Empty;
 
+        List<string> m_docComments = new List<string>();
+
         protected Lexer(string filePath, int lineNumber, int colOffset)
         {
             m_filePath = filePath;
@@ -87,6 +89,7 @@ namespace AdventureScript
         public int IntValue => m_intValue;
         public ReadOnlySpan<char> NameValue => GetCapture();
         public string StringValue => m_stringValue;
+        public IList<string> DocComments => m_docComments;
 
         protected abstract string? ReadLine();
 
@@ -116,6 +119,12 @@ namespace AdventureScript
                     m_matchPos = 0;
                     m_matchLength = 0;
 
+                    if (m_inputLine.StartsWith("## "))
+                    {
+                        m_docComments.Add(m_inputLine);
+                        continue;
+                    }
+
                     m_match = m_tokenRegex.Match(m_inputLine);
                 }
                 InitializeToken();
@@ -128,6 +137,7 @@ namespace AdventureScript
             m_symbolId = SymbolId.None;
             m_intValue = 0;
             m_stringValue = string.Empty;
+            m_docComments.Clear();
         }
 
         ReadOnlySpan<char> GetCapture()

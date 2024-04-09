@@ -1,6 +1,6 @@
 ﻿namespace AdventureScript
 {
-    internal abstract class TypeDef
+    public abstract class TypeDef
     {
         static IList<string> m_noNames = new string[0];
 

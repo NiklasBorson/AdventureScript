@@ -1,0 +1,3 @@
+include "Foundation-Debug.md";
+include "Foundation.md";
+include "Foundation-Combat.md";
