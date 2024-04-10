@@ -1,25 +1,50 @@
 ﻿using AdventureScript;
+using System.Text;
 
 namespace AdventureDoc
 {
+    record struct PageType(string Name, string PluralName, List<RefPage> Pages);
+
     abstract class RefPage : IComparable<RefPage>
     {
-        string? m_fileName;
+        Doc m_doc;
         string m_description;
         string m_name;
+        string m_title;
+        string m_outputFileName;
         bool m_isType;
 
         protected RefPage(Doc doc, string name, bool isType)
         {
-            m_fileName = Path.GetFileName(doc.SourcePos.FileName);
+            m_doc = doc;
             m_description = doc.Description;
             m_name = name;
             m_isType = isType;
+
+            var b = new StringBuilder();
+            if (name.StartsWith('$'))
+            {
+                b.Append(name, 1, name.Length - 1);
+            }
+            else
+            {
+                b.Append(name);
+            }
+            b.Append('-');
+            b.Append(doc.PageType.Name);
+            b.Append(".html");
+            m_outputFileName = b.ToString();
+            m_title = $"{name} {doc.PageType.Name}";
+
+            doc.PageType.Pages.Add(this);
         }
 
-        public string? FileName => m_fileName;
+        public Module Module => m_doc.Module;
+        public PageType PageType => m_doc.PageType;
         public string Description => m_description;
         public string Name => m_name;
+        public string OutputFileName => m_outputFileName;
+        public string Title => m_title;
         public bool IsType => m_isType;
 
         public RefPage? Next { get; set; }

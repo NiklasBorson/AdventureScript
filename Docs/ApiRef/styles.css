@@ -1,39 +1,39 @@
 body {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size:16px;
-    padding-left:20px;
+    padding-left:40px;
 }
 
 h1 {
     margin-left:0;
     margin-top:20px;
     margin-bottom:0;
-    font-size:40px;
+    font-size:30px;
 }
 
 h2 {
     margin-left:0;
     margin-top:40px;
     margin-bottom:5px;
-    font-size:30px;
-}
-
-h3 {
-    margin-left:50px;
-    margin-top:40;
-    margin-bottom:5px;
     font-size:25px;
 }
 
+h3 {
+    margin-left:0;
+    margin-top:40;
+    margin-bottom:5px;
+    font-size:20px;
+}
+
 h4 {
-    margin-left:50px;
+    margin-left:0;
     margin-top:15;
     margin-bottom:5px;
     font-size:18px;
 }
 
 ul {
-    margin-left:50px;
+    margin-left:0;
     margin-top:0;
     margin-bottom:10;
 }
@@ -45,7 +45,7 @@ li {
 
 pre {
     font-family:'Consolas', Courier, monospace;
-    margin-left:50px;
+    margin-left:0;
     margin-top:0;
     margin-bottom:10px;
     padding:10px;
@@ -53,19 +53,33 @@ pre {
 }
 
 p {
-    margin-left:50px;
+    margin-left:0;
     margin-top:0;
     margin-bottom:10px;
 }
 
 p.term {
     font-family:'Consolas', Courier, monospace;
-    margin-left:50px;
+    margin-left:0;
     margin-top:0;
     margin-bottom:0;
 }
 p.def {
-    margin-left:70px;
+    margin-left:50px;
     margin-top:0;
     margin-bottom:10px;
+}
+
+div.toc {
+    margin-left:10px;
+    margin-top:0;
+    margin-bottom:10px;
+    border-left: 4px solid lightgray;
+    padding-left: 20px;
+}
+
+div.toc p {
+    margin-left:0;
+    margin-top:0;
+    margin-bottom:5px;
 }

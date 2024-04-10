@@ -18,6 +18,7 @@ namespace AdventureScript
             this.ParamList = paramList;
             this.ReturnType = returnType;
             this.DocComments = new string[0];
+            this.SourcePos = SourcePos.Empty;
         }
 
         public SourcePos SourcePos { get; set; }

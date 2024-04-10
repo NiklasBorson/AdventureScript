@@ -5,16 +5,16 @@ namespace AdventureDoc
 {
     internal class Doc
     {
+        Module m_module;
+        PageType m_pageType;
         SourcePos m_sourcePos;
         string m_description = string.Empty;
         List<KeyValuePair<string, string>> m_members = new List<KeyValuePair<string, string>>();
 
-        public Doc()
+        public Doc(Module module, PageType pageType, SourcePos sourcePos, string[] docComments)
         {
-        }
-
-        public Doc(SourcePos sourcePos, string[] docComments)
-        {
+            m_module = module;
+            m_pageType = pageType;
             m_sourcePos = sourcePos;
 
             var description = new StringBuilder();
@@ -56,6 +56,8 @@ namespace AdventureDoc
             Console.Error.WriteLine($"Warning: {m_sourcePos}: {message}");
         }
 
+        public Module Module => m_module;
+        public PageType PageType => m_pageType;
         public SourcePos SourcePos => m_sourcePos;
         public string Description => m_description;
         public IList<KeyValuePair<string, string>> Members => m_members;

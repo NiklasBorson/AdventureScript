@@ -107,7 +107,7 @@
         GlobalVariableExpr AddVar(string[] docComments, GlobalVarMap varMap, string varName, TypeDef type)
         {
             var varExpr = varMap.TryAdd(
-                new SourcePos(),
+                SourcePos.Empty,
                 docComments,
                 varName,
                 type, /*isConst*/ false

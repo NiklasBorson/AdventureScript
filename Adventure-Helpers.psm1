@@ -227,10 +227,12 @@ function Build-GameTrace([string] $Name) {
 function Build-Docs {
     $dllPath = Get-DllPath('AdventureDoc')
     $inputPath = Join-Path $GamesDir 'inc' 'all.txt'
-    $outputPath = Join-Path $PSScriptRoot 'Docs' 'Foundation-Library.html'
+    $outputDir = Join-Path $PSScriptRoot 'Docs' 'ApiRef'
 
-    Write-Host "dotnet $dllPath $inputPath $outputPath"
-    & dotnet $dllPath $inputPath $outputPath
+    Remove-Item -Path (Join-Path $outputDir '*.html')
+
+    Write-Host "dotnet $dllPath $inputPath $outputDir"
+    & dotnet $dllPath $inputPath $outputDir
 }
 
 function Build-AdventureScript {

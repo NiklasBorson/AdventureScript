@@ -16,7 +16,7 @@ namespace AdventureDoc
                 }
 
                 string inputFile = args[0];
-                string outputFile = args[1];
+                string outputDir = args[1];
 
                 // Load the game.
                 var game = new GameState();
@@ -27,7 +27,7 @@ namespace AdventureDoc
                 game.GetApis(apiSet);
 
                 // Write the output.
-                apiSet.Write(outputFile);
+                apiSet.Write(outputDir);
             }
             catch (Exception e)
             {

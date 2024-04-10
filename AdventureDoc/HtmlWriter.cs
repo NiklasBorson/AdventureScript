@@ -3,40 +3,20 @@ using System.Xml;
 
 namespace AdventureDoc
 {
-    record struct Section(string Heading, List<RefPage> Pages);
-
     internal class HtmlWriter : IDisposable
     {
         string m_title;
         XmlWriter m_writer;
-        Section[] m_sections;
-        Dictionary<string, RefPage> m_apiMap = new Dictionary<string, RefPage>();
+        ApiSet m_apiSet;
         RefPage? m_currentPage = null;
 
-        public HtmlWriter(string fileName, Section[] sections)
+        public HtmlWriter(string outputDir, string fileName, string title, ApiSet apiSet)
         {
-            // Sort the pages in each section, and initialize the API map.
-            foreach (var section in sections)
-            {
-                section.Pages.Sort();
+            string filePath = Path.Combine(outputDir, fileName);
 
-                foreach (var page in section.Pages)
-                {
-                    if (!m_apiMap.TryAdd(page.Name, page))
-                    {
-                        var other = m_apiMap[page.Name];
-                        while (other.Next != null)
-                        {
-                            other = other.Next;
-                        }
-                        other.Next = page;
-                    }
-                }
-            }
-
-            m_title = Path.GetFileNameWithoutExtension(fileName).Replace('-', ' ');
-            m_writer = XmlWriter.Create(fileName, new XmlWriterSettings { Indent = true });
-            m_sections = sections;
+            m_title = title;
+            m_writer = XmlWriter.Create(filePath, new XmlWriterSettings { Indent = true });
+            m_apiSet = apiSet;
         }
 
         public void Dispose()
@@ -44,7 +24,142 @@ namespace AdventureDoc
             m_writer.Dispose();
         }
 
-        public void Write()
+        public void WriteTopIndex()
+        {
+            BeginDocument();
+            WriteHeading("h1", m_title);
+
+            BeginToc();
+
+            foreach (var pageType in m_apiSet.PageTypes)
+            {
+                if (pageType.Pages.Count != 0)
+                {
+                    WriteTocItem(
+                        GetGlobalIndexTitle(pageType),
+                        GetGlobalIndexFileName(pageType)
+                        );
+                }
+            }
+
+            EndToc();
+
+            foreach (var module in m_apiSet.Modules)
+            {
+                WriteHeading("h2", $"{module.ModuleTitle} Module");
+
+                BeginToc();
+
+                foreach (var pageType in m_apiSet.PageTypes)
+                {
+                    if (GetIndexPages(module, pageType).Count != 0)
+                    {
+                        WriteTocItem(
+                            GetIndexTitle(module.ModuleTitle, pageType),
+                            GetIndexFileName(module.ModuleTitle, pageType)
+                            );
+                    }
+                }
+
+                EndToc();
+            }
+
+            EndDocument();
+        }
+
+        public static string GetGlobalIndexTitle(PageType pageType)
+        {
+            return GetIndexTitle("All", pageType);
+        }
+
+        public static string GetGlobalIndexFileName(PageType pageType)
+        {
+            return GetIndexFileName("All", pageType);
+        }
+
+        public static string GetIndexTitle(string moduleTitle, PageType pageType)
+        {
+            return $"{moduleTitle} {pageType.PluralName}";
+        }
+
+        public static string GetIndexFileName(string moduleTitle, PageType pageType)
+        {
+            return $"{moduleTitle}-{pageType.PluralName}.html";
+        }
+
+        public static List<RefPage> GetIndexPages(Module module, PageType pageType)
+        {
+            var pages = new List<RefPage>();
+
+            foreach (var page in pageType.Pages)
+            {
+                if (page.Module == module)
+                {
+                    pages.Add(page);
+                }
+            }
+
+            return pages;
+        }
+
+        public void WriteIndex(List<RefPage> pages)
+        {
+            BeginDocument();
+            WriteHeading("h1", m_title);
+
+            BeginToc();
+            foreach (var page in pages)
+            {
+                WriteTocItem(page.Name, page.OutputFileName);
+            }
+            EndToc();
+
+            WriteHeading("h2", "See Also");
+            BeginToc();
+            WriteTocItem(
+                "Index",
+                "index.html"
+                );
+            EndToc();
+
+            EndDocument();
+        }
+
+        public void WritePage(RefPage page)
+        {
+            m_currentPage = page;
+            BeginDocument();
+
+            WriteHeading("h1", m_title);
+            WriteParagraph(page.Description);
+
+            BeginElement("pre");
+            WriteString(page.GetSyntax(), /*linkTypesOnly*/ true);
+            EndElement(); // </pre>
+
+            page.WriteMembers(this);
+
+            WriteHeading("h4", "See Also");
+            BeginToc();
+            WriteTocItem(
+                GetIndexTitle(page.Module.ModuleTitle, page.PageType),
+                GetIndexFileName(page.Module.ModuleTitle, page.PageType)
+                );
+            WriteTocItem(
+                GetGlobalIndexTitle(page.PageType),
+                GetGlobalIndexFileName(page.PageType)
+                );
+            WriteTocItem(
+                "Index",
+                "index.html"
+                );
+            EndToc();
+
+            EndDocument();
+            m_currentPage = null;
+        }
+
+        void BeginDocument()
         {
             BeginElement("html");
             BeginElement("head");
@@ -58,51 +173,10 @@ namespace AdventureDoc
             EndElement(); // </head>
 
             BeginElement("body");
+        }
 
-            WriteHeading("h1", m_title);
-
-            BeginElement("ul");
-            foreach (var section in m_sections)
-            {
-                BeginElement("li");
-                WriteLink(section.Heading);
-                EndElement(); // </li>
-            }
-            EndElement(); // </ul>
-
-            foreach (var section in m_sections)
-            {
-                WriteHeading("h2", section.Heading);
-
-                BeginElement("ul");
-                foreach (var page in section.Pages)
-                {
-                    BeginElement("li");
-                    WriteLink(page.Name);
-                    EndElement(); // </li>
-                }
-                EndElement(); // </ul>
-
-                foreach (var page in section.Pages)
-                {
-                    m_currentPage = page;
-
-                    WriteHeading("h3", page.Name);
-
-                    WriteParagraph(page.Description);
-
-                    BeginElement("pre");
-                    if (page.FileName != null)
-                    {
-                        WriteRawString($"include \"{page.FileName}\";\n\n");
-                    }
-                    WriteString(page.GetSyntax(), /*linkTypesOnly*/ true);
-                    EndElement(); // </pre>
-
-                    page.WriteMembers(this);
-                }
-            }
-
+        void EndDocument()
+        {
             EndElement(); // </body>
             EndElement(); // </html>
         }
@@ -120,6 +194,24 @@ namespace AdventureDoc
         public void WriteAttribute(string name, string value)
         {
             m_writer.WriteAttributeString(name, value);
+        }
+
+        public void BeginToc()
+        {
+            BeginElement("div");
+            WriteAttribute("class", "toc");
+        }
+
+        public void EndToc()
+        {
+            EndElement();
+        }
+
+        public void WriteTocItem(string linkText, string url)
+        {
+            BeginElement("p");
+            WriteLink(linkText, url);
+            EndElement();
         }
 
         static bool IsNameStartChar(char ch)
@@ -202,8 +294,8 @@ namespace AdventureDoc
 
                 var word = text.Substring(wordPos, seekPos - wordPos);
 
-                RefPage? page;
-                if (!m_apiMap.TryGetValue(word, out page))
+                RefPage? page = m_apiSet.TryGetPage(word);
+                if (page == null)
                     continue;
 
                 while (page != null && (page == m_currentPage || isType != page.IsType))
@@ -222,7 +314,7 @@ namespace AdventureDoc
 
                 // Write the link.
                 BeginElement("a");
-                WriteAttribute("href", $"#{GetAnchor(page.Name)}");
+                WriteAttribute("href", $"{page.OutputFileName}");
                 m_writer.WriteString(word);
                 EndElement();
 
@@ -262,30 +354,19 @@ namespace AdventureDoc
             }
         }
 
-        public static string GetAnchor(string headingText) => 
-            headingText.Replace(' ', '_').Replace('$', '_');
-
         public void WriteHeading(string tag, string text)
         {
             BeginElement(tag);
-            BeginElement("a");
-            m_writer.WriteAttributeString("name", GetAnchor(text));
-            m_writer.WriteEndElement(); // </a>
-            m_writer.WriteString(text);
-            m_writer.WriteEndElement(); // </h1>
+            WriteRawString(text);
+            EndElement(); // </h1>
         }
 
         public void WriteLink(string text, string url)
         {
             BeginElement("a");
-            m_writer.WriteAttributeString("href", url);
-            m_writer.WriteString(text);
-            m_writer.WriteEndElement();
-        }
-
-        public void WriteLink(string text)
-        {
-            WriteLink(text, "#" + GetAnchor(text));
+            WriteAttribute("href", url);
+            WriteRawString(text);
+            EndElement();
         }
     }
 }

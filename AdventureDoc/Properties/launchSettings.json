@@ -2,7 +2,7 @@
   "profiles": {
     "AdventureDoc": {
       "commandName": "Project",
-      "commandLineArgs": ".\\Games\\Inc\\all.txt .\\Docs\\Foundation-Library.html",
+      "commandLineArgs": ".\\Games\\Inc\\all.txt .\\Docs\\ApiRef",
       "workingDirectory": "$(SolutionDir)"
     }
   }

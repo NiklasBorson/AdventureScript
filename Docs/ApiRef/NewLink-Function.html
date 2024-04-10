@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>NewLink Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>NewLink Function</h1>
+    <p>Creates and initializes an unnamed link between rooms. The link object does not have a noun so is not automatically enumerated by the <a href="Describe-Function.html">Describe</a> function. The room's <a href="Description-Property.html">Description</a> property may therefore need to explicitly mention the link, e.g., "You are in a clearing with a path to the north."</p>
+    <pre>function NewLink(
+    $from : Item,
+    $to : Item,
+    $dir : <a href="Direction-Enum.html">Direction</a>
+    ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created unnamed link item.</p>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="Foundation.md-Functions.html">Foundation.md Functions</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+    </div>
+  </body>
+</html>
