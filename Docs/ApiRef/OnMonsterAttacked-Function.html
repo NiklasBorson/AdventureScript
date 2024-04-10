@@ -14,6 +14,12 @@
     <h4>Parameters</h4>
     <p class="term">$monster</p>
     <p class="def">Item the action is invoked on.</p>
+    <h4>Source</h4>
+    <pre>function OnMonsterAttacked($monster:Item)
+{
+    $monster.<a href="UpdateAction-Property.html">UpdateAction</a> = <a href="UpdateHostileMonster-Function.html">UpdateHostileMonster</a>;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

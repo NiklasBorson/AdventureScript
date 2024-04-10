@@ -20,6 +20,14 @@
       <a href="DamageResistance-Property.html">DamageResistance</a> property of the target.</p>
     <h4>Return value</h4>
     <p>Returns the actual damage inflicted.</p>
+    <h4>Source</h4>
+    <pre>function ComputeDamage($attackDamage:Int, $damageResistance:Int) : Int
+{
+    var $damage = $attackDamage - $damageResistance;
+    $damage = $damage - $damage * $damageResistance / 100;
+    $return = $damage &gt; 0 ? $damage : 0;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

@@ -19,6 +19,19 @@
     <p class="def">Item passed as a parameter to the delegate.</p>
     <p class="term">$fallback</p>
     <p class="def">Alternative delegate to invoke if $func is null.</p>
+    <h4>Source</h4>
+    <pre>function InvokeItemActionWithFallback($func:<a href="ItemDelegate-Delegate.html">ItemDelegate</a>, $item:Item, $fallback:<a href="ItemDelegate-Delegate.html">ItemDelegate</a>)
+{
+    if ($func != null)
+    {
+        $func($item);
+    }
+    else
+    {
+        $fallback($item);
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

@@ -23,8 +23,7 @@ namespace AdventureDoc
                 game.LoadGame(inputFile);
 
                 // Get APIs.
-                var apiSet = new ApiSet();
-                game.GetApis(apiSet);
+                var apiSet = new ApiSet(game);
 
                 // Write the output.
                 apiSet.Write(outputDir);

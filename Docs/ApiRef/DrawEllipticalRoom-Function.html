@@ -21,6 +21,15 @@
     <p class="def">Height of the drawing.</p>
     <h4>Return value</h4>
     <p>Returns the drawing ID.</p>
+    <h4>Source</h4>
+    <pre>function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
+{
+    <a href="BeginDrawing-Function.html">BeginDrawing</a>($width, $height);
+    <a href="DrawEllipse-Function.html">DrawEllipse</a>(0, 0, $width, $height, -1, -16777216, 15);
+    <a href="DrawDoors-Function.html">DrawDoors</a>($room, 0, 0, $width, $height, -1);
+    return <a href="EndDrawing-Function.html">EndDrawing</a>();
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

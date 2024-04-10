@@ -13,6 +13,13 @@
     <h4>Parameters</h4>
     <p class="term">$item</p>
     <p class="def">Item to add nouns and adjectives for.</p>
+    <h4>Source</h4>
+    <pre>function AddItemWords($item:Item)
+{
+    <a href="AddAdjectives-Function.html">AddAdjectives</a>($item.<a href="Adjectives-Property.html">Adjectives</a>, $item);
+    <a href="AddNoun-Function.html">AddNoun</a>($item.<a href="Noun-Property.html">Noun</a>, $item);
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

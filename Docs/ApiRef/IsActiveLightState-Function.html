@@ -15,6 +15,16 @@
     <p class="def">Input value.</p>
     <h4>Return value</h4>
     <p>Returns true if the input value is On or Lit.</p>
+    <h4>Source</h4>
+    <pre>map IsActiveLightState <a href="LightState-Property.html">LightState</a> -&gt; Bool
+{
+    None -&gt; false,
+    Off -&gt; false,
+    On -&gt; true,
+    Unlit -&gt; false,
+    Lit -&gt; true
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

@@ -17,6 +17,24 @@
     <p class="def">Item being put on the table.</p>
     <p class="term">$table</p>
     <p class="def">Target item the action is invoked on.</p>
+    <h4>Source</h4>
+    <pre>function PutOnTable($item:Item, $table:Item)
+{
+    if (!<a href="IsPortable-Function.html">IsPortable</a>($item))
+    {
+        <a href="Message-Function.html">Message</a>($"You can't move the {Label($item)}.");
+    }
+    elseif ($item.<a href="Location-Property.html">Location</a> == $table)
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($item)} is already on the {Label($table)}.");
+    }
+    else
+    {
+        $item.<a href="Location-Property.html">Location</a> = $table;
+        <a href="Message-Function.html">Message</a>($"The {Label($item)} is now on the {Label($table)}.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

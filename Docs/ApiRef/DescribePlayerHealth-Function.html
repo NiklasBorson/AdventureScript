@@ -14,6 +14,40 @@
     <h4>Parameters</h4>
     <p class="term">$item</p>
     <p class="def">Item to describe the health of.</p>
+    <h4>Source</h4>
+    <pre>function DescribePlayerHealth($item:Item)
+{
+    if ($item.<a href="MaxHealth-Property.html">MaxHealth</a> != 0)
+    {
+        var $health = $item.<a href="Health-Property.html">Health</a>;
+        var $percentage = $health * 100 / $item.<a href="MaxHealth-Property.html">MaxHealth</a>;
+        if ($health &lt; 0)
+        {
+            <a href="Message-Function.html">Message</a>("You are dead!");
+        }
+        elseif ($percentage &lt; 20)
+        {
+            <a href="Message-Function.html">Message</a>("You are critically injured.");
+        }
+        elseif ($percentage &lt; 40)
+        {
+            <a href="Message-Function.html">Message</a>("You are severely injured.");
+        }
+        elseif ($percentage &lt; 70)
+        {
+            <a href="Message-Function.html">Message</a>("You are significantly injured.");
+        }
+        elseif ($percentage &lt; 100)
+        {
+            <a href="Message-Function.html">Message</a>("You are slightly injured.");
+        }
+        else
+        {
+            <a href="Message-Function.html">Message</a>("You are uninjured.");
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

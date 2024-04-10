@@ -28,6 +28,88 @@
     <p class="def">Height of the room.</p>
     <p class="term">$backColor</p>
     <p class="def">Background (floor) color of the room.</p>
+    <h4>Source</h4>
+    <pre>function DrawDoors($room:Item, $left:Int, $top:Int, $width:Int, $height:Int, $backColor:Int)
+{
+    var $openW = false;
+    var $openE = false;
+    if ($room.<a href="LinkW-Property.html">LinkW</a> != null &amp;&amp; !$room.<a href="LinkW-Property.html">LinkW</a>.<a href="IsHidden-Property.html">IsHidden</a>)
+    {
+        if ($room.<a href="LinkW-Property.html">LinkW</a>.<a href="DoorState-Property.html">DoorState</a> != <a href="DoorState-Property.html">DoorState</a>.None)
+        {
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left, $top + $height / 2 - 25, 17, 50, -1, -16777216, 2);
+        }
+        else
+        {
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left, $top + 15, 17, $height - 30, $backColor, 0, 0);
+            $openW = true;
+        }
+    }
+    if ($room.<a href="LinkE-Property.html">LinkE</a> != null &amp;&amp; !$room.<a href="LinkE-Property.html">LinkE</a>.<a href="IsHidden-Property.html">IsHidden</a>)
+    {
+        if ($room.<a href="LinkE-Property.html">LinkE</a>.<a href="DoorState-Property.html">DoorState</a> != <a href="DoorState-Property.html">DoorState</a>.None)
+        {
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left + $width - 17, $top + $height / 2 - 25, 17, 50, -1, -16777216, 2);
+        }
+        else
+        {
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left + $width - 17, $top + 15, 17, $height - 30, $backColor, 0, 0);
+            $openE = true;
+        }
+    }
+    if ($room.<a href="LinkN-Property.html">LinkN</a> != null &amp;&amp; !$room.<a href="LinkN-Property.html">LinkN</a>.<a href="IsHidden-Property.html">IsHidden</a>)
+    {
+        if ($room.<a href="LinkN-Property.html">LinkN</a>.<a href="DoorState-Property.html">DoorState</a> != <a href="DoorState-Property.html">DoorState</a>.None)
+        {
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left + $width / 2 - 25, $top, 50, 17, -1, -16777216, 2);
+        }
+        else
+        {
+            var $x1 = $openW ? 0 : 15;
+            var $x2 = $openE ? $width : $width - 15;
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left + $x1, $top, $x2 - $x1, 17, $backColor, 0, 0);
+        }
+    }
+    if ($room.<a href="LinkS-Property.html">LinkS</a> != null &amp;&amp; !$room.<a href="LinkS-Property.html">LinkS</a>.<a href="IsHidden-Property.html">IsHidden</a>)
+    {
+        if ($room.<a href="LinkS-Property.html">LinkS</a>.<a href="DoorState-Property.html">DoorState</a> != <a href="DoorState-Property.html">DoorState</a>.None)
+        {
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left + $width / 2 - 25, $top + $height - 17, 50, 17, -1, -16777216, 2);
+        }
+        else
+        {
+            var $x1 = $openW ? 0 : 15;
+            var $x2 = $openE ? $width : $width - 15;
+            <a href="DrawRectangle-Function.html">DrawRectangle</a>($left + $x1, $top + $height - 17, $x2 - $x1, 17, $backColor, 0, 0);
+        }
+    }
+    if ($room.<a href="LinkU-Property.html">LinkU</a> != null &amp;&amp; !$room.<a href="LinkU-Property.html">LinkU</a>.<a href="IsHidden-Property.html">IsHidden</a>)
+    {
+        var $x = $left + $width / 2 - 40;
+        var $y = $top + $height / 2 - 35;
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y, 35, 70, 0, -16777216, 2);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y + 10, 35, 2, -16777216, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y + 20, 35, 2, -16777216, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y + 30, 35, 2, -16777216, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y + 40, 35, 2, -16777216, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y + 50, 35, 2, -16777216, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y + 60, 35, 2, -16777216, 0, 0);
+    }
+    if ($room.<a href="LinkD-Property.html">LinkD</a> != null &amp;&amp; !$room.<a href="LinkD-Property.html">LinkD</a>.<a href="IsHidden-Property.html">IsHidden</a>)
+    {
+        var $x = $left + $width / 2 + 5;
+        var $y = $top + $height / 2 - 35;
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x, $y, 35, 70, -16777216, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x + 4, $y + 2, 27, 8, -1, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x + 5, $y + 13, 25, 8, -1, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x + 6, $y + 24, 23, 7, -1, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x + 7, $y + 34, 21, 7, -1, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x + 8, $y + 44, 19, 6, -1, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x + 9, $y + 53, 17, 6, -1, 0, 0);
+        <a href="DrawRectangle-Function.html">DrawRectangle</a>($x + 10, $y + 62, 15, 5, -1, 0, 0);
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

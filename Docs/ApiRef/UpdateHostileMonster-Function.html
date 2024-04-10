@@ -14,6 +14,22 @@
     <h4>Parameters</h4>
     <p class="term">$monster</p>
     <p class="def">Item the action is invoked on.</p>
+    <h4>Source</h4>
+    <pre>function UpdateHostileMonster($monster:Item)
+{
+    if (!<a href="isNowDark-Variable.html">$isNowDark</a>)
+    {
+        if ($monster.<a href="Location-Property.html">Location</a> == player.<a href="Location-Property.html">Location</a>)
+        {
+            <a href="AttackPlayer-Function.html">AttackPlayer</a>($monster);
+        }
+        else
+        {
+            <a href="TryFollowPlayer-Function.html">TryFollowPlayer</a>($monster);
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

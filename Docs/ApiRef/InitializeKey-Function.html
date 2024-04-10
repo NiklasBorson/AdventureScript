@@ -23,6 +23,13 @@
       <a href="Noun-Property.html">Noun</a> used to refer to the item.</p>
     <p class="term">$loc</p>
     <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Source</h4>
+    <pre>function InitializeKey($key:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    <a href="InitializePortableItem-Function.html">InitializePortableItem</a>($key, $adjectives, $noun, $loc);
+    $key.<a href="UseOnAction-Property.html">UseOnAction</a> = <a href="UseKeyOn-Function.html">UseKeyOn</a>;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

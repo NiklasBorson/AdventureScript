@@ -22,6 +22,13 @@
     <p class="def">Initial location of the item, such as a room or container.</p>
     <h4>Return value</h4>
     <p>Returns the newly-created item.</p>
+    <h4>Source</h4>
+    <pre>function NewPortableItem($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    $return = <a href="NewItem-Function.html">NewItem</a>($"_{$noun}{$loc}");
+    <a href="InitializePortableItem-Function.html">InitializePortableItem</a>($return, $adjectives, $noun, $loc);
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

@@ -8,6 +8,15 @@
     <h1>UpdateItems Function</h1>
     <p>Called each turn to invoke the <a href="UpdateAction-Property.html">UpdateAction</a> for each item.</p>
     <pre>function UpdateItems();</pre>
+    <h4>Source</h4>
+    <pre>function UpdateItems()
+{
+    foreach (var $item)
+    {
+        $item.<a href="UpdateAction-Property.html">UpdateAction</a>($item);
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

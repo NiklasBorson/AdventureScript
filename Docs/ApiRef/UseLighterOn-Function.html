@@ -17,6 +17,19 @@
     <p class="def">Lighter item the action is invoked on.</p>
     <p class="term">$target</p>
     <p class="def">Target item of the action.</p>
+    <h4>Source</h4>
+    <pre>function UseLighterOn($item:Item, $target:Item)
+{
+    if ($target.<a href="IgniteAction-Property.html">IgniteAction</a> != null)
+    {
+        $target.<a href="IgniteAction-Property.html">IgniteAction</a>($target);
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"You cannot light the {Label($target)}.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

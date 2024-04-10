@@ -17,6 +17,28 @@
     <p class="def">Item to put in the container.</p>
     <p class="term">$container</p>
     <p class="def">Target item on which the action is invoked.</p>
+    <h4>Source</h4>
+    <pre>function PutInContainer($item:Item, $container:Item)
+{
+    if (!<a href="IsPortable-Function.html">IsPortable</a>($item))
+    {
+        <a href="Message-Function.html">Message</a>($"You can't move the {Label($item)}.");
+    }
+    elseif (<a href="IsClosedOrLocked-Function.html">IsClosedOrLocked</a>($container.<a href="DoorState-Property.html">DoorState</a>))
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($container)} is closed.");
+    }
+    elseif ($item.<a href="Location-Property.html">Location</a> == $container)
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($item)} is already in the {Label($container)}.");
+    }
+    else
+    {
+        $item.<a href="Location-Property.html">Location</a> = $container;
+        <a href="Message-Function.html">Message</a>($"The {Label($item)} is now in the {Label($container)}.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

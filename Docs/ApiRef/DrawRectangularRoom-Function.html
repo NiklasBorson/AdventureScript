@@ -27,6 +27,15 @@
     <p class="def">Background color used for the floor (e.g., <a href="colorWhite-Constant.html">$colorWhite</a>).</p>
     <h4>Return value</h4>
     <p>Returns the drawing ID.</p>
+    <h4>Source</h4>
+    <pre>function DrawRectangularRoom($room:Item, $width:Int, $height:Int, $wallColor:Int, $backColor:Int) : Int
+{
+    <a href="BeginDrawing-Function.html">BeginDrawing</a>($width, $height);
+    <a href="DrawRectangle-Function.html">DrawRectangle</a>(0, 0, $width, $height, $backColor, $wallColor, 15);
+    <a href="DrawDoors-Function.html">DrawDoors</a>($room, 0, 0, $width, $height, $backColor);
+    return <a href="EndDrawing-Function.html">EndDrawing</a>();
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

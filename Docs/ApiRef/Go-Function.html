@@ -13,6 +13,43 @@
     <h4>Parameters</h4>
     <p class="term">$dir</p>
     <p class="def">Direction to move.</p>
+    <h4>Source</h4>
+    <pre>function Go($dir:<a href="Direction-Enum.html">Direction</a>)
+{
+    var $source = player.<a href="Location-Property.html">Location</a>;
+    var $door = <a href="GetLink-Function.html">GetLink</a>($source, $dir);
+    if ($door == null || $door.<a href="IsHidden-Property.html">IsHidden</a>)
+    {
+        <a href="Message-Function.html">Message</a>($"You cannot go {$dir}.");
+    }
+    elseif (<a href="IsClosedOrLocked-Function.html">IsClosedOrLocked</a>($door.<a href="DoorState-Property.html">DoorState</a>) &amp;&amp; <a href="isNowDark-Variable.html">$isNowDark</a>)
+    {
+        <a href="Message-Function.html">Message</a>($"You cannot go {$dir}.");
+    }
+    elseif ($door.<a href="DoorState-Property.html">DoorState</a> == <a href="DoorState-Property.html">DoorState</a>.Locked)
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($door)} is locked.");
+    }
+    else
+    {
+        if ($door.<a href="DoorState-Property.html">DoorState</a> == <a href="DoorState-Property.html">DoorState</a>.Closed)
+        {
+            <a href="Message-Function.html">Message</a>($"You open the {Label($door)}.");
+            $door.<a href="DoorState-Property.html">DoorState</a> = <a href="DoorState-Property.html">DoorState</a>.<a href="Open-Function.html">Open</a>;
+            <a href="Tick-Function.html">Tick</a>();
+        }
+        <a href="Message-Function.html">Message</a>($"You go {$dir}.");
+        var $dest = <a href="GetLink-Function.html">GetLink</a>($door, $dir);
+        if (!$source.<a href="LeaveAction-Property.html">LeaveAction</a>($source, $dest) &amp;&amp; !$dest.<a href="EnterAction-Property.html">EnterAction</a>($source, $dest))
+        {
+            <a href="lastRoom-Variable.html">$lastRoom</a> = player.<a href="Location-Property.html">Location</a>;
+            player.<a href="Location-Property.html">Location</a> = $dest;
+            <a href="InitializeLighting-Function.html">InitializeLighting</a>();
+            <a href="Look-Function.html">Look</a>();
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

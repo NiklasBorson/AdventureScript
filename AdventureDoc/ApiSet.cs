@@ -1,4 +1,5 @@
 ﻿using AdventureScript;
+using System.Collections.Generic;
 using static System.Collections.Specialized.BitVector32;
 
 namespace AdventureDoc
@@ -7,6 +8,8 @@ namespace AdventureDoc
 
     internal class ApiSet : IApiSink
     {
+        GameState m_game;
+
         List<Module> m_modules = new List<Module>();
 
         PageType m_enumPages = new PageType("Enum", "Enums", new List<RefPage>());
@@ -19,8 +22,10 @@ namespace AdventureDoc
 
         Dictionary<string, RefPage> m_apiMap = new Dictionary<string, RefPage>();
 
-        public ApiSet()
+        public ApiSet(GameState game)
         {
+            m_game = game;
+
             m_pageTypes = new PageType[]
             {
                 m_enumPages,
@@ -33,6 +38,28 @@ namespace AdventureDoc
 
             // Add the special intrinsic module first.
             m_modules.Add(new Module("", "", "Intrinsic"));
+
+            // Get the APIs.
+            game.GetApis(this);
+
+            // Sort the pages and initialize the dictionary.
+            foreach (var pageType in m_pageTypes)
+            {
+                pageType.Pages.Sort();
+
+                foreach (var page in pageType.Pages)
+                {
+                    if (!m_apiMap.TryAdd(page.Name, page))
+                    {
+                        var other = m_apiMap[page.Name];
+                        while (other.Next != null)
+                        {
+                            other = other.Next;
+                        }
+                        other.Next = page;
+                    }
+                }
+            }
         }
 
         public PageType[] PageTypes => m_pageTypes;
@@ -65,37 +92,37 @@ namespace AdventureDoc
             return new Doc(GetModule(sourcePos), pageType, sourcePos, docComments);
         }
 
-        public void AddEnum(EnumTypeDef def)
+        void IApiSink.AddEnum(EnumTypeDef def)
         {
             var doc = NewDoc(m_enumPages, def.SourcePos, def.DocComments);
             new EnumPage(doc, def);
         }
 
-        public void AddDelegate(DelegateTypeDef def)
+        void IApiSink.AddDelegate(DelegateTypeDef def)
         {
             var doc = NewDoc(m_delegatePages, def.SourcePos, def.DocComments);
             new DelegatePage(doc, def);
         }
 
-        public void AddFunction(FunctionDef def)
+        void IApiSink.AddFunction(FunctionDef def)
         {
             var doc = NewDoc(m_functionPages, def.SourcePos, def.DocComments);
-            new FunctionPage(doc, def);
+            new FunctionPage(doc, def, m_game);
         }
 
-        public void AddProperty(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
+        void IApiSink.AddProperty(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
         {
             var doc = NewDoc(m_propertyPages, sourcePos, docComments);
             new PropertyPage(doc, name, typeDef);
         }
 
-        public void AddVariable(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
+        void IApiSink.AddVariable(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
         {
             var doc = NewDoc(m_variablePages, sourcePos, docComments);
             new VariablePage(doc, name, typeDef);
         }
 
-        public void AddConstant(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
+        void IApiSink.AddConstant(SourcePos sourcePos, string[] docComments, string name, TypeDef typeDef)
         {
             var doc = NewDoc(m_constPages, sourcePos, docComments);
             new ConstantPage(doc, name, typeDef);
@@ -103,24 +130,6 @@ namespace AdventureDoc
 
         public void Write(string outputDir)
         {
-            foreach (var pageType in m_pageTypes)
-            {
-                pageType.Pages.Sort();
-
-                foreach (var page in pageType.Pages)
-                {
-                    if (!m_apiMap.TryAdd(page.Name, page))
-                    {
-                        var other = m_apiMap[page.Name];
-                        while (other.Next != null)
-                        {
-                            other = other.Next;
-                        }
-                        other.Next = page;
-                    }
-                }
-            }
-
             // Write the top index.
             using (var writer = new HtmlWriter(outputDir, "index.html", "AdventureScript API", this))
             {

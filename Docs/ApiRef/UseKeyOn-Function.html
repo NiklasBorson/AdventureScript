@@ -18,6 +18,28 @@
       <a href="Key-Property.html">Key</a> item on which the <a href="UseOnAction-Property.html">UseOnAction</a> is invoked.</p>
     <p class="term">$target</p>
     <p class="def">Target item to use the key on.</p>
+    <h4>Source</h4>
+    <pre>function UseKeyOn($key:Item, $target:Item)
+{
+    if ($target.<a href="Key-Property.html">Key</a> == $key &amp;&amp; $target.<a href="DoorState-Property.html">DoorState</a> != <a href="DoorState-Property.html">DoorState</a>.None)
+    {
+        if ($target.<a href="DoorState-Property.html">DoorState</a> == <a href="DoorState-Property.html">DoorState</a>.Locked)
+        {
+            $target.<a href="DoorState-Property.html">DoorState</a> = <a href="DoorState-Property.html">DoorState</a>.Closed;
+            <a href="Message-Function.html">Message</a>($"The {Label($target)} is now unlocked.");
+        }
+        else
+        {
+            $target.<a href="DoorState-Property.html">DoorState</a> = <a href="DoorState-Property.html">DoorState</a>.Locked;
+            <a href="Message-Function.html">Message</a>($"The {Label($target)} is now locked.");
+        }
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($key)} doesn't work on that.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

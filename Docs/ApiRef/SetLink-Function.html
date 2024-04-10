@@ -19,6 +19,38 @@
     <p class="def">Destination item being linked to.</p>
     <p class="term">$dir</p>
     <p class="def">Direction of the link.</p>
+    <h4>Source</h4>
+    <pre>function SetLink($from:Item, $to:Item, $dir:<a href="Direction-Enum.html">Direction</a>)
+{
+    switch ($dir)
+    {
+        case Direction.North
+        {
+            $from.<a href="LinkN-Property.html">LinkN</a> = $to;
+        }
+        case Direction.South
+        {
+            $from.<a href="LinkS-Property.html">LinkS</a> = $to;
+        }
+        case Direction.East
+        {
+            $from.<a href="LinkE-Property.html">LinkE</a> = $to;
+        }
+        case Direction.West
+        {
+            $from.<a href="LinkW-Property.html">LinkW</a> = $to;
+        }
+        case Direction.Up
+        {
+            $from.<a href="LinkU-Property.html">LinkU</a> = $to;
+        }
+        case Direction.Down
+        {
+            $from.<a href="LinkD-Property.html">LinkD</a> = $to;
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

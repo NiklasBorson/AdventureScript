@@ -22,6 +22,13 @@
     <p class="def">Intermediate item such as a door, opening, or path.</p>
     <p class="term">$dir</p>
     <p class="def">Direction of the link.</p>
+    <h4>Source</h4>
+    <pre>function LinkRooms($from:Item, $to:Item, $via:Item, $dir:<a href="Direction-Enum.html">Direction</a>)
+{
+    <a href="LinkRoomsOneWay-Function.html">LinkRoomsOneWay</a>($from, $to, $via, $dir);
+    <a href="LinkRoomsOneWay-Function.html">LinkRoomsOneWay</a>($to, $from, $via, <a href="Opposite-Function.html">Opposite</a>($dir));
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

@@ -28,6 +28,13 @@
     <p class="def">Initial location of the item, such as a room or container.</p>
     <h4>Return value</h4>
     <p>Returns the newly-created item.</p>
+    <h4>Source</h4>
+    <pre>function NewArmor($adjectives:String, $noun:String, $kind:<a href="ArmorKind-Enum.html">ArmorKind</a>, $damageResistance:Int, $loc:Item) : Item
+{
+    $return = <a href="NewItem-Function.html">NewItem</a>($"_{$loc}_{$noun}");
+    <a href="InitializeArmor-Function.html">InitializeArmor</a>($return, $adjectives, $noun, $kind, $damageResistance, $loc);
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

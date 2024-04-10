@@ -18,6 +18,38 @@
     <p class="def">Direction of the link.</p>
     <h4>Return value</h4>
     <p>Returns the linked item in the specified direction, if any.</p>
+    <h4>Source</h4>
+    <pre>function GetLink($item:Item, $dir:<a href="Direction-Enum.html">Direction</a>) : Item
+{
+    switch ($dir)
+    {
+        case Direction.North
+        {
+            return $item.<a href="LinkN-Property.html">LinkN</a>;
+        }
+        case Direction.South
+        {
+            return $item.<a href="LinkS-Property.html">LinkS</a>;
+        }
+        case Direction.East
+        {
+            return $item.<a href="LinkE-Property.html">LinkE</a>;
+        }
+        case Direction.West
+        {
+            return $item.<a href="LinkW-Property.html">LinkW</a>;
+        }
+        case Direction.Up
+        {
+            return $item.<a href="LinkU-Property.html">LinkU</a>;
+        }
+        case Direction.Down
+        {
+            return $item.<a href="LinkD-Property.html">LinkD</a>;
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

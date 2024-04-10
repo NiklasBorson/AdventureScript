@@ -22,6 +22,14 @@
     <p class="def">Initial location of the item, such as a room or container.</p>
     <h4>Return value</h4>
     <p>Returns the newly-created item.</p>
+    <h4>Source</h4>
+    <pre>function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
+{
+    var $item = <a href="NewItem-Function.html">NewItem</a>($"_{$noun}_{$loc}");
+    <a href="InitializeLighter-Function.html">InitializeLighter</a>($item, $adjectives, $noun, $loc);
+    return $item;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

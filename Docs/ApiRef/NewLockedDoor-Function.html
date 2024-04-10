@@ -24,6 +24,13 @@
     <p class="def">Item used to unlock the door (see <a href="NewKey-Function.html">NewKey</a> or <a href="InitializeKey-Function.html">InitializeKey</a>).</p>
     <h4>Return value</h4>
     <p>Returns the newly-created door item.</p>
+    <h4>Source</h4>
+    <pre>function NewLockedDoor($from:Item, $to:Item, $dir:<a href="Direction-Enum.html">Direction</a>, $key:Item) : Item
+{
+    $return = <a href="NewDoorItem-Function.html">NewDoorItem</a>($from, $to, $dir, "", "door", <a href="DoorState-Property.html">DoorState</a>.Locked);
+    $return.<a href="Key-Property.html">Key</a> = $key;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

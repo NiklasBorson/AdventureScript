@@ -16,6 +16,26 @@
     <p class="def">Kind of armor to set.</p>
     <p class="term">$item</p>
     <p class="def">Item to set, which can be null.</p>
+    <h4>Source</h4>
+    <pre>function SetArmor($kind:<a href="ArmorKind-Enum.html">ArmorKind</a>, $item:Item)
+{
+    switch ($kind)
+    {
+        case <a href="ArmorKind-Property.html">ArmorKind</a>.Head
+        {
+            <a href="headArmor-Variable.html">$headArmor</a> = $item;
+        }
+        case <a href="ArmorKind-Property.html">ArmorKind</a>.Torso
+        {
+            <a href="torsoArmor-Variable.html">$torsoArmor</a> = $item;
+        }
+        case <a href="ArmorKind-Property.html">ArmorKind</a>.Leg
+        {
+            <a href="legArmor-Variable.html">$legArmor</a> = $item;
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

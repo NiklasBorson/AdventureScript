@@ -8,6 +8,28 @@
     <h1>InitializeLighting Function</h1>
     <p>Called each turn to initialize the <a href="currentLightSource-Variable.html">$currentLightSource</a> and <a href="isNowDark-Variable.html">$isNowDark</a> variables.</p>
     <pre>function InitializeLighting();</pre>
+    <h4>Source</h4>
+    <pre>function InitializeLighting()
+{
+    <a href="currentLightSource-Variable.html">$currentLightSource</a> = null;
+    if (player.<a href="Location-Property.html">Location</a>.<a href="IsDark-Property.html">IsDark</a>(player.<a href="Location-Property.html">Location</a>))
+    {
+        foreach (var $item) where <a href="LightState-Property.html">LightState</a> != <a href="LightState-Property.html">LightState</a>.None
+        {
+            if (<a href="IsActiveLightState-Function.html">IsActiveLightState</a>($item.<a href="LightState-Property.html">LightState</a>) &amp;&amp; <a href="IsAccessible-Function.html">IsAccessible</a>($item))
+            {
+                <a href="currentLightSource-Variable.html">$currentLightSource</a> = $item;
+                break;
+            }
+        }
+        <a href="isNowDark-Variable.html">$isNowDark</a> = <a href="currentLightSource-Variable.html">$currentLightSource</a> == null;
+    }
+    else
+    {
+        <a href="isNowDark-Variable.html">$isNowDark</a> = false;
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

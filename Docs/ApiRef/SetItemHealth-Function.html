@@ -16,6 +16,14 @@
     <p class="def">Item to initialize.</p>
     <p class="term">$health</p>
     <p class="def">Initial value of the <a href="Health-Property.html">Health</a> and <a href="MaxHealth-Property.html">MaxHealth</a> properties.</p>
+    <h4>Source</h4>
+    <pre>function SetItemHealth($item:Item, $health:Int)
+{
+    $item.<a href="Health-Property.html">Health</a> = $health;
+    $item.<a href="MaxHealth-Property.html">MaxHealth</a> = $health;
+    $item.<a href="DescribeHealthAction-Property.html">DescribeHealthAction</a> = <a href="DescribeItemHealth-Function.html">DescribeItemHealth</a>;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

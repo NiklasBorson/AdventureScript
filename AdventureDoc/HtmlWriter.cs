@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using AdventureScript;
+using System.Text;
 using System.Xml;
 
 namespace AdventureDoc
@@ -246,10 +247,25 @@ namespace AdventureDoc
                 {
                     break;
                 }
+                else if (ch == '\"')
+                {
+                    string value;
+                    i += StringHelpers.ParseStringLiteral(text.AsSpan(i), out value) - 1;
+                }
                 else if (ch == '$')
                 {
-                    if (i + 1 < text.Length && IsNameStartChar(text[i + 1]))
-                        return i;
+                    if (i + 1 < text.Length)
+                    {
+                        if (IsNameStartChar(text[i + 1]))
+                        {
+                            return i;
+                        }
+                        else if (text[i + 1] == '\"')
+                        {
+                            string value;
+                            i += StringHelpers.ParseStringLiteral(text.AsSpan(i + 1), out value);
+                        }
+                    }
                 }
                 else if (IsNameStartChar(ch))
                 {

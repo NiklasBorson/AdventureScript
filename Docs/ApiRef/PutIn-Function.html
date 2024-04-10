@@ -16,6 +16,19 @@
     <p class="def">Item to put in the target.</p>
     <p class="term">$target</p>
     <p class="def">Target to put the item in (e.g., a container).</p>
+    <h4>Source</h4>
+    <pre>function PutIn($item:Item, $target:Item)
+{
+    if ($target.<a href="PutInAction-Property.html">PutInAction</a> != null)
+    {
+        $target.<a href="PutInAction-Property.html">PutInAction</a>($item, $target);
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"You can't put the {Label($item)} in the {Label($target)}.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

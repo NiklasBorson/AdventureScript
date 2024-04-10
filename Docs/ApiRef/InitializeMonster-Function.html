@@ -34,6 +34,20 @@
       <a href="AttackDamage-Property.html">AttackDamage</a> of the monster.</p>
     <p class="term">$loc</p>
     <p class="def">Initial location of the monster, such as a room.</p>
+    <h4>Source</h4>
+    <pre>function InitializeMonster($monster:Item, $adjectives:String, $noun:String, $health:Int, $damageResistance:Int, $attackDamage:Int, $loc:Item)
+{
+    <a href="SetLabelProperties-Function.html">SetLabelProperties</a>($monster, $adjectives, $noun);
+    $monster.<a href="Health-Property.html">Health</a> = $health;
+    $monster.<a href="MaxHealth-Property.html">MaxHealth</a> = $health;
+    $monster.<a href="DescribeHealthAction-Property.html">DescribeHealthAction</a> = <a href="DescribeCreatureHealth-Function.html">DescribeCreatureHealth</a>;
+    $monster.<a href="DamageResistance-Property.html">DamageResistance</a> = $damageResistance;
+    $monster.<a href="AttackDamage-Property.html">AttackDamage</a> = $attackDamage;
+    $monster.<a href="Location-Property.html">Location</a> = $loc;
+    $monster.<a href="OnAttackedAction-Property.html">OnAttackedAction</a> = <a href="OnMonsterAttacked-Function.html">OnMonsterAttacked</a>;
+    $monster.<a href="UpdateAction-Property.html">UpdateAction</a> = <a href="UpdateSurprisedMonster-Function.html">UpdateSurprisedMonster</a>;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

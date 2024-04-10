@@ -8,6 +8,12 @@
     <h1>SetPlayerDamageResistance Function</h1>
     <p>Sets the player's <a href="DamageResistance-Property.html">DamageResistance</a> to a weighted average of the damage resistence for each piece of armor.</p>
     <pre>function SetPlayerDamageResistance();</pre>
+    <h4>Source</h4>
+    <pre>function SetPlayerDamageResistance()
+{
+    player.<a href="DamageResistance-Property.html">DamageResistance</a> = (<a href="headArmor-Variable.html">$headArmor</a>.<a href="DamageResistance-Property.html">DamageResistance</a> * 30 + <a href="torsoArmor-Variable.html">$torsoArmor</a>.<a href="DamageResistance-Property.html">DamageResistance</a> * 50 + <a href="legArmor-Variable.html">$legArmor</a>.<a href="DamageResistance-Property.html">DamageResistance</a> * 20) / 100;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

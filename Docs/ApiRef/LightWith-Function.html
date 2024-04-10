@@ -16,6 +16,19 @@
     <p class="def">Target item to light.</p>
     <p class="term">$lighter</p>
     <p class="def">Lighter item.</p>
+    <h4>Source</h4>
+    <pre>function LightWith($target:Item, $lighter:Item)
+{
+    if (<a href="IsLighter-Function.html">IsLighter</a>($lighter))
+    {
+        <a href="UseLighterOn-Function.html">UseLighterOn</a>($lighter, $target);
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($lighter)} has no effect.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

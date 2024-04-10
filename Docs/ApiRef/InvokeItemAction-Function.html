@@ -19,6 +19,19 @@
     <p class="def">Item passed as a parameter to the delegate.</p>
     <p class="term">$verb</p>
     <p class="def">Verb used in an error message if the delegate is null.</p>
+    <h4>Source</h4>
+    <pre>function InvokeItemAction($func:<a href="ItemDelegate-Delegate.html">ItemDelegate</a>, $item:Item, $verb:String)
+{
+    if ($func != null)
+    {
+        $func($item);
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"You cannot {$verb} the {Label($item)}.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

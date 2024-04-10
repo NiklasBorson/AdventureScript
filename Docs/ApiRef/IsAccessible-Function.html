@@ -10,6 +10,23 @@
     <pre>function IsAccessible(
     $item : Item
     ) : Bool;</pre>
+    <h4>Source</h4>
+    <pre>function IsAccessible($item:Item) : Bool
+{
+    if (!$item.<a href="IsHidden-Property.html">IsHidden</a> &amp;&amp; $item.<a href="Noun-Property.html">Noun</a> != null)
+    {
+        var $loc = $item.<a href="Location-Property.html">Location</a>;
+        if ($loc == player.<a href="Location-Property.html">Location</a> || $loc == player)
+        {
+            return true;
+        }
+        elseif ($loc.<a href="Location-Property.html">Location</a> == player.<a href="Location-Property.html">Location</a> &amp;&amp; !<a href="IsClosedOrLocked-Function.html">IsClosedOrLocked</a>($loc.<a href="DoorState-Property.html">DoorState</a>))
+        {
+            return true;
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

@@ -27,6 +27,17 @@
       <a href="AttackDamage-Property.html">AttackDamage</a> property of the weapon.</p>
     <p class="term">$loc</p>
     <p class="def">Initial location of the weapon, such as a room or container.</p>
+    <h4>Source</h4>
+    <pre>function InitializeWeapon($item:Item, $adjectives:String, $noun:String, $damage:Int, $loc:Item)
+{
+    <a href="SetLabelProperties-Function.html">SetLabelProperties</a>($item, $adjectives, $noun);
+    $item.<a href="UseAction-Property.html">UseAction</a> = <a href="UseWeapon-Function.html">UseWeapon</a>;
+    $item.<a href="TakeAction-Property.html">TakeAction</a> = <a href="TakeWeapon-Function.html">TakeWeapon</a>;
+    $item.<a href="DropAction-Property.html">DropAction</a> = <a href="DropWeapon-Function.html">DropWeapon</a>;
+    $item.<a href="AttackDamage-Property.html">AttackDamage</a> = $damage;
+    $item.<a href="Location-Property.html">Location</a> = $loc;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

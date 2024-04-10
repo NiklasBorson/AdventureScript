@@ -25,6 +25,14 @@
     <p class="def">Initial location of the item, such as a room.</p>
     <h4>Return value</h4>
     <p>Returns the newly-created container item.</p>
+    <h4>Source</h4>
+    <pre>function NewContainer($adjectives:String, $noun:String, $state:<a href="DoorState-Enum.html">DoorState</a>, $loc:Item) : Item
+{
+    var $container = <a href="NewItem-Function.html">NewItem</a>($"_{$noun}_{$loc}");
+    <a href="InitializeContainer-Function.html">InitializeContainer</a>($container, $adjectives, $noun, $state, $loc);
+    return $container;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

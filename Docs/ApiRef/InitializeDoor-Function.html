@@ -32,6 +32,19 @@
       <a href="Noun-Property.html">Noun</a> used to refer to the door.</p>
     <p class="term">$state</p>
     <p class="def">Initial state of the door.</p>
+    <h4>Source</h4>
+    <pre>function InitializeDoor($door:Item, $from:Item, $to:Item, $dir:<a href="Direction-Enum.html">Direction</a>, $adjectives:String, $noun:String, $state:<a href="DoorState-Enum.html">DoorState</a>)
+{
+    <a href="SetLabelProperties-Function.html">SetLabelProperties</a>($door, $adjectives, $noun);
+    $door.<a href="DoorState-Property.html">DoorState</a> = $state;
+    if ($state != <a href="DoorState-Property.html">DoorState</a>.None)
+    {
+        $door.<a href="OpenAction-Property.html">OpenAction</a> = <a href="OpenDoor-Function.html">OpenDoor</a>;
+        $door.<a href="CloseAction-Property.html">CloseAction</a> = <a href="CloseDoor-Function.html">CloseDoor</a>;
+    }
+    <a href="LinkRooms-Function.html">LinkRooms</a>($from, $to, $door, $dir);
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

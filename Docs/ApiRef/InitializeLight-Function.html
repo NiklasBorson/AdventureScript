@@ -23,6 +23,16 @@
       <a href="Noun-Property.html">Noun</a> used to refer to the item.</p>
     <p class="term">$loc</p>
     <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Source</h4>
+    <pre>function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
+{
+    <a href="InitializePortableItem-Function.html">InitializePortableItem</a>($item, $adjectives, $noun, $loc);
+    $item.<a href="LightState-Property.html">LightState</a> = <a href="LightState-Property.html">LightState</a>.Off;
+    $item.<a href="TurnOnAction-Property.html">TurnOnAction</a> = <a href="TurnOnLight-Function.html">TurnOnLight</a>;
+    $item.<a href="TurnOffAction-Property.html">TurnOffAction</a> = <a href="TurnOffLight-Function.html">TurnOffLight</a>;
+    $item.<a href="PutOutAction-Property.html">PutOutAction</a> = <a href="TurnOffLight-Function.html">TurnOffLight</a>;
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

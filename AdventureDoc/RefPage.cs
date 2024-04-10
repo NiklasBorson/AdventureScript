@@ -64,11 +64,13 @@ namespace AdventureDoc
     sealed class FunctionPage : RefPage
     {
         FunctionDef m_def;
+        GameState m_game;
         FunctionInfo m_funcInfo;
 
-        public FunctionPage(Doc doc, FunctionDef def) : base(doc, def.Name, /*isType*/ false)
+        public FunctionPage(Doc doc, FunctionDef def, GameState game) : base(doc, def.Name, /*isType*/ false)
         {
             m_def = def;
+            m_game = game;
             m_funcInfo = new FunctionInfo(doc, def.Name, def.ParamList, def.ReturnType);
         }
 
@@ -80,6 +82,18 @@ namespace AdventureDoc
         public override void WriteMembers(HtmlWriter writer)
         {
             m_funcInfo.Write(writer);
+
+            if (Module.SourceFileName != "")
+            {
+                writer.WriteHeading("h4", "Source");
+
+                var b = new StringWriter();
+                m_def.SaveDefinition(m_game, new CodeWriter(b));
+
+                writer.BeginElement("pre");
+                writer.WriteString(b.ToString(), /*linkTypesOnly*/ false);
+                writer.EndElement();
+            }
         }
     }
 

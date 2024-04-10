@@ -21,6 +21,12 @@
     <p class="def">Direction of the link.</p>
     <h4>Return value</h4>
     <p>Returns the newly-created door item.</p>
+    <h4>Source</h4>
+    <pre>function NewClosedDoor($from:Item, $to:Item, $dir:<a href="Direction-Enum.html">Direction</a>) : Item
+{
+    return <a href="NewDoorItem-Function.html">NewDoorItem</a>($from, $to, $dir, "", "door", <a href="DoorState-Property.html">DoorState</a>.Closed);
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

@@ -8,6 +8,25 @@
     <h1>Inventory Function</h1>
     <p>Called by the "i" or "inventory" command to list the items in the player's inventory.</p>
     <pre>function Inventory();</pre>
+    <h4>Source</h4>
+    <pre>function Inventory()
+{
+    var $haveItems = false;
+    foreach (var $item) where <a href="Location-Property.html">Location</a> == player
+    {
+        if (!$haveItems)
+        {
+            <a href="Message-Function.html">Message</a>("You have the following items:");
+            $haveItems = true;
+        }
+        <a href="Message-Function.html">Message</a>($"- A {ItalicLabelWithState($item)}.");
+    }
+    if (!$haveItems)
+    {
+        <a href="Message-Function.html">Message</a>("There is nothing in your inventory.");
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

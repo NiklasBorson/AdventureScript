@@ -8,6 +8,58 @@
     <h1>Look Function</h1>
     <p>Called by the "look" command to output a description of the current room and its contents.</p>
     <pre>function Look();</pre>
+    <h4>Source</h4>
+    <pre>function Look()
+{
+    var $room = player.<a href="Location-Property.html">Location</a>;
+    if (<a href="isNowDark-Variable.html">$isNowDark</a>)
+    {
+        <a href="Message-Function.html">Message</a>("You are in the dark.");
+        foreach (var $dir:<a href="Direction-Enum.html">Direction</a>)
+        {
+            var $door = <a href="GetLink-Function.html">GetLink</a>($room, $dir);
+            if ($door != null &amp;&amp; !<a href="IsClosedOrLocked-Function.html">IsClosedOrLocked</a>($door.<a href="DoorState-Property.html">DoorState</a>))
+            {
+                var $linkedRoom = <a href="GetLink-Function.html">GetLink</a>($door, $dir);
+                if (!$linkedRoom.<a href="IsDark-Property.html">IsDark</a>($linkedRoom))
+                {
+                    <a href="Message-Function.html">Message</a>($"A faint light filters in from the {$door.Noun} {DirectionPhrase($dir)}.");
+                }
+            }
+        }
+    }
+    else
+    {
+        if (<a href="currentLightSource-Variable.html">$currentLightSource</a> != null)
+        {
+            if (player.<a href="Location-Property.html">Location</a>.<a href="IsDark-Property.html">IsDark</a> == <a href="IsDarkAtNight-Function.html">IsDarkAtNight</a>)
+            {
+                <a href="Message-Function.html">Message</a>($"It is night, but the {Label($currentLightSource)} illuminates the darkness.");
+            }
+            else
+            {
+                <a href="Message-Function.html">Message</a>($"The {Label($currentLightSource)} illuminates the darkness.");
+            }
+        }
+        <a href="Describe-Function.html">Describe</a>($room);
+        foreach (var $dir:<a href="Direction-Enum.html">Direction</a>)
+        {
+            var $door = <a href="GetLink-Function.html">GetLink</a>(player.<a href="Location-Property.html">Location</a>, $dir);
+            if ($door != null &amp;&amp; $door.<a href="Noun-Property.html">Noun</a> != null &amp;&amp; !$door.<a href="IsHidden-Property.html">IsHidden</a>)
+            {
+                <a href="Message-Function.html">Message</a>($"There is a {LabelWithState($door)} {DirectionPhrase($dir)}.");
+            }
+        }
+        foreach (var $item) where <a href="Location-Property.html">Location</a> == $room
+        {
+            if (!$item.<a href="IsHidden-Property.html">IsHidden</a> &amp;&amp; $item.<a href="Noun-Property.html">Noun</a> != null)
+            {
+                <a href="Message-Function.html">Message</a>($"There is a {ItalicLabelWithState($item)} here.");
+            }
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

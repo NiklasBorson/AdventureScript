@@ -16,6 +16,43 @@
     <p class="def">Item being attacked.</p>
     <p class="term">$weapon</p>
     <p class="def">Weapon to attack with, which can be null.</p>
+    <h4>Source</h4>
+    <pre>function AttackItemWith($target:Item, $weapon:Item)
+{
+    if ($target.<a href="MaxHealth-Property.html">MaxHealth</a> == 0)
+    {
+        <a href="Message-Function.html">Message</a>($"You can't attack the {Label($target)}.");
+    }
+    elseif ($weapon != null &amp;&amp; $weapon.<a href="AttackDamage-Property.html">AttackDamage</a> == 0)
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($weapon)} is not a weapon.");
+    }
+    else
+    {
+        var $weaponName = $weapon != null ? $"the {Label($weapon)}" : "your bare hands";
+        var $weaponDamage = $weapon != null ? $weapon.<a href="AttackDamage-Property.html">AttackDamage</a> : player.<a href="AttackDamage-Property.html">AttackDamage</a>;
+        var $damage = <a href="ComputeDamage-Function.html">ComputeDamage</a>($weaponDamage, $target.<a href="DamageResistance-Property.html">DamageResistance</a>);
+        if ($damage &lt;= 0)
+        {
+            <a href="Message-Function.html">Message</a>($"You attack the {Label($target)} with {$weaponName} but do no damage.");
+        }
+        else
+        {
+            <a href="Message-Function.html">Message</a>($"You attack the {Label($target)} with {$weaponName}.");
+            $target.<a href="Health-Property.html">Health</a> = $target.<a href="Health-Property.html">Health</a> - $damage;
+            $target.<a href="DescribeHealthAction-Property.html">DescribeHealthAction</a>($target);
+            if ($target.<a href="Health-Property.html">Health</a> &lt; 0)
+            {
+                <a href="DestroyItem-Function.html">DestroyItem</a>($target);
+            }
+        }
+        if ($target.<a href="Health-Property.html">Health</a> &gt;= 0)
+        {
+            $target.<a href="OnAttackedAction-Property.html">OnAttackedAction</a>($target);
+        }
+    }
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

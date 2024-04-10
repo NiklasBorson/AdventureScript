@@ -10,6 +10,15 @@
     <pre>function DoorStateAdj(
     $fromValue : <a href="DoorState-Enum.html">DoorState</a>
     ) : String;</pre>
+    <h4>Source</h4>
+    <pre>map DoorStateAdj <a href="DoorState-Property.html">DoorState</a> -&gt; String
+{
+    None -&gt; "",
+    <a href="Open-Function.html">Open</a> -&gt; "open",
+    Closed -&gt; "closed",
+    Locked -&gt; "closed"
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>

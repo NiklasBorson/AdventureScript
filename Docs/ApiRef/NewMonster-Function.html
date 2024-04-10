@@ -33,6 +33,13 @@
     <p class="def">Initial location of the monster, such as a room.</p>
     <h4>Return value</h4>
     <p>Returns the newly-created monster item.</p>
+    <h4>Source</h4>
+    <pre>function NewMonster($adjectives:String, $noun:String, $health:Int, $damageResistance:Int, $attackDamage:Int, $loc:Item) : Item
+{
+    $return = <a href="NewItem-Function.html">NewItem</a>($"_{$loc}_{$noun}");
+    <a href="InitializeMonster-Function.html">InitializeMonster</a>($return, $adjectives, $noun, $health, $damageResistance, $attackDamage, $loc);
+}
+</pre>
     <h4>See Also</h4>
     <div class="toc">
       <p>
