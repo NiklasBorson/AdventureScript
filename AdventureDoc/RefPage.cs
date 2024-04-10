@@ -8,7 +8,6 @@ namespace AdventureDoc
     abstract class RefPage : IComparable<RefPage>
     {
         Doc m_doc;
-        string m_description;
         string m_name;
         string m_title;
         string m_outputFileName;
@@ -17,7 +16,6 @@ namespace AdventureDoc
         protected RefPage(Doc doc, string name, bool isType)
         {
             m_doc = doc;
-            m_description = doc.Description;
             m_name = name;
             m_isType = isType;
 
@@ -41,7 +39,8 @@ namespace AdventureDoc
 
         public Module Module => m_doc.Module;
         public PageType PageType => m_doc.PageType;
-        public string Description => m_description;
+        public string Description => m_doc.Description;
+        public string SeeAlso => m_doc.SeeAlso;
         public string Name => m_name;
         public string OutputFileName => m_outputFileName;
         public string Title => m_title;

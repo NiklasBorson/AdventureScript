@@ -9,6 +9,7 @@ namespace AdventureDoc
         PageType m_pageType;
         SourcePos m_sourcePos;
         string m_description = string.Empty;
+        string m_seeAlso = string.Empty;
         List<KeyValuePair<string, string>> m_members = new List<KeyValuePair<string, string>>();
 
         public Doc(Module module, PageType pageType, SourcePos sourcePos, string[] docComments)
@@ -28,6 +29,10 @@ namespace AdventureDoc
                         line.Substring(3, i - 3),
                         line.Substring(i + 2)
                         ));
+                }
+                else if (line.StartsWith("## @"))
+                {
+                    m_seeAlso = line.Substring(4);
                 }
                 else if (m_members.Count == 0)
                 {
@@ -60,6 +65,8 @@ namespace AdventureDoc
         public PageType PageType => m_pageType;
         public SourcePos SourcePos => m_sourcePos;
         public string Description => m_description;
+
+        public string SeeAlso => m_seeAlso;
         public IList<KeyValuePair<string, string>> Members => m_members;
     }
 }

@@ -62,6 +62,7 @@ words are used by the player to refer to the item and also comprise the item's l
 ## $item: Item to set properties of.
 ## $adjectives: New value of the Adjectives property.
 ## $noun: New value of the Noun property.
+## @Noun,Adjectives,Label
 function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
 {
     $item.Adjectives = $adjectives;
@@ -77,6 +78,7 @@ The `Label` function gets a short label that can be used to refer to an item.
 ## Gets an item's label, which is a string that can be used to refer to the item.
 ## $item: Item to get the label of.
 ## $return: Returns the item label.
+## @ItalicLabel,SetLabelProperties,Noun,Adjectives
 function Label($item:Item) => $item.Adjectives != null ?
     $"{$item.Adjectives} {$item.Noun}" :
     $item.Noun;
@@ -84,6 +86,7 @@ function Label($item:Item) => $item.Adjectives != null ?
 ## Gets an item's label with Markdown italic formatting.
 ## $item: Item to get the label of.
 ## $return: Returns the item label.
+## @Label,SetLabelProperties,Noun,Adjectives
 function ItalicLabel($item:Item) => $"_{Label($item)}_";
 ```
 
@@ -118,6 +121,7 @@ The functions in this section are used to invoke action delegates.
 ## $func: Delegate to invoke, which is typically a property of $item.
 ## $item: Item passed as a parameter to the delegate.
 ## $verb: Verb used in an error message if the delegate is null.
+## @InvokeItemActionWithFallback
 function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
 {
     if ($func != null)
@@ -134,6 +138,7 @@ function InvokeItemAction($func:ItemDelegate, $item:Item, $verb:String)
 ## $func: Delegate to invoke, which is typically a property of $item.
 ## $item: Item passed as a parameter to the delegate.
 ## $fallback: Alternative delegate to invoke if $func is null.
+## @InvokeItemAction
 function InvokeItemActionWithFallback($func:ItemDelegate, $item:Item, $fallback:ItemDelegate)
 {
     if ($func != null)
@@ -233,9 +238,11 @@ either function returns true then navigation is cancelled.
 delegate NavigationAction($from:Item, $to:Item) : Bool;
 
 ## Delegate invoked when leaving a room.
+## @EnterAction,Go
 property LeaveAction : NavigationAction;
 
 ## Delegate invoked when entering a room.
+## @LeaveAction,Go
 property EnterAction : NavigationAction;
 ```
 
@@ -248,10 +255,12 @@ item is not a door. Other possible values are `Open`, `Closed`, and `Locked`.
 ```text
 ## Represents the state of a door or container. The default None value
 ## applies to non-door items.
+## @DoorState,IsClosedOrLocked
 enum DoorState(None,Open,Closed,Locked);
 
 ## Represents the state of a door or container. The default None value
 ## applies to non-door items.
+## @DoorState,IsClosedOrLocked
 property DoorState : DoorState;
 ```
 
@@ -261,8 +270,9 @@ Returns true if a `DoorState` value is either closed or locked.
 
 ```text
 ## Returns true if the specified door state is either closed or locked.
-## $fromValue: DoorState value.
+## $fromValue: Input value.
 ## $return: Returns true for Closed or Locked.
+## @DoorState
 map IsClosedOrLocked DoorState -> Bool {
     None -> false,
     Open -> false,

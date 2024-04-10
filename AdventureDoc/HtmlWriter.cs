@@ -47,7 +47,7 @@ namespace AdventureDoc
 
             foreach (var module in m_apiSet.Modules)
             {
-                WriteHeading("h2", $"{module.ModuleTitle} Module");
+                WriteHeading("h2", module.ModuleTitle);
 
                 BeginToc();
 
@@ -56,8 +56,8 @@ namespace AdventureDoc
                     if (GetIndexPages(module, pageType).Count != 0)
                     {
                         WriteTocItem(
-                            GetIndexTitle(module.ModuleTitle, pageType),
-                            GetIndexFileName(module.ModuleTitle, pageType)
+                            GetIndexTitle(module.ModuleName, pageType),
+                            GetIndexFileName(module.ModuleName, pageType)
                             );
                     }
                 }
@@ -143,17 +143,30 @@ namespace AdventureDoc
             WriteHeading("h4", "See Also");
             BeginToc();
             WriteTocItem(
-                GetIndexTitle(page.Module.ModuleTitle, page.PageType),
-                GetIndexFileName(page.Module.ModuleTitle, page.PageType)
+                "Index",
+                "index.html"
                 );
             WriteTocItem(
                 GetGlobalIndexTitle(page.PageType),
                 GetGlobalIndexFileName(page.PageType)
                 );
             WriteTocItem(
-                "Index",
-                "index.html"
+                GetIndexTitle(page.Module.ModuleName, page.PageType),
+                GetIndexFileName(page.Module.ModuleName, page.PageType)
                 );
+            if (page.SeeAlso != "")
+            {
+                foreach (var name in page.SeeAlso.Split(','))
+                {
+                    for (var link = m_apiSet.TryGetPage(name); link != null; link = link.Next)
+                    {
+                        if (link != page)
+                        {
+                            WriteTocItem(link.Title, link.OutputFileName);
+                        }
+                    }
+                }
+            }
             EndToc();
 
             EndDocument();
@@ -225,16 +238,28 @@ namespace AdventureDoc
             return IsNameStartChar(ch) || (ch >= '0' && ch <= '9');
         }
 
-        static bool IsTypeToken(string text, int pos)
+        static bool IsTypeToken(string text, int pos, int endPos)
         {
+            // Check if preceded by ":"
             for (int i = pos - 1; i >= 0; i--)
             {
                 char ch = text[i];
                 if (ch == ':')
                     return true;
                 else if (ch != ' ')
-                    return false;
+                    break;
             }
+
+            // Check if followed by "->"
+            for (int i = endPos; i + 1 < text.Length; i++)
+            {
+                char ch = text[i];
+                if (ch == '-' && text[i + 1] == '>')
+                    return true;
+                else if (ch != ' ')
+                    break;
+            }
+
             return false;
         }
 
@@ -304,7 +329,7 @@ namespace AdventureDoc
                 int wordPos = seekPos;
                 seekPos = FindNameEnd(text, seekPos);
 
-                bool isType = IsTypeToken(text, wordPos);
+                bool isType = IsTypeToken(text, wordPos, seekPos);
                 if (linkTypesOnly && !isType)
                     continue;
 

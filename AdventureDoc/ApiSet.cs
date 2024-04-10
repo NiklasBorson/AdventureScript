@@ -4,7 +4,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace AdventureDoc
 {
-    record class Module(string SourceFilePath, string SourceFileName, string ModuleTitle);
+    record class Module(string SourceFilePath, string SourceFileName, string ModuleName, string ModuleTitle);
 
     internal class ApiSet : IApiSink
     {
@@ -37,7 +37,7 @@ namespace AdventureDoc
             };
 
             // Add the special intrinsic module first.
-            m_modules.Add(new Module("", "", "Intrinsic"));
+            m_modules.Add(new Module("", "", "Intrinsic", "Intrinsics"));
 
             // Get the APIs.
             game.GetApis(this);
@@ -82,7 +82,7 @@ namespace AdventureDoc
             }
 
             string fileName = Path.GetFileName(filePath);
-            var newModule = new Module(filePath, fileName, fileName);
+            var newModule = new Module(filePath, fileName, fileName, $"{fileName} Module");
             m_modules.Add(newModule);
             return newModule;
         }
@@ -160,8 +160,8 @@ namespace AdventureDoc
 
                     if (pages.Count != 0)
                     {
-                        string title = HtmlWriter.GetIndexTitle(module.ModuleTitle, pageType);
-                        string fileName = HtmlWriter.GetIndexFileName(module.ModuleTitle, pageType);
+                        string title = HtmlWriter.GetIndexTitle(module.ModuleName, pageType);
+                        string fileName = HtmlWriter.GetIndexFileName(module.ModuleName, pageType);
 
                         using (var writer = new HtmlWriter(outputDir, fileName, title, this))
                         {
