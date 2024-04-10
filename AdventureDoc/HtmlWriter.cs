@@ -94,7 +94,7 @@ namespace AdventureDoc
 
             foreach (var page in pageType.Pages)
             {
-                if (page.Module == module)
+                if (page.Doc.Module == module)
                 {
                     pages.Add(page);
                 }
@@ -132,7 +132,7 @@ namespace AdventureDoc
             BeginDocument();
 
             WriteHeading("h1", m_title);
-            WriteParagraph(page.Description);
+            WriteParagraph(page.Doc.Description);
 
             BeginElement("pre");
             WriteString(page.GetSyntax(), /*linkTypesOnly*/ true);
@@ -147,22 +147,30 @@ namespace AdventureDoc
                 "index.html"
                 );
             WriteTocItem(
-                GetGlobalIndexTitle(page.PageType),
-                GetGlobalIndexFileName(page.PageType)
+                GetGlobalIndexTitle(page.Doc.PageType),
+                GetGlobalIndexFileName(page.Doc.PageType)
                 );
             WriteTocItem(
-                GetIndexTitle(page.Module.ModuleName, page.PageType),
-                GetIndexFileName(page.Module.ModuleName, page.PageType)
+                GetIndexTitle(page.Doc.Module.ModuleName, page.Doc.PageType),
+                GetIndexFileName(page.Doc.Module.ModuleName, page.Doc.PageType)
                 );
-            if (page.SeeAlso != "")
+            if (page.Doc.SeeAlso != "")
             {
-                foreach (var name in page.SeeAlso.Split(','))
+                foreach (var name in page.Doc.SeeAlso.Split(','))
                 {
-                    for (var link = m_apiSet.TryGetPage(name); link != null; link = link.Next)
+                    var link = m_apiSet.TryGetPage(name);
+                    if (link == null)
                     {
-                        if (link != page)
+                        page.Doc.WriteWarning($"Unresolved see-also: {name}.");
+                    }
+                    else
+                    {
+                        for (; link != null; link = link.Next)
                         {
-                            WriteTocItem(link.Title, link.OutputFileName);
+                            if (link != page)
+                            {
+                                WriteTocItem(link.Title, link.OutputFileName);
+                            }
                         }
                     }
                 }

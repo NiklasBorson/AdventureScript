@@ -37,10 +37,7 @@ namespace AdventureDoc
             doc.PageType.Pages.Add(this);
         }
 
-        public Module Module => m_doc.Module;
-        public PageType PageType => m_doc.PageType;
-        public string Description => m_doc.Description;
-        public string SeeAlso => m_doc.SeeAlso;
+        public Doc Doc => m_doc;
         public string Name => m_name;
         public string OutputFileName => m_outputFileName;
         public string Title => m_title;
@@ -82,7 +79,7 @@ namespace AdventureDoc
         {
             m_funcInfo.Write(writer);
 
-            if (Module.SourceFileName != "")
+            if (this.Doc.Module.SourceFileName != "")
             {
                 writer.WriteHeading("h4", "Source");
 

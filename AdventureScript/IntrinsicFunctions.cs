@@ -453,7 +453,8 @@ namespace AdventureScript
                 new string[]
                 {
                     "## Outputs a message, normalizing white space.",
-                    "## $message: Output string."
+                    "## $message: Output string.",
+                    "## @RawMessage"
                 },
                 "Message",
                 new ParamDef[] {
@@ -466,7 +467,8 @@ namespace AdventureScript
                 new string[]
                 {
                     "## Outputs a message without normalizing white space.",
-                    "## $message: Output string."
+                    "## $message: Output string.",
+                    "## @Message"
                 },
                 "RawMessage",
                 new ParamDef[] {
@@ -488,7 +490,8 @@ namespace AdventureScript
             new IntrinsicFunctionDef(
                 new string[]
                 {
-                    "## Lists all items in the game."
+                    "## Lists all items in the game.",
+                    "## @ListItem"
                 },
                 "ListItems",
                 new ParamDef[0],
@@ -499,7 +502,8 @@ namespace AdventureScript
                 new string[]
                 {
                     "## Lists the properties of a specified item.",
-                    "## $name: Item to list."
+                    "## $name: Item to list.",
+                    "## @ListItems"
                 },
                 "ListItem",
                 new ParamDef[] {
@@ -541,7 +545,8 @@ namespace AdventureScript
             new IntrinsicFunctionDef(
                 new string[]
                 {
-                    "## Lists all functions in the game."
+                    "## Lists all functions in the game.",
+                    "## @ListFunction"
                 },
                 "ListFunctions",
                 new ParamDef[0],
@@ -552,7 +557,8 @@ namespace AdventureScript
                 new string[]
                 {
                     "## Lists a specific function.",
-                    "## $name: Name of the function to list."
+                    "## $name: Name of the function to list.",
+                    "## @ListFunctions"
                 },
                 "ListFunction",
                 new ParamDef[] {
@@ -574,7 +580,8 @@ namespace AdventureScript
             new IntrinsicFunctionDef(
                 new string[]
                 {
-                    "## Lists words (adjectives and nouns) for currently-accessible items."
+                    "## Lists words (adjectives and nouns) for currently-accessible items.",
+                    "## @AddNoun,AddAdjectives"
                 },
                 "ListWords",
                 new ParamDef[0],
@@ -586,7 +593,8 @@ namespace AdventureScript
                 {
                     "## Adds a noun for a currently-accessible item.",
                     "## $word: Noun used to refer to the item.",
-                    "## $item: Item the noun refers to."
+                    "## $item: Item the noun refers to.",
+                    "## @AddAdjectives,ListWords"
                 },
                 "AddNoun",
                 new ParamDef[] {
@@ -601,7 +609,8 @@ namespace AdventureScript
                 {
                     "## Adds adjectives for a currently-accessible item.",
                     "## $words: Space-separated list of adjectives.",
-                    "## $item: Item the adjectives refer to."
+                    "## $item: Item the adjectives refer to.",
+                    "## @AddNoun,ListWords"
                 },
                 "AddAdjectives",
                 new ParamDef[] {
@@ -616,7 +625,8 @@ namespace AdventureScript
                 {
                     "## Begins a vector drawing. All units are in px (1/96 inch).",
                     "## $width: Width of the canvas.",
-                    "## $height: Height of the canvas."
+                    "## $height: Height of the canvas.",
+                    "## @EndDrawing,DrawRectangle,DrawEllipse"
                 },
                 "BeginDrawing",
                 new ParamDef[] {
@@ -630,7 +640,8 @@ namespace AdventureScript
                 new string[]
                 {
                     "## Ends a vector drawing and returns a drawing ID.",
-                    "## $return: Returns a unique identifier that can be used to refer to the drawing within the current turn."
+                    "## $return: Returns a unique identifier that can be used to refer to the drawing within the current turn.",
+                    "## @BeginDrawing,DrawRectangle,DrawEllipse"
                 },
                 "EndDrawing",
                 new ParamDef[0],
@@ -647,7 +658,8 @@ namespace AdventureScript
                     "## $height: Height of the rectangle.",
                     "## $fillColor: ARGB fill color.",
                     "## $strokeColor: ARGB border color.",
-                    "## $strokeThickness: Border thickness."
+                    "## $strokeThickness: Border thickness.",
+                    "## @BeginDrawing,EndDrawing,DrawEllipse"
                 },
                 "DrawRectangle",
                 new ParamDef[] {
@@ -672,7 +684,8 @@ namespace AdventureScript
                     "## $height: Height of the ellipse.",
                     "## $fillColor: ARGB fill color.",
                     "## $strokeColor: ARGB border color.",
-                    "## $strokeThickness: Border thickness."
+                    "## $strokeThickness: Border thickness.",
+                    "## @BeginDrawing,EndDrawing,DrawRectangle"
                 },
                 "DrawEllipse",
                 new ParamDef[] {
