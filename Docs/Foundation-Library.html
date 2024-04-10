@@ -45,11 +45,22 @@
     </ul>
     <h3>
       <a name="ArmorKind" />ArmorKind</h3>
+    <p>Identifies a type of armor. The player can wear one piece of armor of each type.</p>
     <pre>include "Foundation-Combat.md";
 
 enum ArmorKind(None,Head,Torso,Leg);</pre>
+    <h4>Values</h4>
+    <p class="term">None</p>
+    <p class="def">Default value for non-armor items.</p>
+    <p class="term">Head</p>
+    <p class="def">Head armor, such as a helmet.</p>
+    <p class="term">Torso</p>
+    <p class="def">Body armor, such as a mail shirt.</p>
+    <p class="term">Leg</p>
+    <p class="def">Leg armor.</p>
     <h3>
       <a name="Direction" />Direction</h3>
+    <p>Represents the possible directions a player can go. This parameter is specified as a parameter when linking rooms with doors (e.g., with <a href="#NewDoorItem">NewDoorItem</a>).</p>
     <pre>include "Foundation.md";
 
 enum Direction(North,South,East,West,Up,Down);</pre>
@@ -97,11 +108,17 @@ enum LightState(None,Off,On,Unlit,Lit);</pre>
     </ul>
     <h3>
       <a name="DrawDelegate" />DrawDelegate</h3>
+    <p>Delegate type for the <a href="#DrawAction">DrawAction</a> property.</p>
     <pre>include "Foundation.md";
 
 delegate DrawDelegate(
     $item : Item
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Room or other item on which the <a href="#DrawAction">DrawAction</a> is invoked.</p>
+    <h4>Return value</h4>
+    <p>Drawing ID returned by the <a href="#EndDrawing">EndDrawing</a> function.</p>
     <h3>
       <a name="Item2Delegate" />Item2Delegate</h3>
     <p>Reference to a function that takes two Item parameters.</p>
@@ -129,7 +146,7 @@ delegate ItemPredicate(
     ) : Bool;</pre>
     <h3>
       <a name="NavigationAction" />NavigationAction</h3>
-    <p>Delegate type for the LeaveAction and EnterAction properties.</p>
+    <p>Delegate type for the <a href="#LeaveAction">LeaveAction</a> and <a href="#EnterAction">EnterAction</a> properties.</p>
     <pre>include "Foundation.md";
 
 delegate NavigationAction(
@@ -195,16 +212,19 @@ delegate NavigationAction(
     <pre>var $AmbiguousItemFormatString : String;</pre>
     <h3>
       <a name="_currentLightSource" />$currentLightSource</h3>
+    <p>Set each turn by the <a href="#InitializeLighting">InitializeLighting</a> function, this variable specifies the light source (if any) currently illuminating the room. This variable is null if no light source is needed.</p>
     <pre>include "Foundation.md";
 
 var $currentLightSource : Item;</pre>
     <h3>
       <a name="_currentTime" />$currentTime</h3>
+    <p>Specifies the current time of day in the game, measured in minutes from midnight. The default initial time is 11am.</p>
     <pre>include "Foundation.md";
 
 var $currentTime : Int;</pre>
     <h3>
       <a name="_headArmor" />$headArmor</h3>
+    <p>Current head armor for the player.</p>
     <pre>include "Foundation-Combat.md";
 
 var $headArmor : Item;</pre>
@@ -226,21 +246,25 @@ var $headArmor : Item;</pre>
     <pre>var $IsNounFirst : Bool;</pre>
     <h3>
       <a name="_isNowDark" />$isNowDark</h3>
+    <p>Set each turn by the <a href="#InitializeLighting">InitializeLighting</a> function, this variable specifies whether it is currently dark, i.e., the room is dark and there is no active light source.</p>
     <pre>include "Foundation.md";
 
 var $isNowDark : Bool;</pre>
     <h3>
       <a name="_isSleeping" />$isSleeping</h3>
+    <p>Specifies whether the player is currently sleeping. This is used by the <a href="#Sleep">Sleep</a> function and the <a href="#OnPlayerAttacked">OnPlayerAttacked</a> function.</p>
     <pre>include "Foundation-Combat.md";
 
 var $isSleeping : Bool;</pre>
     <h3>
       <a name="_lastRoom" />$lastRoom</h3>
+    <p>Player location before the most recent navigation.</p>
     <pre>include "Foundation.md";
 
 var $lastRoom : Item;</pre>
     <h3>
       <a name="_legArmor" />$legArmor</h3>
+    <p>Current leg armor for the player.</p>
     <pre>include "Foundation-Combat.md";
 
 var $legArmor : Item;</pre>
@@ -250,6 +274,7 @@ var $legArmor : Item;</pre>
     <pre>var $NoItemFormatString : String;</pre>
     <h3>
       <a name="_torsoArmor" />$torsoArmor</h3>
+    <p>Current torso armor for the player.</p>
     <pre>include "Foundation-Combat.md";
 
 var $torsoArmor : Item;</pre>
@@ -274,26 +299,31 @@ var $torsoArmor : Item;</pre>
     </ul>
     <h3>
       <a name="_colorBlack" />$colorBlack</h3>
+    <p>Black color in ARGB format (0xff000000).</p>
     <pre>include "Foundation.md";
 
 const $colorBlack : Int;</pre>
     <h3>
       <a name="_colorWhite" />$colorWhite</h3>
+    <p>White color in ARGB format (0xffffffff).</p>
     <pre>include "Foundation.md";
 
 const $colorWhite : Int;</pre>
     <h3>
       <a name="_dawnTime" />$dawnTime</h3>
+    <p>Specifies the time of dawn (8am), in minutes from midnight.</p>
     <pre>include "Foundation.md";
 
 const $dawnTime : Int;</pre>
     <h3>
       <a name="_duskTime" />$duskTime</h3>
+    <p>Specifies the time of dusk (8pm), in minutes from midnight.</p>
     <pre>include "Foundation.md";
 
 const $duskTime : Int;</pre>
     <h3>
       <a name="_minutesPerDay" />$minutesPerDay</h3>
+    <p>Specifies the number of minutes per day (i.e., 24 * 60).</p>
     <pre>include "Foundation.md";
 
 const $minutesPerDay : Int;</pre>
@@ -426,50 +456,55 @@ const $minutesPerDay : Int;</pre>
     </ul>
     <h3>
       <a name="Adjectives" />Adjectives</h3>
-    <p>Space-separated adjectives that may be used to refer to an item along with its Noun.</p>
+    <p>Space-separated adjectives that may be used to refer to an item along with its <a href="#Noun">Noun</a>.</p>
     <pre>include "Foundation.md";
 
 property Adjectives : String;</pre>
     <h3>
       <a name="ArmorKind" />ArmorKind</h3>
+    <p>Property specifying what type of armor an item is.</p>
     <pre>include "Foundation-Combat.md";
 
-property ArmorKind : ArmorKind;</pre>
+property ArmorKind : <a href="#ArmorKind">ArmorKind</a>;</pre>
     <h3>
       <a name="AttackDamage" />AttackDamage</h3>
+    <p>Specifies the nominal amount of damage inflicted by a weapon or monster. This may be adjusted by the damage resistence of the thing being attacked.</p>
     <pre>include "Foundation-Combat.md";
 
 property AttackDamage : Int;</pre>
     <h3>
       <a name="CloseAction" />CloseAction</h3>
-    <p>Delgate invoked by "close" command.</p>
+    <p>Delgate invoked by <a href="#Close">Close</a> function and "close" command.</p>
     <pre>include "Foundation.md";
 
-property CloseAction : ItemDelegate;</pre>
+property CloseAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="CurrentWeapon" />CurrentWeapon</h3>
+    <p>Specifies the current weapon of the player, which is the default weapon used by the "attack" command.</p>
     <pre>include "Foundation-Combat.md";
 
 property CurrentWeapon : Item;</pre>
     <h3>
       <a name="DamageResistance" />DamageResistance</h3>
+    <p>Specifies how much the target of an attack resists damage. The <a href="#ComputeDamage">ComputeDamage</a> function uses <a href="#AttackDamage">AttackDamage</a> of the attacker and the DamageResistance of the target to compute the actual damage.</p>
     <pre>include "Foundation-Combat.md";
 
 property DamageResistance : Int;</pre>
     <h3>
       <a name="DescribeAction" />DescribeAction</h3>
-    <p>Delegate invoked by the Describe function.</p>
+    <p>Delegate invoked by the <a href="#Describe">Describe</a> function.</p>
     <pre>include "Foundation.md";
 
-property DescribeAction : ItemDelegate;</pre>
+property DescribeAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="DescribeHealthAction" />DescribeHealthAction</h3>
     <p>Delegate invoked to describe the health of an item.</p>
     <pre>include "Foundation.md";
 
-property DescribeHealthAction : ItemDelegate;</pre>
+property DescribeHealthAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="Description" />Description</h3>
+    <p>Description of a room or other item. A room description typically begins with "You are in...". A room description need not include doors or items that are enumerated automatically.</p>
     <pre>include "Foundation.md";
 
 property Description : String;</pre>
@@ -478,45 +513,49 @@ property Description : String;</pre>
     <p>Represents the state of a door or container. The default None value applies to non-door items.</p>
     <pre>include "Foundation.md";
 
-property DoorState : DoorState;</pre>
+property DoorState : <a href="#DoorState">DoorState</a>;</pre>
     <h3>
       <a name="DrawAction" />DrawAction</h3>
+    <p>Optional delegate that returns a vector drawing for a room or other item. Possible values include <a href="#DrawSquareRoom">DrawSquareRoom</a>, DrawCircularRoom, etc.</p>
     <pre>include "Foundation.md";
 
-property DrawAction : DrawDelegate;</pre>
+property DrawAction : <a href="#DrawDelegate">DrawDelegate</a>;</pre>
     <h3>
       <a name="DropAction" />DropAction</h3>
-    <p>Delegate invoked by "drop" command.</p>
+    <p>Delegate invoked by the <a href="#Drop">Drop</a> function and "drop" command.</p>
     <pre>include "Foundation.md";
 
-property DropAction : ItemDelegate;</pre>
+property DropAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="EnterAction" />EnterAction</h3>
     <p>Delegate invoked when entering a room.</p>
     <pre>include "Foundation.md";
 
-property EnterAction : NavigationAction;</pre>
+property EnterAction : <a href="#NavigationAction">NavigationAction</a>;</pre>
     <h3>
       <a name="Health" />Health</h3>
+    <p>Health of a player, non-player character, or other item.</p>
     <pre>include "Foundation-Combat.md";
 
 property Health : Int;</pre>
     <h3>
       <a name="IgniteAction" />IgniteAction</h3>
-    <p>Delegate invoked by the UseLighterOn function.</p>
+    <p>Delegate invoked by the <a href="#UseLighterOn">UseLighterOn</a> function.</p>
     <pre>include "Foundation.md";
 
-property IgniteAction : ItemDelegate;</pre>
+property IgniteAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="Image" />Image</h3>
+    <p>Optional URL of an image file to be displayed along with the <a href="#Description">Description</a> of a room or other item.</p>
     <pre>include "Foundation.md";
 
 property Image : String;</pre>
     <h3>
       <a name="IsDark" />IsDark</h3>
+    <p>Predicate property that determines whether this room is currently dark. If this method returns true, an active light source is needed to see in the room. Possible values are <a href="#IsDarkAtNight">IsDarkAtNight</a> and <a href="#IsDarkAlways">IsDarkAlways</a>. If this property is null then the room is never dark.</p>
     <pre>include "Foundation.md";
 
-property IsDark : ItemPredicate;</pre>
+property IsDark : <a href="#ItemPredicate">ItemPredicate</a>;</pre>
     <h3>
       <a name="IsHidden" />IsHidden</h3>
     <p>Specifies whether this item is hidden.</p>
@@ -534,40 +573,46 @@ property Key : Item;</pre>
     <p>Delegate invoked when leaving a room.</p>
     <pre>include "Foundation.md";
 
-property LeaveAction : NavigationAction;</pre>
+property LeaveAction : <a href="#NavigationAction">NavigationAction</a>;</pre>
     <h3>
       <a name="LightState" />LightState</h3>
     <p>Represents the state ofa  light source.</p>
     <pre>include "Foundation.md";
 
-property LightState : LightState;</pre>
+property LightState : <a href="#LightState">LightState</a>;</pre>
     <h3>
       <a name="LinkD" />LinkD</h3>
+    <p>Specifies the linked item for Direction.Down.</p>
     <pre>include "Foundation.md";
 
 property LinkD : Item;</pre>
     <h3>
       <a name="LinkE" />LinkE</h3>
+    <p>Specifies the linked item for Direction.East.</p>
     <pre>include "Foundation.md";
 
 property LinkE : Item;</pre>
     <h3>
       <a name="LinkN" />LinkN</h3>
+    <p>Specifies the linked item for Direction.North.</p>
     <pre>include "Foundation.md";
 
 property LinkN : Item;</pre>
     <h3>
       <a name="LinkS" />LinkS</h3>
+    <p>Specifies the linked item for Direction.South.</p>
     <pre>include "Foundation.md";
 
 property LinkS : Item;</pre>
     <h3>
       <a name="LinkU" />LinkU</h3>
+    <p>Specifies the linked item for Direction.Up.</p>
     <pre>include "Foundation.md";
 
 property LinkU : Item;</pre>
     <h3>
       <a name="LinkW" />LinkW</h3>
+    <p>Specifies the linked item for Direction.West.</p>
     <pre>include "Foundation.md";
 
 property LinkW : Item;</pre>
@@ -579,6 +624,7 @@ property LinkW : Item;</pre>
 property Location : Item;</pre>
     <h3>
       <a name="MaxHealth" />MaxHealth</h3>
+    <p>Maximum health of an item. The relative health is the ratio of <a href="#Health">Health</a> to MaxHealth.</p>
     <pre>include "Foundation-Combat.md";
 
 property MaxHealth : Int;</pre>
@@ -590,68 +636,70 @@ property MaxHealth : Int;</pre>
 property Noun : String;</pre>
     <h3>
       <a name="OnAttackedAction" />OnAttackedAction</h3>
+    <p>Delegate invoked on an item when the item is attacked. For example, a monster or non-player character might change its behavior (e.g., become more hostile) when this action is invoked. Changing behavior can be implemented by setting the <a href="#UpdateAction">UpdateAction</a> to a different function.</p>
     <pre>include "Foundation-Combat.md";
 
-property OnAttackedAction : ItemDelegate;</pre>
+property OnAttackedAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="OpenAction" />OpenAction</h3>
-    <p>Delegate invoked by "open" command.</p>
+    <p>Delegate invoked by <a href="#Open">Open</a> function and "open" command.</p>
     <pre>include "Foundation.md";
 
-property OpenAction : ItemDelegate;</pre>
+property OpenAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="PutInAction" />PutInAction</h3>
-    <p>Delegate invoked by the "put...in" command. The property applies to the container.</p>
+    <p>Delegate invoked by the <a href="#PutIn">PutIn</a> function and "put...in" command. The property applies to the target item (e.g., container).</p>
     <pre>include "Foundation.md";
 
-property PutInAction : Item2Delegate;</pre>
+property PutInAction : <a href="#Item2Delegate">Item2Delegate</a>;</pre>
     <h3>
       <a name="PutOnAction" />PutOnAction</h3>
-    <p>Delegate invoked by the "put..on" command. The property applies to the table.</p>
+    <p>Delegate invoked by the <a href="#PutOn">PutOn</a> function and "put..on" command. The property applies to the target item (e.g., table).</p>
     <pre>include "Foundation.md";
 
-property PutOnAction : Item2Delegate;</pre>
+property PutOnAction : <a href="#Item2Delegate">Item2Delegate</a>;</pre>
     <h3>
       <a name="PutOutAction" />PutOutAction</h3>
-    <p>Delegate invoked by the "put out" command.</p>
+    <p>Delegate invoked by the <a href="#PutOut">PutOut</a> function and "put out" command.</p>
     <pre>include "Foundation.md";
 
-property PutOutAction : ItemDelegate;</pre>
+property PutOutAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="TakeAction" />TakeAction</h3>
-    <p>Delegate invoked by "take" command.</p>
+    <p>Delegate invoked by <a href="#Take">Take</a> function and "take" command.</p>
     <pre>include "Foundation.md";
 
-property TakeAction : ItemDelegate;</pre>
+property TakeAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="TurnOffAction" />TurnOffAction</h3>
-    <p>Delegate invoked by the "turn off" command.</p>
+    <p>Delegate invoked by the <a href="#TurnOff">TurnOff</a> function and "turn off" command.</p>
     <pre>include "Foundation.md";
 
-property TurnOffAction : ItemDelegate;</pre>
+property TurnOffAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="TurnOnAction" />TurnOnAction</h3>
-    <p>Delegate invoked by the "turn on" command.</p>
+    <p>Delegate invoked by the <a href="#TurnOn">TurnOn</a> function and "turn on" command.</p>
     <pre>include "Foundation.md";
 
-property TurnOnAction : ItemDelegate;</pre>
+property TurnOnAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="UpdateAction" />UpdateAction</h3>
+    <p>Delegate invoked each turn for each item. Can be used to implement behavior for monsters, non-player characters, etc.</p>
     <pre>include "Foundation-Combat.md";
 
-property UpdateAction : ItemDelegate;</pre>
+property UpdateAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="UseAction" />UseAction</h3>
-    <p>Delegate invoked by "use" command.</p>
+    <p>Delegate invoked by <a href="#Use">Use</a> function and "use" command.</p>
     <pre>include "Foundation.md";
 
-property UseAction : ItemDelegate;</pre>
+property UseAction : <a href="#ItemDelegate">ItemDelegate</a>;</pre>
     <h3>
       <a name="UseOnAction" />UseOnAction</h3>
-    <p>Delegate invoked by "use...on" command. The property applies to the item being used.</p>
+    <p>Delegate invoked by <a href="#UseOn">UseOn</a> function and "use...on" command. The property applies to the item being used.</p>
     <pre>include "Foundation.md";
 
-property UseOnAction : Item2Delegate;</pre>
+property UseOnAction : <a href="#Item2Delegate">Item2Delegate</a>;</pre>
     <h2>
       <a name="Functions" />Functions</h2>
     <ul>
@@ -1132,11 +1180,15 @@ property UseOnAction : Item2Delegate;</pre>
     <p class="def">Item the adjectives refer to.</p>
     <h3>
       <a name="AddItemWords" />AddItemWords</h3>
+    <p>Called by <a href="#InitializeWordMap">InitializeWordMap</a> to add nouns and adjectives for the specified item. This enables the player to refer to the item via commands.</p>
     <pre>include "Foundation.md";
 
 function AddItemWords(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to add nouns and adjectives for.</p>
     <h3>
       <a name="AddNoun" />AddNoun</h3>
     <p>Adds a noun for a currently-accessible item.</p>
@@ -1146,32 +1198,51 @@ function AddItemWords(
     );</pre>
     <h4>Parameters</h4>
     <p class="term">$word</p>
-    <p class="def">Noun used to refer to the item.</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
     <p class="term">$item</p>
     <p class="def">Item the noun refers to.</p>
     <h3>
       <a name="AddStateQualifier" />AddStateQualifier</h3>
+    <p>Adds a qualifier to the specified phrase if applicable based on the state of the item.</p>
     <pre>include "Foundation.md";
 
 function AddStateQualifier(
     $item : Item,
     $phrase : String
     ) : String;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to check the state of.</p>
+    <p class="term">$phrase</p>
+    <p class="def">Input phrase to qualify.</p>
+    <h4>Return value</h4>
+    <p>Returns the qualified phrase, which may equal the input phrase.</p>
     <h3>
       <a name="AttackItemWith" />AttackItemWith</h3>
+    <p>Function invoked when the player attacks something.</p>
     <pre>include "Foundation-Combat.md";
 
 function AttackItemWith(
     $target : Item,
     $weapon : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$target</p>
+    <p class="def">Item being attacked.</p>
+    <p class="term">$weapon</p>
+    <p class="def">Weapon to attack with, which can be null.</p>
     <h3>
       <a name="AttackPlayer" />AttackPlayer</h3>
+    <p>Function invoked when a monster or non-player character attacks the player.</p>
     <pre>include "Foundation-Combat.md";
 
 function AttackPlayer(
     $foe : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$foe</p>
+    <p class="def">Item attacking the player.</p>
     <h3>
       <a name="BeginDrawing" />BeginDrawing</h3>
     <p>Begins a vector drawing. All units are in px (1/96 inch).</p>
@@ -1186,6 +1257,7 @@ function AttackPlayer(
     <p class="def">Height of the canvas.</p>
     <h3>
       <a name="Close" />Close</h3>
+    <p>Implements the "close" command.</p>
     <pre>include "Foundation.md";
 
 function Close(
@@ -1193,21 +1265,36 @@ function Close(
     );</pre>
     <h3>
       <a name="CloseDoor" />CloseDoor</h3>
+    <p>Implementation of the <a href="#CloseAction">CloseAction</a> for door items.</p>
     <pre>include "Foundation.md";
 
 function CloseDoor(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to close.</p>
     <h3>
       <a name="ComputeDamage" />ComputeDamage</h3>
+    <p>Computes the actual damage inflicted by an attack.</p>
     <pre>include "Foundation-Combat.md";
 
 function ComputeDamage(
     $attackDamage : Int,
-    $DamageResistance : Int
+    $damageResistance : Int
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$attackDamage</p>
+    <p class="def">
+      <a href="#AttackDamage">AttackDamage</a> property of the attacker or weapon.</p>
+    <p class="term">$damageResistance</p>
+    <p class="def">
+      <a href="#DamageResistance">DamageResistance</a> property of the target.</p>
+    <h4>Return value</h4>
+    <p>Returns the actual damage inflicted.</p>
     <h3>
       <a name="Describe" />Describe</h3>
+    <p>Outputs a description of the specified item, for example, in response to the "look" command.</p>
     <pre>include "Foundation.md";
 
 function Describe(
@@ -1215,76 +1302,122 @@ function Describe(
     );</pre>
     <h3>
       <a name="DescribeCommon" />DescribeCommon</h3>
+    <p>Default behavior of the <a href="#Describe">Describe</a> function if the <a href="#DescribeAction">DescribeAction</a> property is not set.</p>
     <pre>include "Foundation.md";
 
 function DescribeCommon(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to describe.</p>
     <h3>
       <a name="DescribeContainer" />DescribeContainer</h3>
+    <p>
+      <a href="#DescribeAction">DescribeAction</a> implementation for container items.</p>
     <pre>include "Foundation.md";
 
 function DescribeContainer(
     $container : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$container</p>
+    <p class="def">Item on which the <a href="#DescribeAction">DescribeAction</a> is invoked.</p>
     <h3>
       <a name="DescribeCreatureHealth" />DescribeCreatureHealth</h3>
+    <p>
+      <a href="#DescribeHealthAction">DescribeHealthAction</a> implementation suitable for monsters, NPCs, etc.</p>
     <pre>include "Foundation-Combat.md";
 
 function DescribeCreatureHealth(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to describe the health of.</p>
     <h3>
       <a name="DescribeItemHealth" />DescribeItemHealth</h3>
+    <p>
+      <a href="#DescribeHealthAction">DescribeHealthAction</a> implementation suitable for inaninate objects.</p>
     <pre>include "Foundation-Combat.md";
 
 function DescribeItemHealth(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to describe the health of.</p>
     <h3>
       <a name="DescribePlayerHealth" />DescribePlayerHealth</h3>
+    <p>
+      <a href="#DescribeHealthAction">DescribeHealthAction</a> implementation for the player.</p>
     <pre>include "Foundation-Combat.md";
 
 function DescribePlayerHealth(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to describe the health of.</p>
     <h3>
       <a name="DescribePlayerWithArms" />DescribePlayerWithArms</h3>
+    <p>
+      <a href="#DescribeAction">DescribeAction</a> implementation for the player. This implementation in the Combat module replaces the general implementation and adds information about weapons and armor.</p>
     <pre>include "Foundation-Combat.md";
 
 function DescribePlayerWithArms(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item on which the action is invoked (i.e., the player).</p>
     <h3>
       <a name="DescribeTable" />DescribeTable</h3>
+    <p>
+      <a href="#DescribeAction">DescribeAction</a> implementation for table items.</p>
     <pre>include "Foundation.md";
 
 function DescribeTable(
     $table : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$table</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="DestroyItem" />DestroyItem</h3>
+    <p>Function invoked when an item is destroyed.</p>
     <pre>include "Foundation-Combat.md";
 
 function DestroyItem(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to destroy.</p>
     <h3>
       <a name="DirectionPhrase" />DirectionPhrase</h3>
+    <p>Returns a phrase representing a direction.</p>
     <pre>include "Foundation.md";
 
 function DirectionPhrase(
-    $fromValue : Direction
+    $fromValue : <a href="#Direction">Direction</a>
     ) : String;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$fromValue</p>
+    <p class="def">Input direction.</p>
+    <h4>Return value</h4>
+    <p>Returns a phrase such as "to the North" or "leading upward".</p>
     <h3>
       <a name="DoorStateAdj" />DoorStateAdj</h3>
+    <p>Converts a <a href="#DoorState">DoorState</a> value to an adjective.</p>
     <pre>include "Foundation.md";
 
 function DoorStateAdj(
-    $fromValue : DoorState
+    $fromValue : <a href="#DoorState">DoorState</a>
     ) : String;</pre>
     <h3>
       <a name="DrawDoors" />DrawDoors</h3>
+    <p>Draws doors and openings for the specified room.</p>
     <pre>include "Foundation.md";
 
 function DrawDoors(
@@ -1295,9 +1428,22 @@ function DrawDoors(
     $height : Int,
     $backColor : Int
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw doors and openings for.</p>
+    <p class="term">$left</p>
+    <p class="def">Left coordinate of the room.</p>
+    <p class="term">$top</p>
+    <p class="def">Top coordinate of the room.</p>
+    <p class="term">$width</p>
+    <p class="def">Width of the room.</p>
+    <p class="term">$height</p>
+    <p class="def">Height of the room.</p>
+    <p class="term">$backColor</p>
+    <p class="def">Background (floor) color of the room.</p>
     <h3>
       <a name="DrawEllipse" />DrawEllipse</h3>
-    <p>Called after BeginDrawing to draw an ellipse.</p>
+    <p>Called after <a href="#BeginDrawing">BeginDrawing</a> to draw an ellipse.</p>
     <pre>function DrawEllipse(
     $left : Int,
     $top : Int,
@@ -1324,6 +1470,7 @@ function DrawDoors(
     <p class="def">Border thickness.</p>
     <h3>
       <a name="DrawEllipticalRoom" />DrawEllipticalRoom</h3>
+    <p>Draws an eliptical room and returns its drawing ID.</p>
     <pre>include "Foundation.md";
 
 function DrawEllipticalRoom(
@@ -1331,9 +1478,18 @@ function DrawEllipticalRoom(
     $width : Int,
     $height : Int
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw.</p>
+    <p class="term">$width</p>
+    <p class="def">Width of the drawing.</p>
+    <p class="term">$height</p>
+    <p class="def">Height of the drawing.</p>
+    <h4>Return value</h4>
+    <p>Returns the drawing ID.</p>
     <h3>
       <a name="DrawRectangle" />DrawRectangle</h3>
-    <p>Called after BeginDrawing to draw a rectangle.</p>
+    <p>Called after <a href="#BeginDrawing">BeginDrawing</a> to draw a rectangle.</p>
     <pre>function DrawRectangle(
     $left : Int,
     $top : Int,
@@ -1360,6 +1516,7 @@ function DrawEllipticalRoom(
     <p class="def">Border thickness.</p>
     <h3>
       <a name="DrawRectangularRoom" />DrawRectangularRoom</h3>
+    <p>Draws a rectangular room and returns its drawing ID.</p>
     <pre>include "Foundation.md";
 
 function DrawRectangularRoom(
@@ -1369,43 +1526,92 @@ function DrawRectangularRoom(
     $wallColor : Int,
     $backColor : Int
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw.</p>
+    <p class="term">$width</p>
+    <p class="def">Width of the drawing.</p>
+    <p class="term">$height</p>
+    <p class="def">Height of the drawing.</p>
+    <p class="term">$wallColor</p>
+    <p class="def">Color used for walls (e.g., <a href="#_colorBlack">$colorBlack</a>).</p>
+    <p class="term">$backColor</p>
+    <p class="def">Background color used for the floor (e.g., <a href="#_colorWhite">$colorWhite</a>).</p>
+    <h4>Return value</h4>
+    <p>Returns the drawing ID.</p>
     <h3>
       <a name="DrawRoom_100x200" />DrawRoom_100x200</h3>
+    <p>
+      <a href="#DrawAction">DrawAction</a> implementation that draws a 100x200 rectangular room.</p>
     <pre>include "Foundation.md";
 
 function DrawRoom_100x200(
     $room : Item
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw.</p>
+    <h4>Return value</h4>
+    <p>Returns the drawing ID.</p>
     <h3>
       <a name="DrawRoom_200x100" />DrawRoom_200x100</h3>
+    <p>
+      <a href="#DrawAction">DrawAction</a> implementation that draws a 200x100 rectangular room.</p>
     <pre>include "Foundation.md";
 
 function DrawRoom_200x100(
     $room : Item
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw.</p>
+    <h4>Return value</h4>
+    <p>Returns the drawing ID.</p>
     <h3>
       <a name="DrawRoom_300x150" />DrawRoom_300x150</h3>
+    <p>
+      <a href="#DrawAction">DrawAction</a> implementation that draws a 300x150 rectangular room.</p>
     <pre>include "Foundation.md";
 
 function DrawRoom_300x150(
     $room : Item
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw.</p>
+    <h4>Return value</h4>
+    <p>Returns the drawing ID.</p>
     <h3>
       <a name="DrawRoundRoom" />DrawRoundRoom</h3>
+    <p>
+      <a href="#DrawAction">DrawAction</a> implementation that draws a round room with a 200px diameter.</p>
     <pre>include "Foundation.md";
 
 function DrawRoundRoom(
     $room : Item
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw.</p>
+    <h4>Return value</h4>
+    <p>Returns the drawing ID.</p>
     <h3>
       <a name="DrawSquareRoom" />DrawSquareRoom</h3>
+    <p>
+      <a href="#DrawAction">DrawAction</a> implementation that draws a 200x200 square room.</p>
     <pre>include "Foundation.md";
 
 function DrawSquareRoom(
     $room : Item
     ) : Int;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$room</p>
+    <p class="def">Room to draw.</p>
+    <h4>Return value</h4>
+    <p>Returns the drawing ID.</p>
     <h3>
       <a name="Drop" />Drop</h3>
+    <p>Implements the "drop" command.</p>
     <pre>include "Foundation.md";
 
 function Drop(
@@ -1413,14 +1619,20 @@ function Drop(
     );</pre>
     <h3>
       <a name="DropArmor" />DropArmor</h3>
+    <p>
+      <a href="#DropAction">DropAction</a> implementation for armor items.</p>
     <pre>include "Foundation-Combat.md";
 
 function DropArmor(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="DropPortableItem" />DropPortableItem</h3>
-    <p>DropAction implementation for portable items.</p>
+    <p>
+      <a href="#DropAction">DropAction</a> implementation for portable items.</p>
     <pre>include "Foundation.md";
 
 function DropPortableItem(
@@ -1431,11 +1643,16 @@ function DropPortableItem(
     <p class="def">Item the action applies to.</p>
     <h3>
       <a name="DropWeapon" />DropWeapon</h3>
+    <p>
+      <a href="#DropAction">DropAction</a> for a weapon item.</p>
     <pre>include "Foundation-Combat.md";
 
 function DropWeapon(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="EndDrawing" />EndDrawing</h3>
     <p>Ends a vector drawing and returns a drawing ID.</p>
@@ -1453,11 +1670,17 @@ function DropWeapon(
     <p class="def">True if the game is won, false if it is lost.</p>
     <h3>
       <a name="GetArmor" />GetArmor</h3>
+    <p>Get the current armor of the specified kind.</p>
     <pre>include "Foundation-Combat.md";
 
 function GetArmor(
-    $kind : ArmorKind
+    $kind : <a href="#ArmorKind">ArmorKind</a>
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$kind</p>
+    <p class="def">Kind of armor to get.</p>
+    <h4>Return value</h4>
+    <p>Returns the player's current armor of the specified kind.</p>
     <h3>
       <a name="GetItem" />GetItem</h3>
     <p>Gets the specified item.</p>
@@ -1471,45 +1694,79 @@ function GetArmor(
     <p>Returns the newly-created item.</p>
     <h3>
       <a name="GetLink" />GetLink</h3>
+    <p>Gets the linked item, if any, for the specified item in the specified direction.</p>
     <pre>include "Foundation.md";
 
 function GetLink(
     $item : Item,
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to get the linked item for.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <h4>Return value</h4>
+    <p>Returns the linked item in the specified direction, if any.</p>
     <h3>
       <a name="Go" />Go</h3>
+    <p>Moves the player in the specified direction if possible. Used to implement the "go", "n", "s", "e", "w", "up", and "down" commands.</p>
     <pre>include "Foundation.md";
 
 function Go(
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$dir</p>
+    <p class="def">Direction to move.</p>
     <h3>
       <a name="IgniteCandle" />IgniteCandle</h3>
+    <p>
+      <a href="#IgniteAction">IgniteAction</a> implementation for a candle-like light source.</p>
     <pre>include "Foundation.md";
 
 function IgniteCandle(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="IncrementTime" />IncrementTime</h3>
+    <p>Called once per turn to add one minute to the current time.</p>
     <pre>include "Foundation.md";
 
 function IncrementTime();</pre>
     <h3>
       <a name="InitializeArmor" />InitializeArmor</h3>
+    <p>Initializes the properties of an armor item.</p>
     <pre>include "Foundation-Combat.md";
 
 function InitializeArmor(
     $item : Item,
     $adjectives : String,
     $noun : String,
-    $kind : ArmorKind,
-    $DamageResistance : Int,
+    $kind : <a href="#ArmorKind">ArmorKind</a>,
+    $damageResistance : Int,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$kind</p>
+    <p class="def">Value of the <a href="#ArmorKind">ArmorKind</a> property.</p>
+    <p class="term">$damageResistance</p>
+    <p class="def">DamanageResistance conferred by the armor.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
     <h3>
       <a name="InitializeBed" />InitializeBed</h3>
+    <p>Initializes the properties of a bed item.</p>
     <pre>include "Foundation-Combat.md";
 
 function InitializeBed(
@@ -1518,8 +1775,19 @@ function InitializeBed(
     $noun : String,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room.</p>
     <h3>
       <a name="InitializeCandle" />InitializeCandle</h3>
+    <p>Initializes the properties of a light source that behaves like a candle.</p>
     <pre>include "Foundation.md";
 
 function InitializeCandle(
@@ -1528,32 +1796,73 @@ function InitializeCandle(
     $noun : String,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
     <h3>
       <a name="InitializeContainer" />InitializeContainer</h3>
+    <p>Initializes the properties of a container item.</p>
     <pre>include "Foundation.md";
 
 function InitializeContainer(
     $container : Item,
     $adjectives : String,
     $noun : String,
-    $state : DoorState,
+    $state : <a href="#DoorState">DoorState</a>,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$container</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$state</p>
+    <p class="def">Initial state of the container, such as Closed or Locked.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room.</p>
     <h3>
       <a name="InitializeDoor" />InitializeDoor</h3>
+    <p>Initializes the properties of a door item.</p>
     <pre>include "Foundation.md";
 
 function InitializeDoor(
     $door : Item,
     $from : Item,
     $to : Item,
-    $dir : Direction,
+    $dir : <a href="#Direction">Direction</a>,
     $adjectives : String,
     $noun : String,
-    $state : DoorState
+    $state : <a href="#DoorState">DoorState</a>
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$door</p>
+    <p class="def">Door item to the the properties of.</p>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the door.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the door.</p>
+    <p class="term">$state</p>
+    <p class="def">Initial state of the door.</p>
     <h3>
       <a name="InitializeKey" />InitializeKey</h3>
+    <p>Initializes the properties of a key item.</p>
     <pre>include "Foundation.md";
 
 function InitializeKey(
@@ -1562,8 +1871,19 @@ function InitializeKey(
     $noun : String,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$key</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
     <h3>
       <a name="InitializeLight" />InitializeLight</h3>
+    <p>Initializes the properties of a light source that behaves like an electric light.</p>
     <pre>include "Foundation.md";
 
 function InitializeLight(
@@ -1572,8 +1892,19 @@ function InitializeLight(
     $noun : String,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
     <h3>
       <a name="InitializeLighter" />InitializeLighter</h3>
+    <p>Initializes the properties of a lighter item.</p>
     <pre>include "Foundation.md";
 
 function InitializeLighter(
@@ -1582,13 +1913,25 @@ function InitializeLighter(
     $noun : String,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
     <h3>
       <a name="InitializeLighting" />InitializeLighting</h3>
+    <p>Called each turn to initialize the <a href="#_currentLightSource">$currentLightSource</a> and <a href="#_isNowDark">$isNowDark</a> variables.</p>
     <pre>include "Foundation.md";
 
 function InitializeLighting();</pre>
     <h3>
       <a name="InitializeMonster" />InitializeMonster</h3>
+    <p>Initializes the properties of a monster item.</p>
     <pre>include "Foundation-Combat.md";
 
 function InitializeMonster(
@@ -1600,6 +1943,24 @@ function InitializeMonster(
     $attackDamage : Int,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$monster</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$health</p>
+    <p class="def">Initial <a href="#Health">Health</a> and <a href="#MaxHealth">MaxHealth</a> of the monster.</p>
+    <p class="term">$damageResistance</p>
+    <p class="def">
+      <a href="#DamageResistance">DamageResistance</a> of the monster.</p>
+    <p class="term">$attackDamage</p>
+    <p class="def">
+      <a href="#AttackDamage">AttackDamage</a> of the monster.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the monster, such as a room.</p>
     <h3>
       <a name="InitializePortableItem" />InitializePortableItem</h3>
     <p>Sets the properties of a portable item.</p>
@@ -1617,11 +1978,13 @@ function InitializePortableItem(
     <p class="term">$adjectives</p>
     <p class="def">Space-separated adjectives used to refer to the item.</p>
     <p class="term">$noun</p>
-    <p class="def">Noun used to refer to the item.</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
     <p class="term">$loc</p>
     <p class="def">Initial location of the item, such as a room or container.</p>
     <h3>
       <a name="InitializeTable" />InitializeTable</h3>
+    <p>Initializes the properties of a table item.</p>
     <pre>include "Foundation.md";
 
 function InitializeTable(
@@ -1630,8 +1993,19 @@ function InitializeTable(
     $noun : String,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$table</p>
+    <p class="def">Item to be initialized.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room.</p>
     <h3>
       <a name="InitializeWeapon" />InitializeWeapon</h3>
+    <p>Initializes the properties of a weapon item.</p>
     <pre>include "Foundation-Combat.md";
 
 function InitializeWeapon(
@@ -1641,13 +2015,28 @@ function InitializeWeapon(
     $damage : Int,
     $loc : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$damage</p>
+    <p class="def">
+      <a href="#AttackDamage">AttackDamage</a> property of the weapon.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the weapon, such as a room or container.</p>
     <h3>
       <a name="InitializeWordMap" />InitializeWordMap</h3>
+    <p>Called each turn to add nouns and adjectives for all accessible items.</p>
     <pre>include "Foundation.md";
 
 function InitializeWordMap();</pre>
     <h3>
       <a name="Inventory" />Inventory</h3>
+    <p>Called by the "i" or "inventory" command to list the items in the player's inventory.</p>
     <pre>include "Foundation.md";
 
 function Inventory();</pre>
@@ -1657,7 +2046,7 @@ function Inventory();</pre>
     <pre>include "Foundation.md";
 
 function InvokeItemAction(
-    $func : ItemDelegate,
+    $func : <a href="#ItemDelegate">ItemDelegate</a>,
     $item : Item,
     $verb : String
     );</pre>
@@ -1674,9 +2063,9 @@ function InvokeItemAction(
     <pre>include "Foundation.md";
 
 function InvokeItemActionWithFallback(
-    $func : ItemDelegate,
+    $func : <a href="#ItemDelegate">ItemDelegate</a>,
     $item : Item,
-    $fallback : ItemDelegate
+    $fallback : <a href="#ItemDelegate">ItemDelegate</a>
     );</pre>
     <h4>Parameters</h4>
     <p class="term">$func</p>
@@ -1695,92 +2084,153 @@ function IsAccessible(
     ) : Bool;</pre>
     <h3>
       <a name="IsActiveLightState" />IsActiveLightState</h3>
+    <p>Returns true if the specified light state is On or Lit.</p>
     <pre>include "Foundation.md";
 
 function IsActiveLightState(
-    $fromValue : LightState
+    $fromValue : <a href="#LightState">LightState</a>
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$fromValue</p>
+    <p class="def">Input value.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the input value is On or Lit.</p>
     <h3>
       <a name="IsCandle" />IsCandle</h3>
+    <p>Tests if the item is a candle.</p>
     <pre>include "Foundation.md";
 
 function IsCandle(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to test.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the item is a light source that behaves like a candle.</p>
     <h3>
       <a name="IsClosedOrLocked" />IsClosedOrLocked</h3>
     <p>Returns true if the specified door state is either closed or locked.</p>
     <pre>include "Foundation.md";
 
 function IsClosedOrLocked(
-    $fromValue : DoorState
+    $fromValue : <a href="#DoorState">DoorState</a>
     ) : Bool;</pre>
     <h4>Parameters</h4>
     <p class="term">$fromValue</p>
-    <p class="def">DoorState value.</p>
+    <p class="def">
+      <a href="#DoorState">DoorState</a> value.</p>
     <h4>Return value</h4>
     <p>Returns true for Closed or Locked.</p>
     <h3>
       <a name="IsContainer" />IsContainer</h3>
+    <p>Tests whether an item is a container.</p>
     <pre>include "Foundation.md";
 
 function IsContainer(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to test.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the item implements the <a href="#PutInAction">PutInAction</a>.</p>
     <h3>
       <a name="IsDarkAlways" />IsDarkAlways</h3>
+    <p>Function that may be assigned to the <a href="#IsDark">IsDark</a> property if a room is always dark, e.g., a windowless room.</p>
     <pre>include "Foundation.md";
 
 function IsDarkAlways(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Room on which the predicate is invoked.</p>
+    <h4>Return value</h4>
+    <p>Returns true if a light source is required to see in the room.</p>
     <h3>
       <a name="IsDarkAtNight" />IsDarkAtNight</h3>
+    <p>Function that may be assigned to the <a href="#IsDark">IsDark</a> property if a room is dark only at night, e.g., if a room is outside or has windows.</p>
     <pre>include "Foundation.md";
 
 function IsDarkAtNight(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Room on which the predicate is invoked.</p>
+    <h4>Return value</h4>
+    <p>Returns true if a light source is required to see in the room.</p>
     <h3>
       <a name="IsKey" />IsKey</h3>
+    <p>Tests whether an item is a key.</p>
     <pre>include "Foundation.md";
 
 function IsKey(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to test.</p>
+    <h4>Return value</h4>
+    <p>Returns true if and only the item's <a href="#UseOnAction">UseOnAction</a> is <a href="#UseKeyOn">UseKeyOn</a>.</p>
     <h3>
       <a name="IsLight" />IsLight</h3>
+    <p>Tests if an item is a light.</p>
     <pre>include "Foundation.md";
 
 function IsLight(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to test.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the item is a light source that can be turned on like an electric light.</p>
     <h3>
       <a name="IsLighter" />IsLighter</h3>
+    <p>Tests if an item is a lighter.</p>
     <pre>include "Foundation.md";
 
 function IsLighter(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to test.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the item can be used like a lighter.</p>
     <h3>
       <a name="IsNight" />IsNight</h3>
+    <p>Determines whether the current time is night (i.e., before dawn or after dusk).</p>
     <pre>include "Foundation.md";
 
 function IsNight() : Bool;</pre>
+    <h4>Return value</h4>
+    <p>Returns true if it is night or false if it is day.</p>
     <h3>
       <a name="IsOpenable" />IsOpenable</h3>
+    <p>Tests whether an item implements the <a href="#OpenAction">OpenAction</a>.</p>
     <pre>include "Foundation.md";
 
 function IsOpenable(
     $item : Item
     ) : Bool;</pre>
+    <h4>Return value</h4>
+    <p>Returns true if the item is openable, false if not.</p>
     <h3>
       <a name="IsOpenContainer" />IsOpenContainer</h3>
+    <p>Tests whether an item is an open container.</p>
     <pre>include "Foundation.md";
 
 function IsOpenContainer(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to test.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the item is a container which is not closed or locked.</p>
     <h3>
       <a name="IsPortable" />IsPortable</h3>
     <p>Determines whether an item is portable.</p>
@@ -1790,14 +2240,20 @@ function IsPortable(
     $item : Item
     ) : Bool;</pre>
     <h4>Return value</h4>
-    <p>Returns true if the item's TakeAction is not null.</p>
+    <p>Returns true if the item's <a href="#TakeAction">TakeAction</a> is not null.</p>
     <h3>
       <a name="IsTable" />IsTable</h3>
+    <p>Tests whether an item is a table.</p>
     <pre>include "Foundation.md";
 
 function IsTable(
     $item : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to test.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the <a href="#PutOnAction">PutOnAction</a> is implemented for the item.</p>
     <h3>
       <a name="ItalicLabel" />ItalicLabel</h3>
     <p>Gets an item's label with Markdown italic formatting.</p>
@@ -1813,11 +2269,15 @@ function ItalicLabel(
     <p>Returns the item label.</p>
     <h3>
       <a name="ItalicLabelWithState" />ItalicLabelWithState</h3>
+    <p>Gets an item's italicized label with a state qualifier (e.g., "open _door_").</p>
     <pre>include "Foundation.md";
 
 function ItalicLabelWithState(
     $item : Item
     ) : String;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to get the label of.</p>
     <h3>
       <a name="Label" />Label</h3>
     <p>Gets an item's label, which is a string that can be used to refer to the item.</p>
@@ -1833,57 +2293,92 @@ function Label(
     <p>Returns the item label.</p>
     <h3>
       <a name="LabelWithState" />LabelWithState</h3>
+    <p>Gets an item's label with a state qualifier (e.g., "open door").</p>
     <pre>include "Foundation.md";
 
 function LabelWithState(
     $item : Item
     ) : String;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to get the label of.</p>
     <h3>
       <a name="LightStateAdj" />LightStateAdj</h3>
+    <p>Converts a <a href="#LightState">LightState</a> value to an adjective.</p>
     <pre>include "Foundation.md";
 
 function LightStateAdj(
-    $fromValue : LightState
+    $fromValue : <a href="#LightState">LightState</a>
     ) : String;</pre>
     <h3>
       <a name="LightWith" />LightWith</h3>
+    <p>Implementation of the "light...with" command.</p>
     <pre>include "Foundation.md";
 
 function LightWith(
     $target : Item,
     $lighter : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$target</p>
+    <p class="def">Target item to light.</p>
+    <p class="term">$lighter</p>
+    <p class="def">Lighter item.</p>
     <h3>
       <a name="LinkRooms" />LinkRooms</h3>
+    <p>Creates a two-way link between rooms, that is, two one-way links in opposite directions.</p>
     <pre>include "Foundation.md";
 
 function LinkRooms(
     $from : Item,
     $to : Item,
     $via : Item,
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$via</p>
+    <p class="def">Intermediate item such as a door, opening, or path.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
     <h3>
       <a name="LinkRoomsOneWay" />LinkRoomsOneWay</h3>
+    <p>Creates a one-way link from one room to another.</p>
     <pre>include "Foundation.md";
 
 function LinkRoomsOneWay(
     $from : Item,
     $to : Item,
     $via : Item,
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$via</p>
+    <p class="def">Intermediate item such as a door, opening, or path.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
     <h3>
       <a name="ListCommands" />ListCommands</h3>
     <p>Lists all commands in the game.</p>
     <pre>function ListCommands();</pre>
     <h3>
       <a name="ListContainerContents" />ListContainerContents</h3>
+    <p>Outputs a list of items in a container.</p>
     <pre>include "Foundation.md";
 
 function ListContainerContents(
     $container : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$container</p>
+    <p class="def">Container item to list the contents of.</p>
     <h3>
       <a name="ListFunction" />ListFunction</h3>
     <p>Lists a specific function.</p>
@@ -1928,6 +2423,7 @@ function ListContainerContents(
     <pre>function ListWords();</pre>
     <h3>
       <a name="Look" />Look</h3>
+    <p>Called by the "look" command to output a description of the current room and its contents.</p>
     <pre>include "Foundation.md";
 
 function Look();</pre>
@@ -1942,17 +2438,33 @@ function Look();</pre>
     <p class="def">Output string.</p>
     <h3>
       <a name="NewArmor" />NewArmor</h3>
+    <p>Creates and initializes an armor item.</p>
     <pre>include "Foundation-Combat.md";
 
 function NewArmor(
     $adjectives : String,
     $noun : String,
-    $kind : ArmorKind,
-    $DamageResistance : Int,
+    $kind : <a href="#ArmorKind">ArmorKind</a>,
+    $damageResistance : Int,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$kind</p>
+    <p class="def">Value of the <a href="#ArmorKind">ArmorKind</a> property.</p>
+    <p class="term">$damageResistance</p>
+    <p class="def">DamanageResistance conferred by the armor.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created item.</p>
     <h3>
       <a name="NewBed" />NewBed</h3>
+    <p>Creates and initializes a bed item.</p>
     <pre>include "Foundation-Combat.md";
 
 function NewBed(
@@ -1960,8 +2472,19 @@ function NewBed(
     $noun : String,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created item.</p>
     <h3>
       <a name="NewCandle" />NewCandle</h3>
+    <p>Creates and initializes a light source that behaves like a candle.</p>
     <pre>include "Foundation.md";
 
 function NewCandle(
@@ -1969,37 +2492,87 @@ function NewCandle(
     $noun : String,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created light source item.</p>
     <h3>
       <a name="NewClosedDoor" />NewClosedDoor</h3>
+    <p>Creates and initializes a door item in the Closed state.</p>
     <pre>include "Foundation.md";
 
 function NewClosedDoor(
     $from : Item,
     $to : Item,
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created door item.</p>
     <h3>
       <a name="NewContainer" />NewContainer</h3>
+    <p>Creates and initializes a container item.</p>
     <pre>include "Foundation.md";
 
 function NewContainer(
     $adjectives : String,
     $noun : String,
-    $state : DoorState,
+    $state : <a href="#DoorState">DoorState</a>,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$state</p>
+    <p class="def">Initial state of the container, such as Closed or Locked.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created container item.</p>
     <h3>
       <a name="NewDoorItem" />NewDoorItem</h3>
+    <p>Creates and initializes a door item.</p>
     <pre>include "Foundation.md";
 
 function NewDoorItem(
     $from : Item,
     $to : Item,
-    $dir : Direction,
+    $dir : <a href="#Direction">Direction</a>,
     $adjectives : String,
     $noun : String,
-    $state : DoorState
+    $state : <a href="#DoorState">DoorState</a>
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the door.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the door.</p>
+    <p class="term">$state</p>
+    <p class="def">Initial state of the door.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created door item.</p>
     <h3>
       <a name="NewItem" />NewItem</h3>
     <p>Adds a new item.</p>
@@ -2013,6 +2586,7 @@ function NewDoorItem(
     <p>Returns the newly-created item.</p>
     <h3>
       <a name="NewKey" />NewKey</h3>
+    <p>Creates and initializes a key item.</p>
     <pre>include "Foundation.md";
 
 function NewKey(
@@ -2020,8 +2594,19 @@ function NewKey(
     $noun : String,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created key item.</p>
     <h3>
       <a name="NewLight" />NewLight</h3>
+    <p>Creates and initializes a light source that behaves like an electric light.</p>
     <pre>include "Foundation.md";
 
 function NewLight(
@@ -2029,8 +2614,19 @@ function NewLight(
     $noun : String,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created light source item.</p>
     <h3>
       <a name="NewLighter" />NewLighter</h3>
+    <p>Creates and initializes a lighter item.</p>
     <pre>include "Foundation.md";
 
 function NewLighter(
@@ -2038,27 +2634,60 @@ function NewLighter(
     $noun : String,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created item.</p>
     <h3>
       <a name="NewLink" />NewLink</h3>
+    <p>Creates and initializes an unnamed link between rooms. The link object does not have a noun so is not automatically enumerated by the <a href="#Describe">Describe</a> function. The room's <a href="#Description">Description</a> property may therefore need to explicitly mention the link, e.g., "You are in a clearing with a path to the north."</p>
     <pre>include "Foundation.md";
 
 function NewLink(
     $from : Item,
     $to : Item,
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created unnamed link item.</p>
     <h3>
       <a name="NewLockedDoor" />NewLockedDoor</h3>
+    <p>Creates and initializes a door item in the Locked state.</p>
     <pre>include "Foundation.md";
 
 function NewLockedDoor(
     $from : Item,
     $to : Item,
-    $dir : Direction,
+    $dir : <a href="#Direction">Direction</a>,
     $key : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <p class="term">$key</p>
+    <p class="def">Item used to unlock the door (see <a href="#NewKey">NewKey</a> or <a href="#InitializeKey">InitializeKey</a>).</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created door item.</p>
     <h3>
       <a name="NewMonster" />NewMonster</h3>
+    <p>Creates and initializes a monster item.</p>
     <pre>include "Foundation-Combat.md";
 
 function NewMonster(
@@ -2069,15 +2698,43 @@ function NewMonster(
     $attackDamage : Int,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$health</p>
+    <p class="def">Initial <a href="#Health">Health</a> and <a href="#MaxHealth">MaxHealth</a> of the monster.</p>
+    <p class="term">$damageResistance</p>
+    <p class="def">
+      <a href="#DamageResistance">DamageResistance</a> of the monster.</p>
+    <p class="term">$attackDamage</p>
+    <p class="def">
+      <a href="#AttackDamage">AttackDamage</a> of the monster.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the monster, such as a room.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created monster item.</p>
     <h3>
       <a name="NewOpening" />NewOpening</h3>
+    <p>Creates and initializes an "opening" between rooms.</p>
     <pre>include "Foundation.md";
 
 function NewOpening(
     $from : Item,
     $to : Item,
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source room to link from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination room to link to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created opening item.</p>
     <h3>
       <a name="NewPortableItem" />NewPortableItem</h3>
     <p>Creates and initializes a portable item.</p>
@@ -2092,13 +2749,15 @@ function NewPortableItem(
     <p class="term">$adjectives</p>
     <p class="def">Space-separated adjectives used to refer to the item.</p>
     <p class="term">$noun</p>
-    <p class="def">Noun used to refer to the item.</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
     <p class="term">$loc</p>
     <p class="def">Initial location of the item, such as a room or container.</p>
     <h4>Return value</h4>
     <p>Returns the newly-created item.</p>
     <h3>
       <a name="NewTable" />NewTable</h3>
+    <p>Creates and initializes a table item.</p>
     <pre>include "Foundation.md";
 
 function NewTable(
@@ -2106,8 +2765,19 @@ function NewTable(
     $noun : String,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created table item.</p>
     <h3>
       <a name="NewWeapon" />NewWeapon</h3>
+    <p>Creates and initializes a weapon item.</p>
     <pre>include "Foundation-Combat.md";
 
 function NewWeapon(
@@ -2116,29 +2786,57 @@ function NewWeapon(
     $damage : Int,
     $loc : Item
     ) : Item;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="#Noun">Noun</a> used to refer to the item.</p>
+    <p class="term">$damage</p>
+    <p class="def">
+      <a href="#AttackDamage">AttackDamage</a> property of the weapon.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the weapon, such as a room or container.</p>
+    <h4>Return value</h4>
+    <p>Returns the newly-created item.</p>
     <h3>
       <a name="OnLightActivated" />OnLightActivated</h3>
+    <p>Called when a light source is activated (turned on or lit).</p>
     <pre>include "Foundation.md";
 
 function OnLightActivated(
     $lightSource : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$lightSource</p>
+    <p class="def">Light source item being activated.</p>
     <h3>
       <a name="OnMonsterAttacked" />OnMonsterAttacked</h3>
+    <p>
+      <a href="#OnAttackedAction">OnAttackedAction</a> implementation for a monster.</p>
     <pre>include "Foundation-Combat.md";
 
 function OnMonsterAttacked(
     $monster : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$monster</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="OnPlayerAttacked" />OnPlayerAttacked</h3>
+    <p>
+      <a href="#OnAttackedAction">OnAttackedAction</a> implementation for the player item. This causes the player to wake up if sleeping.</p>
     <pre>include "Foundation-Combat.md";
 
 function OnPlayerAttacked(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="Open" />Open</h3>
+    <p>Implements the "open" command.</p>
     <pre>include "Foundation.md";
 
 function Open(
@@ -2146,59 +2844,101 @@ function Open(
     );</pre>
     <h3>
       <a name="OpenContainer" />OpenContainer</h3>
+    <p>
+      <a href="#OpenAction">OpenAction</a> implementation for container items.</p>
     <pre>include "Foundation.md";
 
 function OpenContainer(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item on wich the <a href="#OpenAction">OpenAction</a> is invoked.</p>
     <h3>
       <a name="OpenDoor" />OpenDoor</h3>
+    <p>Implementation of the <a href="#OpenAction">OpenAction</a> for door items.</p>
     <pre>include "Foundation.md";
 
 function OpenDoor(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to open.</p>
     <h3>
       <a name="Opposite" />Opposite</h3>
+    <p>Returns the direction opposite the specified direction.</p>
     <pre>include "Foundation.md";
 
 function Opposite(
-    $fromValue : Direction
-    ) : Direction;</pre>
+    $fromValue : <a href="#Direction">Direction</a>
+    ) : <a href="#Direction">Direction</a>;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$fromValue</p>
+    <p class="def">Input direction.</p>
+    <h4>Return value</h4>
+    <p>Returns the direction opposite the input direction.</p>
     <h3>
       <a name="PutIn" />PutIn</h3>
+    <p>Puts the specified item in the specified target by invoking the target's <a href="#PutInAction">PutInAction</a>.</p>
     <pre>include "Foundation.md";
 
 function PutIn(
     $item : Item,
     $target : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to put in the target.</p>
+    <p class="term">$target</p>
+    <p class="def">Target to put the item in (e.g., a container).</p>
     <h3>
       <a name="PutInContainer" />PutInContainer</h3>
+    <p>
+      <a href="#PutInAction">PutInAction</a> implementation for containers.</p>
     <pre>include "Foundation.md";
 
 function PutInContainer(
     $item : Item,
     $container : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to put in the container.</p>
+    <p class="term">$container</p>
+    <p class="def">Target item on which the action is invoked.</p>
     <h3>
       <a name="PutOn" />PutOn</h3>
+    <p>Puts the specified item on the specified target by invoking the target's <a href="#PutOnAction">PutOnAction</a>.</p>
     <pre>include "Foundation.md";
 
 function PutOn(
     $item : Item,
     $target : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to put on the target.</p>
+    <p class="term">$target</p>
+    <p class="def">Target to put the item on (e.g., a table).</p>
     <h3>
       <a name="PutOnTable" />PutOnTable</h3>
+    <p>
+      <a href="#PutOnAction">PutOnAction</a> implementation for table items.</p>
     <pre>include "Foundation.md";
 
 function PutOnTable(
     $item : Item,
     $table : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item being put on the table.</p>
+    <p class="term">$table</p>
+    <p class="def">Target item the action is invoked on.</p>
     <h3>
       <a name="PutOut" />PutOut</h3>
+    <p>Implements the "put out" command.</p>
     <pre>include "Foundation.md";
 
 function PutOut(
@@ -2206,11 +2946,16 @@ function PutOut(
     );</pre>
     <h3>
       <a name="PutOutCandle" />PutOutCandle</h3>
+    <p>
+      <a href="#PutOutAction">PutOutAction</a> implementation for a candle-like light source.</p>
     <pre>include "Foundation.md";
 
 function PutOutCandle(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="RawMessage" />RawMessage</h3>
     <p>Outputs a message without normalizing white space.</p>
@@ -2222,20 +2967,32 @@ function PutOutCandle(
     <p class="def">Output string.</p>
     <h3>
       <a name="SetArmor" />SetArmor</h3>
+    <p>Set the current armor of the specified kind.</p>
     <pre>include "Foundation-Combat.md";
 
 function SetArmor(
-    $kind : ArmorKind,
+    $kind : <a href="#ArmorKind">ArmorKind</a>,
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$kind</p>
+    <p class="def">Kind of armor to set.</p>
+    <p class="term">$item</p>
+    <p class="def">Item to set, which can be null.</p>
     <h3>
       <a name="SetItemHealth" />SetItemHealth</h3>
+    <p>Initializes health-related properties of an inanimate item.</p>
     <pre>include "Foundation-Combat.md";
 
 function SetItemHealth(
     $item : Item,
     $health : Int
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$health</p>
+    <p class="def">Initial value of the <a href="#Health">Health</a> and <a href="#MaxHealth">MaxHealth</a> properties.</p>
     <h3>
       <a name="SetLabelProperties" />SetLabelProperties</h3>
     <p>Sets the adjectives and noun for an item, which together comprise its label.</p>
@@ -2250,32 +3007,48 @@ function SetLabelProperties(
     <p class="term">$item</p>
     <p class="def">Item to set properties of.</p>
     <p class="term">$adjectives</p>
-    <p class="def">New value of the Adjectives property.</p>
+    <p class="def">New value of the <a href="#Adjectives">Adjectives</a> property.</p>
     <p class="term">$noun</p>
-    <p class="def">New value of the Noun property.</p>
+    <p class="def">New value of the <a href="#Noun">Noun</a> property.</p>
     <h3>
       <a name="SetLink" />SetLink</h3>
+    <p>Sets the linked item for the specified item in the specified direction.</p>
     <pre>include "Foundation.md";
 
 function SetLink(
     $from : Item,
     $to : Item,
-    $dir : Direction
+    $dir : <a href="#Direction">Direction</a>
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source item being linked from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination item being linked to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
     <h3>
       <a name="SetPlayerDamageResistance" />SetPlayerDamageResistance</h3>
+    <p>Sets the player's <a href="#DamageResistance">DamageResistance</a> to a weighted average of the damage resistence for each piece of armor.</p>
     <pre>include "Foundation-Combat.md";
 
 function SetPlayerDamageResistance();</pre>
     <h3>
       <a name="Sleep" />Sleep</h3>
+    <p>Causes the player to sleep for the specified number of minutes or until the sleep is interrupted (i.e., if the player is attacked).</p>
     <pre>include "Foundation-Combat.md";
 
 function Sleep(
     $minutes : Int
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$minutes</p>
+    <p class="def">Number of minutes to sleep.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the player slept for the full duration, or false if the sleep was interrupted.</p>
     <h3>
       <a name="Take" />Take</h3>
+    <p>Implements the "take" command.</p>
     <pre>include "Foundation.md";
 
 function Take(
@@ -2283,14 +3056,20 @@ function Take(
     );</pre>
     <h3>
       <a name="TakeArmor" />TakeArmor</h3>
+    <p>
+      <a href="#TakeAction">TakeAction</a> implementation for armor items.</p>
     <pre>include "Foundation-Combat.md";
 
 function TakeArmor(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="TakePortableItem" />TakePortableItem</h3>
-    <p>TakeAction implementation for portable items.</p>
+    <p>
+      <a href="#TakeAction">TakeAction</a> implementation for portable items.</p>
     <pre>include "Foundation.md";
 
 function TakePortableItem(
@@ -2301,24 +3080,36 @@ function TakePortableItem(
     <p class="def">Item the action applies to.</p>
     <h3>
       <a name="TakeWeapon" />TakeWeapon</h3>
+    <p>
+      <a href="#TakeAction">TakeAction</a> for a weapon item.</p>
     <pre>include "Foundation-Combat.md";
 
 function TakeWeapon(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="Tick" />Tick</h3>
     <p>Causes a turn to pass.</p>
     <pre>function Tick();</pre>
     <h3>
       <a name="TryFollowPlayer" />TryFollowPlayer</h3>
+    <p>Helper function that may be used to implement the <a href="#UpdateAction">UpdateAction</a> for monsters and non-player characters. The function moves the monster to the player's location if the monster can follow the player.</p>
     <pre>include "Foundation-Combat.md";
 
 function TryFollowPlayer(
     $monster : Item
     ) : Bool;</pre>
+    <h4>Parameters</h4>
+    <p class="term">$monster</p>
+    <p class="def">Monster or non-player character.</p>
+    <h4>Return value</h4>
+    <p>Returns true if the monster moved, or false if not.</p>
     <h3>
       <a name="TurnOff" />TurnOff</h3>
+    <p>Implements the "turn off" command.</p>
     <pre>include "Foundation.md";
 
 function TurnOff(
@@ -2326,13 +3117,18 @@ function TurnOff(
     );</pre>
     <h3>
       <a name="TurnOffLight" />TurnOffLight</h3>
+    <p>TurnOfAction implementation for a light source that behaves like an electric light.</p>
     <pre>include "Foundation.md";
 
 function TurnOffLight(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="TurnOn" />TurnOn</h3>
+    <p>Implements the "turn on" command.</p>
     <pre>include "Foundation.md";
 
 function TurnOn(
@@ -2340,53 +3136,84 @@ function TurnOn(
     );</pre>
     <h3>
       <a name="TurnOnCandle" />TurnOnCandle</h3>
+    <p>
+      <a href="#TurnOnAction">TurnOnAction</a> implementation for a candle-like light source.</p>
     <pre>include "Foundation.md";
 
 function TurnOnCandle(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="TurnOnLight" />TurnOnLight</h3>
+    <p>
+      <a href="#TurnOnAction">TurnOnAction</a> implementation for a light source that behaves like an electric light.</p>
     <pre>include "Foundation.md";
 
 function TurnOnLight(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="UpdateFriendlyMonster" />UpdateFriendlyMonster</h3>
+    <p>
+      <a href="#UpdateAction">UpdateAction</a> implementation for a friendly monster, the behavior of which is to follow the player.</p>
     <pre>include "Foundation-Combat.md";
 
 function UpdateFriendlyMonster(
     $monster : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$monster</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="UpdateHostileMonster" />UpdateHostileMonster</h3>
+    <p>
+      <a href="#UpdateAction">UpdateAction</a> implementation for a monster in a hostile state.</p>
     <pre>include "Foundation-Combat.md";
 
 function UpdateHostileMonster(
     $monster : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$monster</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="UpdateItems" />UpdateItems</h3>
+    <p>Called each turn to invoke the <a href="#UpdateAction">UpdateAction</a> for each item.</p>
     <pre>include "Foundation-Combat.md";
 
 function UpdateItems();</pre>
     <h3>
       <a name="UpdatePlayer" />UpdatePlayer</h3>
+    <p>The <a href="#UpdateAction">UpdateAction</a> for the player is to heal one health unit.</p>
     <pre>include "Foundation-Combat.md";
 
 function UpdatePlayer(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="UpdateSurprisedMonster" />UpdateSurprisedMonster</h3>
+    <p>
+      <a href="#UpdateAction">UpdateAction</a> implementation for a monster that has not yet noticed the player. This is the typical initial state of a monster.</p>
     <pre>include "Foundation-Combat.md";
 
 function UpdateSurprisedMonster(
     $monster : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$monster</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="Use" />Use</h3>
+    <p>Implements the "use" command.</p>
     <pre>include "Foundation.md";
 
 function Use(
@@ -2394,41 +3221,72 @@ function Use(
     );</pre>
     <h3>
       <a name="UseBed" />UseBed</h3>
+    <p>
+      <a href="#UseAction">UseAction</a> implementation for a bed item.</p>
     <pre>include "Foundation-Combat.md";
 
 function UseBed(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
     <h3>
       <a name="UseKeyOn" />UseKeyOn</h3>
+    <p>
+      <a href="#UseOnAction">UseOnAction</a> implementation for key items.</p>
     <pre>include "Foundation.md";
 
 function UseKeyOn(
     $key : Item,
     $target : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$key</p>
+    <p class="def">
+      <a href="#Key">Key</a> item on which the <a href="#UseOnAction">UseOnAction</a> is invoked.</p>
+    <p class="term">$target</p>
+    <p class="def">Target item to use the key on.</p>
     <h3>
       <a name="UseLighterOn" />UseLighterOn</h3>
+    <p>
+      <a href="#UseOnAction">UseOnAction</a> implementation for a lighter item.</p>
     <pre>include "Foundation.md";
 
 function UseLighterOn(
     $item : Item,
     $target : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Lighter item the action is invoked on.</p>
+    <p class="term">$target</p>
+    <p class="def">Target item of the action.</p>
     <h3>
       <a name="UseOn" />UseOn</h3>
+    <p>Uses the specified item on the specified target by invoking the item's <a href="#UseOnAction">UseOnAction</a>.</p>
     <pre>include "Foundation.md";
 
 function UseOn(
     $item : Item,
     $target : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to use.</p>
+    <p class="term">$target</p>
+    <p class="def">Target item for the action.</p>
     <h3>
       <a name="UseWeapon" />UseWeapon</h3>
+    <p>
+      <a href="#UseAction">UseAction</a> for a weapon item. This selects the weapon as the current weapon.</p>
     <pre>include "Foundation-Combat.md";
 
 function UseWeapon(
     $item : Item
     );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
   </body>
 </html>

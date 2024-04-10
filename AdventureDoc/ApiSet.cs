@@ -62,14 +62,9 @@ namespace AdventureDoc
                 new Section("Functions", m_functions)
             };
 
-            foreach (var section in sections)
+            using (var writer = new HtmlWriter(fileName, sections))
             {
-                section.Pages.Sort();
-            }
-
-            using (var writer = new HtmlWriter(fileName))
-            {
-                writer.Write(sections);
+                writer.Write();
             }
         }
     }

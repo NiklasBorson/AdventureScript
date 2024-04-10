@@ -7,17 +7,22 @@ namespace AdventureDoc
         string? m_fileName;
         string m_description;
         string m_name;
+        bool m_isType;
 
-        public RefPage(Doc doc, string name)
+        protected RefPage(Doc doc, string name, bool isType)
         {
             m_fileName = Path.GetFileName(doc.SourcePos.FileName);
             m_description = doc.Description;
             m_name = name;
+            m_isType = isType;
         }
 
         public string? FileName => m_fileName;
         public string Description => m_description;
         public string Name => m_name;
+        public bool IsType => m_isType;
+
+        public RefPage? Next { get; set; }
 
         public int CompareTo(RefPage? other)
         {
@@ -36,7 +41,7 @@ namespace AdventureDoc
         FunctionDef m_def;
         FunctionInfo m_funcInfo;
 
-        public FunctionPage(Doc doc, FunctionDef def) : base(doc, def.Name)
+        public FunctionPage(Doc doc, FunctionDef def) : base(doc, def.Name, /*isType*/ false)
         {
             m_def = def;
             m_funcInfo = new FunctionInfo(doc, def.Name, def.ParamList, def.ReturnType);
@@ -58,7 +63,7 @@ namespace AdventureDoc
         DelegateTypeDef m_def;
         FunctionInfo m_funcInfo;
 
-        public DelegatePage(Doc doc, DelegateTypeDef def) : base(doc, def.Name)
+        public DelegatePage(Doc doc, DelegateTypeDef def) : base(doc, def.Name, /*isType*/ true)
         {
             m_def = def;
             m_funcInfo = new FunctionInfo(doc, def.Name, def.ParamList, def.ReturnType);
@@ -80,7 +85,7 @@ namespace AdventureDoc
         EnumTypeDef m_def;
         KeyValuePair<string, string>[]? m_members;
 
-        public EnumPage(Doc doc, EnumTypeDef def) : base(doc, def.Name)
+        public EnumPage(Doc doc, EnumTypeDef def) : base(doc, def.Name, /*isType*/ true)
         {
             m_def = def;
 
@@ -125,7 +130,7 @@ namespace AdventureDoc
             if (m_members != null)
             {
                 writer.BeginElement("h4");
-                writer.WriteString("Values");
+                writer.WriteRawString("Values");
                 writer.EndElement();
 
                 writer.WriteTermDefList(m_members);
@@ -137,7 +142,7 @@ namespace AdventureDoc
     {
         TypeDef m_typeDef;
 
-        public PropertyPage(Doc doc, string name, TypeDef typeDef) : base(doc, name)
+        public PropertyPage(Doc doc, string name, TypeDef typeDef) : base(doc, name, /*isType*/ false)
         {
             m_typeDef = typeDef;
         }
@@ -149,7 +154,7 @@ namespace AdventureDoc
     {
         TypeDef m_typeDef;
 
-        public VariablePage(Doc def, string name, TypeDef typeDef) : base(def, name)
+        public VariablePage(Doc def, string name, TypeDef typeDef) : base(def, name, /*isType*/ false)
         {
             m_typeDef = typeDef;
         }
@@ -161,7 +166,7 @@ namespace AdventureDoc
     {
         TypeDef m_typeDef;
 
-        public ConstantPage(Doc doc, string name, TypeDef typeDef) : base(doc, name)
+        public ConstantPage(Doc doc, string name, TypeDef typeDef) : base(doc, name, /*isType*/ false)
         {
             m_typeDef = typeDef;
         }

@@ -172,23 +172,23 @@ action.
 | `PutOnAction`             | `PutOn`           | "put (item) on (table)"       |
 
 ```text
-## Delegate invoked by "take" command.
+## Delegate invoked by Take function and "take" command.
 property TakeAction : ItemDelegate;
 
-## Delegate invoked by "drop" command.
+## Delegate invoked by the Drop function and "drop" command.
 property DropAction : ItemDelegate;
 
-## Delegate invoked by "use" command.
+## Delegate invoked by Use function and "use" command.
 property UseAction : ItemDelegate;
 
-## Delegate invoked by "use...on" command. The property
-## applies to the item being used.
+## Delegate invoked by UseOn function and "use...on" command.
+## The property applies to the item being used.
 property UseOnAction : Item2Delegate;
 
-## Delegate invoked by "open" command.
+## Delegate invoked by Open function and "open" command.
 property OpenAction : ItemDelegate;
 
-## Delgate invoked by "close" command.
+## Delgate invoked by Close function and "close" command.
 property CloseAction : ItemDelegate;
 
 ## Delegate invoked by the Describe function.
@@ -197,25 +197,25 @@ property DescribeAction : ItemDelegate;
 ## Delegate invoked to describe the health of an item.
 property DescribeHealthAction : ItemDelegate;
 
-## Delegate invoked by the "turn on" command.
+## Delegate invoked by the TurnOn function and "turn on" command.
 property TurnOnAction : ItemDelegate;
 
-## Delegate invoked by the "turn off" command.
+## Delegate invoked by the TurnOff function and "turn off" command.
 property TurnOffAction : ItemDelegate;
 
 ## Delegate invoked by the UseLighterOn function.
 property IgniteAction : ItemDelegate;
 
-## Delegate invoked by the "put out" command.
+## Delegate invoked by the PutOut function and "put out" command.
 property PutOutAction : ItemDelegate;
 
-## Delegate invoked by the "put...in" command. The property
-## applies to the container.
+## Delegate invoked by the PutIn function and "put...in" command.
+## The property applies to the target item (e.g., container).
 property PutInAction : Item2Delegate;
 
-## Delegate invoked by the "put..on" command. The property
-## applies to the table.
-property PutOnAction : Item2Delegate;   # applies to table
+## Delegate invoked by the PutOn function and "put..on" command.
+## The property applies to the target item (e.g., table).
+property PutOnAction : Item2Delegate;
 ```
 
 ## LeaveAction and EnterAction Properties
@@ -439,14 +439,24 @@ It is automatically incremented at the start of each turn. An `IsDark` predicate
 use the current time to determine if there is daylight.
 
 ```text
-var $currentTime = 11*60; # default initial time is 11am
+## Specifies the current time of day in the game, measured in minutes from midnight.
+## The default initial time is 11am.
+var $currentTime = 11*60;
 
+## Specifies the time of dawn (8am), in minutes from midnight.
 const $dawnTime = 8 * 60;   # 8:00 AM
+
+## Specifies the time of dusk (8pm), in minutes from midnight.
 const $duskTime = 20 * 60;  # 8:00 PM
+
+## Specifies the number of minutes per day (i.e., 24 * 60).
 const $minutesPerDay = 24 * 60;
 
+## Determines whether the current time is night (i.e., before dawn or after dusk).
+## $return: Returns true if it is night or false if it is day.
 function IsNight() => $currentTime < $dawnTime || $currentTime >= $duskTime;
 
+## Called once per turn to add one minute to the current time.
 function IncrementTime()
 {
     $currentTime = ($currentTime + 1) % $minutesPerDay;
@@ -469,10 +479,22 @@ Possible values of the `IsDark` property include the following functions:
 - `IsDarkAlways` returns true unconditionally.
 
 ```text
+## Predicate property that determines whether this room is currently dark. If this
+## method returns true, an active light source is needed to see in the room. Possible
+## values are IsDarkAtNight and IsDarkAlways. If this property is null then the room
+## is never dark.
 property IsDark : ItemPredicate;
 
+## Function that may be assigned to the IsDark property if a room is dark only at
+## night, e.g., if a room is outside or has windows.
+## $item: Room on which the predicate is invoked.
+## $return: Returns true if a light source is required to see in the room.
 function IsDarkAtNight($item:Item) => IsNight();
 
+## Function that may be assigned to the IsDark property if a room is always dark,
+## e.g., a windowless room.
+## $item: Room on which the predicate is invoked.
+## $return: Returns true if a light source is required to see in the room.
 function IsDarkAlways($item:Item) => true;
 ```
 
@@ -481,6 +503,9 @@ function IsDarkAlways($item:Item) => true;
 Helper functions in this section are used to determine if it is currently dark.
 
 ```text
+## Returns true if the specified light state is On or Lit.
+## $fromValue: Input value.
+## $return: Returns true if the input value is On or Lit.
 map IsActiveLightState LightState -> Bool {
     None -> false,
     Off -> false,
@@ -489,10 +514,15 @@ map IsActiveLightState LightState -> Bool {
     Lit -> true
 }
 
-# Called during turn initialization.
+## Set each turn by the InitializeLighting function, this variable specifies the light source
+## (if any) currently illuminating the room. This variable is null if no light source is needed.
 var $currentLightSource : Item = null;
+
+## Set each turn by the InitializeLighting function, this variable specifies whether it is
+## currently dark, i.e., the room is dark and there is no active light source.
 var $isNowDark = false;
 
+## Called each turn to initialize the $currentLightSource and $isNowDark variables.
 function InitializeLighting()
 {
     $currentLightSource = null;
@@ -526,6 +556,7 @@ Some possible examples:
 - lantern, _which is lit_
 
 ```text
+## Converts a LightState value to an adjective.
 map LightStateAdj LightState -> String {
     None -> "",
     Off -> "off",
@@ -534,6 +565,7 @@ map LightStateAdj LightState -> String {
     Lit -> "lit"
 }
 
+## Converts a DoorState value to an adjective.
 map DoorStateAdj DoorState -> String
 {
     None -> "",
@@ -542,13 +574,21 @@ map DoorStateAdj DoorState -> String
     Locked -> "closed"
 }
 
+## Adds a qualifier to the specified phrase if applicable based on the state of the item.
+## $item: Item to check the state of.
+## $phrase: Input phrase to qualify.
+## $return: Returns the qualified phrase, which may equal the input phrase.
 function AddStateQualifier($item:Item, $phrase:String) =>
     $item.DoorState != DoorState.None ? $"{DoorStateAdj($item.DoorState)} {$phrase}" :
     $item.LightState != LightState.None ? $"{$phrase}, which is {LightStateAdj($item.LightState)}" :
     $phrase;
 
+## Gets an item's label with a state qualifier (e.g., "open door").
+## $item: Item to get the label of.
 function LabelWithState($item:Item) => AddStateQualifier($item, Label($item));
 
+## Gets an item's italicized label with a state qualifier (e.g., "open _door_").
+## $item: Item to get the label of.
 function ItalicLabelWithState($item:Item) => AddStateQualifier($item, ItalicLabel($item));
 ```
 
@@ -558,6 +598,7 @@ The `Inventory` function lists items in the player's inventory. The associated c
 are `inventory` and `i`.
 
 ```text
+## Called by the "i" or "inventory" command to list the items in the player's inventory.
 function Inventory()
 {
     var $haveItems = false;
@@ -575,7 +616,6 @@ function Inventory()
         Message("There is nothing in your inventory.");
     }
 }
-
 ```
 
 ## Description Property
@@ -585,6 +625,8 @@ The `Description` is a string describing an item. The default behavior of the
 typically begins with "You are in...".
 
 ```text
+## Description of a room or other item. A room description typically begins with "You are in...".
+## A room description need not include doors or items that are enumerated automatically.
 property Description : String;
 ```
 
@@ -594,16 +636,23 @@ The optional `Image` property is the relative path of an image file to display a
 with the room or other item's description.
 
 ```text
+## Optional URL of an image file to be displayed along with the Description of a
+## room or other item.
 property Image : String;
 ```
 
 ## DrawAction Property
 
-The option `DrawAction` property draws an item and returns an integer identifier.
+The optional `DrawAction` property draws an item and returns an integer identifier.
 
 ```text
+## Delegate type for the DrawAction property.
+## $item: Room or other item on which the DrawAction is invoked.
+## $return: Drawing ID returned by the EndDrawing function.
 delegate DrawDelegate($item:Item) : Int;
 
+## Optional delegate that returns a vector drawing for a room or other item. Possible
+## values include DrawSquareRoom, DrawCircularRoom, etc.
 property DrawAction: DrawDelegate;
 ```
 
@@ -612,7 +661,8 @@ property DrawAction: DrawDelegate;
 This section contains internal helpers used to implement the Describe function.
 
 ```text
-# Default behavior of Describe if DescribeAction is not set
+## Default behavior of the Describe function if the DescribeAction property is not set.
+## $item: Item to describe.
 function DescribeCommon($item:Item)
 {
     if ($item.Description != null)
@@ -663,16 +713,36 @@ error message if the action property is null.
 | `Describe`        | `DescribeAction`          | "look at (item)"          |
 
 ```text
+## Implements the "take" command.
 function Take($item:Item) => InvokeItemAction($item.TakeAction, $item, "take");
+
+## Implements the "drop" command.
 function Drop($item:Item) => InvokeItemAction($item.DropAction, $item, "drop");
+
+## Implements the "use" command.
 function Use($item:Item) => InvokeItemAction($item.UseAction, $item, "use");
+
+## Implements the "open" command.
 function Open($item:Item) => InvokeItemAction($item.OpenAction, $item, "open");
+
+## Implements the "close" command.
 function Close($item:Item) => InvokeItemAction($item.CloseAction, $item, "close");
+
+## Implements the "turn on" command.
 function TurnOn($item:Item) => InvokeItemAction($item.TurnOnAction, $item, "turn on");
+
+## Implements the "turn off" command.
 function TurnOff($item:Item) => InvokeItemAction($item.TurnOffAction, $item, "turn off");
+
+## Implements the "put out" command.
 function PutOut($item:Item) => InvokeItemAction($item.PutOutAction, $item, "put out");
+
+## Outputs a description of the specified item, for example, in response to the "look" command.
 function Describe($item:Item) => InvokeItemActionWithFallback($item.DescribeAction, $item, DescribeCommon);
 
+## Uses the specified item on the specified target by invoking the item's UseOnAction.
+## $item: Item to use.
+## $target: Target item for the action.
 function UseOn($item:Item, $target:Item)
 {
     # The UseOnAction property applies to the item being used
@@ -686,6 +756,9 @@ function UseOn($item:Item, $target:Item)
     }
 }
 
+## Puts the specified item in the specified target by invoking the target's PutInAction.
+## $item: Item to put in the target.
+## $target: Target to put the item in (e.g., a container).
 function PutIn($item:Item, $target:Item)
 {
     # The PutInAction property applies to the target (container)
@@ -699,6 +772,9 @@ function PutIn($item:Item, $target:Item)
     }
 }
 
+## Puts the specified item on the specified target by invoking the target's PutOnAction.
+## $item: Item to put on the target.
+## $target: Target to put the item on (e.g., a table).
 function PutOn($item:Item, $target:Item)
 {
     # The PutOnAction property applies to the target (container)
@@ -719,6 +795,8 @@ The `Direction` type represents the possible directions a player can go. A direc
 may also be specified as a parameter when linking objects such as rooms and doors.
 
 ```text
+## Represents the possible directions a player can go. This parameter is specified
+## as a parameter when linking rooms with doors (e.g., with NewDoorItem).
 enum Direction(North,South,East,West,Up,Down);
 ```
 
@@ -727,6 +805,9 @@ enum Direction(North,South,East,West,Up,Down);
 The `Opposite` function returns the direction opposite to the specified direction.
 
 ```text
+## Returns the direction opposite the specified direction.
+## $fromValue: Input direction.
+## $return: Returns the direction opposite the input direction.
 map Opposite Direction -> Direction
 {
     North -> South,
@@ -744,6 +825,9 @@ The `DirectionPhrase` returns a phrase representing the specified direction, e.g
 "to the North" or "leading upward".
 
 ```text
+## Returns a phrase representing a direction.
+## $fromValue: Input direction.
+## $return: Returns a phrase such as "to the North" or "leading upward".
 map DirectionPhrase Direction -> String
 {
     North -> "to the North",
@@ -762,7 +846,23 @@ for each direction. A room links to a door item, which in turn links to the dest
 room.
 
 ```text
-property LinkN,LinkS,LinkE,LinkW,LinkU,LinkD : Item;
+## Specifies the linked item for Direction.North.
+property LinkN : Item;
+
+## Specifies the linked item for Direction.South.
+property LinkS : Item;
+
+## Specifies the linked item for Direction.East.
+property LinkE : Item;
+
+## Specifies the linked item for Direction.West.
+property LinkW : Item;
+
+## Specifies the linked item for Direction.Up.
+property LinkU : Item;
+
+## Specifies the linked item for Direction.Down.
+property LinkD : Item;
 ```
 
 ## GetLink and SetLink Functions
@@ -771,6 +871,10 @@ The `GetLink` and `SetLink` functions get and set the link property associated w
 the specified direction.
 
 ```text
+## Gets the linked item, if any, for the specified item in the specified direction.
+## $item: Item to get the linked item for.
+## $dir: Direction of the link.
+## $return: Returns the linked item in the specified direction, if any.
 function GetLink($item:Item, $dir:Direction) : Item
 {
     switch ($dir)
@@ -784,6 +888,10 @@ function GetLink($item:Item, $dir:Direction) : Item
     }
 }
 
+## Sets the linked item for the specified item in the specified direction.
+## $from: Source item being linked from.
+## $to: Destination item being linked to.
+## $dir: Direction of the link.
 function SetLink($from:Item, $to:Item, $dir:Direction) 
 {
     switch ($dir)
@@ -805,6 +913,8 @@ and close actions. The `IsOpenable` function tests whether an item supports the 
 action.
 
 ```text
+## Implementation of the OpenAction for door items.
+## $item: Item to open.
 function OpenDoor($item:Item)
 {
     switch ($item.DoorState)
@@ -824,6 +934,9 @@ function OpenDoor($item:Item)
         }
     }
 }
+
+## Implementation of the CloseAction for door items.
+## $item: Item to close.
 function CloseDoor($item:Item)
 {
     switch ($item.DoorState)
@@ -843,6 +956,9 @@ function CloseDoor($item:Item)
         }
     }
 }
+
+## Tests whether an item implements the OpenAction.
+## $return: Returns true if the item is openable, false if not.
 function IsOpenable($item:Item) => $item.OpenAction != null;
 ```
 
@@ -863,16 +979,37 @@ may be actual doors, which can be opened or closed, or mere openings.
 | `NewLink`             | Links two rooms with a new unnamed object.                    |
 
 ```text
+## Creates a one-way link from one room to another.
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $via: Intermediate item such as a door, opening, or path.
+## $dir: Direction of the link.
 function LinkRoomsOneWay($from:Item, $to:Item, $via:Item, $dir:Direction)
 {
     SetLink($from, $via, $dir);
     SetLink($via, $to, $dir);
 }
+
+## Creates a two-way link between rooms, that is, two one-way links in
+## opposite directions.
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $via: Intermediate item such as a door, opening, or path.
+## $dir: Direction of the link.
 function LinkRooms($from:Item, $to:Item, $via:Item, $dir:Direction)
 {
     LinkRoomsOneWay($from, $to, $via, $dir);
     LinkRoomsOneWay($to, $from, $via, Opposite($dir));
 }
+
+## Initializes the properties of a door item.
+## $door: Door item to the the properties of.
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $dir: Direction of the link.
+## $adjectives: Space-separated adjectives used to refer to the door.
+## $noun: Noun used to refer to the door.
+## $state: Initial state of the door.
 function InitializeDoor($door:Item, $from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState)
 {
     SetLabelProperties($door, $adjectives, $noun);
@@ -886,24 +1023,61 @@ function InitializeDoor($door:Item, $from:Item, $to:Item, $dir:Direction, $adjec
     
     LinkRooms($from, $to, $door, $dir);
 }
+
+## Creates and initializes a door item.
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $dir: Direction of the link.
+## $adjectives: Space-separated adjectives used to refer to the door.
+## $noun: Noun used to refer to the door.
+## $state: Initial state of the door.
+## $return: Returns the newly-created door item.
 function NewDoorItem($from:Item, $to:Item, $dir:Direction, $adjectives:String, $noun:String, $state:DoorState) : Item
 {
     $return = NewItem($"_{$noun}_{$from}{$to}");
     InitializeDoor($return, $from, $to, $dir, $adjectives, $noun, $state);
 }
+
+## Creates and initializes a door item in the Closed state.
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $dir: Direction of the link.
+## $return: Returns the newly-created door item.
 function NewClosedDoor($from:Item, $to:Item, $dir:Direction) : Item
 {
     return NewDoorItem($from, $to, $dir, "", "door", DoorState.Closed);
 }
+
+## Creates and initializes a door item in the Locked state.
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $dir: Direction of the link.
+## $key: Item used to unlock the door (see NewKey or InitializeKey).
+## $return: Returns the newly-created door item.
 function NewLockedDoor($from:Item, $to:Item, $dir:Direction, $key:Item) : Item
 {
     $return = NewDoorItem($from, $to, $dir, "", "door", DoorState.Locked);
     $return.Key = $key;
 }
+
+## Creates and initializes an "opening" between rooms.
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $dir: Direction of the link.
+## $return: Returns the newly-created opening item.
 function NewOpening($from:Item, $to:Item, $dir:Direction) : Item
 {
     return NewDoorItem($from, $to, $dir, "", "opening", DoorState.None);
 }
+
+## Creates and initializes an unnamed link between rooms. The link object does
+## not have a noun so is not automatically enumerated by the Describe function.
+## The room's Description property may therefore need to explicitly mention the
+## link, e.g., "You are in a clearing with a path to the north."
+## $from: Source room to link from.
+## $to: Destination room to link to.
+## $dir: Direction of the link.
+## $return: Returns the newly-created unnamed link item.
 function NewLink($from:Item, $to:Item, $dir:Direction) : Item
 {
     return NewDoorItem($from, $to, $dir, "", "", DoorState.None);
@@ -915,7 +1089,9 @@ function NewLink($from:Item, $to:Item, $dir:Direction) : Item
 This section contains internal functions related to keys.
 
 ```text
-# UseOn action for keys
+## UseOnAction implementation for key items.
+## $key: Key item on which the UseOnAction is invoked.
+## $target: Target item to use the key on.
 function UseKeyOn($key:Item, $target:Item)
 {
     if ($target.Key == $key && $target.DoorState != DoorState.None)
@@ -947,17 +1123,31 @@ The `NewKey` function creates and initializes a new key item.
 The `IsKey` function tests whether a specified item is a key.
 
 ```text
+## Initializes the properties of a key item.
+## $key: Item to initialize.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
 function InitializeKey($key:Item, $adjectives:String, $noun:String, $loc:Item)
 {
     InitializePortableItem($key, $adjectives, $noun, $loc);
     $key.UseOnAction = UseKeyOn;
 }
+
+## Creates and initializes a key item.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
+## $return: Returns the newly-created key item.
 function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
 {
-    var $key = NewItem($"_{$noun}_{$loc}");
-    InitializeKey($key, $adjectives, $noun, $loc);
-    return $key;
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeKey($return, $adjectives, $noun, $loc);
 }
+
+## Tests whether an item is a key.
+## $item: Item to test.
+## $return: Returns true if and only the item's UseOnAction is UseKeyOn.
 function IsKey($item:Item) => $item.UseOnAction == UseKeyOn;
 ```
 
@@ -978,6 +1168,8 @@ The `IsOpenContainer` function tests whether the specified item is a container t
 not closed or locked.
 
 ```text
+## Outputs a list of items in a container.
+## $container: Container item to list the contents of.
 function ListContainerContents($container:Item)
 {
     var $haveItems = false;
@@ -996,6 +1188,8 @@ function ListContainerContents($container:Item)
     }
 }
 
+## OpenAction implementation for container items.
+## $item: Item on wich the OpenAction is invoked.
 function OpenContainer($item:Item)
 {
     switch ($item.DoorState)
@@ -1017,6 +1211,8 @@ function OpenContainer($item:Item)
     }
 }
 
+## DescribeAction implementation for container items.
+## $container: Item on which the DescribeAction is invoked.
 function DescribeContainer($container:Item)
 {
     # Output basic description, including the door state.
@@ -1028,7 +1224,9 @@ function DescribeContainer($container:Item)
     }
 }
 
-# PutInAction implementation for containers
+## PutInAction implementation for containers.
+## $item: Item to put in the container.
+## $container: Target item on which the action is invoked.
 function PutInContainer($item:Item, $container:Item)
 {
     if (!IsPortable($item))
@@ -1050,6 +1248,12 @@ function PutInContainer($item:Item, $container:Item)
     }
 }
 
+## Initializes the properties of a container item.
+## $container: Item to initialize.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $state: Initial state of the container, such as Closed or Locked.
+## $loc: Initial location of the item, such as a room.
 function InitializeContainer(
     $container:Item,
     $adjectives:String,
@@ -1067,6 +1271,12 @@ function InitializeContainer(
     $container.Location = $loc;
 }
 
+## Creates and initializes a container item.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $state: Initial state of the container, such as Closed or Locked.
+## $loc: Initial location of the item, such as a room.
+## $return: Returns the newly-created container item.
 function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:Item) : Item
 {
     var $container = NewItem($"_{$noun}_{$loc}");
@@ -1074,8 +1284,14 @@ function NewContainer($adjectives:String, $noun:String, $state:DoorState, $loc:I
     return $container;    
 }
 
+## Tests whether an item is a container.
+## $item: Item to test.
+## $return: Returns true if the item implements the PutInAction.
 function IsContainer($item:Item) => $item.PutInAction != null;
 
+## Tests whether an item is an open container.
+## $item: Item to test.
+## $return: Returns true if the item is a container which is not closed or locked.
 function IsOpenContainer($item:Item) =>
     IsContainer($item) &&
     !IsClosedOrLocked($item.DoorState);
@@ -1094,6 +1310,8 @@ The `NewTable` function creates and initializes a new table item.
 The `IsTable` function tests whether the specified item is a table.
 
 ```text
+## DescribeAction implementation for table items.
+## $table: Item the action is invoked on.
 function DescribeTable($table:Item)
 {
     # Output basic description.
@@ -1111,7 +1329,9 @@ function DescribeTable($table:Item)
     }
 }
 
-# PutOnAction implementation for table items
+## PutOnAction implementation for table items.
+## $item: Item being put on the table.
+## $table: Target item the action is invoked on.
 function PutOnTable($item:Item, $table:Item)
 {
     if (!IsPortable($item))
@@ -1129,6 +1349,11 @@ function PutOnTable($item:Item, $table:Item)
     }
 }
 
+## Initializes the properties of a table item.
+## $table: Item to be initialized.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room.
 function InitializeTable(
     $table:Item,
     $adjectives:String,
@@ -1142,12 +1367,20 @@ function InitializeTable(
     $table.Location = $loc;
 }
 
+## Creates and initializes a table item.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room.
+## $return: Returns the newly-created table item.
 function NewTable($adjectives:String, $noun:String, $loc:Item) : Item
 {
     $return = NewItem($"_{$noun}_{$loc}");
     InitializeTable($return, $adjectives, $noun, $loc);
 }
 
+## Tests whether an item is a table.
+## $item: Item to test.
+## $return: Returns true if the PutOnAction is implemented for the item.
 function IsTable($item:Item) => $item.PutOnAction != null;
 ```
 
@@ -1156,6 +1389,8 @@ function IsTable($item:Item) => $item.PutOnAction != null;
 The `Look` function describes the current room and its contents.
 
 ```text
+## Called by the "look" command to output a description of the current
+## room and its contents.
 function Look()
 {
     var $room = player.Location;
@@ -1219,6 +1454,8 @@ function Look()
 The section contains internal helpers used to implement lighting.
 
 ```text
+## Called when a light source is activated (turned on or lit).
+## $lightSource: Light source item being activated.
 function OnLightActivated($lightSource:Item)
 {
     if ($isNowDark)
@@ -1229,7 +1466,9 @@ function OnLightActivated($lightSource:Item)
     }
 }
 
-# TurnOnAction for a light source that behaves like an electric light
+## TurnOnAction implementation for a light source that behaves like
+## an electric light.
+## $item: Item the action is invoked on.
 function TurnOnLight($item:Item)
 {
     if ($item.LightState != LightState.On)
@@ -1243,7 +1482,10 @@ function TurnOnLight($item:Item)
         Message($"The {Label($item)} is already on.");
     }
 }
-# TurnOfAction for a light source that behaves like an electric light
+
+## TurnOfAction implementation for a light source that behaves like
+## an electric light.
+## $item: Item the action is invoked on.
 function TurnOffLight($item:Item)
 {
     if ($item.LightState == LightState.On)
@@ -1256,12 +1498,16 @@ function TurnOffLight($item:Item)
         Message($"The {Label($item)} is already off.");
     }
 }
-# TurnOnAction for a candle-like light source
+
+## TurnOnAction implementation for a candle-like light source.
+## $item: Item the action is invoked on.
 function TurnOnCandle($item:Item)
 {
     Message($"You can't turn on the {Label($item)}. You need to light it with something.");
 }
-# IgniteAction for a candle-like light source
+
+## IgniteAction implementation for a candle-like light source.
+## $item: Item the action is invoked on.
 function IgniteCandle($item:Item)
 {
     if ($item.LightState != LightState.Lit)
@@ -1275,7 +1521,9 @@ function IgniteCandle($item:Item)
         Message($"The {Label($item)} is already lit.");
     }
 }
-# PutOutAction for a candle-like light source
+
+## PutOutAction implementation for a candle-like light source.
+## $item: Item the action is invoked on.
 function PutOutCandle($item:Item)
 {
     if ($item.LightState == LightState.Lit)
@@ -1288,7 +1536,10 @@ function PutOutCandle($item:Item)
         Message($"The {Label($item)} is already out.");
     }
 }
-# UseAction for a lighter item
+
+## UseOnAction implementation for a lighter item.
+## $item: Lighter item the action is invoked on.
+## $target: Target item of the action.
 function UseLighterOn($item:Item, $target:Item)
 {
     if ($target.IgniteAction != null)
@@ -1314,6 +1565,11 @@ The `NewLight` function creates and initializes a new light item.
 The `IsLight` function tests whether an item is a light.
 
 ```text
+## Initializes the properties of a light source that behaves like an electric light.
+## $item: Item to initialize.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
 function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
     InitializePortableItem($item, $adjectives, $noun, $loc);
@@ -1322,12 +1578,22 @@ function InitializeLight($item:Item, $adjectives:String, $noun:String, $loc:Item
     $item.TurnOffAction = TurnOffLight;
     $item.PutOutAction = TurnOffLight;
 }
+
+## Creates and initializes a light source that behaves like an electric light.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
+## $return: Returns the newly-created light source item.
 function NewLight($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeLight($item, $adjectives, $noun, $loc);
     return $item;
 }
+
+## Tests if an item is a light.
+## $item: Item to test.
+## $return: Returns true if the item is a light source that can be turned on like an electric light.
 function IsLight($item:Item) => $item.TurnOnAction == TurnOnLight;
 ```
 
@@ -1344,6 +1610,11 @@ The `NewCandle` function creates and initializes a new candle item.
 The `IsCandle` function tests whether an item is a candle.
 
 ```text
+## Initializes the properties of a light source that behaves like a candle.
+## $item: Item to initialize.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
 function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
     InitializePortableItem($item, $adjectives, $noun, $loc);
@@ -1353,12 +1624,22 @@ function InitializeCandle($item:Item, $adjectives:String, $noun:String, $loc:Ite
     $item.TurnOffAction = PutOutCandle; # sets to LightState.Unlit
     $item.PutOutAction = PutOutCandle;  # sets to LightState.Unlit
 }
+
+## Creates and initializes a light source that behaves like a candle.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
+## $return: Returns the newly-created light source item.
 function NewCandle($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeCandle($item, $adjectives, $noun, $loc);
     return $item;
 }
+
+## Tests if the item is a candle.
+## $item: Item to test.
+## $return: Returns true if the item is a light source that behaves like a candle.
 function IsCandle($item:Item) => $item.TurnOnAction == TurnOnCandle;
 ```
 
@@ -1374,19 +1655,37 @@ The `NewLighter` function creates and initializes a new lighter item.
 The `IsLighter` function tests whether an item is a lighter.
 
 ```text
+## Initializes the properties of a lighter item.
+## $item: Item to initialize.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
 function InitializeLighter($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
     InitializePortableItem($item, $adjectives, $noun, $loc);
     $item.UseOnAction = UseLighterOn;
 }
+
+## Creates and initializes a lighter item.
+## $adjectives: Space-separated adjectives used to refer to the item.
+## $noun: Noun used to refer to the item.
+## $loc: Initial location of the item, such as a room or container.
+## $return: Returns the newly-created item.
 function NewLighter($adjectives:String, $noun:String, $loc:Item) : Item
 {
     var $item = NewItem($"_{$noun}_{$loc}");
     InitializeLighter($item, $adjectives, $noun, $loc);
     return $item;
 }
+
+## Tests if an item is a lighter.
+## $item: Item to test.
+## $return: Returns true if the item can be used like a lighter.
 function IsLighter($item:Item) => $item.UseOnAction == UseLighterOn;
 
+## Implementation of the "light...with" command.
+## $target: Target item to light.
+## $lighter: Lighter item.
 function LightWith($target:Item, $lighter:Item)
 {
     if (IsLighter($lighter))
@@ -1405,8 +1704,12 @@ function LightWith($target:Item, $lighter:Item)
 The `Go` function navigates in the specified direction.
 
 ```text
+## Player location before the most recent navigation.
 var $lastRoom : Item;
 
+## Moves the player in the specified direction if possible. Used to
+## implement the "go", "n", "s", "e", "w", "up", and "down" commands.
+## $dir: Direction to move.
 function Go($dir:Direction)
 {
     var $source = player.Location;
@@ -1452,12 +1755,16 @@ function Go($dir:Direction)
 This section contains internal functions that are called during turn initialization.
 
 ```text
+## Called by InitializeWordMap to add nouns and adjectives for the specified item.
+## This enables the player to refer to the item via commands.
+## $item: Item to add nouns and adjectives for.
 function AddItemWords($item:Item)
 {
     AddAdjectives($item.Adjectives, $item);
     AddNoun($item.Noun, $item);
 }
 
+## Called each turn to add nouns and adjectives for all accessible items.
 function InitializeWordMap()
 {
     if ($isNowDark)
@@ -1521,9 +1828,19 @@ implement the above functions or could be used to implement game-specific
 drawing functions.
 
 ```text
-const $colorWhite = 0xffffffff; # argb
-const $colorBlack = 0xff000000; # argb
+## White color in ARGB format (0xffffffff).
+const $colorWhite = 0xffffffff;
 
+## Black color in ARGB format (0xff000000).
+const $colorBlack = 0xff000000;
+
+## Draws doors and openings for the specified room.
+## $room: Room to draw doors and openings for.
+## $left: Left coordinate of the room.
+## $top: Top coordinate of the room.
+## $width: Width of the room.
+## $height: Height of the room.
+## $backColor: Background (floor) color of the room.
 function DrawDoors(
     $room:Item,
     $left:Int,
@@ -1625,6 +1942,13 @@ function DrawDoors(
     }
 }
 
+## Draws a rectangular room and returns its drawing ID.
+## $room: Room to draw.
+## $width: Width of the drawing.
+## $height: Height of the drawing.
+## $wallColor: Color used for walls (e.g., $colorBlack).
+## $backColor: Background color used for the floor (e.g., $colorWhite).
+## $return: Returns the drawing ID.
 function DrawRectangularRoom(
     $room:Item,
     $width:Int,
@@ -1641,6 +1965,11 @@ function DrawRectangularRoom(
     return EndDrawing();
 }
 
+## Draws an eliptical room and returns its drawing ID.
+## $room: Room to draw.
+## $width: Width of the drawing.
+## $height: Height of the drawing.
+## $return: Returns the drawing ID.
 function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
 {
     BeginDrawing($width, $height);
@@ -1651,26 +1980,41 @@ function DrawEllipticalRoom($room:Item, $width:Int, $height:Int) : Int
     return EndDrawing();
 }
 
+## DrawAction implementation that draws a 200x200 square room.
+## $room: Room to draw.
+## $return: Returns the drawing ID.
 function DrawSquareRoom($room:Item) : Int
 {
     return DrawRectangularRoom($room, 200, 200, $colorBlack, $colorWhite);
 }
 
+## DrawAction implementation that draws a 200x100 rectangular room.
+## $room: Room to draw.
+## $return: Returns the drawing ID.
 function DrawRoom_200x100($room:Item) : Int
 {
     return DrawRectangularRoom($room, 200, 100, $colorBlack, $colorWhite);
 }
 
+## DrawAction implementation that draws a 100x200 rectangular room.
+## $room: Room to draw.
+## $return: Returns the drawing ID.
 function DrawRoom_100x200($room:Item) : Int
 {
     return DrawRectangularRoom($room, 100, 200, $colorBlack, $colorWhite);
 }
 
+## DrawAction implementation that draws a 300x150 rectangular room.
+## $room: Room to draw.
+## $return: Returns the drawing ID.
 function DrawRoom_300x150($room:Item) : Int
 {
     return DrawRectangularRoom($room, 300, 150, $colorBlack, $colorWhite);
 }
 
+## DrawAction implementation that draws a round room with a 200px diameter.
+## $room: Room to draw.
+## $return: Returns the drawing ID.
 function DrawRoundRoom($room:Item) : Int
 {
     return DrawEllipticalRoom($room, 200, 200);
