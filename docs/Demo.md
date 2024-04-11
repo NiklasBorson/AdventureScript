@@ -17,7 +17,7 @@ Each game subdirectory has the following contents:
 This document describes the Demo game, which is in the `Demo` subdirectory under
 the `Games` directory.
 
-The [adventure.txt](http://github.com/NiklasBorson/AdventureScript/Games/Demo/adventure.txt)
+The [adventure.txt](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt)
 file for the Demo game contains the complete definition with comments. This document
 provides a more detailed explanation of selected elements of the game.
 
