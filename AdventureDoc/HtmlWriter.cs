@@ -135,6 +135,13 @@ namespace AdventureDoc
             WriteParagraph(page.Doc.Description);
 
             BeginElement("pre");
+
+            string includeFileName = page.Doc.Module.SourceFileName;
+            if (includeFileName != "")
+            {
+                WriteRawString($"include \"{includeFileName}\";\n\n");
+            }
+
             WriteString(page.GetSyntax(), /*linkTypesOnly*/ true);
             EndElement(); // </pre>
 

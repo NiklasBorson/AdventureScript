@@ -7,7 +7,9 @@
   <body>
     <h1>NewLink Function</h1>
     <p>Creates and initializes an unnamed link between rooms. The link object does not have a noun so is not automatically enumerated by the <a href="Describe-Function.html">Describe</a> function. The room's <a href="Description-Property.html">Description</a> property may therefore need to explicitly mention the link, e.g., "You are in a clearing with a path to the north."</p>
-    <pre>function NewLink(
+    <pre>include "Foundation.md";
+
+function NewLink(
     $from : Item,
     $to : Item,
     $dir : <a href="Direction-Enum.html">Direction</a>

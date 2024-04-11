@@ -7,7 +7,9 @@
   <body>
     <h1>TryFollowPlayer Function</h1>
     <p>Helper function that may be used to implement the <a href="UpdateAction-Property.html">UpdateAction</a> for monsters and non-player characters. The function moves the monster to the player's location if the monster can follow the player.</p>
-    <pre>function TryFollowPlayer(
+    <pre>include "Foundation-Combat.md";
+
+function TryFollowPlayer(
     $monster : Item
     ) : Bool;</pre>
     <h4>Parameters</h4>
