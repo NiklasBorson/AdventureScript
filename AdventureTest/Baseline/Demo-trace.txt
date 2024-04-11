@@ -1,5 +1,5 @@
 # Demo Adventure
-You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/Docs/Demo.md) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.
+You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://niklasborson.github.io/AdventureScript/Demo.html) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.
 # Game Description
 The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.
 > e

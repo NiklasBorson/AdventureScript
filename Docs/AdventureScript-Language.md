@@ -4,20 +4,24 @@ The AdventureScript language is a scripting language designed for implementing
 text adventure games. This document describes the syntax and core concepts of
 the AdventureScript language.
 
-See [Demo Adventure](Demo.md) to learn how to use AdventureScript to create a
-simple "Demo" adventure game.
+## Related Topics
 
-See [AdventureScript API](ApiRef/index.html) for documentation of all the types,
-properties, variables, constants, and functions in the AdventureScript language
-and its foundation library. Following are links to the foundation library source
-code, which is in Markdown format:
+[Demo Adventure](Demo.md) describes the implementation of an sample "Demo" game
+written in AdventureScript.
 
-- [Core library (Foundation.md)](../Games/inc/Foundation.md)
-- [Combat library (Foundation-Combat.md)](../Games/inc/Foundation-Combat.md)
-- [Debug library (Foundation_Debug.md)](../Games/inc/Foundation-Debug.md)
+[AdventureScript API](ApiRef/index.html) is a reference to all of the APIs (functions,
+properties, etc.) implemented by the AdventureScript Foundation Library, as well as
+intrinsic APIs implemented by the game engine.
 
-See [AdventureScript Grammar](AdventureScript-Grammar.md) for a formal description
-of the AdventureScript language's grammar.
+Following are links to the foundation library source code, which is in Markdown
+format:
+
+- [Core library (Foundation.md)](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation.md)
+- [Combat library (Foundation-Combat.md)](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation-Combat.md)
+- [Debug library (Foundation_Debug.md)](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation-Debug.md)
+
+[AdventureScript Grammar](AdventureScript-Grammar.md) gives a formal description of
+the AdventureScript language's grammar.
 
 ## Core Concepts
 

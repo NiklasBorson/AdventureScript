@@ -3,6 +3,10 @@
 AdventureScript is a scripting language and interpreter designed for implementing text
 adventure games.
 
+## Documentation
+
+[AdventureScript Documentation](https://niklasborson.github.io/AdventureScript)
+
 ## Organization of this Project
 
 This repo contains the following subdirectories:
@@ -20,8 +24,10 @@ This repo contains the following subdirectories:
 
 - **AdventureTest** implements a set of tests for the game engine and for games.
 
-- **Docs** contains a walkthrough of the [Demo](Docs/Demo.md) game as well as reference
-  documentation for the [AdventureScript Language](Docs/AdventureScript-Language.md).
+- **AdventureDoc** implements a tool to generate HTML reference documentation from
+  AdvenureScript source code.
+
+- **docs** contains the sources for the AdventureScript Documentation linked above.
 
 ## Contributions
 

@@ -17,9 +17,9 @@ Each game subdirectory has the following contents:
 This document describes the Demo game, which is in the `Demo` subdirectory under
 the `Games` directory.
 
-The [adventure.txt](../Games/Demo/adventure.txt) file for the Demo game contains
-the complete definition with comments. This document provides a more detailed
-explanation of selected elements of the game.
+The [adventure.txt](http://github.com/NiklasBorson/AdventureScript/Games/Demo/adventure.txt)
+file for the Demo game contains the complete definition with comments. This document
+provides a more detailed explanation of selected elements of the game.
 
 The goal of the Demo game is to get out of a house. To do so, you must find the key
 to the front door, which is in the garage. However, to get to the garage you must
@@ -44,15 +44,18 @@ include "../inc/Foundation-Combat.md";
 The library files are in the `inc` subdirectory under `Games`, so the relative path
 from the `Demo` directory begins with "../inc".
 
-[Foundation-Debug.md](../Games/inc/Foundation-Debug.md) is an optional module that
-defines commands useful when debugging and testing your game.
+- [Foundation-Debug.md](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation-Debug.md)
+  is an optional module that defines commands useful when debugging and testing your game.
+- [Foundation.md](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation.md)
+  is the core module of the AdventureScript Foundation Library. It defines basic things
+  like rooms, doors, keys, containers, lighting, and navigation commands.
+- [Foundation-Combat.md](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation-Combat.md)
+  is an optiona module that implements a simple combat system. It defines weapons, armor,
+  and monsters.
 
-[Foundation.md](../Games/inc/Foundation.md) is the core module of the AdventureScript
-Foundation Library. It defines basic things like rooms, doors, keys, containers,
-lighting, and navigation commands.
-
-[Foundation-Combat.md](../Games/inc/Foundation-Combat.md) is an optiona module that
-implements a simple combat system. It defines weapons, armor, and monsters.
+See [AdventureScript API](https://niklasborson.github.io/AdventureScript/ApiRef/index.html)
+for a reference to all of the foundation library APIs (functions, properties, etc.) as well
+as intrinsic APIs implemented by the game engine.
 
 ## Items and Properties
 
