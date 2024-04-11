@@ -252,6 +252,25 @@ function Build-AdventureScript {
 }
 Set-Alias build Build-AdventureScript
 
+function Get-PackageForArch([string] $arch) {
+    $bestDate = [DateTime]0
+    $bestMatch = $null
+
+    Get-ChildItem -Recurse -Path (Join-Path $PSScriptRoot 'OxbowCastle' "*$arch.msix") | ForEach-Object {
+        if ($_.CreationTimeUtc -gt $bestDate) {
+            $bestDate = $_.CreationTime
+            $bestMatch = $_.FullName
+        }
+    }
+
+    Write-Output $bestMatch
+}
+
+function Get-Packages {
+    Get-PackageForArch 'x64'
+    Get-PackageForArch 'arm64'
+}
+
 <#
 .SYNOPSIS
 Get a list of functions exported by the Adventure-Helpers module.
@@ -289,4 +308,5 @@ Export-ModuleMember -Function Build-AllGames
 Export-ModuleMember -Function Build-GameTrace
 Export-ModuleMember -Function Build-Docs
 Export-ModuleMember -Function Build-AdventureScript -Alias build
+Export-ModuleMember -Function Get-Packages
 Export-ModuleMember -Function Get-AdventureHelp
