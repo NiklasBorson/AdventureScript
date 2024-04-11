@@ -161,7 +161,7 @@ game
         );
     Message(
         "You can use this simple game as an example to write your own games in AdventureScript. See "
-        "[Demo Adventure](https://github.com/NiklasBorson/AdventureScript/blob/main/docs/Demo.md) "
+        "[Demo Adventure](https://niklasborson.github.io/AdventureScript/Demo.html) "
         "for an overview of how the Demo game is implemented. See "
         "[Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) "
         "to see the complete source code for the Demo game."
