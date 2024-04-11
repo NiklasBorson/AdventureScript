@@ -12,9 +12,11 @@ behavior for "active" items like monsters and non-player characters.
 ```text
 ## Delegate invoked each turn for each item. Can be used to implement
 ## behavior for monsters, non-player characters, etc.
+## @UpdateItems,UpdatePlayer,UpdateSurprisedMonster,UpdateHostileMonster,UpdateFriendlyMonster
 property UpdateAction : ItemDelegate;
 
 ## Called each turn to invoke the UpdateAction for each item.
+## @UpdateAction
 function UpdateItems()
 {
     foreach (var $item)
@@ -39,6 +41,7 @@ a chance to respond, e.g., by changing its behavior.
 ## or non-player character might change its behavior (e.g., become more hostile)
 ## when this action is invoked. Changing behavior can be implemented by setting
 ## the UpdateAction to a different function.
+## @OnMonsterAttacked,OnPlayerAttacked
 property OnAttackedAction : ItemDelegate;
 ```
 
@@ -52,9 +55,11 @@ to damage.
 
 ```text
 ## Health of a player, non-player character, or other item.
+## @SetItemHealth,MaxHealth
 property Health : Int;
 
 ## Maximum health of an item. The relative health is the ratio of Health to MaxHealth.
+## @SetItemHealth,Health
 property MaxHealth : Int;
 ```
 
@@ -67,6 +72,7 @@ thing being attacked.
 ```text
 ## Specifies the nominal amount of damage inflicted by a weapon or monster.
 ## This may be adjusted by the damage resistence of the thing being attacked.
+## @DamageResistance,ComputeDamage
 property AttackDamage : Int;
 ```
 
@@ -84,6 +90,7 @@ is reduced proportionally).
 ## Specifies how much the target of an attack resists damage. The ComputeDamage
 ## function uses AttackDamage of the attacker and the DamageResistance of the
 ## target to compute the actual damage.
+## @AttackDamage,ComputeDamage
 property DamageResistance : Int;
 ```
 
@@ -98,6 +105,7 @@ the target.
 ## $attackDamage: AttackDamage property of the attacker or weapon.
 ## $damageResistance: DamageResistance property of the target.
 ## $return: Returns the actual damage inflicted.
+## @AttackDamage,DamageResistance
 function ComputeDamage($attackDamage:Int, $damageResistance:Int) : Int
 {
     # Compute absolute reduction.
@@ -118,6 +126,7 @@ DescribeHealthAction delegate.
 ```text
 ## DescribeHealthAction implementation suitable for inaninate objects.
 ## $item: Item to describe the health of.
+## @DescribeHealthAction,DescribeCreatureHealth,DescribePlayerHealth
 function DescribeItemHealth($item:Item)
 {
     if ($item.MaxHealth > 0)
@@ -154,6 +163,7 @@ function DescribeItemHealth($item:Item)
 
 ## DescribeHealthAction implementation suitable for monsters, NPCs, etc.
 ## $item: Item to describe the health of.
+## @DescribeHealthAction,DescribeItemHealth,DescribePlayerHealth
 function DescribeCreatureHealth($item:Item)
 {
     if ($item.MaxHealth > 0)
@@ -190,6 +200,7 @@ function DescribeCreatureHealth($item:Item)
 
 ## DescribeHealthAction implementation for the player.
 ## $item: Item to describe the health of.
+## @DescribeHealthAction,DescribeItemHealth,DescribeCreatureHealth
 function DescribePlayerHealth($item:Item)
 {
     if ($item.MaxHealth != 0)
@@ -225,6 +236,7 @@ function DescribePlayerHealth($item:Item)
 
 ## The UpdateAction for the player is to heal one health unit.
 ## $item: Item the action is invoked on.
+## @UpdateAction,Health,MaxHealth
 function UpdatePlayer($item:Item)
 {
     if ($item.Health < $item.MaxHealth)
@@ -254,6 +266,7 @@ The `SetItemHealth` function sets an inanimate item's `Health`, `MaxHealth`, and
 ## Initializes health-related properties of an inanimate item.
 ## $item: Item to initialize.
 ## $health: Initial value of the Health and MaxHealth properties.
+## @InitializeMonster,NewMonster
 function SetItemHealth($item:Item, $health:Int)
 {
     $item.Health = $health;
@@ -270,6 +283,7 @@ character.
 ```text
 ## Specifies the current weapon of the player, which is the default weapon
 ## used by the "attack" command.
+## @InitializeWeapon,NewWeapon
 property CurrentWeapon : Item;
 ```
 
@@ -285,9 +299,11 @@ value is None.
 ## Head: Head armor, such as a helmet.
 ## Torso: Body armor, such as a mail shirt.
 ## Leg: Leg armor.
+## @ArmorKind,GetArmor,SetArmor,InitializeArmor,NewArmor
 enum ArmorKind(None, Head, Torso, Leg);
 
 ## Property specifying what type of armor an item is.
+## @ArmorKind,GetArmor,SetArmor,InitializeArmor,NewArmor
 property ArmorKind : ArmorKind;
 ```
 
@@ -297,12 +313,15 @@ This section contains internal helper methods related to armor.
 
 ```text
 ## Current head armor for the player.
+## @ArmorKind
 var $headArmor : Item;
 
 ## Current torso armor for the player.
+## @ArmorKind
 var $torsoArmor : Item;
 
 ## Current leg armor for the player.
+## @ArmorKind
 var $legArmor : Item;
 
 ## Get the current armor of the specified kind.
@@ -333,6 +352,7 @@ function SetArmor($kind:ArmorKind, $item:Item)
 
 ## Sets the player's DamageResistance to a weighted average of
 ## the damage resistence for each piece of armor.
+## @ArmorKind,InitializeArmor,NewArmor
 function SetPlayerDamageResistance()
 {
     player.DamageResistance = (
@@ -344,6 +364,7 @@ function SetPlayerDamageResistance()
 
 ## TakeAction implementation for armor items.
 ## $item: Item the action is invoked on.
+## @TakeAction,InitializeArmor,NewArmor
 function TakeArmor($item:Item)
 {
     var $kind = $item.ArmorKind;
@@ -380,6 +401,7 @@ function TakeArmor($item:Item)
 
 ## DropAction implementation for armor items.
 ## $item: Item the action is invoked on.
+## @DropAction,InitializeArmor,NewArmor
 function DropArmor($item:Item)
 {
     if ($item.Location == player)
@@ -409,6 +431,7 @@ The `InitializeArmor` function sets the properties of an armor item. The
 ## $kind: Value of the ArmorKind property.
 ## $damageResistance: DamanageResistance conferred by the armor.
 ## $loc: Initial location of the item, such as a room or container.
+## @ArmorKind,NewArmor
 function InitializeArmor(
     $item:Item,             # item to initialize
     $adjectives:String,     # E.g., "leather"
@@ -434,6 +457,7 @@ function InitializeArmor(
 ## $damageResistance: DamanageResistance conferred by the armor.
 ## $loc: Initial location of the item, such as a room or container.
 ## $return: Returns the newly-created item.
+## @ArmorKind,InitializeArmor
 function NewArmor(
     $adjectives:String,     # E.g., "leather"
     $noun:String,           # E.g., "vest" or "cap"
@@ -470,6 +494,7 @@ function DestroyItem($item:Item)
 ## Function invoked when the player attacks something.
 ## $target: Item being attacked.
 ## $weapon: Weapon to attack with, which can be null.
+## @InitializeWeapon,NewWeapon
 function AttackItemWith($target:Item, $weapon:Item)
 {
     if ($target.MaxHealth == 0)
@@ -552,6 +577,7 @@ This section contains internal helper functions associated with weapon items.
 ```text
 ## UseAction for a weapon item. This selects the weapon as the current weapon.
 ## $item: Item the action is invoked on.
+## @UseAction,InitializeWeapon,NewWeapon
 function UseWeapon($item:Item)
 {
     if (player.CurrentWeapon == $item)
@@ -575,6 +601,7 @@ function UseWeapon($item:Item)
 
 ## TakeAction for a weapon item.
 ## $item: Item the action is invoked on.
+## @TakeAction,InitializeWeapon,NewWeapon
 function TakeWeapon($item:Item)
 {
     TakePortableItem($item);
@@ -594,6 +621,7 @@ function TakeWeapon($item:Item)
 
 ## DropAction for a weapon item.
 ## $item: Item the action is invoked on.
+## @DropAction,InitializeWeapon,NewWeapon
 function DropWeapon($item:Item)
 {
     if ($item.Location == player)
@@ -626,6 +654,7 @@ The `InitializeWeapon` function sets the properties of a weapon item. The
 ## $noun: Noun used to refer to the item.
 ## $damage: AttackDamage property of the weapon.
 ## $loc: Initial location of the weapon, such as a room or container.
+## @NewWeapon
 function InitializeWeapon($item:Item, $adjectives:String, $noun:String, $damage:Int, $loc:Item)
 {
     SetLabelProperties($item, $adjectives, $noun);
@@ -642,6 +671,7 @@ function InitializeWeapon($item:Item, $adjectives:String, $noun:String, $damage:
 ## $damage: AttackDamage property of the weapon.
 ## $loc: Initial location of the weapon, such as a room or container.
 ## $return: Returns the newly-created item.
+## @InitializeWeapon
 function NewWeapon($adjectives:String, $noun:String, $damage:Int, $loc:Item) : Item
 {
     $return = NewItem($"_{$noun}_{$loc}");
@@ -659,6 +689,7 @@ weapons information.
 ## module replaces the general implementation and adds information about weapons
 ## and armor.
 ## $item: Item on which the action is invoked (i.e., the player).
+## @DescribeAction
 function DescribePlayerWithArms($item:Item)
 {
     DescribeCommon($item);
@@ -698,6 +729,7 @@ for monsters or NPCs that follow the player.
 ## if the monster can follow the player.
 ## $monster: Monster or non-player character.
 ## $return: Returns true if the monster moved, or false if not.
+## @UpdateAction,$lastRoom
 function TryFollowPlayer($monster:Item) : Bool
 {
     if (!$isNowDark && $monster.Location == $lastRoom && $lastRoom != player.Location)
@@ -718,6 +750,7 @@ hostile monster.
 ```text
 ## UpdateAction implementation for a monster in a hostile state.
 ## $monster: Item the action is invoked on.
+## @UpdateAction,UpdateSurprisedMonster,UpdateFriendlyMonster
 function UpdateHostileMonster($monster:Item)
 {
     if (!$isNowDark)
@@ -744,6 +777,7 @@ noticing the player.
 ## UpdateAction implementation for a monster that has not yet noticed the
 ## player. This is the typical initial state of a monster.
 ## $monster: Item the action is invoked on.
+## @UpdateAction,UpdateHostileMonster,UpdateFriendlyMonster
 function UpdateSurprisedMonster($monster:Item)
 {
     if ($monster.Location == player.Location && !$isNowDark)
@@ -763,6 +797,7 @@ friendly monster.
 ## UpdateAction implementation for a friendly monster, the behavior of which
 ## is to follow the player.
 ## $monster: Item the action is invoked on.
+## @UpdateAction,UpdateSurprisedMonster,UpdateHostileMonster
 function UpdateFriendlyMonster($monster:Item)
 {
     TryFollowPlayer($monster);
@@ -777,6 +812,7 @@ for a monster by changing its behavior to that of a hostile moster.
 ```text
 ## OnAttackedAction implementation for a monster.
 ## $monster: Item the action is invoked on.
+## @OnAttackedAction,InitializeMonster,NewMonster
 function OnMonsterAttacked($monster:Item)
 {
     $monster.UpdateAction = UpdateHostileMonster;
@@ -799,6 +835,7 @@ UpdateAction property.
 ## $damageResistance: DamageResistance of the monster.
 ## $attackDamage: AttackDamage of the monster.
 ## $loc: Initial location of the monster, such as a room.
+## @NewMonster,DamageResistance,AttackDamage
 function InitializeMonster(
     $monster : Item,
     $adjectives : String,
@@ -828,6 +865,7 @@ function InitializeMonster(
 ## $attackDamage: AttackDamage of the monster.
 ## $loc: Initial location of the monster, such as a room.
 ## $return: Returns the newly-created monster item.
+## @InitializeMonster,DamageResistance,AttackDamage
 function NewMonster(
     $adjectives : String,
     $noun : String,
@@ -851,12 +889,14 @@ duration or false if the player was attacked.
 ```text
 ## Specifies whether the player is currently sleeping. This is used by the Sleep
 ## function and the OnPlayerAttacked function.
+## @Sleep
 var $isSleeping = false;
 
 ## Causes the player to sleep for the specified number of minutes or until the
 ## sleep is interrupted (i.e., if the player is attacked).
 ## $minutes: Number of minutes to sleep.
 ## $return: Returns true if the player slept for the full duration, or false if the sleep was interrupted.
+## @$isSleeping,OnPlayerAttacked
 function Sleep($minutes:Int) : Bool
 {
     $isSleeping = true;
@@ -877,6 +917,7 @@ function Sleep($minutes:Int) : Bool
 ## OnAttackedAction implementation for the player item. This causes the player
 ## to wake up if sleeping.
 ## $item: Item the action is invoked on.
+## @Sleep
 function OnPlayerAttacked($item:Item)
 {
     $isSleeping = false;
@@ -897,6 +938,7 @@ table (i.e., you can put things on it) plus the additional "use" of sleeping.
 ```text
 ## UseAction implementation for a bed item.
 ## $item: Item the action is invoked on.
+## @UseAction,Sleep,InitializeBed,NewBed
 function UseBed($item:Item)
 {
     Message($"You go to sleep in the {Label($item)}.");
@@ -915,6 +957,7 @@ function UseBed($item:Item)
 ## $adjectives: Space-separated adjectives used to refer to the item.
 ## $noun: Noun used to refer to the item.
 ## $loc: Initial location of the item, such as a room.
+## @Sleep,NewBed
 function InitializeBed($item:Item, $adjectives:String, $noun:String, $loc:Item)
 {
     # A bed has the properties of a table (you can put things on it), plus
@@ -928,6 +971,7 @@ function InitializeBed($item:Item, $adjectives:String, $noun:String, $loc:Item)
 ## $noun: Noun used to refer to the item.
 ## $loc: Initial location of the item, such as a room.
 ## $return: Returns the newly-created item.
+## @Sleep,InitializeBed
 function NewBed($adjectives:String, $noun:String, $loc:Item) : Item
 {
     $return = NewItem($"{$noun}_{$loc}");

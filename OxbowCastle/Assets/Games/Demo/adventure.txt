@@ -506,9 +506,8 @@ function InitializeKey($key:Item, $adjectives:String, $noun:String, $loc:Item)
 }
 function NewKey($adjectives:String, $noun:String, $loc:Item) : Item
 {
-    var $key = NewItem($"_{$noun}_{$loc}");
-    InitializeKey($key, $adjectives, $noun, $loc);
-    return $key;
+    $return = NewItem($"_{$noun}_{$loc}");
+    InitializeKey($return, $adjectives, $noun, $loc);
 }
 function IsKey($item:Item) => $item.UseOnAction == UseKeyOn;
 function ListContainerContents($container:Item)
@@ -1009,10 +1008,10 @@ function UpdateItems()
         $item.UpdateAction($item);
     }
 }
-function ComputeDamage($attackDamage:Int, $DamageResistance:Int) : Int
+function ComputeDamage($attackDamage:Int, $damageResistance:Int) : Int
 {
-    var $damage = $attackDamage - $DamageResistance;
-    $damage = $damage - $damage * $DamageResistance / 100;
+    var $damage = $attackDamage - $damageResistance;
+    $damage = $damage - $damage * $damageResistance / 100;
     $return = $damage > 0 ? $damage : 0;
 }
 function DescribeItemHealth($item:Item)
@@ -1211,19 +1210,20 @@ function DropArmor($item:Item)
         Message($"You're not wearing the {Label($item)}.");
     }
 }
-function InitializeArmor($item:Item, $adjectives:String, $noun:String, $kind:ArmorKind, $DamageResistance:Int, $loc:Item)
+function InitializeArmor($item:Item, $adjectives:String, $noun:String, $kind:ArmorKind, $damageResistance:Int, $loc:Item)
 {
     SetLabelProperties($item, $adjectives, $noun);
     $item.ArmorKind = $kind;
+    $item.DamageResistance = $damageResistance;
     $item.Location = $loc;
     $item.TakeAction = TakeArmor;
     $item.UseAction = TakeArmor;
     $item.DropAction = DropArmor;
 }
-function NewArmor($adjectives:String, $noun:String, $kind:ArmorKind, $DamageResistance:Int, $loc:Item) : Item
+function NewArmor($adjectives:String, $noun:String, $kind:ArmorKind, $damageResistance:Int, $loc:Item) : Item
 {
     $return = NewItem($"_{$loc}_{$noun}");
-    InitializeArmor($return, $adjectives, $noun, $kind, $DamageResistance, $loc);
+    InitializeArmor($return, $adjectives, $noun, $kind, $damageResistance, $loc);
 }
 function DestroyItem($item:Item)
 {
@@ -1434,12 +1434,15 @@ function Sleep($minutes:Int) : Bool
     $isSleeping = true;
     while ($isSleeping && $minutes > 0)
     {
-        IncrementTime();
-        UpdateItems();
+        Tick();
+        if (!$isSleeping)
+        {
+            return false;
+        }
         $minutes = $minutes - 1;
     }
-    $return = $isSleeping;
     $isSleeping = false;
+    return true;
 }
 function OnPlayerAttacked($item:Item)
 {
