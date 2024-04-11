@@ -14,12 +14,19 @@ namespace AdventureScript
 
     public struct SourcePos
     {
+        public SourcePos()
+        {
+            FileName = string.Empty;
+        }
+
         public SourcePos(string fileName, int lineNumber, int columnNumber)
         {
             FileName = fileName;
             LineNumber = lineNumber;
             ColumnNumber = columnNumber;
         }
+
+        public static readonly SourcePos Empty = new SourcePos();
 
         public string FileName { get; }
         public int LineNumber { get; }

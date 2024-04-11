@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>UpdateItems Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>UpdateItems Function</h1>
+    <p>Called each turn to invoke the <a href="UpdateAction-Property.html">UpdateAction</a> for each item.</p>
+    <pre>function UpdateItems();</pre>
+    <h4>Source</h4>
+    <pre>function UpdateItems()
+{
+    foreach (var $item)
+    {
+        $item.<a href="UpdateAction-Property.html">UpdateAction</a>($item);
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation-Combat.md-Functions.html">Foundation-Combat.md Functions</a>
+      </p>
+      <p>
+        <a href="UpdateAction-Property.html">UpdateAction Property</a>
+      </p>
+    </div>
+  </body>
+</html>

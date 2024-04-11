@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>InitializeArmor Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>InitializeArmor Function</h1>
+    <p>Initializes the properties of an armor item.</p>
+    <pre>function InitializeArmor(
+    $item : Item,
+    $adjectives : String,
+    $noun : String,
+    $kind : <a href="ArmorKind-Enum.html">ArmorKind</a>,
+    $damageResistance : Int,
+    $loc : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to initialize.</p>
+    <p class="term">$adjectives</p>
+    <p class="def">Space-separated adjectives used to refer to the item.</p>
+    <p class="term">$noun</p>
+    <p class="def">
+      <a href="Noun-Property.html">Noun</a> used to refer to the item.</p>
+    <p class="term">$kind</p>
+    <p class="def">Value of the <a href="ArmorKind-Property.html">ArmorKind</a> property.</p>
+    <p class="term">$damageResistance</p>
+    <p class="def">DamanageResistance conferred by the armor.</p>
+    <p class="term">$loc</p>
+    <p class="def">Initial location of the item, such as a room or container.</p>
+    <h4>Source</h4>
+    <pre>function InitializeArmor($item:Item, $adjectives:String, $noun:String, $kind:<a href="ArmorKind-Enum.html">ArmorKind</a>, $damageResistance:Int, $loc:Item)
+{
+    <a href="SetLabelProperties-Function.html">SetLabelProperties</a>($item, $adjectives, $noun);
+    $item.<a href="ArmorKind-Property.html">ArmorKind</a> = $kind;
+    $item.<a href="DamageResistance-Property.html">DamageResistance</a> = $damageResistance;
+    $item.<a href="Location-Property.html">Location</a> = $loc;
+    $item.<a href="TakeAction-Property.html">TakeAction</a> = <a href="TakeArmor-Function.html">TakeArmor</a>;
+    $item.<a href="UseAction-Property.html">UseAction</a> = <a href="TakeArmor-Function.html">TakeArmor</a>;
+    $item.<a href="DropAction-Property.html">DropAction</a> = <a href="DropArmor-Function.html">DropArmor</a>;
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation-Combat.md-Functions.html">Foundation-Combat.md Functions</a>
+      </p>
+      <p>
+        <a href="ArmorKind-Enum.html">ArmorKind Enum</a>
+      </p>
+      <p>
+        <a href="ArmorKind-Property.html">ArmorKind Property</a>
+      </p>
+      <p>
+        <a href="NewArmor-Function.html">NewArmor Function</a>
+      </p>
+    </div>
+  </body>
+</html>

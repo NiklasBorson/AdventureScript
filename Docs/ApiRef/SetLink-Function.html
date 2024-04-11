@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>SetLink Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>SetLink Function</h1>
+    <p>Sets the linked item for the specified item in the specified direction.</p>
+    <pre>function SetLink(
+    $from : Item,
+    $to : Item,
+    $dir : <a href="Direction-Enum.html">Direction</a>
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$from</p>
+    <p class="def">Source item being linked from.</p>
+    <p class="term">$to</p>
+    <p class="def">Destination item being linked to.</p>
+    <p class="term">$dir</p>
+    <p class="def">Direction of the link.</p>
+    <h4>Source</h4>
+    <pre>function SetLink($from:Item, $to:Item, $dir:<a href="Direction-Enum.html">Direction</a>)
+{
+    switch ($dir)
+    {
+        case Direction.North
+        {
+            $from.<a href="LinkN-Property.html">LinkN</a> = $to;
+        }
+        case Direction.South
+        {
+            $from.<a href="LinkS-Property.html">LinkS</a> = $to;
+        }
+        case Direction.East
+        {
+            $from.<a href="LinkE-Property.html">LinkE</a> = $to;
+        }
+        case Direction.West
+        {
+            $from.<a href="LinkW-Property.html">LinkW</a> = $to;
+        }
+        case Direction.Up
+        {
+            $from.<a href="LinkU-Property.html">LinkU</a> = $to;
+        }
+        case Direction.Down
+        {
+            $from.<a href="LinkD-Property.html">LinkD</a> = $to;
+        }
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation.md-Functions.html">Foundation.md Functions</a>
+      </p>
+      <p>
+        <a href="Direction-Enum.html">Direction Enum</a>
+      </p>
+      <p>
+        <a href="GetLink-Function.html">GetLink Function</a>
+      </p>
+    </div>
+  </body>
+</html>

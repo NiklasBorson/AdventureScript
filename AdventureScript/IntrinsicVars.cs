@@ -18,35 +18,66 @@
             m_stringMap = stringMap;
 
             m_isNounFirst = AddBoolVar(
+                new string[]
+                {
+                    "## Specifies whether nouns precede adjectives in the game's language. ",
+                    "## False if adjectives precede nouns, as in English (e.g., cold water).",
+                    "## True if nouns precede adjectives, as in Spanish (e.g., agua fria)."
+                },
                 varMap, 
                 "$IsNounFirst"
                 );
 
             m_invalidCommandString = AddStringVar(
+                new string[]
+                {
+                    "## Error message if the user input does not match a command.",
+                    "## E.g., \"I don't understand that.\""
+                },
                 varMap,
                 "$InvalidCommandString",
                 "I don't understand that."
                 );
 
             m_invalidArgFormatString = AddStringVar(
+                new string[]
+                {
+                    "## Error message format if a command has an invalid argument.",
+                    "## E.g., \"I don't understand {0}.\""
+                },
                 varMap,
                 "$InvalidArgFormatString",
                 "I don't understand {0}."
                 );
 
             m_noItemFormatString = AddStringVar(
+                new string[]
+                {
+                    "## Error message format if a command argument doesn't match an item.",
+                    "## E.g., \"I couldn't find {0}.\""
+                },
                 varMap,
                 "$NoItemFormatString",
                 "I couldn't find {0}."
                 );
 
             m_ambiguousItemFormatString = AddStringVar(
+                new string[]
+                {
+                    "## Error message format if a command argument could match multiple items.",
+                    "## E.g., \"I don't know which {0} you mean. It could be:\""
+                },
                 varMap,
                 "$AmbiguousItemFormatString",
                 "I don't know which {0} you mean. It could be:"
                 );
 
             m_ignoreWords = AddStringVar(
+                new string[]
+                {
+                    "## Space-separated list of words to remove from user input.",
+                    "## E.g., \"a an the\"."
+                },
                 varMap,
                 "$IgnoreWords",
                 "a an the"
@@ -73,9 +104,14 @@
             }
         }
 
-        GlobalVariableExpr AddVar(GlobalVarMap varMap, string varName, TypeDef type)
+        GlobalVariableExpr AddVar(string[] docComments, GlobalVarMap varMap, string varName, TypeDef type)
         {
-            var varExpr = varMap.TryAdd(varName, type, /*isConst*/ false);
+            var varExpr = varMap.TryAdd(
+                SourcePos.Empty,
+                docComments,
+                varName,
+                type, /*isConst*/ false
+                );
             if (varExpr == null)
             {
                 throw new InvalidOperationException();
@@ -83,15 +119,15 @@
             return varExpr;
         }
 
-        GlobalVariableExpr AddBoolVar(GlobalVarMap varMap, string varName)
+        GlobalVariableExpr AddBoolVar(string[] docComments, GlobalVarMap varMap, string varName)
         {
-            var varExpr = AddVar(varMap, varName, Types.Bool);
+            var varExpr = AddVar(docComments, varMap, varName, Types.Bool);
             return varExpr;
         }
 
-        GlobalVariableExpr AddStringVar(GlobalVarMap varMap, string varName, string value)
+        GlobalVariableExpr AddStringVar(string[] docComments, GlobalVarMap varMap, string varName, string value)
         {
-            var varExpr = AddVar(varMap, varName, Types.String);
+            var varExpr = AddVar(docComments, varMap, varName, Types.String);
             varExpr.Value = m_stringMap[value];
             return varExpr;
         }

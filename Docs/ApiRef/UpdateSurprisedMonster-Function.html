@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>UpdateSurprisedMonster Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>UpdateSurprisedMonster Function</h1>
+    <p>
+      <a href="UpdateAction-Property.html">UpdateAction</a> implementation for a monster that has not yet noticed the player. This is the typical initial state of a monster.</p>
+    <pre>function UpdateSurprisedMonster(
+    $monster : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$monster</p>
+    <p class="def">Item the action is invoked on.</p>
+    <h4>Source</h4>
+    <pre>function UpdateSurprisedMonster($monster:Item)
+{
+    if ($monster.<a href="Location-Property.html">Location</a> == player.<a href="Location-Property.html">Location</a> &amp;&amp; !<a href="isNowDark-Variable.html">$isNowDark</a>)
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label($monster)} notices you.");
+        $monster.<a href="UpdateAction-Property.html">UpdateAction</a> = <a href="UpdateHostileMonster-Function.html">UpdateHostileMonster</a>;
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation-Combat.md-Functions.html">Foundation-Combat.md Functions</a>
+      </p>
+      <p>
+        <a href="UpdateAction-Property.html">UpdateAction Property</a>
+      </p>
+      <p>
+        <a href="UpdateHostileMonster-Function.html">UpdateHostileMonster Function</a>
+      </p>
+      <p>
+        <a href="UpdateFriendlyMonster-Function.html">UpdateFriendlyMonster Function</a>
+      </p>
+    </div>
+  </body>
+</html>

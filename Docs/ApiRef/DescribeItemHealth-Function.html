@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>DescribeItemHealth Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>DescribeItemHealth Function</h1>
+    <p>
+      <a href="DescribeHealthAction-Property.html">DescribeHealthAction</a> implementation suitable for inaninate objects.</p>
+    <pre>function DescribeItemHealth(
+    $item : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item to describe the health of.</p>
+    <h4>Source</h4>
+    <pre>function DescribeItemHealth($item:Item)
+{
+    if ($item.<a href="MaxHealth-Property.html">MaxHealth</a> &gt; 0)
+    {
+        var $health = $item.<a href="Health-Property.html">Health</a>;
+        var $percentage = $health * 100 / $item.<a href="MaxHealth-Property.html">MaxHealth</a>;
+        var $label = <a href="Label-Function.html">Label</a>($item);
+        if ($health &lt; 0)
+        {
+            <a href="Message-Function.html">Message</a>($"The {$label} is destroyed!");
+        }
+        elseif ($percentage &lt; 20)
+        {
+            <a href="Message-Function.html">Message</a>($"The {$label} is critically damanged.");
+        }
+        elseif ($percentage &lt; 40)
+        {
+            <a href="Message-Function.html">Message</a>($"The {$label} is severely damanged.");
+        }
+        elseif ($percentage &lt; 70)
+        {
+            <a href="Message-Function.html">Message</a>($"The {$label} is significantly damanged.");
+        }
+        elseif ($percentage &lt; 100)
+        {
+            <a href="Message-Function.html">Message</a>($"The {$label} is slightly damaged.");
+        }
+        else
+        {
+            <a href="Message-Function.html">Message</a>($"The {$label} is undamaged.");
+        }
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation-Combat.md-Functions.html">Foundation-Combat.md Functions</a>
+      </p>
+      <p>
+        <a href="DescribeHealthAction-Property.html">DescribeHealthAction Property</a>
+      </p>
+      <p>
+        <a href="DescribeCreatureHealth-Function.html">DescribeCreatureHealth Function</a>
+      </p>
+      <p>
+        <a href="DescribePlayerHealth-Function.html">DescribePlayerHealth Function</a>
+      </p>
+    </div>
+  </body>
+</html>

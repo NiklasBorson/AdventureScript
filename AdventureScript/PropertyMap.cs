@@ -6,9 +6,14 @@ namespace AdventureScript
     {
         Dictionary<string, PropertyDef> m_map = new Dictionary<string, PropertyDef>();
 
-        public bool TryAdd(string name, TypeDef type)
+        public bool TryAdd(
+            SourcePos sourcePos,
+            string[] docComments,
+            string name, 
+            TypeDef type
+            )
         {
-            var def = new PropertyDef(name, type);
+            var def = new PropertyDef(sourcePos, docComments, name, type);
             return m_map.TryAdd(name, def);
         }
 

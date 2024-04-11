@@ -133,8 +133,7 @@ The small goblin notices you.
 > attack goblin
 You attack the small goblin with the long sword.
 The small goblin is severely injured.
-The small goblin attacks you.
-You are slightly injured.
+The small goblin attacks you but does no damage.
 > attack goblin
 You attack the small goblin with the long sword.
 The small goblin is dead!
@@ -505,19 +504,15 @@ The chamber maid follows you.
 The hairy imp notices you.
 > s
 You cannot go South.
-The hairy imp attacks you.
-You are slightly injured.
+The hairy imp attacks you but does no damage.
 > s
 You cannot go South.
-The hairy imp attacks you.
-You are slightly injured.
+The hairy imp attacks you but does no damage.
 > put cup in statue
 I couldn't find statue.
 > put wine in cup
 You can't put the flask of wine in the silver cup.
-The hairy imp attacks you.
-You are slightly injured.
+The hairy imp attacks you but does no damage.
 > s
 You cannot go South.
-The hairy imp attacks you.
-You are significantly injured.
+The hairy imp attacks you but does no damage.

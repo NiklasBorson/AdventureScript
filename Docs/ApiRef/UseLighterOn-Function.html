@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>UseLighterOn Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>UseLighterOn Function</h1>
+    <p>
+      <a href="UseOnAction-Property.html">UseOnAction</a> implementation for a lighter item.</p>
+    <pre>function UseLighterOn(
+    $item : Item,
+    $target : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Lighter item the action is invoked on.</p>
+    <p class="term">$target</p>
+    <p class="def">Target item of the action.</p>
+    <h4>Source</h4>
+    <pre>function UseLighterOn($item:Item, $target:Item)
+{
+    if ($target.<a href="IgniteAction-Property.html">IgniteAction</a> != null)
+    {
+        $target.<a href="IgniteAction-Property.html">IgniteAction</a>($target);
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"You cannot light the {Label($target)}.");
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation.md-Functions.html">Foundation.md Functions</a>
+      </p>
+      <p>
+        <a href="InitializeCandle-Function.html">InitializeCandle Function</a>
+      </p>
+      <p>
+        <a href="NewCandle-Function.html">NewCandle Function</a>
+      </p>
+      <p>
+        <a href="InitializeLighter-Function.html">InitializeLighter Function</a>
+      </p>
+      <p>
+        <a href="NewLighter-Function.html">NewLighter Function</a>
+      </p>
+    </div>
+  </body>
+</html>

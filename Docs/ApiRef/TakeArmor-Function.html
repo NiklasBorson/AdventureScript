@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>TakeArmor Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>TakeArmor Function</h1>
+    <p>
+      <a href="TakeAction-Property.html">TakeAction</a> implementation for armor items.</p>
+    <pre>function TakeArmor(
+    $item : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
+    <h4>Source</h4>
+    <pre>function TakeArmor($item:Item)
+{
+    var $kind = $item.<a href="ArmorKind-Property.html">ArmorKind</a>;
+    if ($kind != <a href="ArmorKind-Property.html">ArmorKind</a>.None)
+    {
+        var $current = <a href="GetArmor-Function.html">GetArmor</a>($kind);
+        if ($current == $item)
+        {
+            <a href="Message-Function.html">Message</a>($"You're already wearing the {Label($item)}.");
+        }
+        else
+        {
+            if ($current != null)
+            {
+                <a href="Message-Function.html">Message</a>($"You drop the {Label($current)} and put on the {Label($item)}.");
+                $current.<a href="Location-Property.html">Location</a> = player.<a href="Location-Property.html">Location</a>;
+            }
+            else
+            {
+                <a href="Message-Function.html">Message</a>($"You put on the {Label($item)}.");
+            }
+            $item.<a href="Location-Property.html">Location</a> = player;
+            <a href="SetArmor-Function.html">SetArmor</a>($kind, $item);
+            <a href="SetPlayerDamageResistance-Function.html">SetPlayerDamageResistance</a>();
+        }
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"You can't take the {Label($item)}.");
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation-Combat.md-Functions.html">Foundation-Combat.md Functions</a>
+      </p>
+      <p>
+        <a href="TakeAction-Property.html">TakeAction Property</a>
+      </p>
+      <p>
+        <a href="InitializeArmor-Function.html">InitializeArmor Function</a>
+      </p>
+      <p>
+        <a href="NewArmor-Function.html">NewArmor Function</a>
+      </p>
+    </div>
+  </body>
+</html>

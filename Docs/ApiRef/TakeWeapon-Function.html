@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>TakeWeapon Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>TakeWeapon Function</h1>
+    <p>
+      <a href="TakeAction-Property.html">TakeAction</a> for a weapon item.</p>
+    <pre>function TakeWeapon(
+    $item : Item
+    );</pre>
+    <h4>Parameters</h4>
+    <p class="term">$item</p>
+    <p class="def">Item the action is invoked on.</p>
+    <h4>Source</h4>
+    <pre>function TakeWeapon($item:Item)
+{
+    <a href="TakePortableItem-Function.html">TakePortableItem</a>($item);
+    if (player.<a href="CurrentWeapon-Property.html">CurrentWeapon</a> == null)
+    {
+        player.<a href="CurrentWeapon-Property.html">CurrentWeapon</a> = $item;
+        <a href="Message-Function.html">Message</a>($"The {Label($item)} is now your current weapon.");
+    }
+    else
+    {
+        <a href="Message-Function.html">Message</a>($"The {Label(player.CurrentWeapon)} is still your current weapon.");
+        <a href="Message-Function.html">Message</a>($"You can 'use {Label($item)}' to change that.");
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation-Combat.md-Functions.html">Foundation-Combat.md Functions</a>
+      </p>
+      <p>
+        <a href="TakeAction-Property.html">TakeAction Property</a>
+      </p>
+      <p>
+        <a href="InitializeWeapon-Function.html">InitializeWeapon Function</a>
+      </p>
+      <p>
+        <a href="NewWeapon-Function.html">NewWeapon Function</a>
+      </p>
+    </div>
+  </body>
+</html>

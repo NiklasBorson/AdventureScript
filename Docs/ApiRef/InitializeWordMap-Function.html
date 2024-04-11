@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>InitializeWordMap Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>InitializeWordMap Function</h1>
+    <p>Called each turn to add nouns and adjectives for all accessible items.</p>
+    <pre>function InitializeWordMap();</pre>
+    <h4>Source</h4>
+    <pre>function InitializeWordMap()
+{
+    if (<a href="isNowDark-Variable.html">$isNowDark</a>)
+    {
+        foreach (var $item) where <a href="Location-Property.html">Location</a> == player
+        {
+            <a href="AddItemWords-Function.html">AddItemWords</a>($item);
+        }
+    }
+    else
+    {
+        foreach (var $item)
+        {
+            if (<a href="IsAccessible-Function.html">IsAccessible</a>($item))
+            {
+                <a href="AddItemWords-Function.html">AddItemWords</a>($item);
+            }
+        }
+        foreach (var $dir:<a href="Direction-Enum.html">Direction</a>)
+        {
+            var $door = <a href="GetLink-Function.html">GetLink</a>(player.<a href="Location-Property.html">Location</a>, $dir);
+            if ($door.<a href="DoorState-Property.html">DoorState</a> != <a href="DoorState-Property.html">DoorState</a>.None)
+            {
+                <a href="AddAdjectives-Function.html">AddAdjectives</a>($"{$dir}", $door);
+                <a href="AddItemWords-Function.html">AddItemWords</a>($door);
+            }
+        }
+    }
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation.md-Functions.html">Foundation.md Functions</a>
+      </p>
+      <p>
+        <a href="AddItemWords-Function.html">AddItemWords Function</a>
+      </p>
+    </div>
+  </body>
+</html>

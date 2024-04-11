@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>IsNight Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>IsNight Function</h1>
+    <p>Determines whether the current time is night (i.e., before dawn or after dusk).</p>
+    <pre>function IsNight() : Bool;</pre>
+    <h4>Return value</h4>
+    <p>Returns true if it is night or false if it is day.</p>
+    <h4>Source</h4>
+    <pre>function IsNight() =&gt; <a href="currentTime-Variable.html">$currentTime</a> &lt; 480 || <a href="currentTime-Variable.html">$currentTime</a> &gt;= 1200;
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation.md-Functions.html">Foundation.md Functions</a>
+      </p>
+      <p>
+        <a href="InitializeLighting-Function.html">InitializeLighting Function</a>
+      </p>
+      <p>
+        <a href="IsDark-Property.html">IsDark Property</a>
+      </p>
+    </div>
+  </body>
+</html>

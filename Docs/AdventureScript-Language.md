@@ -7,17 +7,17 @@ the AdventureScript language.
 See [Demo Adventure](Demo.md) to learn how to use AdventureScript to create a
 simple "Demo" adventure game.
 
-See [AdventureScript Grammar](AdventureScript-Grammar.md) for a formal description
-of the AdventureScript language's grammar.
-
-Many building blocks of text adventure games are not part of the language itself
-but are implemented by the AdventureScript Foundation library, which is itself
-written in AdventureScript. For reference information about the foundation
-library, see the following links:
+See [AdventureScript API](ApiRef/index.html) for documentation of all the types,
+properties, variables, constants, and functions in the AdventureScript language
+and its foundation library. Following are links to the foundation library source
+code, which is in Markdown format:
 
 - [Core library (Foundation.md)](../Games/inc/Foundation.md)
 - [Combat library (Foundation-Combat.md)](../Games/inc/Foundation-Combat.md)
 - [Debug library (Foundation_Debug.md)](../Games/inc/Foundation-Debug.md)
+
+See [AdventureScript Grammar](AdventureScript-Grammar.md) for a formal description
+of the AdventureScript language's grammar.
 
 ## Core Concepts
 

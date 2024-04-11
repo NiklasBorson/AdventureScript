@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>SetPlayerDamageResistance Function</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>SetPlayerDamageResistance Function</h1>
+    <p>Sets the player's <a href="DamageResistance-Property.html">DamageResistance</a> to a weighted average of the damage resistence for each piece of armor.</p>
+    <pre>function SetPlayerDamageResistance();</pre>
+    <h4>Source</h4>
+    <pre>function SetPlayerDamageResistance()
+{
+    player.<a href="DamageResistance-Property.html">DamageResistance</a> = (<a href="headArmor-Variable.html">$headArmor</a>.<a href="DamageResistance-Property.html">DamageResistance</a> * 30 + <a href="torsoArmor-Variable.html">$torsoArmor</a>.<a href="DamageResistance-Property.html">DamageResistance</a> * 50 + <a href="legArmor-Variable.html">$legArmor</a>.<a href="DamageResistance-Property.html">DamageResistance</a> * 20) / 100;
+}
+</pre>
+    <h4>See Also</h4>
+    <div class="toc">
+      <p>
+        <a href="index.html">Index</a>
+      </p>
+      <p>
+        <a href="All-Functions.html">All Functions</a>
+      </p>
+      <p>
+        <a href="Foundation-Combat.md-Functions.html">Foundation-Combat.md Functions</a>
+      </p>
+      <p>
+        <a href="ArmorKind-Enum.html">ArmorKind Enum</a>
+      </p>
+      <p>
+        <a href="ArmorKind-Property.html">ArmorKind Property</a>
+      </p>
+      <p>
+        <a href="InitializeArmor-Function.html">InitializeArmor Function</a>
+      </p>
+      <p>
+        <a href="NewArmor-Function.html">NewArmor Function</a>
+      </p>
+    </div>
+  </body>
+</html>

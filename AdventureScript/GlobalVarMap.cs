@@ -17,9 +17,15 @@ namespace AdventureScript
 
         public IntrinsicVars Intrinsics => m_intrinsics;
 
-        public GlobalVariableExpr? TryAdd(string varName, TypeDef type, bool isConst)
+        public GlobalVariableExpr? TryAdd(
+            SourcePos sourcePos,
+            string[] docComments,
+            string varName, 
+            TypeDef type, 
+            bool isConst
+            )
         {
-            var expr = new GlobalVariableExpr(varName, type, isConst);
+            var expr = new GlobalVariableExpr(sourcePos, docComments, varName, type, isConst);
             if (m_map.TryAdd(varName, expr))
             {
                 m_vars.Add(expr);

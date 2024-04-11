@@ -3,9 +3,9 @@ using System.Text;
 
 namespace AdventureScript
 {
-    record struct ParamDef(string Name, TypeDef Type);
+    public record struct ParamDef(string Name, TypeDef Type);
 
-    internal abstract class FunctionDef
+    public abstract class FunctionDef
     {
         public int ID { get; set; }
         public string Name { get; }
@@ -17,7 +17,12 @@ namespace AdventureScript
             this.Name = name;
             this.ParamList = paramList;
             this.ReturnType = returnType;
+            this.DocComments = new string[0];
+            this.SourcePos = SourcePos.Empty;
         }
+
+        public SourcePos SourcePos { get; set; }
+        public string[] DocComments { get; set; }
 
         public abstract int Invoke(GameState game, int[] frame);
 

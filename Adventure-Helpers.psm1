@@ -1,10 +1,11 @@
-$IsRelease = $false
+# Current configuration ('Debug' or 'Release')
 $ConfigName = 'Debug'
 
+# Well-known directories
 $TestFilesDir = Join-Path $PSScriptRoot 'AdventureTest' 'TestFiles'
 $BaselineDir = Join-Path $PSScriptRoot 'AdventureTest' 'Baseline'
-$GamesDir = Join-Path $PSScriptRoot 'Games'
 $TestOutputDir = Join-Path $PSScriptRoot 'AdventureTest' 'bin' 'Output'
+$GamesDir = Join-Path $PSScriptRoot 'Games'
 
 function Get-DllPath([string] $BaseName) {
     Join-Path $PSScriptRoot $BaseName 'bin' $ConfigName 'net8.0' "$BaseName.dll"
@@ -38,11 +39,9 @@ Set-Config -Release
 #>
 function Set-Config([switch] $Release, [switch] $Debug) {
     if ($Release -and (-not $Debug)) {
-        $script:IsRelease = $true
         $script:ConfigName = 'Release'
     }
     elseif ($Debug -and (-not $Release)) {
-        $script:IsRelease = $false
         $script:ConfigName = 'Debug'
     }
     else {
@@ -81,7 +80,7 @@ function Update-Baselines {
     }
     else {
         Write-Error "Error: $TestOutputDirectory does not exist."
-        Write-Error "       Try running Invoke-Test."
+        Write-Error "       Try running Invoke-Tests."
     }
 }
 
@@ -225,15 +224,26 @@ function Build-GameTrace([string] $Name) {
         Set-Content $commandFilePath
 }
 
+function Build-Docs {
+    $dllPath = Get-DllPath('AdventureDoc')
+    $inputPath = Join-Path $GamesDir 'inc' 'all.txt'
+    $outputDir = Join-Path $PSScriptRoot 'Docs' 'ApiRef'
+
+    Remove-Item -Path (Join-Path $outputDir '*.html')
+
+    Write-Host "dotnet $dllPath $inputPath $outputDir"
+    & dotnet $dllPath $inputPath $outputDir
+}
+
 function Build-AdventureScript {
     if ($IsWindows) {
         # Build the entire solution on Windows
-        dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln') --configuration $ConfigName
+        & dotnet build (Join-Path $PSScriptRoot 'AdventureScript.sln') --configuration $ConfigName
     }
     else {
         # Build selected directories on other platforms
         'AdventureScript', 'AdventureTest', 'TextAdventure' | Foreach-Object {
-            dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj") --configuration $ConfigName
+            & dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj") --configuration $ConfigName
         }
     }
 }
@@ -274,5 +284,6 @@ Export-ModuleMember -Function Invoke-Game
 Export-ModuleMember -Function Build-Game
 Export-ModuleMember -Function Build-AllGames
 Export-ModuleMember -Function Build-GameTrace
+Export-ModuleMember -Function Build-Docs
 Export-ModuleMember -Function Build-AdventureScript -Alias build
 Export-ModuleMember -Function Get-AdventureHelp
