@@ -5,7 +5,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>DrawRectangularRoom Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>DrawRectangularRoom Function</h2>
     <p>Draws a rectangular room and returns its drawing ID.</p>
     <pre>include "Foundation.md";
 
@@ -16,7 +19,7 @@ function DrawRectangularRoom(
     $wallColor : Int,
     $backColor : Int
     ) : Int;</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$room</p>
     <p class="def">Room to draw.</p>
     <p class="term">$width</p>
@@ -27,9 +30,9 @@ function DrawRectangularRoom(
     <p class="def">Color used for walls (e.g., <a href="colorBlack-Constant.html">$colorBlack</a>).</p>
     <p class="term">$backColor</p>
     <p class="def">Background color used for the floor (e.g., <a href="colorWhite-Constant.html">$colorWhite</a>).</p>
-    <h4>Return value</h4>
+    <h3>Return value</h3>
     <p>Returns the drawing ID.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function DrawRectangularRoom($room:Item, $width:Int, $height:Int, $wallColor:Int, $backColor:Int) : Int
 {
     <a href="BeginDrawing-Function.html">BeginDrawing</a>($width, $height);
@@ -38,10 +41,10 @@ function DrawRectangularRoom(
     return <a href="EndDrawing-Function.html">EndDrawing</a>();
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

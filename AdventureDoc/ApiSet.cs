@@ -9,6 +9,9 @@ namespace AdventureDoc
     internal class ApiSet : IApiSink
     {
         GameState m_game;
+        string m_indexTitle;
+        string m_headingText;
+        string m_headingUrl;
 
         List<Module> m_modules = new List<Module>();
 
@@ -22,9 +25,12 @@ namespace AdventureDoc
 
         Dictionary<string, RefPage> m_apiMap = new Dictionary<string, RefPage>();
 
-        public ApiSet(GameState game)
+        public ApiSet(GameState game, string indexTitle, string headingText, string headingUrl)
         {
             m_game = game;
+            m_indexTitle = indexTitle;
+            m_headingText = headingText;
+            m_headingUrl = headingUrl;
 
             m_pageTypes = new PageType[]
             {
@@ -61,6 +67,10 @@ namespace AdventureDoc
                 }
             }
         }
+
+        public string IndexTitle => m_indexTitle;
+        public string HeadingText => m_headingText;
+        public string HeadingUrl => m_headingUrl;
 
         public PageType[] PageTypes => m_pageTypes;
 
@@ -131,7 +141,7 @@ namespace AdventureDoc
         public void Write(string outputDir)
         {
             // Write the top index.
-            using (var writer = new HtmlWriter(outputDir, "index.html", "AdventureScript API", this))
+            using (var writer = new HtmlWriter(outputDir, "index.html", IndexTitle, this))
             {
                 writer.WriteTopIndex();
             }

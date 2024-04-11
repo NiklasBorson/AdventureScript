@@ -28,7 +28,7 @@ namespace AdventureDoc
         public void WriteTopIndex()
         {
             BeginDocument();
-            WriteHeading("h1", m_title);
+            WriteHeading("h2", m_title);
 
             BeginToc();
 
@@ -47,7 +47,7 @@ namespace AdventureDoc
 
             foreach (var module in m_apiSet.Modules)
             {
-                WriteHeading("h2", module.ModuleTitle);
+                WriteHeading("h3", module.ModuleTitle);
 
                 BeginToc();
 
@@ -106,7 +106,7 @@ namespace AdventureDoc
         public void WriteIndex(List<RefPage> pages)
         {
             BeginDocument();
-            WriteHeading("h1", m_title);
+            WriteHeading("h2", m_title);
 
             BeginToc();
             foreach (var page in pages)
@@ -115,10 +115,10 @@ namespace AdventureDoc
             }
             EndToc();
 
-            WriteHeading("h2", "See Also");
+            WriteHeading("h3", "See Also");
             BeginToc();
             WriteTocItem(
-                "Index",
+                m_apiSet.IndexTitle,
                 "index.html"
                 );
             EndToc();
@@ -131,7 +131,7 @@ namespace AdventureDoc
             m_currentPage = page;
             BeginDocument();
 
-            WriteHeading("h1", m_title);
+            WriteHeading("h2", m_title);
             WriteParagraph(page.Doc.Description);
 
             BeginElement("pre");
@@ -147,10 +147,10 @@ namespace AdventureDoc
 
             page.WriteMembers(this);
 
-            WriteHeading("h4", "See Also");
+            WriteHeading("h3", "See Also");
             BeginToc();
             WriteTocItem(
-                "Index",
+                "AdventureScript API",
                 "index.html"
                 );
             WriteTocItem(
@@ -202,6 +202,10 @@ namespace AdventureDoc
             EndElement(); // </head>
 
             BeginElement("body");
+
+            BeginElement("h1");
+            WriteLink(m_apiSet.HeadingText, m_apiSet.HeadingUrl);
+            EndElement();
         }
 
         void EndDocument()

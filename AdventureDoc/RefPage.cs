@@ -81,7 +81,7 @@ namespace AdventureDoc
 
             if (this.Doc.Module.SourceFileName != "")
             {
-                writer.WriteHeading("h4", "Source");
+                writer.WriteHeading("h3", "Source");
 
                 var b = new StringWriter();
                 m_def.SaveDefinition(m_game, new CodeWriter(b));
@@ -164,7 +164,7 @@ namespace AdventureDoc
         {
             if (m_members != null)
             {
-                writer.BeginElement("h4");
+                writer.BeginElement("h3");
                 writer.WriteRawString("Values");
                 writer.EndElement();
 

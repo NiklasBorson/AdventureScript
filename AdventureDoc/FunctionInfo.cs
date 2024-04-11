@@ -92,7 +92,7 @@ namespace AdventureDoc
         {
             if (m_params != null)
             {
-                writer.BeginElement("h4");
+                writer.BeginElement("h3");
                 writer.WriteRawString("Parameters");
                 writer.EndElement();
 
@@ -101,7 +101,7 @@ namespace AdventureDoc
 
             if (m_returnValue.Length != 0)
             {
-                writer.BeginElement("h4");
+                writer.BeginElement("h3");
                 writer.WriteRawString("Return value");
                 writer.EndElement();
 

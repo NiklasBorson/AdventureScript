@@ -5,7 +5,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>ComputeDamage Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>ComputeDamage Function</h2>
     <p>Computes the actual damage inflicted by an attack.</p>
     <pre>include "Foundation-Combat.md";
 
@@ -13,16 +16,16 @@ function ComputeDamage(
     $attackDamage : Int,
     $damageResistance : Int
     ) : Int;</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$attackDamage</p>
     <p class="def">
       <a href="AttackDamage-Property.html">AttackDamage</a> property of the attacker or weapon.</p>
     <p class="term">$damageResistance</p>
     <p class="def">
       <a href="DamageResistance-Property.html">DamageResistance</a> property of the target.</p>
-    <h4>Return value</h4>
+    <h3>Return value</h3>
     <p>Returns the actual damage inflicted.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function ComputeDamage($attackDamage:Int, $damageResistance:Int) : Int
 {
     var $damage = $attackDamage - $damageResistance;
@@ -30,10 +33,10 @@ function ComputeDamage(
     $return = $damage &gt; 0 ? $damage : 0;
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

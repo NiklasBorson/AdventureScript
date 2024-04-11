@@ -5,7 +5,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>UpdateSurprisedMonster Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>UpdateSurprisedMonster Function</h2>
     <p>
       <a href="UpdateAction-Property.html">UpdateAction</a> implementation for a monster that has not yet noticed the player. This is the typical initial state of a monster.</p>
     <pre>include "Foundation-Combat.md";
@@ -13,10 +16,10 @@
 function UpdateSurprisedMonster(
     $monster : Item
     );</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$monster</p>
     <p class="def">Item the action is invoked on.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function UpdateSurprisedMonster($monster:Item)
 {
     if ($monster.<a href="Location-Property.html">Location</a> == player.<a href="Location-Property.html">Location</a> &amp;&amp; !<a href="isNowDark-Variable.html">$isNowDark</a>)
@@ -26,10 +29,10 @@ function UpdateSurprisedMonster(
     }
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>
