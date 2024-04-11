@@ -177,23 +177,23 @@ action.
 | `PutOnAction`             | `PutOn`           | "put (item) on (table)"       |
 
 ```text
-## Delegate invoked by Take function and "take" command.
+## Delegate invoked by the Take function and "take" command.
 property TakeAction : ItemDelegate;
 
 ## Delegate invoked by the Drop function and "drop" command.
 property DropAction : ItemDelegate;
 
-## Delegate invoked by Use function and "use" command.
+## Delegate invoked by the Use function and "use" command.
 property UseAction : ItemDelegate;
 
-## Delegate invoked by UseOn function and "use...on" command.
+## Delegate invoked by the UseOn function and "use...on" command.
 ## The property applies to the item being used.
 property UseOnAction : Item2Delegate;
 
-## Delegate invoked by Open function and "open" command.
+## Delegate invoked by the Open function and "open" command.
 property OpenAction : ItemDelegate;
 
-## Delgate invoked by Close function and "close" command.
+## Delgate invoked by the Close function and "close" command.
 property CloseAction : ItemDelegate;
 
 ## Delegate invoked by the Describe function.

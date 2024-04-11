@@ -5,12 +5,17 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>IsAccessible Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>IsAccessible Function</h2>
     <p>Determines whether an item is accessible to the player.</p>
-    <pre>function IsAccessible(
+    <pre>include "Foundation.md";
+
+function IsAccessible(
     $item : Item
     ) : Bool;</pre>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function IsAccessible($item:Item) : Bool
 {
     if (!$item.<a href="IsHidden-Property.html">IsHidden</a> &amp;&amp; $item.<a href="Noun-Property.html">Noun</a> != null)
@@ -27,10 +32,10 @@
     }
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

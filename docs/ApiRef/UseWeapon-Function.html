@@ -5,16 +5,21 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>UseWeapon Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>UseWeapon Function</h2>
     <p>
       <a href="UseAction-Property.html">UseAction</a> for a weapon item. This selects the weapon as the current weapon.</p>
-    <pre>function UseWeapon(
+    <pre>include "Foundation-Combat.md";
+
+function UseWeapon(
     $item : Item
     );</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$item</p>
     <p class="def">Item the action is invoked on.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function UseWeapon($item:Item)
 {
     if (player.<a href="CurrentWeapon-Property.html">CurrentWeapon</a> == $item)
@@ -33,10 +38,10 @@
     }
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

@@ -228,11 +228,14 @@ function Build-Docs {
     $dllPath = Get-DllPath('AdventureDoc')
     $inputPath = Join-Path $GamesDir 'inc' 'all.txt'
     $outputDir = Join-Path $PSScriptRoot 'docs' 'ApiRef'
+    $indexTitle = 'AdventureScript API'
+    $headingText = 'AdventureScript'
+    $headingUrl = 'https://niklasborson.github.io/AdventureScript'
 
     Remove-Item -Path (Join-Path $outputDir '*.html')
 
-    Write-Host "dotnet $dllPath $inputPath $outputDir"
-    & dotnet $dllPath $inputPath $outputDir
+    Write-Host "dotnet $dllPath $inputPath $outputDir $indexTitle $headingText $headingUrl"
+    & dotnet $dllPath $inputPath $outputDir $indexTitle $headingText $headingUrl
 }
 
 function Build-AdventureScript {

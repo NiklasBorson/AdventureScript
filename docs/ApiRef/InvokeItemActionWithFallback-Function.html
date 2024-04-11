@@ -5,21 +5,26 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>InvokeItemActionWithFallback Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>InvokeItemActionWithFallback Function</h2>
     <p>Invokes an ItemAction delegate or invokes a fallback action.</p>
-    <pre>function InvokeItemActionWithFallback(
+    <pre>include "Foundation.md";
+
+function InvokeItemActionWithFallback(
     $func : <a href="ItemDelegate-Delegate.html">ItemDelegate</a>,
     $item : Item,
     $fallback : <a href="ItemDelegate-Delegate.html">ItemDelegate</a>
     );</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$func</p>
     <p class="def">Delegate to invoke, which is typically a property of $item.</p>
     <p class="term">$item</p>
     <p class="def">Item passed as a parameter to the delegate.</p>
     <p class="term">$fallback</p>
     <p class="def">Alternative delegate to invoke if $func is null.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function InvokeItemActionWithFallback($func:<a href="ItemDelegate-Delegate.html">ItemDelegate</a>, $item:Item, $fallback:<a href="ItemDelegate-Delegate.html">ItemDelegate</a>)
 {
     if ($func != null)
@@ -32,10 +37,10 @@
     }
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

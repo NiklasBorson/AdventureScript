@@ -5,31 +5,36 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>SetLabelProperties Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>SetLabelProperties Function</h2>
     <p>Sets the adjectives and noun for an item, which together comprise its label.</p>
-    <pre>function SetLabelProperties(
+    <pre>include "Foundation.md";
+
+function SetLabelProperties(
     $item : Item,
     $adjectives : String,
     $noun : String
     );</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$item</p>
     <p class="def">Item to set properties of.</p>
     <p class="term">$adjectives</p>
     <p class="def">New value of the <a href="Adjectives-Property.html">Adjectives</a> property.</p>
     <p class="term">$noun</p>
     <p class="def">New value of the <a href="Noun-Property.html">Noun</a> property.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function SetLabelProperties($item:Item, $adjectives:String, $noun:String)
 {
     $item.<a href="Adjectives-Property.html">Adjectives</a> = $adjectives;
     $item.<a href="Noun-Property.html">Noun</a> = $noun;
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

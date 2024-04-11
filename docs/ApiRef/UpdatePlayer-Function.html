@@ -5,15 +5,20 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>UpdatePlayer Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>UpdatePlayer Function</h2>
     <p>The <a href="UpdateAction-Property.html">UpdateAction</a> for the player is to heal one health unit.</p>
-    <pre>function UpdatePlayer(
+    <pre>include "Foundation-Combat.md";
+
+function UpdatePlayer(
     $item : Item
     );</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$item</p>
     <p class="def">Item the action is invoked on.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function UpdatePlayer($item:Item)
 {
     if ($item.<a href="Health-Property.html">Health</a> &lt; $item.<a href="MaxHealth-Property.html">MaxHealth</a>)
@@ -22,10 +27,10 @@
     }
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

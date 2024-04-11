@@ -5,18 +5,23 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>SetItemHealth Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>SetItemHealth Function</h2>
     <p>Initializes health-related properties of an inanimate item.</p>
-    <pre>function SetItemHealth(
+    <pre>include "Foundation-Combat.md";
+
+function SetItemHealth(
     $item : Item,
     $health : Int
     );</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$item</p>
     <p class="def">Item to initialize.</p>
     <p class="term">$health</p>
     <p class="def">Initial value of the <a href="Health-Property.html">Health</a> and <a href="MaxHealth-Property.html">MaxHealth</a> properties.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function SetItemHealth($item:Item, $health:Int)
 {
     $item.<a href="Health-Property.html">Health</a> = $health;
@@ -24,10 +29,10 @@
     $item.<a href="DescribeHealthAction-Property.html">DescribeHealthAction</a> = <a href="DescribeItemHealth-Function.html">DescribeItemHealth</a>;
 }
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>

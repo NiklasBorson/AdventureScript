@@ -5,23 +5,28 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <h1>IsOpenContainer Function</h1>
+    <h1>
+      <a href="https://niklasborson.github.io/AdventureScript">AdventureScript</a>
+    </h1>
+    <h2>IsOpenContainer Function</h2>
     <p>Tests whether an item is an open container.</p>
-    <pre>function IsOpenContainer(
+    <pre>include "Foundation.md";
+
+function IsOpenContainer(
     $item : Item
     ) : Bool;</pre>
-    <h4>Parameters</h4>
+    <h3>Parameters</h3>
     <p class="term">$item</p>
     <p class="def">Item to test.</p>
-    <h4>Return value</h4>
+    <h3>Return value</h3>
     <p>Returns true if the item is a container which is not closed or locked.</p>
-    <h4>Source</h4>
+    <h3>Source</h3>
     <pre>function IsOpenContainer($item:Item) =&gt; <a href="IsContainer-Function.html">IsContainer</a>($item) &amp;&amp; !<a href="IsClosedOrLocked-Function.html">IsClosedOrLocked</a>($item.<a href="DoorState-Property.html">DoorState</a>);
 </pre>
-    <h4>See Also</h4>
+    <h3>See Also</h3>
     <div class="toc">
       <p>
-        <a href="index.html">Index</a>
+        <a href="index.html">AdventureScript API</a>
       </p>
       <p>
         <a href="All-Functions.html">All Functions</a>
