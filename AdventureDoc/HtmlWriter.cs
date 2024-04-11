@@ -150,7 +150,7 @@ namespace AdventureDoc
             WriteHeading("h3", "See Also");
             BeginToc();
             WriteTocItem(
-                "AdventureScript API",
+                "API Reference",
                 "index.html"
                 );
             WriteTocItem(
@@ -191,9 +191,11 @@ namespace AdventureDoc
         void BeginDocument()
         {
             BeginElement("html");
+            WriteAttribute("lang", "en-US");
+
             BeginElement("head");
             BeginElement("title");
-            WriteRawString(m_title);
+            WriteRawString($"{m_title} | {m_apiSet.HeadingText}");
             EndElement(); // </title>
             BeginElement("link");
             WriteAttribute("rel", "stylesheet");

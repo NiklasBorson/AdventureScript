@@ -51,7 +51,7 @@ from the `Demo` directory begins with "../inc".
 - `Foundation-Combat.md` is an optiona module that implements a simple combat system. It defines
   weapons, armor, and monsters.
 
-See [AdventureScript API](ApiRef/index.html) for a reference to all of the foundation
+See [API Reference](ApiRef/index.html) for a reference to all of the foundation
 library APIs (functions, properties, etc.) as well as intrinsic APIs implemented by
 the game engine.
 

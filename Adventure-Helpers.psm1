@@ -228,7 +228,7 @@ function Build-Docs {
     $dllPath = Get-DllPath('AdventureDoc')
     $inputPath = Join-Path $GamesDir 'inc' 'all.txt'
     $outputDir = Join-Path $PSScriptRoot 'docs' 'ApiRef'
-    $indexTitle = 'AdventureScript API'
+    $indexTitle = 'API Reference'
     $headingText = 'AdventureScript'
     $headingUrl = 'https://niklasborson.github.io/AdventureScript'
 
