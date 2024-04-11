@@ -13,12 +13,16 @@ written in AdventureScript.
 properties, etc.) implemented by the AdventureScript Foundation Library, as well as
 intrinsic APIs implemented by the game engine.
 
-Following are links to the foundation library source code, which is in Markdown
-format:
+The AdventureScript Foundation Library is the `Games/inc` subdirectory of the
+[AdventureScript repository](https://github.com/NiklasBorson/AdventureScript).
+It comprises the following source files:
 
-- [Core library (Foundation.md)](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation.md)
-- [Combat library (Foundation-Combat.md)](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation-Combat.md)
-- [Debug library (Foundation_Debug.md)](http://github.com/NiklasBorson/AdventureScript/Games/inc/Foundation-Debug.md)
+- `Foundation-Debug.md` is an optional module that defines commands useful when debugging and
+  testing your game.
+- `Foundation.md` is the core module of the AdventureScript Foundation Library. It defines basic
+  things like rooms, doors, keys, containers, lighting, and navigation commands.
+- `Foundation-Combat.md` is an optiona module that implements a simple combat system. It defines
+  weapons, armor, and monsters.
 
 [AdventureScript Grammar](AdventureScript-Grammar.md) gives a formal description of
 the AdventureScript language's grammar.
