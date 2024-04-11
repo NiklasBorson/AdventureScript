@@ -1,8 +1,8 @@
-# AdventureScript Documentation
+# Contents
 
 [AdventureScript Language](AdventureScript-Language.md)
 
-[AdventureScript API Reference](ApiRef/index.html)
+[API Reference](ApiRef/index.html)
 
 [Demo Adventure](Demo.md)
 

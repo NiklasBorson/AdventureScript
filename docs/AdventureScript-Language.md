@@ -9,7 +9,7 @@ the AdventureScript language.
 [Demo Adventure](Demo.md) describes the implementation of an sample "Demo" game
 written in AdventureScript.
 
-[AdventureScript API](ApiRef/index.html) is a reference to all of the APIs (functions,
+[API Reference](ApiRef/index.html) is a reference to all of the APIs (functions,
 properties, etc.) implemented by the AdventureScript Foundation Library, as well as
 intrinsic APIs implemented by the game engine.
 
