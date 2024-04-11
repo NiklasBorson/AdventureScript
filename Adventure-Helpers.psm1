@@ -227,7 +227,7 @@ function Build-GameTrace([string] $Name) {
 function Build-Docs {
     $dllPath = Get-DllPath('AdventureDoc')
     $inputPath = Join-Path $GamesDir 'inc' 'all.txt'
-    $outputDir = Join-Path $PSScriptRoot 'Docs' 'ApiRef'
+    $outputDir = Join-Path $PSScriptRoot 'docs' 'ApiRef'
 
     Remove-Item -Path (Join-Path $outputDir '*.html')
 
@@ -242,7 +242,7 @@ function Build-AdventureScript {
     }
     else {
         # Build selected directories on other platforms
-        'AdventureScript', 'AdventureTest', 'TextAdventure' | Foreach-Object {
+        'AdventureScript', 'AdventureDoc', 'AdventureTest', 'TextAdventure' | Foreach-Object {
             & dotnet build (Join-Path $PSScriptRoot $_ "$_.csproj") --configuration $ConfigName
         }
     }
