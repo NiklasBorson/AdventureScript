@@ -22,14 +22,17 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="local:GameReference">
-                    <Button Width="600" Margin="10" Click="GameButton_Click">
-                        <Grid>
+                    <Button Margin="10" Click="GameButton_Click">
+                        <Grid Width="600">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <TextBlock HorizontalAlignment="Center" Text="{x:Bind Action}" Style="{StaticResource BodyStyle}"/>
                             <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{x:Bind Name}" Style="{StaticResource HeadingStyle}"/>
+                            <Button Grid.RowSpan="2" HorizontalAlignment="Right" Visibility="{x:Bind DeleteButtonVisibility}" Click="DeleteButton_Click">
+                                <SymbolIcon Symbol="Delete"/>
+                            </Button>
                         </Grid>
                     </Button>
                 </DataTemplate>

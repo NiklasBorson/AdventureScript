@@ -26,10 +26,6 @@ to the front door, which is in the garage. However, to get to the garage you mus
 get past a goblin. You can kill the goblin using a knife in the kitchen drawer.
 A few other items are also scattered around the house.
 
-Following is the floor plan used by the game:
-
-![Floor Plan](../Games/Demo/FloorPlan.png)
-
 ## Include Files
 
 The demo game definition file begins by including files from the AdventureScript
