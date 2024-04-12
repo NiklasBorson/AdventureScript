@@ -364,6 +364,12 @@ namespace AdventureScript
             return 0;
         }
 
+        static int _HideGlobalCommands(GameState game, int[] frame)
+        {
+            game.HideGlobalCommands();
+            return 0;
+        }
+
         static int _BeginDrawing(GameState game, int[] frame)
         {
             // BeginDrawing($width:Int, $height:Int)
@@ -619,6 +625,17 @@ namespace AdventureScript
                 },
                 /*returnType*/ Types.Void,
                 _AddAdjectives
+                ),
+            new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Causes global command definitions to be hidden for the current turn, so only",
+                    "## per-tern commands are available."
+                },
+                "HideGlobalCommands",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _HideGlobalCommands
                 ),
             new IntrinsicFunctionDef(
                 new string[]

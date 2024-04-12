@@ -78,7 +78,8 @@ namespace AdventureScript
                 }
                 else if (MatchName("command"))
                 {
-                    ParseCommandDefinition();
+                    var commandDef = ParseCommandDefinition();
+                    this.Game.Commands.Add(commandDef);
                 }
                 else if (MatchName("game"))
                 {
@@ -435,7 +436,7 @@ namespace AdventureScript
             return declaredType;
         }
 
-        void ParseCommandDefinition()
+        CommandDef ParseCommandDefinition()
         {
             // Advance past "command" keyword.
             Advance();
@@ -494,8 +495,7 @@ namespace AdventureScript
 
             ParseStatementBlock(builder);
 
-            // Add the command.
-            this.Game.Commands.Add(builder.CreateCommand());
+            return builder.CreateCommand();
         }
 
         void ParseMapDefinition()
@@ -699,6 +699,11 @@ namespace AdventureScript
                 builder.AddStatement(new ContinueStatement(loop));
                 Advance();
                 ReadSymbol(SymbolId.Semicolon);
+            }
+            else if (MatchName("command"))
+            {
+                var commandDef = ParseCommandDefinition();
+                // TODO
             }
             else if (MatchSymbol(SymbolId.LeftBrace))
             {

@@ -127,6 +127,7 @@ namespace AdventureScript
         internal PropertyMap Properties => m_propMap;
         internal FunctionMap Functions => m_funcMap;
         internal CommandMap Commands => m_commandMap;
+        internal CommandMap TurnCommands => m_commandMap;
         internal GlobalVarMap GlobalVars => m_varMap;
         internal IntrinsicVars IntrinsicVars => m_varMap.Intrinsics;
         internal ItemMap Items => m_itemMap;
@@ -164,6 +165,11 @@ namespace AdventureScript
                 var frame = new int[block.FrameSize];
                 block.Invoke(this, frame);
             }
+        }
+
+        internal void HideGlobalCommands()
+        {
+            m_hideGlobalCommands = true;
         }
 
         public IList<string> InvokeCommand(string commandLine)
