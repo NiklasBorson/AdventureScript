@@ -6,7 +6,7 @@ using System.IO;
 using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using System;
-using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Navigation;
 
 namespace OxbowCastle
@@ -59,6 +59,20 @@ namespace OxbowCastle
             if (gameInfo != null)
             {
                 gameInfo.Invoke(this);
+            }
+        }
+
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var gameInfo = ((Button)sender).DataContext as GameReference;
+            if (gameInfo != null)
+            {
+                if (await ShowYesNoMessage($"Are you sure you want to delete {gameInfo.Name}?"))
+                {
+                    var folderPath = Path.Combine(App.SavedGamesDir, gameInfo.Name);
+                    Directory.Delete(folderPath, true);
+                    InitializeGameList();
+                }
             }
         }
 
@@ -133,6 +147,28 @@ namespace OxbowCastle
 
             // Show the message dialog
             await messageDialog.ShowAsync();
+        }
+
+        async Task<bool> ShowYesNoMessage(string message)
+        {
+            var messageDialog = new MessageDialog(message);
+
+            var yesCommand = new UICommand("Yes");
+            var noCommand = new UICommand("No");
+
+            messageDialog.Commands.Add(yesCommand);
+            messageDialog.Commands.Add(noCommand);
+
+            messageDialog.DefaultCommandIndex = 0;
+            messageDialog.CancelCommandIndex = 1;
+
+            // Associate the app's HWND with the message dialog.
+            App.Current.InitializeWithWindow(messageDialog);
+
+            // Show the message dialog
+            var command = await messageDialog.ShowAsync();
+
+            return object.ReferenceEquals(command, yesCommand);
         }
     }
 }

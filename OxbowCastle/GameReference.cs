@@ -1,4 +1,6 @@
-﻿namespace OxbowCastle
+﻿using Microsoft.UI.Xaml;
+
+namespace OxbowCastle
 {
     abstract class GameReference
     {
@@ -11,6 +13,8 @@
 
         public abstract string Action { get; }
 
+        public virtual Visibility DeleteButtonVisibility => Visibility.Collapsed;
+
         public abstract void Invoke(StartPage page);
     }
 
@@ -21,6 +25,8 @@
         }
 
         public override string Action => "Resume saved game";
+
+        public override Visibility DeleteButtonVisibility => Visibility.Visible;
 
         public override void Invoke(StartPage page)
         {
