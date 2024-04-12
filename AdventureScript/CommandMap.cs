@@ -21,7 +21,7 @@ namespace AdventureScript
             m_commandList.Add(def);
         }
 
-        public bool InvokeCommandLine(GameState game, string commandLine)
+        public bool InvokeCommandLine(GameState game, string commandLine, bool warnIfInvalid)
         {
             string input = StringHelpers.NormalizeInputString(
                 commandLine,
@@ -37,7 +37,10 @@ namespace AdventureScript
                 }
             }
 
-            game.OutputInvalidCommand();
+            if (warnIfInvalid)
+            {
+                game.OutputInvalidCommand();
+            }
             return false;
         }
 
