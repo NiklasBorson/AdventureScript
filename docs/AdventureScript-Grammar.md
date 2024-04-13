@@ -173,6 +173,7 @@ Statement = "var" VarName TypeDecl? ( "=" Expr )? ";"
           | "return" Expr? ";"
           | "break" ";"
           | "continue" ";"
+          | "command" String StatementBlock
           | StatementBlock
 
 IfBlock = "if" "(" Expr ")" StatementBlock
