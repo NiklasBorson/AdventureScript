@@ -318,12 +318,18 @@ namespace AdventureScript
             return 0;
         }
 
-        static int _ListCommands(GameState game, int[] frame)
+        static void ListCommands(GameState game, CommandMap commandMap)
         {
-            foreach (var def in game.Commands)
+            foreach (var def in commandMap)
             {
                 game.RawMessage($"- `{def.CommandSpec}`");
             }
+        }
+
+        static int _ListCommands(GameState game, int[] frame)
+        {
+            ListCommands(game, game.TurnCommands);
+            ListCommands(game, game.Commands);
             return 0;
         }
 
