@@ -21,7 +21,7 @@ namespace AdventureScript
             m_commandList.Add(def);
         }
 
-        public bool InvokeCommandLine(GameState game, string commandLine)
+        public bool InvokeCommandLine(GameState game, string commandLine, bool warnIfInvalid)
         {
             string input = StringHelpers.NormalizeInputString(
                 commandLine,
@@ -37,7 +37,10 @@ namespace AdventureScript
                 }
             }
 
-            game.OutputInvalidCommand();
+            if (warnIfInvalid)
+            {
+                game.OutputInvalidCommand();
+            }
             return false;
         }
 
@@ -132,12 +135,16 @@ namespace AdventureScript
         {
             foreach (var def in m_commandList)
             {
-
-                writer.Write("command \"");
-                writer.Write(def.CommandSpec);
-                writer.Write("\"");
-                def.Body.Write(game, writer);
+                SaveCommand(game, def, writer);
             }
+        }
+
+        public static void SaveCommand(GameState game, CommandDef def, CodeWriter writer)
+        {
+            writer.Write("command \"");
+            writer.Write(def.CommandSpec);
+            writer.Write("\"");
+            def.Body.Write(game, writer);
         }
 
         public IEnumerator<CommandDef> GetEnumerator()

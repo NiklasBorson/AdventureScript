@@ -318,12 +318,18 @@ namespace AdventureScript
             return 0;
         }
 
-        static int _ListCommands(GameState game, int[] frame)
+        static void ListCommands(GameState game, CommandMap commandMap)
         {
-            foreach (var def in game.Commands)
+            foreach (var def in commandMap)
             {
                 game.RawMessage($"- `{def.CommandSpec}`");
             }
+        }
+
+        static int _ListCommands(GameState game, int[] frame)
+        {
+            ListCommands(game, game.TurnCommands);
+            ListCommands(game, game.Commands);
             return 0;
         }
 
@@ -361,6 +367,12 @@ namespace AdventureScript
             {
                 game.WordMap.AddAdjective(word, itemId);
             }
+            return 0;
+        }
+
+        static int _HideGlobalCommands(GameState game, int[] frame)
+        {
+            game.HideGlobalCommands();
             return 0;
         }
 
@@ -619,6 +631,17 @@ namespace AdventureScript
                 },
                 /*returnType*/ Types.Void,
                 _AddAdjectives
+                ),
+            new IntrinsicFunctionDef(
+                new string[]
+                {
+                    "## Causes global command definitions to be hidden for the current turn, so only",
+                    "## per-tern commands are available."
+                },
+                "HideGlobalCommands",
+                new ParamDef[0],
+                /*returnType*/ Types.Void,
+                _HideGlobalCommands
                 ),
             new IntrinsicFunctionDef(
                 new string[]

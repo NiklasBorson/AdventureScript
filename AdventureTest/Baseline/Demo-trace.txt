@@ -2,14 +2,153 @@
 You can use this simple game as an example to write your own games in AdventureScript. See [Demo Adventure](https://niklasborson.github.io/AdventureScript/Demo.html) for an overview of how the Demo game is implemented. See [Demo Source Code](https://github.com/NiklasBorson/AdventureScript/blob/main/Games/Demo/adventure.txt) to see the complete source code for the Demo game.
 # Game Description
 The goal of this game is to leave the house, but first you have to find the key to the front door. At any time you can type 'map' to see a floor plan or 'look' for a description of your current location.
+> look
+You are in the **entryway**.
+![entry_way](#1)
+There is a opening to the North.
+There is a closed door to the South.
+There is a opening to the East.
 > e
 You go East.
 You are in the **living room**.
 ![living_room](living_room.png)
 There is a opening to the North.
 There is a opening to the West.
+> list commands
+- `list items`
+- `list item {$name:String}`
+- `list properties`
+- `list types`
+- `list variables`
+- `list functions`
+- `list function {$name:String}`
+- `list commands`
+- `list words`
+- `go {$dir:Direction}`
+- `n`
+- `s`
+- `e`
+- `w`
+- `up`
+- `down`
+- `inventory`
+- `i`
+- `take {$item1:Item} and {$item2:Item} and {$item3:Item}`
+- `take {$item1:Item} and {$item2:Item}`
+- `take {$item:Item}`
+- `drop {$item:Item}`
+- `put {$item:Item} in {$container:Item}`
+- `put {$item:Item} on {$table:Item}`
+- `use {$item:Item} on {$target:Item}`
+- `use {$item:Item}`
+- `open {$item:Item}`
+- `close {$item:Item}`
+- `turn on {$item:Item}`
+- `turn off {$item:Item}`
+- `light {$target:Item} with {$lighter:Item}`
+- `put out {$item:Item}`
+- `look at me`
+- `look at self`
+- `look at {$item:Item}`
+- `look`
+- `attack {$target:Item} with {$weapon:Item}`
+- `attack {$target:Item}`
+- `map`
 > n
 You go North.
+You are in the **dining room**.
+![dining_room](dining_room.png)
+There is a opening to the South.
+There is a opening to the West.
+There is a _dining room table_ here.
+> list commands
+- `hide under table`
+- `list items`
+- `list item {$name:String}`
+- `list properties`
+- `list types`
+- `list variables`
+- `list functions`
+- `list function {$name:String}`
+- `list commands`
+- `list words`
+- `go {$dir:Direction}`
+- `n`
+- `s`
+- `e`
+- `w`
+- `up`
+- `down`
+- `inventory`
+- `i`
+- `take {$item1:Item} and {$item2:Item} and {$item3:Item}`
+- `take {$item1:Item} and {$item2:Item}`
+- `take {$item:Item}`
+- `drop {$item:Item}`
+- `put {$item:Item} in {$container:Item}`
+- `put {$item:Item} on {$table:Item}`
+- `use {$item:Item} on {$target:Item}`
+- `use {$item:Item}`
+- `open {$item:Item}`
+- `close {$item:Item}`
+- `turn on {$item:Item}`
+- `turn off {$item:Item}`
+- `light {$target:Item} with {$lighter:Item}`
+- `put out {$item:Item}`
+- `look at me`
+- `look at self`
+- `look at {$item:Item}`
+- `look`
+- `attack {$target:Item} with {$weapon:Item}`
+- `attack {$target:Item}`
+- `map`
+> hide under table
+You crawl under the dining room table. Say **leave table** to crawl back out.
+> look
+You are hiding under the dining room table.
+> list commands
+- `leave table`
+- `list items`
+- `list item {$name:String}`
+- `list properties`
+- `list types`
+- `list variables`
+- `list functions`
+- `list function {$name:String}`
+- `list commands`
+- `list words`
+- `go {$dir:Direction}`
+- `n`
+- `s`
+- `e`
+- `w`
+- `up`
+- `down`
+- `inventory`
+- `i`
+- `take {$item1:Item} and {$item2:Item} and {$item3:Item}`
+- `take {$item1:Item} and {$item2:Item}`
+- `take {$item:Item}`
+- `drop {$item:Item}`
+- `put {$item:Item} in {$container:Item}`
+- `put {$item:Item} on {$table:Item}`
+- `use {$item:Item} on {$target:Item}`
+- `use {$item:Item}`
+- `open {$item:Item}`
+- `close {$item:Item}`
+- `turn on {$item:Item}`
+- `turn off {$item:Item}`
+- `light {$target:Item} with {$lighter:Item}`
+- `put out {$item:Item}`
+- `look at me`
+- `look at self`
+- `look at {$item:Item}`
+- `look`
+- `attack {$target:Item} with {$weapon:Item}`
+- `attack {$target:Item}`
+- `map`
+> leave table
+You crawl out from under the dining room table.
 You are in the **dining room**.
 ![dining_room](dining_room.png)
 There is a opening to the South.
@@ -44,21 +183,24 @@ There is a opening to the East.
 There is a closed door to the West.
 There is a _hairy goblin_ here.
 The hairy goblin notices you.
-> attack goblin
-You attack the hairy goblin with the carving knife.
-The hairy goblin is significantly injured.
-The hairy goblin attacks you.
-You are significantly injured.
-> attack goblin
-You attack the hairy goblin with the carving knife.
-The hairy goblin is dead!
 > w
 You open the door.
+The hairy goblin attacks you.
+You are significantly injured.
 You go West.
 You are in the **garage**.
 ![garage](garage.png)
 There is a open door to the East.
 There is a _brass house key_ here.
+The hairy goblin follows you.
+> attack goblin
+You attack the hairy goblin with the carving knife.
+The hairy goblin is significantly injured.
+The hairy goblin attacks you.
+You are severely injured.
+> attack goblin
+You attack the hairy goblin with the carving knife.
+The hairy goblin is dead!
 > take key
 The brass house key is now in your inventory.
 > e
@@ -75,6 +217,8 @@ You are in the **entryway**.
 There is a opening to the North.
 There is a closed door to the South.
 There is a opening to the East.
+> s
+The door is locked.
 > use key on door
 The door is now unlocked.
 > s

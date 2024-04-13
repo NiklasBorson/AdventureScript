@@ -7,7 +7,7 @@
     },
     "Oxbow": {
       "commandName": "Project",
-      "commandLineArgs": "\".\\Games\\Oxbow Castle\\adventure.txt\"",
+      "commandLineArgs": ".\\Games\\Demo\\adventure.txt",
       "workingDirectory": "$(SolutionDir)"
     }
   }

@@ -62,6 +62,7 @@ item back_hallway;
 item garage;
 item kitchen;
 item dining_room;
+item under_dining_room_table;
 item living_room;
 item _key_garage;
 item _door_front_porchentry_way;
@@ -1690,6 +1691,10 @@ game
         $_.LinkW = _opening_kitchendining_room;
     }
     {
+        var $_ = under_dining_room_table;
+        $_.Description = "You are hiding under the dining room table.";
+    }
+    {
         var $_ = living_room;
         $_.Description = "You are in the **living room**.";
         $_.Image = "living_room.png";
@@ -1848,4 +1853,24 @@ turn
 turn
 {
     UpdateItems();
+}
+turn
+{
+    if (player.Location == dining_room)
+    {
+        command "hide under table"
+        {
+            Message("You crawl under the dining room table. Say **leave table** to crawl back out.");
+            player.Location = under_dining_room_table;
+        }
+    }
+    elseif (player.Location == under_dining_room_table)
+    {
+        command "leave table"
+        {
+            Message("You crawl out from under the dining room table.");
+            player.Location = dining_room;
+            Look();
+        }
+    }
 }

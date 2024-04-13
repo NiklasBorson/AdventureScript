@@ -1,15 +1,23 @@
+look
 e
+list commands
 n
+list commands
+hide under table
+look
+list commands
+leave table
 look at table
 w
 open drawer
 take knife
 w
-attack goblin
-attack goblin
 w
+attack goblin
+attack goblin
 take key
 e
+s
 s
 use key on door
 s

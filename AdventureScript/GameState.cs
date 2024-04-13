@@ -28,6 +28,8 @@ namespace AdventureScript
         PropertyMap m_propMap = new PropertyMap();
         FunctionMap m_funcMap = new FunctionMap();
         CommandMap m_commandMap = new CommandMap();
+        CommandMap m_turnCommandMap = new CommandMap();
+        bool m_hideGlobalCommands = false;
         GlobalVarMap m_varMap;
         WordMap? m_wordMap = null;
         List<FunctionBody> m_gameBlocks = new List<FunctionBody>();
@@ -125,6 +127,7 @@ namespace AdventureScript
         internal PropertyMap Properties => m_propMap;
         internal FunctionMap Functions => m_funcMap;
         internal CommandMap Commands => m_commandMap;
+        internal CommandMap TurnCommands => m_turnCommandMap;
         internal GlobalVarMap GlobalVars => m_varMap;
         internal IntrinsicVars IntrinsicVars => m_varMap.Intrinsics;
         internal ItemMap Items => m_itemMap;
@@ -152,6 +155,11 @@ namespace AdventureScript
             // Reset the word map before each turn.
             m_wordMap = null;
 
+            // Reset to the global command map before each turn.
+            m_turnCommandMap = new CommandMap();
+            m_hideGlobalCommands = false;
+
+            // Execute turn blocks.
             foreach (var block in this.TurnBlocks)
             {
                 var frame = new int[block.FrameSize];
@@ -159,12 +167,18 @@ namespace AdventureScript
             }
         }
 
+        internal void HideGlobalCommands()
+        {
+            m_hideGlobalCommands = true;
+        }
+
         public IList<string> InvokeCommand(string commandLine)
         {
             m_messages.Clear();
             m_drawings.Clear();
 
-            if (this.Commands.InvokeCommandLine(this, commandLine))
+            if (m_turnCommandMap.InvokeCommandLine(this, commandLine, m_hideGlobalCommands) ||
+                (!m_hideGlobalCommands && m_commandMap.InvokeCommandLine(this, commandLine, true)))
             {
                 InitializeTurn();
             }

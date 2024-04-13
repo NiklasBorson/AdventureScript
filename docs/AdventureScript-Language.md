@@ -276,10 +276,10 @@ The value on the right-hand side of each mapping can either be an enum value nam
 
 ### Command Definition
 
-The `command` keyword specifies a command string followed by a statement block. The command
-string is matched against user input and may include placeholders, which behave like
-function parameters. The statement block is executed if user input matches the command
-string.
+A _command definition_ defines a command that may be invoked by the user. It comprises the
+`command` keyword followed by a string and a statement block. The command string is matched
+against user input and may include placeholders, which behave like function parameters.
+The statement block is executed if user input matches the command string.
 
 ```text
 command "go {$dir:Direction}"
@@ -298,6 +298,9 @@ attempts to convert the input substring to specified value.
 
 In the above example, `Direction` is assumed to be a previously-defined enum type.
 If the user typed "go north", the `$dir` parameter would be set to `Direction.North`.
+
+Note: A command definition within a statement block is called a _command statement_.
+See the "Command Statement" section below.
 
 ### Game Blocks
 
@@ -337,6 +340,21 @@ the body of a command definition, the body of a loop, and so on.
 
 The following subsections describe the different kinds of statements that can be used in
 a statement block.
+
+### Command Statement
+
+A _command statement_ has the same syntax as a command definition except that it
+appears within a statement block insetad of at global scope. The difference in
+meaning is as follows:
+
+- A _command definition_ adds a global command as soon as the statement is parsed,
+  and the command remains defined for the duration of the game.
+- A _command statement_ does not add a command until the statement is _executed_,
+  and the command is only defined until the end of the current turn.
+
+Command statements can be used to add commands conditionally based on context.
+For example, a command might only be defined if the player is in a certain room.
+The Demo game includes an example.
 
 ### Local Variable Statement
 
