@@ -12,7 +12,7 @@
         public override int Invoke(GameState game, int[] frame)
         {
             game.TurnCommands.Add(m_def);
-            return 0;
+            return NextStatementIndex;
         }
 
         public override void WriteStatement(GameState game, CodeWriter writer)

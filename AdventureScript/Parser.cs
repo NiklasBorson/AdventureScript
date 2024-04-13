@@ -703,7 +703,7 @@ namespace AdventureScript
             else if (MatchName("command"))
             {
                 var commandDef = ParseCommandDefinition();
-                // TODO
+                builder.AddStatement(new CommandStatement(commandDef));
             }
             else if (MatchSymbol(SymbolId.LeftBrace))
             {

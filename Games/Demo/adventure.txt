@@ -14,6 +14,7 @@ item back_hallway;
 item garage;
 item kitchen;
 item dining_room;
+item under_dining_room_table;
 item living_room;
 
 #
@@ -51,6 +52,7 @@ game
     garage.Description = "You are in the **garage**.";
     kitchen.Description = "You are in the **kitchen**.";
     dining_room.Description = "You are in the **dining room**.";
+    under_dining_room_table.Description = "You are hiding under the dining room table.";
     living_room.Description = "You are in the **living room**.";
 
     #
@@ -184,4 +186,28 @@ command "map" {
 
     # A message may include a Markdown image.
     Message("![Floor Plan](FloorPlan.png)");
+}
+
+#
+# Commands defined within a turn block are only available within the current turn.
+# This enables context-specific commands to be defined, e.g., commands that only
+# exist in a specific location.
+#
+turn
+{
+    if (player.Location == dining_room)
+    {
+        command "hide under table" {
+            Message("You crawl under the dining room table. Say **leave table** to crawl back out.");
+            player.Location = under_dining_room_table;
+        }
+    }
+    elseif (player.Location == under_dining_room_table)
+    {
+        command "leave table" {
+            Message("You crawl out from under the dining room table.");
+            player.Location = dining_room;
+            Look();
+        }
+    }
 }

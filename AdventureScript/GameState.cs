@@ -127,7 +127,7 @@ namespace AdventureScript
         internal PropertyMap Properties => m_propMap;
         internal FunctionMap Functions => m_funcMap;
         internal CommandMap Commands => m_commandMap;
-        internal CommandMap TurnCommands => m_commandMap;
+        internal CommandMap TurnCommands => m_turnCommandMap;
         internal GlobalVarMap GlobalVars => m_varMap;
         internal IntrinsicVars IntrinsicVars => m_varMap.Intrinsics;
         internal ItemMap Items => m_itemMap;
