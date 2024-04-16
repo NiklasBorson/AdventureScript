@@ -1,13 +1,9 @@
 using AdventureScript;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Documents;
-using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
-using System.IO;
 using System.Collections.Generic;
 using Windows.System;
-using System;
 
 namespace OxbowCastle
 {
@@ -71,7 +67,6 @@ namespace OxbowCastle
             if (input != string.Empty)
             {
                 // Add the command itself to the output.
-                // TODO - specify command style
                 MarkdownParser.AddCommandParagraph(input, m_outputControl);
 
                 // Process the command get its output.
