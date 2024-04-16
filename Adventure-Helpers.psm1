@@ -134,7 +134,7 @@ Path of the input directory containing adventure.txt.
 Path of the destination directory.
 
 .EXAMPLE
-Build-Game -Path .\Games\Demo -Destination .\OxbowCastle\Assets\Games\Demo
+Build-Game -Path .\Games\Demo -Destination .\OxbowCastle\Assets\Games\Demo.adventure
 
 .NOTES
 Compilation means loading the game and then saving the initial game state.
@@ -148,23 +148,27 @@ function Build-Game([string] $Path, [string] $Destination) {
         return
     }
 
-    if (Test-Path $Destination) {
-        Remove-Item -Recurse $Destination
-    }
+    $tempDir = New-Guid
+    mkdir $tempDir | Out-Null
 
-    mkdir $Destination | Out-Null
-
-    $destFile = Join-Path $Destination 'adventure.txt'
+    $tempFile = Join-Path $tempDir 'adventure.txt'
     $dllPath = Get-DllPath('TextAdventure')
 
     # Compile adventure.txt.
-    Write-Host "dotnet $dllPath -compile $sourceFile $destFile"
-    & dotnet $dllPath -compile $sourceFile $destFile
+    Write-Host "dotnet $dllPath -compile $sourceFile $tempFile"
+    & dotnet $dllPath -compile $sourceFile $tempFile
 
     # Copy other files except .txt and .md files.
     Get-ChildItem (Join-Path $Path '*') -File -Exclude '*.txt','*.md' | ForEach-Object {
-        Copy-Item -Path $_.FullName -Destination $Destination
+        Copy-Item -Path $_.FullName -Destination $tempDir
     }
+
+    # Create the compressed file.
+    Write-Host "Compress-Archive -Path $tempDir -DestinationPath $Destination"
+    Compress-Archive -Path $tempDir -DestinationPath $Destination
+
+    # Delete the temporary directory.
+    Remove-Item -Recurse $tempDir
 }
 
 <#
@@ -178,9 +182,11 @@ is the corresponding subdirectory under OxbowCastle\Assets\Games.
 function Build-AllGames {
     $destRoot = Join-Path $PSScriptRoot 'OxbowCastle' 'Assets' 'Games'
 
+    Remove-Item -Recurse (Join-Path $destRoot '*')
+
     Get-ChildItem $GamesDir -Directory | ForEach-Object {
         if (Test-Path (Join-Path $_.FullName 'adventure.txt')) {
-            Build-Game -Path $_.FullName -Destination (Join-Path $destRoot $_.Name)
+            Build-Game -Path $_.FullName -Destination (Join-Path $destRoot "$($_.Name).adventure")
         }
     }
 }
