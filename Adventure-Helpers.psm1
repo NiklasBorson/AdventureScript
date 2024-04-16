@@ -131,30 +131,29 @@ destination directory.
 Path of the input directory containing adventure.txt.
 
 .PARAMETER Destination
-Path of the destination directory.
+Path of the destination .adventure file.
 
 .EXAMPLE
 Build-Game -Path .\Games\Demo -Destination .\OxbowCastle\Assets\Games\Demo.adventure
-
-.NOTES
-Compilation means loading the game and then saving the initial game state.
-This eliminates dependencies on any include files.
 #>
 function Build-Game([string] $Path, [string] $Destination) {
 
+    # Make sure the source adventure.txt file exists.
     $sourceFile = Join-Path $Path 'adventure.txt'
     if (-not (Test-Path $sourceFile)) {
         Write-Error "Error: $sourceFile does not exist."
         return
     }
 
+    # Create a temporary directory that will contain the files to be
+    # stored in the archive.
     $tempDir = New-Guid
     mkdir $tempDir | Out-Null
 
+    # Compile adventure.txt. Compiling loads the game and then saves the
+    # initial game state. This eliminates any dependencies on include files.
     $tempFile = Join-Path $tempDir 'adventure.txt'
     $dllPath = Get-DllPath('TextAdventure')
-
-    # Compile adventure.txt.
     Write-Host "dotnet $dllPath -compile $sourceFile $tempFile"
     & dotnet $dllPath -compile $sourceFile $tempFile
 
@@ -230,6 +229,14 @@ function Build-GameTrace([string] $Name) {
         Set-Content $commandFilePath
 }
 
+<#
+.SYNOPSIS
+Builds the AdventureScript API reference in HTML format.
+
+.DESCRIPTION
+Invokes the AdventureDoc tool to generate HTML documentation for all of the APIs in
+the AdventureScript foundation library as well as intrinsics.
+#>
 function Build-Docs {
     $dllPath = Get-DllPath('AdventureDoc')
     $inputPath = Join-Path $GamesDir 'inc' 'all.txt'
@@ -244,6 +251,10 @@ function Build-Docs {
     & dotnet $dllPath $inputPath $outputDir $indexTitle $headingText $headingUrl
 }
 
+<#
+.SYNOPSIS
+Builds the AdventureScript solution for the current configuration.
+#>
 function Build-AdventureScript {
     if ($IsWindows) {
         # Build the entire solution on Windows
@@ -272,6 +283,10 @@ function Get-PackageForArch([string] $arch) {
     Write-Output $bestMatch
 }
 
+<#
+.SYNOPSIS
+Gets the path of the most recent OxbowCastle MSIX file for each CPU architecture.
+#>
 function Get-Packages {
     Get-PackageForArch 'x64'
     Get-PackageForArch 'arm64'
