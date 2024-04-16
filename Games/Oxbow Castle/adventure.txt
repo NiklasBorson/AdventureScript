@@ -712,6 +712,7 @@ game
         "It depicts a young man, or perhaps a fairy for it has delicate wings. "
         "Its empty hands are outstretched as if reaching for something.";
     inner_court_statue.PutInAction = PutInSilverStatue;
+    inner_court_statue.PutOnAction = PutInSilverStatue;
 }
 
 #############################################

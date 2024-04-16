@@ -8,6 +8,7 @@ using Windows.UI.Popups;
 using System;
 using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Navigation;
+using Windows.Devices.Lights;
 
 namespace OxbowCastle
 {
@@ -76,11 +77,19 @@ namespace OxbowCastle
             }
         }
 
-        void LaunchNewGame(string sourceDir)
+        async void LaunchNewGame(string sourceFilePath, string gameName)
         {
             try
             {
-                var game = ActiveGame.CreateNew(sourceDir);
+                if (Directory.Exists(Path.Combine(App.SavedGamesDir, gameName)))
+                {
+                    if (!await ShowYesNoMessage($"Overwrite saved game \"{gameName}\"?"))
+                    {
+                        return;
+                    }
+                }
+
+                var game = ActiveGame.CreateNew(sourceFilePath, gameName);
                 StartGame(game);
             }
             catch (ParseException e)
@@ -91,7 +100,9 @@ namespace OxbowCastle
 
         internal void LaunchNewGame(NewGameReference gameInfo)
         {
-            LaunchNewGame(Path.Combine(App.GamesDir, $"{gameInfo.Name}.adventure"));
+            string gameName = gameInfo.Name;
+            string sourceFilePath = Path.Combine(App.GamesDir, gameName + ".adventure");
+            LaunchNewGame(sourceFilePath, gameName);
         }
 
         internal void LoadSavedGame(SavedGameReference gameInfo)
@@ -120,7 +131,7 @@ namespace OxbowCastle
             // If the user picked a file then launch the game.
             if (file != null)
             {
-                LaunchNewGame(file.Path);
+                LaunchNewGame(file.Path, Path.GetFileNameWithoutExtension(file.Name));
             }
         }
 

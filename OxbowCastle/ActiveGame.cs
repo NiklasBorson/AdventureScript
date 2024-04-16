@@ -20,10 +20,8 @@ namespace OxbowCastle
 
         public string FilePath => Path.Combine(FolderPath, App.GameFileName);
 
-        static public ActiveGame CreateNew(string sourceFilePath)
+        static public ActiveGame CreateNew(string sourceFilePath, string gameName)
         {
-            string gameName = Path.GetFileNameWithoutExtension(sourceFilePath);
-
             // Get the destination directory and file.
             var savedGamesDir = App.SavedGamesDir;
             var destFolderPath = Path.Combine(savedGamesDir, gameName);
