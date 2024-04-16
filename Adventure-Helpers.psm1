@@ -165,7 +165,7 @@ function Build-Game([string] $Path, [string] $Destination) {
 
     # Create the compressed file.
     Write-Host "Compress-Archive -Path $tempDir -DestinationPath $Destination"
-    Compress-Archive -Path $tempDir -DestinationPath $Destination
+    Compress-Archive -Path (Join-Path $tempDir '*') -DestinationPath $Destination
 
     # Delete the temporary directory.
     Remove-Item -Recurse $tempDir

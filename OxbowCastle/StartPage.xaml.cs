@@ -42,9 +42,9 @@ namespace OxbowCastle
             }
 
             // Add new games.
-            foreach (var dir in new DirectoryInfo(App.GamesDir).GetDirectories())
+            foreach (var file in new DirectoryInfo(App.GamesDir).GetFiles())
             {
-                gameList.Add(new NewGameReference(dir.Name));
+                gameList.Add(new NewGameReference(Path.GetFileNameWithoutExtension(file.Name)));
             }
 
             // Add the browse option.
@@ -91,7 +91,7 @@ namespace OxbowCastle
 
         internal void LaunchNewGame(NewGameReference gameInfo)
         {
-            LaunchNewGame(Path.Combine(App.GamesDir, gameInfo.Name));
+            LaunchNewGame(Path.Combine(App.GamesDir, $"{gameInfo.Name}.adventure"));
         }
 
         internal void LoadSavedGame(SavedGameReference gameInfo)

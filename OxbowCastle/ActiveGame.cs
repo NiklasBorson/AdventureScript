@@ -1,8 +1,6 @@
 ﻿using AdventureScript;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.IO.Compression;
 
 namespace OxbowCastle
 {
@@ -22,16 +20,9 @@ namespace OxbowCastle
 
         public string FilePath => Path.Combine(FolderPath, App.GameFileName);
 
-        static public ActiveGame CreateNew(string sourceFolderPath)
+        static public ActiveGame CreateNew(string sourceFilePath)
         {
-            // Get the source file info.
-            var sourceDir = new DirectoryInfo(sourceFolderPath);
-            string sourceFilePath = Path.Combine(sourceDir.FullName, App.GameFileName);
-            string gameName = sourceDir.Name;
-
-            // Load the game.
-            var game = new GameState();
-            game.LoadGame(sourceFilePath);
+            string gameName = Path.GetFileNameWithoutExtension(sourceFilePath);
 
             // Get the destination directory and file.
             var savedGamesDir = App.SavedGamesDir;
@@ -52,14 +43,12 @@ namespace OxbowCastle
             // Create the destination directory.
             Directory.CreateDirectory(destFolderPath);
 
-            // Copy all from the source directory except *.txt and *.md.
-            foreach (var file in sourceDir.GetFiles())
-            {
-                if (file.Extension != ".txt" && file.Extension != ".md")
-                {
-                    File.Copy(file.FullName, Path.Combine(destFolderPath, file.Name));
-                }
-            }
+            // Extract the file to the destination directory.
+            ZipFile.ExtractToDirectory(sourceFilePath, destFolderPath);
+
+            // Load the game.
+            var game = new GameState();
+            game.LoadGame(destFilePath);
 
             return new ActiveGame(game, gameName, destFolderPath);
         }
