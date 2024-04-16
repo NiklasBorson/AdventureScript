@@ -55,7 +55,7 @@ file extension. This means the following rules apply:
 
 ## Top-Level Elements
 
-The following subsections describe declarations and definitinos that appear at global
+The following subsections describe declarations and definitions that appear at global
 scope in an AdventureScript file -- that is, out side of any functions or statement
 blocks.
 
@@ -226,7 +226,7 @@ Note that it is not required to specify a return value (or assign to the `$retur
 variable) even if the function declares a return type. If no return value is specified,
 the default value of that type is returned.
 
-To summarize, the following two ways of return a value are functionally equivalent:
+To summarize, the following two ways of returning a value are functionally equivalent:
 
 ```text
 # Option 1
@@ -277,9 +277,7 @@ The value on the right-hand side of each mapping can either be an enum value nam
 ### Command Definition
 
 A _command definition_ defines a command that may be invoked by the user. It comprises the
-`command` keyword followed by a string and a statement block. The command string is matched
-against user input and may include placeholders, which behave like function parameters.
-The statement block is executed if user input matches the command string.
+`command` keyword followed by a string and a statement block, as follows:
 
 ```text
 command "go {$dir:Direction}"
@@ -288,16 +286,32 @@ command "go {$dir:Direction}"
 }
 ```
 
-Placeholders in the command string are enclosed in curly braces. A placholder works
-like a function in that it specifies a name and a type. The placeholder name can be
-referenced like a variable in the statement block which follows.
+The command string may include placeholders enclosed in curly braces. A placeholder is
+similar to a function parameter. It has a name and a type, and can be referenced by
+name within the code block.
 
-When matching the command string against user input, the game engine each placeholder
-is matched against the corresponding part of the user input string. The game engine
-attempts to convert the input substring to specified value.
+When the user enters a command, the game engine searches for the first command
+definition whose command string matches the input. A placeholder is treated as a
+wildcard for purposes of matching, so the above example matches the word "go" followed
+by any text.
 
-In the above example, `Direction` is assumed to be a previously-defined enum type.
-If the user typed "go north", the `$dir` parameter would be set to `Direction.North`.
+If a matching command is found, the game engine then tries to convert the input text
+for each placeholder to the specified type. In the above example, suppose the user types
+"go north". The word "north" is matched against the placeholder `{$dir:Direction}`, so
+the game engine tries to convert the word "north" to a value of type `Direction`.
+`Direction` is an `enum` type in the foundation library, so the word "north" maps to
+`Direction.North`.
+
+If the placeholder has type `Item` then the input text is mapped to an item by
+matching the input words against the noun and adjectives associated with each item.
+During turn initialization, the game (or foundation library) uses the intrinsic
+functions `AddNoun` and `AddAdjectives` to add nouns and adjectives for each item
+that can currently be referenced by the user -- for example, items in the current
+room. An item is considered a match if the input noun matches the item's noun and
+all of the input adjectives match adjectives of the item. However, the user need
+not specify all of an item's adjectives. Adjectives need only be specified to
+eliminate ambiguities. For example, an "iron key" can simply be referred to as
+"key" unless there is also a "brass key".
 
 Note: A command definition within a statement block is called a _command statement_.
 See the "Command Statement" section below.
@@ -344,7 +358,7 @@ a statement block.
 ### Command Statement
 
 A _command statement_ has the same syntax as a command definition except that it
-appears within a statement block insetad of at global scope. The difference in
+appears within a statement block instead of at global scope. The difference in
 meaning is as follows:
 
 - A _command definition_ adds a global command as soon as the statement is parsed,
@@ -661,26 +675,28 @@ function AbsoluteValue($n:Int) => $n >= 0 ? $n : -$n;
 
 ## Null Values
 
-Every type is a default "null" value associated with it. This is the value of a
-variable that has not been assigned to, for example.
+Every type has a default "null" value associated with it. The null value is the
+default value of a variable or property that has not been assigned to.
 
 Null values in AdventureScript are always safe to use. It is not necessary to do
-a null check before getting a property of an item, for example. The null item is
-defined to be an item for which the value of every property is null. For example,
-the following is safe:
+a null check before getting a property of an item, for example. Getting any property
+from the null item returns null. Setting any property on the null item has no effect.
+Neither operation results in a run-time error.
 
 ```text
 # Example: Using null items is safe
-property NextItem : Item;
 var $itemA : Item = null;
-var $itemB = $itemA.NextItem.NextItem;
-# $itemB is now null
+property LinkedItem : Item;
+
+# Getting a property of a null item returns null but is not an error.
+var $itemB = $itemA.LinkedItem.LinkedItem;
+
+# Setting a property on a null item has no effect but is not an error.
+$itemA.NextItem = $itemB;
 ```
 
-Setting a property on the null item has no effect but does cause a runtime error.
-
-Calling a null delegate has no effect but does not cause a runtime error. If the
-delegate type has a return value, the return value of the null delegate is the
+Likewise, calling a null delegate has no effect but does not cause a runtime error.
+If the delegate type has a return value, the return value of the null delegate is the
 null value for that type.
 
 | Type              | Associated Null Value                         |
