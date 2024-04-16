@@ -108,27 +108,19 @@ namespace OxbowCastle
         internal async void BrowseForGame()
         {
             // Create the file picker
-            var folderPicker = new FolderPicker();
+            var filePicker = new FileOpenPicker();
 
             // Associate the app's HWND with the file picker
-            App.Current.InitializeWithWindow(folderPicker);
+            App.Current.InitializeWithWindow(filePicker);
 
-            // Use file picker like normal!
-            var folder = await folderPicker.PickSingleFolderAsync().AsTask();
+            // Browser for .adventure files.
+            filePicker.FileTypeFilter.Add(".adventure");
+            var file = await filePicker.PickSingleFileAsync();
 
-            if (folder != null)
+            // If the user picked a file then launch the game.
+            if (file != null)
             {
-                string dirPath = folder.Path;
-
-                string filePath = Path.Combine(dirPath, App.GameFileName);
-                if (File.Exists(filePath))
-                {
-                    LaunchNewGame(dirPath);
-                }
-                else
-                {
-                    ShowErrorMessage($"File not found in directory: {App.GameFileName}.");
-                }
+                LaunchNewGame(file.Path);
             }
         }
 
