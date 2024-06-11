@@ -2,104 +2,22 @@ use std::rc::Rc;
 use std::string::String;
 use std::collections::HashMap;
 
-pub trait TypeDef {
-    fn name(&self) -> &str;
-    fn as_enum(&self) -> Option<&EnumType> {
-        None
-    }
-    fn as_delegate(&self) -> Option<&DelegateType> {
-        None
-    }
+pub type TypeRef = Rc<Type>;
+
+pub struct Type {
+    pub name: String,
+    pub def: TypeDef
 }
 
-pub type TypeRef = Rc<dyn TypeDef>;
-
-pub struct EnumType {
-    name : String,
-    value_names: Vec<String>
-}
-
-impl EnumType {
-    pub fn value_names(&self) -> &[String] {
-        self.value_names.as_slice()
-    }    
-}
-
-impl TypeDef for EnumType {
-    fn name(&self) -> &str {
-        self.name.as_str()
-    }
-    fn as_enum(&self) -> Option<&EnumType> {
-        Some(self)
-    }
-}
-
-pub struct ParamDef {
-    pub name : String,
-    pub param_type : TypeRef
-}
-
-pub struct DelegateType {
-    name : String,
-    param_defs : Vec<ParamDef>,
-    return_type : TypeRef
-}
-
-impl DelegateType {
-    pub fn params(&self) -> &[ParamDef] {
-        &self.param_defs.as_slice()
-    }
-    pub fn return_type(&self) -> &TypeRef {
-        &self.return_type
-    }
-}
-
-impl TypeDef for DelegateType {
-    fn name(&self) -> &str {
-        self.name.as_str()
-    }
-}
-
-struct ItemType;
-impl TypeDef for ItemType {
-    fn name(&self) -> &str {
-        "item"
-    }
-}
-
-struct StringType;
-impl TypeDef for StringType {
-    fn name(&self) -> &str {
-        "string"
-    }
-}
-
-struct IntType;
-impl TypeDef for IntType {
-    fn name(&self) -> &str {
-        "int"
-    }
-}
-
-struct BoolType;
-impl TypeDef for BoolType {
-    fn name(&self) -> &str {
-        "bool"
-    }
-}
-
-struct NullType;
-impl TypeDef for NullType {
-    fn name(&self) -> &str {
-        "null"
-    }
-}
-
-struct VoidType;
-impl TypeDef for VoidType {
-    fn name(&self) -> &str {
-        "void"
-    }
+pub enum TypeDef {
+    Item,
+    String,
+    Int,
+    Bool,
+    Void,
+    Null,
+    Enum { value_names: Vec<String> },
+    Delegate { return_type: TypeRef, param_types: Vec<TypeRef> }
 }
 
 pub struct TypeMap {
@@ -131,12 +49,30 @@ fn contains_duplicates(names : &[String]) -> bool {
 
 impl TypeMap {
     pub fn new() -> Self {
-        let item_type = Rc::new(ItemType{});
-        let string_type = Rc::new(StringType{});
-        let int_type = Rc::new(IntType);
-        let bool_type = Rc::new(BoolType{});
-        let null_type = Rc::new(NullType{});
-        let void_type = Rc::new(VoidType{});
+        let item_type = Rc::new(Type {
+            name: String::from("item"), 
+            def: TypeDef::Item
+        });
+        let string_type = Rc::new(Type {
+            name: String::from("string"), 
+            def: TypeDef::String
+        });
+        let int_type = Rc::new(Type {
+            name: String::from("int"), 
+            def: TypeDef::Int
+        });
+        let bool_type = Rc::new(Type {
+            name: String::from("bool"), 
+            def: TypeDef::Bool
+        });
+        let null_type = Rc::new(Type {
+            name: String::from("null"), 
+            def: TypeDef::Null
+        });
+        let void_type = Rc::new(Type {
+            name: String::from("void"), 
+            def: TypeDef::Void
+        });
 
         let mut type_map = Self {
             item_type : item_type.clone(),
@@ -159,10 +95,10 @@ impl TypeMap {
     }
 
     fn add_type(&mut self, new_type : TypeRef) {
-        self.hash_map.insert(String::from(new_type.name()), new_type);
+        self.hash_map.insert(new_type.name.clone(), new_type);
     }
 
-    pub fn add_enum_type(&mut self, name : String, value_names : Vec<String>) -> Result<Rc<EnumType>, ParseError> {
+    pub fn add_enum_type(&mut self, name : String, value_names : Vec<String>) -> Result<TypeRef, ParseError> {
         if self.exists(&name) {
             return Err(ParseError::DuplicateTypeName);
         }
@@ -171,7 +107,11 @@ impl TypeMap {
             return Err(ParseError::DuplicateValueName);
         }
 
-        let new_type = Rc::new(EnumType{ name, value_names });
+        let new_type = Rc::new(Type {
+            name, 
+            def: TypeDef::Enum { value_names }
+        });
+
         self.add_type(new_type.clone());
 
         Ok(new_type)
