@@ -1,6 +1,8 @@
-use crate::type_def::*;
-
 mod type_def;
+mod lexer;
+
+use crate::type_def::*;
+use crate::lexer::*;
 
 fn compare_type(t1 : &Type, t2 : &Type) {
     if std::ptr::eq(t1, t2) {
@@ -53,4 +55,7 @@ fn main() {
     dump_type(&types, "string");
     dump_type(&types, "item");
     dump_type(&types, "Direction");
+
+    let data = "item 10 + 2 \"hello\"".as_bytes().to_vec();
+    let lexer = Lexer::new(String::from("foo.txt"), data);
 }
