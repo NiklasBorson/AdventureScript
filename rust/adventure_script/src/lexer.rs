@@ -34,8 +34,7 @@ pub enum SymbolId {
 #[derive(Debug)]
 pub enum Token {
     None,
-    Error,
-    Int,
+    Int(i32),
     Name(String),
     Variable,
     String(String),
@@ -78,9 +77,10 @@ impl Lexer {
         let ch2 = if i + 1 < input.len() { input[i + 1] } else { 0 };
 
         if is_name_start_char(ch) {
-            self.token_end = find_if_not(input, i + 1, is_name_char);
-            let tok = &input[self.token_pos..self.token_end];
+            let j = find_if_not(input, i + 1, is_name_char);
+            let tok = &input[i..j];
             if let Ok(s) = std::str::from_utf8(tok) {
+                self.token_end = j;
                 Ok(Token::Name(String::from(s)))
             }
             else {
@@ -88,9 +88,14 @@ impl Lexer {
             }
         }
         else if is_digit(ch) {
-            // TODO
-
-            Ok(Token::None)
+            let j = find_if_not(input, i + 1, is_digit);
+            let mut value = (ch - b'0') as i32;
+            for digit in &input[i + 1..j] {
+                value *= 10;
+                value += (digit - b'0') as i32;
+            }
+            self.token_end = j;
+            Ok(Token::Int(value))
         }
         else if let Some((symbol, len)) = match_symbol(ch, ch2) {
             self.token_end = self.token_pos + len;

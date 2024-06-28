@@ -57,8 +57,8 @@ fn main() {
     dump_type(&types, "item");
     dump_type(&types, "Direction");
 
-    let data = "+ item 10 + 2 \"hello\"".as_bytes().to_vec();
-    let mut lexer = Lexer::new(String::from("foo.txt"), data);
+    let input = "+ item 10 + 2 \"hello\"".as_bytes().to_vec();
+    let mut lexer = Lexer::new(String::from("foo.txt"), input);
     loop {
         match lexer.read() {
             Ok(Token::None) => {
