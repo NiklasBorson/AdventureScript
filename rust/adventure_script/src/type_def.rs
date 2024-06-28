@@ -1,6 +1,7 @@
 use std::rc::Rc;
 use std::string::String;
 use std::collections::HashMap;
+use crate::adventure_script_types::*;
 
 pub type TypeRef = Rc<Type>;
 
@@ -28,11 +29,6 @@ pub struct TypeMap {
     pub null_type : TypeRef,
     pub void_type : TypeRef,
     hash_map : HashMap<String, TypeRef>,
-}
-
-pub enum ParseError {
-    DuplicateTypeName,
-    DuplicateValueName
 }
 
 fn contains_duplicates(names : &[String]) -> bool {

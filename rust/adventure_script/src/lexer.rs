@@ -1,5 +1,7 @@
 use std::string::String;
+use crate::adventure_script_types::*;
 
+#[derive(Debug)]
 pub enum SymbolId {
     Plus,
     Minus,
@@ -29,11 +31,12 @@ pub enum SymbolId {
     RightArrow,
 }
 
+#[derive(Debug)]
 pub enum Token {
     None,
     Error,
     Int,
-    Name,
+    Name(String),
     Variable,
     String(String),
     FormatString(String),
@@ -42,40 +45,71 @@ pub enum Token {
 
 pub struct Lexer {
     file_name : String,
-    data : Vec<u8>,
+    input : Vec<u8>,
     token_pos : usize,
     token_end : usize,
     line_number : u32,
-    line_start_pos : usize,
-    token : Token
+    line_start_pos : usize
 }
 
-const SPACE : u8 = ' ' as u8;
-const TAB : u8 = '\t' as u8;
-const RETURN : u8 = '\r' as u8;
-const NEWLINE : u8 = '\n' as u8;
-
 impl Lexer {
-    pub fn new(file_name : String, data : Vec<u8>) -> Lexer {
+    pub fn new(file_name : String, input : Vec<u8>) -> Lexer {
         Lexer {
             file_name,
-            data,
+            input,
             token_pos : 0,
             token_end : 0,
             line_number : 1,
-            line_start_pos : 0,
-            token : Token::None
+            line_start_pos : 0
+        }
+    }
+
+    pub fn read(&mut self) -> Result<Token, ParseError> {
+        self.skip_whitespace();
+
+        let input : &[u8] = &self.input;
+        let i = self.token_pos;
+
+        if i == input.len() {
+            return Ok(Token::None);
+        }
+
+        let ch = input[i];
+        let ch2 = if i + 1 < input.len() { input[i + 1] } else { 0 };
+
+        if is_name_start_char(ch) {
+            self.token_end = find_if_not(input, i + 1, is_name_char);
+            let tok = &input[self.token_pos..self.token_end];
+            if let Ok(s) = std::str::from_utf8(tok) {
+                Ok(Token::Name(String::from(s)))
+            }
+            else {
+                Err(ParseError::InvalidToken)
+            }
+        }
+        else if is_digit(ch) {
+            // TODO
+
+            Ok(Token::None)
+        }
+        else if let Some((symbol, len)) = match_symbol(ch, ch2) {
+            self.token_end = self.token_pos + len;
+            Ok(Token::Symbol(symbol))
+        }
+        else {
+            Err(ParseError::InvalidToken)
         }
     }
 
     fn skip_whitespace(&mut self) {
         let mut last_ch : u8 = 0;
-        for i in [self.token_end, self.data.len()] {
-            let ch = self.data[i];
-            if ch == SPACE || ch == TAB {
+        for i in self.token_end..self.input.len() {
+            let ch = self.input[i];
+            if ch == b' ' || ch == b'\t' {
             }
-            else if ch == RETURN || ch == NEWLINE {
-                if last_ch != RETURN || ch != NEWLINE {
+            else if ch == b'\r' || ch == b'\n' {
+                // Increment the line number unless this is the second character in a "\r\n" sequence.
+                if last_ch != b'\r' || ch != b'\n' {
                     self.line_number += 1;
                 }
                 self.line_start_pos = i + 1;
@@ -87,7 +121,58 @@ impl Lexer {
             }
             last_ch = ch;
         }
-        self.token_pos = self.data.len();
-        self.token_end = self.data.len();
+        self.token_pos = self.input.len();
+        self.token_end = self.input.len();
     }    
+}
+
+fn is_digit(ch : u8) -> bool {
+    ch >= b'0' && ch <= b'9'
+}
+
+fn is_name_start_char(ch : u8) -> bool {
+    (ch >= b'a' && ch <= b'z') || (ch >= b'A' && ch <= b'Z') || ch == b'_'
+}
+
+fn is_name_char(ch : u8) -> bool {
+    is_digit(ch) || is_name_start_char(ch)
+}
+
+fn find_if_not(input : &[u8], start_pos : usize, pred : fn(u8) -> bool) -> usize {
+    for i in start_pos..input.len() {
+        if !pred(input[i]) {
+            return i;
+        }
+    }
+    return input.len();
+}
+
+fn match_symbol(ch : u8, ch2 : u8) -> Option<(SymbolId, usize)> {
+    match ch {
+        b'+' => Some((SymbolId::Plus, 1)),
+        b'-' => if ch2 == b'>' { Some((SymbolId::RightArrow, 2)) } else { Some((SymbolId::Minus, 1)) },
+        b'*' => Some((SymbolId::Times, 1)),
+        b'/' => Some((SymbolId::Divide, 1)),
+        b'%' => Some((SymbolId::Modulo, 1)),
+        b'(' => Some((SymbolId::LeftParen, 1)),
+        b')' => Some((SymbolId::RightParen, 1)),
+        b'{' => Some((SymbolId::LeftBrace, 1)),
+        b'}' => Some((SymbolId::RightBrace, 1)),
+        b'.' => Some((SymbolId::Period, 1)),
+        b',' => Some((SymbolId::Comma, 1)),
+        b'|' => if ch2 == b'|' { Some((SymbolId::Or, 2)) } else { None },
+        b'&' => if ch2 == b'&' { Some((SymbolId::And, 2)) } else { None },
+        b'!' => if ch2 == b'=' { Some((SymbolId::NotEquals, 2)) } else { Some((SymbolId::Not, 1)) },
+        b';' => Some((SymbolId::Semicolon, 1)),
+        b':' => Some((SymbolId::Colon, 1)),
+        b'=' => match ch2 {
+            b'=' => Some((SymbolId::Equals, 2)),
+            b'>' => Some((SymbolId::Lambda, 2)),
+            _ => Some((SymbolId::Assign, 1))
+        },
+        b'<' => if ch2 == b'=' { Some((SymbolId::LessEquals, 2)) } else { Some((SymbolId::Less, 1)) },
+        b'>' => if ch2 == b'=' { Some((SymbolId::GreaterEquals, 2)) } else { Some((SymbolId::Greater, 1)) },
+        b'?' => Some((SymbolId::QuestionMark, 1)),
+        _ => None
+    }
 }

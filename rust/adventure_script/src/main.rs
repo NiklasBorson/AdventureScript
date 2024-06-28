@@ -1,3 +1,4 @@
+mod adventure_script_types;
 mod type_def;
 mod lexer;
 
@@ -56,6 +57,20 @@ fn main() {
     dump_type(&types, "item");
     dump_type(&types, "Direction");
 
-    let data = "item 10 + 2 \"hello\"".as_bytes().to_vec();
-    let lexer = Lexer::new(String::from("foo.txt"), data);
+    let data = "+ item 10 + 2 \"hello\"".as_bytes().to_vec();
+    let mut lexer = Lexer::new(String::from("foo.txt"), data);
+    loop {
+        match lexer.read() {
+            Ok(Token::None) => {
+                break
+            },
+            Ok(token) => {
+                println!("{:?}", token)
+            },
+            Err(err) => {
+                println!("Lexer error: {:?}", err);
+                break
+            }
+        };
+    }
 }
