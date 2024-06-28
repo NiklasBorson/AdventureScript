@@ -57,20 +57,12 @@ fn main() {
     dump_type(&types, "item");
     dump_type(&types, "Direction");
 
-    let input = "+ item 10 + 2 \"hello\"".as_bytes().to_vec();
+    let input = "foo() + 12 * $xyz \"hello\"".as_bytes().to_vec();
     let mut lexer = Lexer::new(String::from("foo.txt"), input);
-    loop {
-        match lexer.read() {
-            Ok(Token::None) => {
-                break
-            },
-            Ok(token) => {
-                println!("{:?}", token)
-            },
-            Err(err) => {
-                println!("Lexer error: {:?}", err);
-                break
-            }
-        };
+    let mut token = lexer.read();
+    while token != Token::None && token != Token::Invalid {
+        println!("{:?}", token);
+        token = lexer.read();
     }
+    println!("{:?}", token);
 }

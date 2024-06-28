@@ -1,7 +1,7 @@
 use std::string::String;
-use crate::adventure_script_types::*;
 
 #[derive(Debug)]
+#[derive(PartialEq)]
 pub enum SymbolId {
     Plus,
     Minus,
@@ -32,8 +32,10 @@ pub enum SymbolId {
 }
 
 #[derive(Debug)]
+#[derive(PartialEq)]
 pub enum Token {
     None,
+    Invalid,
     Int(i32),
     Name(String),
     Variable,
@@ -63,14 +65,14 @@ impl Lexer {
         }
     }
 
-    pub fn read(&mut self) -> Result<Token, ParseError> {
+    pub fn read(&mut self) -> Token {
         self.skip_whitespace();
 
         let input : &[u8] = &self.input;
         let i = self.token_pos;
 
         if i == input.len() {
-            return Ok(Token::None);
+            return Token::None;
         }
 
         let ch = input[i];
@@ -81,10 +83,10 @@ impl Lexer {
             let tok = &input[i..j];
             if let Ok(s) = std::str::from_utf8(tok) {
                 self.token_end = j;
-                Ok(Token::Name(String::from(s)))
+                Token::Name(String::from(s))
             }
             else {
-                Err(ParseError::InvalidToken)
+                Token::Invalid
             }
         }
         else if is_digit(ch) {
@@ -95,14 +97,14 @@ impl Lexer {
                 value += (digit - b'0') as i32;
             }
             self.token_end = j;
-            Ok(Token::Int(value))
+            Token::Int(value)
         }
         else if let Some((symbol, len)) = match_symbol(ch, ch2) {
             self.token_end = self.token_pos + len;
-            Ok(Token::Symbol(symbol))
+            Token::Symbol(symbol)
         }
         else {
-            Err(ParseError::InvalidToken)
+            Token::Invalid
         }
     }
 
