@@ -34,12 +34,12 @@ pub enum SymbolId {
 
 #[derive(Debug)]
 #[derive(PartialEq)]
-pub enum Token {
+pub enum Token<'a> {
     None,
     Invalid,
     Int(i32),
-    Name(String),
-    Variable(String),
+    Name(&'a str),
+    Variable(&'a str),
     String(String),
     FormatString(String),
     Symbol(SymbolId)
@@ -84,7 +84,7 @@ impl Lexer {
             let tok = &input[i..j];
             if let Ok(s) = std::str::from_utf8(tok) {
                 self.token_end = j;
-                Token::Name(String::from(s))
+                Token::Name(s)
             }
             else {
                 Token::Invalid
@@ -95,7 +95,7 @@ impl Lexer {
             let tok = &input[i..j];
             if let Ok(s) = std::str::from_utf8(tok) {
                 self.token_end = j;
-                Token::Variable(String::from(s))
+                Token::Variable(s)
             }
             else {
                 Token::Invalid
