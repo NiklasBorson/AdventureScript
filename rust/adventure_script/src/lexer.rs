@@ -1,4 +1,5 @@
 use std::string::String;
+use std::borrow::Cow;
 
 #[derive(Debug)]
 #[derive(PartialEq)]
@@ -38,7 +39,7 @@ pub enum Token {
     Invalid,
     Int(i32),
     Name(String),
-    Variable,
+    Variable(String),
     String(String),
     FormatString(String),
     Symbol(SymbolId)
@@ -89,6 +90,17 @@ impl Lexer {
                 Token::Invalid
             }
         }
+        else if ch == b'$' && is_name_start_char(ch2) {
+            let j = find_if_not(input, i + 2, is_name_char);
+            let tok = &input[i..j];
+            if let Ok(s) = std::str::from_utf8(tok) {
+                self.token_end = j;
+                Token::Variable(String::from(s))
+            }
+            else {
+                Token::Invalid
+            }
+        }
         else if is_digit(ch) {
             let j = find_if_not(input, i + 1, is_digit);
             let mut value = (ch - b'0') as i32;
@@ -98,6 +110,15 @@ impl Lexer {
             }
             self.token_end = j;
             Token::Int(value)
+        }
+        else if ch == b'\"' {
+            if let Some((s, j)) = parse_string(input, i) {
+                self.token_end = j;
+                Token::String(s)
+            }
+            else {
+                Token::Invalid
+            }
         }
         else if let Some((symbol, len)) = match_symbol(ch, ch2) {
             self.token_end = self.token_pos + len;
@@ -131,6 +152,42 @@ impl Lexer {
         self.token_pos = self.input.len();
         self.token_end = self.input.len();
     }    
+}
+
+fn parse_string(input : &[u8], start_pos : usize) -> Option<(String, usize)> {
+    assert!(input[start_pos] == b'\"');
+    let mut last_char = b'\"';
+    let mut v : Vec<u8> = Vec::new();
+    for i in start_pos + 1..input.len() {
+        let ch = input[i];
+
+        if last_char == b'\\' {
+            match ch {
+                b'n' => v.push(b'\n'),
+                b'\\'|b'\"' => v.push(ch),
+                _ => return None
+            };
+        }
+        else {
+            match ch {
+                b'\"' => {
+                    if let Ok(s) = String::from_utf8(v) {
+                        return Some((s, i + 1));
+                    }
+                    else {
+                        return None;
+                    }
+                },
+                b'\\' => {
+                },
+                _ => {
+                    v.push(ch);
+                }
+            }
+        }
+        last_char = ch;
+    }
+    None
 }
 
 fn is_digit(ch : u8) -> bool {
