@@ -57,7 +57,7 @@ fn main() {
     dump_type(&types, "item");
     dump_type(&types, "Direction");
 
-    let input = "foo() + 12 * $xyz \"hello\"".as_bytes().to_vec();
+    let input = "foo() + 12 * $xyz \"hello\" $\"You see an {$obj}.\"".as_bytes().to_vec();
     let mut lexer = Lexer::new(String::from("foo.txt"), input);
     let mut token = lexer.read();
     while token != Token::None && token != Token::Invalid {

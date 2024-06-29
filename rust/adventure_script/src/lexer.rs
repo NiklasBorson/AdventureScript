@@ -120,6 +120,15 @@ impl Lexer {
                 Token::Invalid
             }
         }
+        else if ch == b'$' && ch2 == b'\"' {
+            if let Some((s, j)) = parse_string(input, i + 1) {
+                self.token_end = j;
+                Token::FormatString(s)
+            }
+            else {
+                Token::Invalid
+            }
+        }
         else if let Some((symbol, len)) = match_symbol(ch, ch2) {
             self.token_end = self.token_pos + len;
             Token::Symbol(symbol)
