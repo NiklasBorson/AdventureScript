@@ -94,13 +94,13 @@ impl TypeMap {
         self.hash_map.insert(new_type.name.clone(), new_type);
     }
 
-    pub fn add_enum_type(&mut self, name : String, value_names : Vec<String>) -> Result<TypeRef, ParseError> {
+    pub fn add_enum_type(&mut self, name : String, value_names : Vec<String>) -> Result<TypeRef, ParseErrorCode> {
         if self.exists(&name) {
-            return Err(ParseError::DuplicateTypeName);
+            return Err(ParseErrorCode::DuplicateTypeName);
         }
 
         if contains_duplicates(value_names.as_slice()) {
-            return Err(ParseError::DuplicateValueName);
+            return Err(ParseErrorCode::DuplicateValueName);
         }
 
         let new_type = Rc::new(Type {

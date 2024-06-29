@@ -1,5 +1,5 @@
 use std::string::String;
-use std::borrow::Cow;
+use crate::adventure_script_types::*;
 
 #[derive(Debug)]
 #[derive(PartialEq)]
@@ -63,6 +63,27 @@ impl Lexer {
             token_end : 0,
             line_number : 1,
             line_start_pos : 0
+        }
+    }
+
+    pub fn get_file_name(&self) -> &str {
+        &self.file_name
+    }
+
+    pub fn get_line_number(&self) -> u32 {
+        self.line_number
+    }
+
+    pub fn get_column_number(&self) -> u32 {
+        (self.token_pos - self.line_start_pos + 1) as u32
+    }
+
+    pub fn get_error(&self, error_code : ParseErrorCode) -> ParseError {
+        ParseError {
+            file_name : String::from(self.get_file_name()),
+            line_number : self.get_line_number(),
+            column_number : self.get_column_number(),
+            error_code
         }
     }
 
