@@ -162,6 +162,7 @@ fn parse_string(input : &[u8], start_pos : usize) -> Option<(String, usize)> {
         let ch = input[i];
 
         if last_char == b'\\' {
+            // Character following '\\'
             match ch {
                 b'n' => v.push(b'\n'),
                 b'\\'|b'\"' => v.push(ch),
@@ -169,8 +170,10 @@ fn parse_string(input : &[u8], start_pos : usize) -> Option<(String, usize)> {
             };
         }
         else {
+            // Any other character
             match ch {
                 b'\"' => {
+                    // Closing quotation mark
                     if let Ok(s) = String::from_utf8(v) {
                         return Some((s, i + 1));
                     }
@@ -179,8 +182,10 @@ fn parse_string(input : &[u8], start_pos : usize) -> Option<(String, usize)> {
                     }
                 },
                 b'\\' => {
+                    // Start of escape sequence
                 },
                 _ => {
+                    // Literal character
                     v.push(ch);
                 }
             }
