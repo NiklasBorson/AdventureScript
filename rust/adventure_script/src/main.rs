@@ -2,6 +2,9 @@ mod adventure_script_types;
 mod type_def;
 mod lexer;
 
+#[cfg(test)]
+mod tests;
+
 use crate::type_def::*;
 use crate::lexer::*;
 

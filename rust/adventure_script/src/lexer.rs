@@ -1,8 +1,7 @@
 use std::string::String;
 use crate::adventure_script_types::*;
 
-#[derive(Debug)]
-#[derive(PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum SymbolId {
     Plus,
     Minus,
@@ -32,8 +31,7 @@ pub enum SymbolId {
     RightArrow,
 }
 
-#[derive(Debug)]
-#[derive(PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum Token<'a> {
     None,
     Invalid,
