@@ -4,6 +4,7 @@ use std::fmt;
 pub enum ParseErrorCode {
     InvalidToken,
     DuplicateTypeName,
+    UnknownTypeName,
     DuplicateValueName
 }
 
@@ -11,6 +12,7 @@ fn to_string(error_code : ParseErrorCode) -> &'static str {
     match error_code {
         ParseErrorCode::InvalidToken => "invalid token",
         ParseErrorCode::DuplicateTypeName => "duplicate type name",
+        ParseErrorCode::UnknownTypeName => "unknown type name",
         ParseErrorCode::DuplicateValueName => "duplicate value name"
     }
 }
