@@ -10,6 +10,11 @@ pub struct Type {
     pub def: TypeDef
 }
 
+pub struct DelegateDef {
+    pub return_type: TypeRef,
+    pub param_types: Vec<TypeRef>
+}
+
 pub enum TypeDef {
     Item,
     String,
@@ -17,8 +22,8 @@ pub enum TypeDef {
     Bool,
     Void,
     Null,
-    Enum { value_names: Vec<String> },
-    Delegate { return_type: TypeRef, param_types: Vec<TypeRef> }
+    Enum(Vec<String>),
+    Delegate(DelegateDef)
 }
 
 pub struct TypeMap {
@@ -95,7 +100,7 @@ impl TypeMap {
 
         let new_type = Rc::new(Type {
             name, 
-            def: TypeDef::Enum { value_names }
+            def: TypeDef::Enum(value_names)
         });
 
         self.add_type(new_type.clone());
@@ -107,14 +112,29 @@ impl TypeMap {
             return Err(ParseErrorCode::DuplicateTypeName);
         }
 
+        let def = DelegateDef{ return_type, param_types };
+
+        // Check if there's an equivalent existing delegate type.
+        for other_type in &self.delegate_types {
+            if let TypeDef::Delegate(other_delegate) = &other_type.def {
+                if eq_delegate(&def, &other_delegate) {
+
+                    // Add the new name as an alias for the existing type.
+                    self.hash_map.insert(name, other_type.clone());
+                    return Ok(other_type.clone());
+                }
+            }
+        }
+
+        // No existing type, so create a new one.
         let new_type = Rc::new(Type {
             name,
-            def: TypeDef::Delegate { return_type, param_types }
+            def: TypeDef::Delegate(def)
         });
 
-        // TODO - check for equivalent delegate
-
+        // Add and return the new object.
         self.add_type(new_type.clone());
+        self.delegate_types.push(new_type.clone());
         Ok(new_type)
     }
 
@@ -126,6 +146,27 @@ impl TypeMap {
         self.hash_map.contains_key(name)
     }
 
+}
+
+pub fn eq_type(t1 : &TypeRef, t2 : &TypeRef) -> bool {
+    std::ptr::eq((*t1).as_ref(), (*t2).as_ref())
+}
+
+fn eq_delegate(t1 : &DelegateDef, t2 : &DelegateDef) -> bool {
+    if !eq_type(&t1.return_type, &t2.return_type) {
+        false
+    }
+    else if t1.param_types.len() != t2.param_types.len() {
+        false
+    }
+    else {
+        for i in 0..t1.param_types.len() {
+            if !eq_type(&t1.param_types[i], &t2.param_types[i]) {
+                return false;
+            }
+        }
+        true
+    }
 }
 
 fn contains_duplicates(names : &[String]) -> bool {

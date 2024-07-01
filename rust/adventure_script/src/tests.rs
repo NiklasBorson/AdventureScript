@@ -64,9 +64,15 @@ fn test_typemap() -> Result<(), ParseErrorCode> {
     // Create a delegate type, verify its name and verify name lookup.
     let return_type = (&types.bool_type).clone();
     let param_type = (&types.item_type).clone();
-    let pred = add_delegate_type(&mut types, "Predicate", return_type, param_type)?;
+    let pred = add_delegate_type(&mut types, "Predicate", return_type.clone(), param_type.clone())?;
     assert_eq!(pred.name, "Predicate");
     assert!(is_named_type(&types, "Predicate", &pred));
+
+    // Create an equivalent delegate type with the same properties. This should
+    // be an alias for the existing type.
+    let pred2 = add_delegate_type(&mut types, "Predicate2", return_type, param_type)?;
+    assert!(eq_type(&pred, &pred2));
+    assert!(is_named_type(&types, "Predicate2", &pred));
 
     // Verify name lookup for the built-in types.
     assert!(is_named_type(&types, "item", &types.item_type));
