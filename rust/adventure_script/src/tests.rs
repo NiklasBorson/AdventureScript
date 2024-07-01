@@ -37,12 +37,18 @@ fn add_enum_type(types : &mut TypeMap, name : &str, value_names : &[& str]) -> R
     types.add_enum_type(String::from(name), v)
 }
 
-fn check_type(types : &TypeMap, type_name : &str, type_def : &TypeRef) {
+fn add_delegate_type(types : &mut TypeMap, name : &str, return_type : TypeRef, param_type : TypeRef) -> Result<TypeRef, ParseErrorCode> {
+    let mut param_types = Vec::new();
+    param_types.push(param_type);
+    types.add_delegate_type(String::from(name), return_type, param_types)
+}
+
+fn is_named_type(types : &TypeMap, type_name : &str, expected_type : &TypeRef) -> bool {
     if let Some(t) = types.get(type_name) {
-        assert!(eq_type(t, type_def));
+        eq_type(t, expected_type)
     }
     else {
-        assert!(false);
+        false
     }
 }
 
@@ -53,17 +59,22 @@ fn test_typemap() -> Result<(), ParseErrorCode> {
     // Create an enum type, verify its name and verify name lookup.
     let dir = add_enum_type(&mut types, "Direction", &["North", "South", "East", "West"][..])?;
     assert_eq!(dir.name, "Direction");
-    check_type(&types, "Direction", &dir);
+    assert!(is_named_type(&types, "Direction", &dir));
 
-    // TODO - add delegate type
+    // Create a delegate type, verify its name and verify name lookup.
+    let return_type = (&types.bool_type).clone();
+    let param_type = (&types.item_type).clone();
+    let pred = add_delegate_type(&mut types, "Predicate", return_type, param_type)?;
+    assert_eq!(pred.name, "Predicate");
+    assert!(is_named_type(&types, "Predicate", &pred));
 
     // Verify name lookup for the built-in types.
-    check_type(&types, "item", &types.item_type);
-    check_type(&types, "string", &types.string_type);
-    check_type(&types, "int", &types.int_type);
-    check_type(&types, "bool", &types.bool_type);
-    check_type(&types, "null", &types.null_type);
-    check_type(&types, "void", &types.void_type);
+    assert!(is_named_type(&types, "item", &types.item_type));
+    assert!(is_named_type(&types, "string", &types.string_type));
+    assert!(is_named_type(&types, "int", &types.int_type));
+    assert!(is_named_type(&types, "bool", &types.bool_type));
+    assert!(is_named_type(&types, "null", &types.null_type));
+    assert!(is_named_type(&types, "void", &types.void_type));
 
     // Make sure different types do not compare equal.
     assert!(!eq_type(&dir, &types.item_type));

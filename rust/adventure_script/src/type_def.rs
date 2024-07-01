@@ -29,18 +29,7 @@ pub struct TypeMap {
     pub null_type : TypeRef,
     pub void_type : TypeRef,
     hash_map : HashMap<String, TypeRef>,
-}
-
-fn contains_duplicates(names : &[String]) -> bool {
-    for i in 1..names.len() {
-        let name : &str = names[i].as_ref();
-        for j  in 0..i {
-            if name == names[j] {
-                return true;
-            }
-        }
-    }
-    false
+    delegate_types : Vec<TypeRef>
 }
 
 impl TypeMap {
@@ -77,7 +66,8 @@ impl TypeMap {
             bool_type : bool_type.clone(),
             null_type : null_type.clone(),
             void_type : void_type.clone(),
-            hash_map : HashMap::new()
+            hash_map : HashMap::new(),
+            delegate_types : Vec::new()
         };
 
         type_map.add_type(item_type);
@@ -109,7 +99,22 @@ impl TypeMap {
         });
 
         self.add_type(new_type.clone());
+        Ok(new_type)
+    }
 
+    pub fn add_delegate_type(&mut self, name : String, return_type : TypeRef, param_types : Vec<TypeRef>) -> Result<TypeRef, ParseErrorCode> {
+        if self.exists(&name) {
+            return Err(ParseErrorCode::DuplicateTypeName);
+        }
+
+        let new_type = Rc::new(Type {
+            name,
+            def: TypeDef::Delegate { return_type, param_types }
+        });
+
+        // TODO - check for equivalent delegate
+
+        self.add_type(new_type.clone());
         Ok(new_type)
     }
 
@@ -122,3 +127,16 @@ impl TypeMap {
     }
 
 }
+
+fn contains_duplicates(names : &[String]) -> bool {
+    for i in 1..names.len() {
+        let name : &str = names[i].as_ref();
+        for j  in 0..i {
+            if name == names[j] {
+                return true;
+            }
+        }
+    }
+    false
+}
+
