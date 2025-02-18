@@ -1,32 +1,86 @@
 use super::adventure_script_types::*;
 use super::lexer::*;
 use super::type_def::*;
-use super::*;
+use std::fs::{self, File};
+use std::io::{BufReader,BufRead};
+use std::io::Write;
+use const_format::formatcp;
+use std::error::Error;
+use std::fmt;
+use std::io::LineWriter;
+
+const INPUT_DIR : &str = "test_files/input";
+const BASELINE_DIR : &str = "test_files/baseline";
+const OUTPUT_DIR : &str = "target/testout";
+
+#[derive(Debug)]
+struct ComparisonError(&'static str, i32);
+
+impl fmt::Display for ComparisonError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} differs from baseline version, line {}.", self.0, self.1)
+    }    
+}
+
+impl Error for ComparisonError {}
+
+fn compare_test_output(file_name : &'static str) -> Result<(), Box<dyn Error>> {
+
+    let baseline_path = format!("{BASELINE_DIR}/{file_name}");
+    let baseline = File::open(baseline_path)?;
+    let baseline = BufReader::new(baseline);
+
+    let output_path = format!("{OUTPUT_DIR}/{file_name}");
+    let output = File::open(output_path)?;
+    let output = BufReader::new(output);
+
+    let mut output_lines = output.lines();
+    let mut line_number = 0;
+
+    for baseline_line in baseline.lines() {
+        line_number += 1;
+
+        if let Some(output_line) = output_lines.next() {
+            if baseline_line? != output_line? {
+                return Err(Box::new(ComparisonError(file_name, line_number)));
+            }
+        }
+        else {
+            return Err(Box::new(ComparisonError(file_name, line_number)));
+        }
+    }
+
+    if let Some(_) = output_lines.next() {
+        return Err(Box::new(ComparisonError(file_name, line_number)));
+    }
+
+    Ok(())
+}
 
 #[test]
-fn test_lexer() {
+fn test_lexer() -> Result<(), Box<dyn Error>> {
 
-    let input = "foo() -> 12 $xyz \"hello\" $\"You see an {$obj}.\"".as_bytes().to_vec();
+    const FILE_NAME : &str = "LexerTest.txt";
 
-    let expected_tokens = [
-        Token::Name("foo"),
-        Token::Symbol(SymbolId::LeftParen),
-        Token::Symbol(SymbolId::RightParen),
-        Token::Symbol(SymbolId::RightArrow),
-        Token::Int(12),
-        Token::Variable("$xyz"),
-        Token::String(String::from("hello")),
-        Token::FormatString(String::from("You see an {$obj}.")),
-        Token::None
-    ];
+    let input_path = formatcp!("{INPUT_DIR}/{FILE_NAME}");
+    let input  = fs::read_to_string(input_path)?;
 
-    let mut lexer = Lexer::new(String::from("filename.txt"), input);
+    fs::create_dir_all(OUTPUT_DIR)?;
+    let output_path = formatcp!("{OUTPUT_DIR}/{FILE_NAME}");
+    let output_file = File::create(output_path)?;
+    let mut output_file = LineWriter::new(output_file);
 
-    for i in 0..expected_tokens.len() {
+    let mut lexer = Lexer::new(String::from(input_path), input.as_bytes().to_vec());
+
+    loop {
         let token = lexer.read();
-        println!("{:?}", token);
-        assert!(token == expected_tokens[i]);
+        writeln!(&mut output_file, "{:?}", token)?;
+        if token == Token::None || token == Token::Invalid {
+            break;
+        }
     }
+
+    compare_test_output(FILE_NAME)
 }
 
 fn add_enum_type(types : &mut TypeMap, name : &str, value_names : &[& str]) -> Result<TypeRef, ParseErrorCode> {

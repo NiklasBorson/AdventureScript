@@ -159,21 +159,30 @@ impl Lexer {
 
     fn skip_whitespace(&mut self) {
         let mut last_ch : u8 = 0;
+        let mut in_comment = false;
         for i in self.token_end..self.input.len() {
             let ch = self.input[i];
-            if ch == b' ' || ch == b'\t' {
-            }
-            else if ch == b'\r' || ch == b'\n' {
+            if ch == b'\r' || ch == b'\n' {
                 // Increment the line number unless this is the second character in a "\r\n" sequence.
                 if last_ch != b'\r' || ch != b'\n' {
                     self.line_number += 1;
                 }
                 self.line_start_pos = i + 1;
+
+                // Any comment ends an end-of-line.
+                in_comment = false;
             }
-            else {
-                self.token_pos = i;
-                self.token_end = i;
-                return;
+            else if !in_comment {
+                if ch == b' ' || ch == b'\t' {
+                }
+                else if ch == b'#' {
+                    in_comment = true;
+                }
+                else {
+                    self.token_pos = i;
+                    self.token_end = i;
+                    return;
+                }
             }
             last_ch = ch;
         }
