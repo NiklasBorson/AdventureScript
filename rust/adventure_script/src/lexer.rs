@@ -43,17 +43,17 @@ pub enum Token<'a> {
     Symbol(SymbolId)
 }
 
-pub struct Lexer {
+pub struct Lexer<'a> {
     file_name : String,
-    input : Vec<u8>,
+    input : &'a [u8],
     token_pos : usize,
     token_end : usize,
     line_number : u32,
     line_start_pos : usize
 }
 
-impl Lexer {
-    pub fn new(file_name : String, input : Vec<u8>) -> Lexer {
+impl<'a> Lexer<'a> {
+    pub fn new(file_name : String, input : &'a [u8]) -> Lexer<'a> {
         Lexer {
             file_name,
             input,
@@ -85,7 +85,7 @@ impl Lexer {
         }
     }
 
-    pub fn read(&mut self) -> Token {
+    pub fn read(& mut self) -> Token<'a> {
         self.skip_whitespace();
 
         let input : &[u8] = &self.input;
@@ -115,6 +115,26 @@ impl Lexer {
             if let Ok(s) = std::str::from_utf8(tok) {
                 self.token_end = j;
                 Token::Variable(s)
+            }
+            else {
+                Token::Invalid
+            }
+        }
+        else if ch == b'0' && ch2 == b'x' && i + 2 < input.len() {
+            if let Some(digit) = parse_hex_digit(input[i + 2]) {
+                let mut value = digit as i32;
+                self.token_end = input.len();
+                for j in i + 3..input.len() {
+                    if let Some(digit) = parse_hex_digit(input[j]) {
+                        value *= 0x10;
+                        value += digit as i32;
+                    }
+                    else {
+                        self.token_end = j;
+                        break;
+                    }
+                }
+                Token::Int(value)
             }
             else {
                 Token::Invalid
@@ -234,6 +254,21 @@ fn parse_string(input : &[u8], start_pos : usize) -> Option<(String, usize)> {
 
 fn is_digit(ch : u8) -> bool {
     ch >= b'0' && ch <= b'9'
+}
+
+fn parse_hex_digit(ch : u8) -> Option<u8> {
+    if is_digit(ch) {
+        Some(ch - b'0')
+    }
+    else if ch >= b'A' && ch <= b'F' {
+        Some(ch - (b'A' - 10))
+    }
+    else if ch >= b'a' && ch <= b'f' {
+        Some(ch - (b'a' - 10))
+    }
+    else {
+        None
+    }
 }
 
 fn is_name_start_char(ch : u8) -> bool {

@@ -70,11 +70,11 @@ fn test_lexer() -> Result<(), Box<dyn Error>> {
     let output_file = File::create(output_path)?;
     let mut output_file = LineWriter::new(output_file);
 
-    let mut lexer = Lexer::new(String::from(input_path), input.as_bytes().to_vec());
+    let mut lexer = Lexer::new(String::from(input_path), input.as_bytes());
 
     loop {
         let token = lexer.read();
-        writeln!(&mut output_file, "{:?}", token)?;
+        writeln!(&mut output_file, "{:?} : {},{}", token, lexer.get_line_number(), lexer.get_column_number())?;
         if token == Token::None || token == Token::Invalid {
             break;
         }
